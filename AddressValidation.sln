@@ -30,7 +30,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{353B6DBC-61C8-4FEF-8182-C5B36A3B4818}"
 	ProjectSection(SolutionItems) = preProject
 		.github\renovate.json = .github\renovate.json
-		.github\workflows\ci.yml = .github\workflows\ci.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F5F81E7B-F1BF-4C3A-8D56-6D4A486D687C}"

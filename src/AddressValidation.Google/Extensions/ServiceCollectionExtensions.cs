@@ -2,8 +2,10 @@ namespace AddressValidation.Google.Extensions;
 
 using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Abstractions;
+using AddressValidation.Http.Authentication;
 using FluentValidation;
 using Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -18,7 +20,11 @@ using Validation;
 /// </summary>
 public static class ServiceCollectionExtensions
 {
+	private const string DelegatingHandlerConfigurationKey = "AVE_GOOGLE_API_KEY";
+
 	private const string LoggingCategoryName = "AddressValidation.Google";
+
+	private const string QueryStringParameterKey = "key";
 
 	private const int TransientRetryCount = 3;
 
@@ -36,11 +42,16 @@ public static class ServiceCollectionExtensions
 		services.TryAddScoped<IValidator<ApiAddressValidationResponse>, ApiAddressValidationResponseValidator>();
 		services.TryAddScoped<IAddressValidationService<GoogleAddressValidationRequest>, AddressValidationService>();
 
-		services.AddTransient<ApiKeyDelegateHandler>();
-
 		services.AddHttpClient<GoogleAddressValidationClient>()
 				.AddPolicyHandler((provider, _) => GetHttpRetryPolicy(GetLoggerInstance(provider)))
-				.AddHttpMessageHandler<ApiKeyDelegateHandler>();
+				.AddHttpMessageHandler(provider =>
+									   {
+										   IConfiguration configuration = provider.GetRequiredService<IConfiguration>();
+
+										   return new QueryStringDelegatingHandler(configuration,
+																				   DelegatingHandlerConfigurationKey,
+																				   QueryStringParameterKey);
+									   });
 
 		return services;
 	}

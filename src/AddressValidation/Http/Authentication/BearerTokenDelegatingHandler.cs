@@ -1,23 +1,30 @@
-namespace AddressValidation.Http;
+namespace AddressValidation.Http.Authentication;
 
 using System.Net.Http.Headers;
 using System.Security.Authentication;
 using AddressValidation.Abstractions;
 
 /// <summary>
-///     An HTTP handler delegate that injects a Bearer token into each request.
+///     An HTTP delegate handler that injects a Bearer token into each request.
 /// </summary>
-/// <param name="authenticationService">An instance of <see cref="IAuthenticationService" />.</param>
-public sealed class BearerTokenDelegateHandler(IAuthenticationService authenticationService) : DelegatingHandler
+/// <param name="authenticationService">
+///     An instance of <see cref="IAuthenticationService" /> that retrieves the
+///     access_token.
+/// </param>
+public sealed class BearerTokenDelegatingHandler(IAuthenticationService authenticationService) : DelegatingHandler
 {
 	private readonly IAuthenticationService _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
 
 	/// <inheritdoc />
 	/// <exception cref="InvalidCredentialException">Provided credentials were rejected by the server.</exception>
-	protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+	protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
 	{
 		ArgumentNullException.ThrowIfNull(request);
+		return SendInternalAsync(request, cancellationToken);
+	}
 
+	private async Task<HttpResponseMessage> SendInternalAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+	{
 		if ( request.RequestUri is null )
 		{
 			return await base.SendAsync(request, cancellationToken);

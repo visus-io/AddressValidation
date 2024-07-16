@@ -1,7 +1,7 @@
 namespace AddressValidation.Tests;
 
 using System.Runtime.CompilerServices;
-using Abstractions;
+using AddressValidation.Abstractions;
 using PublicApiGenerator;
 
 public sealed class ApiFacts
