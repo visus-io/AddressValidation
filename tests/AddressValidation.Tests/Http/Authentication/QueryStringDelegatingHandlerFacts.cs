@@ -1,8 +1,8 @@
-namespace AddressValidation.Tests;
+namespace AddressValidation.Tests.Http.Authentication;
 
 using System.Web;
 using Abstractions;
-using Http.Authentication;
+using AddressValidation.Http.Authentication;
 using Microsoft.Extensions.Configuration;
 using Moq;
 
@@ -13,7 +13,7 @@ public sealed class QueryStringDelegatingHandlerFacts : DelegatingHandlerFacts
 	{
 		const string configurationKey = "API_KEY";
 		const string queryKey = "key";
-		
+
 		const string apiKey = "nF4XVxKf3ncwp_8bM2MWWKfNJho-al37bdIVoMs2VJZzjh00QIiz7A";
 
 		var configurationMock = new Mock<IConfiguration>();
