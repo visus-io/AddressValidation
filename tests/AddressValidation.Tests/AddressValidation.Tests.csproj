@@ -6,7 +6,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="coverlet.collector"/>
+        <PackageReference Include="coverlet.collector">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>            
+        </PackageReference>
         <PackageReference Include="coverlet.msbuild">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -21,7 +24,10 @@
         <PackageReference Include="PublicApiGenerator"/>
         <PackageReference Include="Verify.Xunit"/>
         <PackageReference Include="xunit"/>
-        <PackageReference Include="xunit.runner.visualstudio"/>
+        <PackageReference Include="xunit.runner.visualstudio">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -30,19 +36,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\AddressValidation\AddressValidation.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageVersion Update="coverlet.collector" Version="6.0.2">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageVersion>
-        <PackageVersion Update="Microsoft.NET.Test.Sdk" Version="17.9.0"/>
-        <PackageVersion Update="xunit" Version="2.8.0"/>
-        <PackageVersion Update="xunit.runner.visualstudio" Version="2.8.0">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageVersion>
     </ItemGroup>
 
 </Project>

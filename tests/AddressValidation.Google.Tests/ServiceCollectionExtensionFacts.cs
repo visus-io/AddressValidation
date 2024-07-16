@@ -16,7 +16,7 @@ public sealed class ServiceCollectionExtensionFacts
 
 		serviceCollection.AddSingleton<IConfiguration>(_ => new ConfigurationBuilder().Build());
 		serviceCollection.AddGoogleAddressValidation();
-		
+
 		var serviceProvider = serviceCollection.BuildServiceProvider();
 
 		using ( var scope = serviceProvider.CreateScope() )
@@ -25,7 +25,6 @@ public sealed class ServiceCollectionExtensionFacts
 			Assert.NotNull(scope.ServiceProvider.GetService<IAddressValidationService<GoogleAddressValidationRequest>>());
 		}
 
-		Assert.NotNull(serviceProvider.GetService<ApiKeyDelegateHandler>());
 		Assert.NotNull(serviceProvider.GetService<GoogleAddressValidationClient>());
 	}
 }

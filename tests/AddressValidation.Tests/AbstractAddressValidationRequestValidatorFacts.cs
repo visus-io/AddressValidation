@@ -1,6 +1,6 @@
 namespace AddressValidation.Tests;
 
-using Abstractions;
+using AddressValidation.Abstractions;
 using FluentValidation.TestHelper;
 
 public sealed class AbstractAddressValidationRequestValidatorFacts

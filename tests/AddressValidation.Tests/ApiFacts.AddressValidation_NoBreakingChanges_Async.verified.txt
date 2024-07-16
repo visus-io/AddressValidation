@@ -584,11 +584,16 @@ namespace AddressValidation.Http.Abstractions
         AddressValidation.Abstractions.IAddressValidationResponse ToAddressValidationResponse(FluentValidation.Results.ValidationResult? validationResult);
     }
 }
-namespace AddressValidation.Http
+namespace AddressValidation.Http.Authentication
 {
-    public sealed class BearerTokenDelegateHandler : System.Net.Http.DelegatingHandler
+    public sealed class BearerTokenDelegatingHandler : System.Net.Http.DelegatingHandler
     {
-        public BearerTokenDelegateHandler(AddressValidation.Abstractions.IAuthenticationService authenticationService) { }
+        public BearerTokenDelegatingHandler(AddressValidation.Abstractions.IAuthenticationService authenticationService) { }
+        protected override System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage> SendAsync(System.Net.Http.HttpRequestMessage request, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public sealed class QueryStringDelegatingHandler : System.Net.Http.DelegatingHandler
+    {
+        public QueryStringDelegatingHandler(Microsoft.Extensions.Configuration.IConfiguration configuration, string configurationKey, string queryKey) { }
         protected override System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage> SendAsync(System.Net.Http.HttpRequestMessage request, System.Threading.CancellationToken cancellationToken) { }
     }
 }

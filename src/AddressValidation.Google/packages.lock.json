@@ -72,14 +72,6 @@
           "Microsoft.Extensions.Primitives": "8.0.0"
         }
       },
-      "Microsoft.Extensions.Configuration.Abstractions": {
-        "type": "Transitive",
-        "resolved": "8.0.0",
-        "contentHash": "3lE/iLSutpgX1CC0NOW70FJoGARRHbyKmG7dc0klnUZ9Dd9hS6N/POPWhKhMLCEuNN5nXEY5agmlFtH562vqhQ==",
-        "dependencies": {
-          "Microsoft.Extensions.Primitives": "8.0.0"
-        }
-      },
       "Microsoft.Extensions.Configuration.Binder": {
         "type": "Transitive",
         "resolved": "8.0.0",
@@ -186,7 +178,8 @@
       "addressvalidation": {
         "type": "Project",
         "dependencies": {
-          "FluentValidation": "[11.9.2, )"
+          "FluentValidation": "[11.9.2, )",
+          "Microsoft.Extensions.Configuration.Abstractions": "[8.0.0, )"
         }
       },
       "FluentValidation": {
@@ -194,6 +187,15 @@
         "requested": "[11.9.2, )",
         "resolved": "11.9.2",
         "contentHash": "XeHp9LvFvu1fsQ/NvDCymV02GOCB1nz7ZUhfpI3uMhCcHTkV1K5bMkv+Nc/kuNYyAsX5+5bcmUanIEMd5QN+Eg=="
+      },
+      "Microsoft.Extensions.Configuration.Abstractions": {
+        "type": "CentralTransitive",
+        "requested": "[8.0.0, )",
+        "resolved": "8.0.0",
+        "contentHash": "3lE/iLSutpgX1CC0NOW70FJoGARRHbyKmG7dc0klnUZ9Dd9hS6N/POPWhKhMLCEuNN5nXEY5agmlFtH562vqhQ==",
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "8.0.0"
+        }
       }
     }
   }
