@@ -1,4 +1,4 @@
-namespace AddressValidation;
+namespace Visus.AddressValidation;
 
 /// <summary>
 ///     The exception that is thrown when a class does not implement a required base class.
@@ -28,7 +28,8 @@ public class InvalidImplementationException : Exception
 	/// <param name="message">The message that describes the error.</param>
 	/// <param name="innerException">
 	///     The exception that is the cause of the current exception. If the
-	///     <paramref name="innerException" /> parameter is not a <see langword="null" /> reference (<see langword="Nothing" /> in Visual Basic),
+	///     <paramref name="innerException" /> parameter is not a <see langword="null" /> reference (<see langword="Nothing" />
+	///     in Visual Basic),
 	///     the current exception is raised in a <see langword="catch" /> block that handles the inner exception.
 	/// </param>
 	public InvalidImplementationException(string message, Exception innerException)

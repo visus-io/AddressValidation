@@ -1,4 +1,4 @@
-namespace AddressValidation.Google.Tests;
+namespace Visus.AddressValidation.Google.Tests;
 
 using System.Text.Json;
 using AddressValidation.Abstractions;

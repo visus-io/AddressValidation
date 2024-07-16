@@ -1,6 +1,5 @@
-namespace AddressValidation.Tests.Http.Authentication;
+namespace Visus.AddressValidation.Tests.Http.Authentication;
 
-using System.Web;
 using Abstractions;
 using AddressValidation.Abstractions;
 using AddressValidation.Http.Authentication;
@@ -17,7 +16,7 @@ public sealed class BearerTokenDelegatingHandlerFacts : DelegatingHandlerFacts
 
 		authenticationServiceMock.Setup(s => s.GetAccessTokenAsync(It.IsAny<CancellationToken>()))
 								 .ReturnsAsync(() => accessToken);
-		
+
 		var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "http://localhost");
 		var handler = new BearerTokenDelegatingHandler(authenticationServiceMock.Object)
 		{

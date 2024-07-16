@@ -1,4 +1,4 @@
-namespace AddressValidation;
+namespace Visus.AddressValidation;
 
 using System.Collections.ObjectModel;
 using Abstractions;

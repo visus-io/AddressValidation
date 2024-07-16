@@ -1,4 +1,4 @@
-namespace AddressValidation.Google.Http;
+namespace Visus.AddressValidation.Google.Http;
 
 using System.Text.Json.Serialization;
 using AddressValidation.Abstractions;

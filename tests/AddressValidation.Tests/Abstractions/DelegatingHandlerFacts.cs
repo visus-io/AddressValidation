@@ -1,4 +1,4 @@
-namespace AddressValidation.Tests.Abstractions;
+namespace Visus.AddressValidation.Tests.Abstractions;
 
 public abstract class DelegatingHandlerFacts
 {

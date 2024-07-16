@@ -1,4 +1,4 @@
-﻿namespace AddressValidation.Google.Abstractions;
+﻿namespace Visus.AddressValidation.Google.Abstractions;
 
 using System.ComponentModel;
 

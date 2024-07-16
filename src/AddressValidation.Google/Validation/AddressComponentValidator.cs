@@ -1,4 +1,4 @@
-namespace AddressValidation.Google.Validation;
+namespace Visus.AddressValidation.Google.Validation;
 
 using Abstractions;
 using FluentValidation;
@@ -11,7 +11,7 @@ internal sealed class AddressComponentValidator : AbstractValidator<ApiAddressVa
 		ConfirmationLevel.UNCONFIRMED_BUT_PLAUSIBLE,
 		ConfirmationLevel.UNCONFIRMED_AND_SUSPICIOUS
 	];
-	
+
 	public AddressComponentValidator()
 	{
 		RuleFor(r => r.ConfirmationLevel)

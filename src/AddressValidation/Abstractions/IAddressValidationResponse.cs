@@ -1,4 +1,4 @@
-namespace AddressValidation.Abstractions;
+namespace Visus.AddressValidation.Abstractions;
 
 /// <summary>
 ///     Represents a uniformed address validation response.

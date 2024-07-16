@@ -1,7 +1,7 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("AddressValidation.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
-namespace AddressValidation
+namespace Visus.AddressValidation
 {
     public abstract class AbstractAddressValidationRequest
     {
@@ -9,40 +9,40 @@ namespace AddressValidation
         public System.Collections.Generic.ISet<string> AddressLines { get; }
         public string? CityOrTown { get; set; }
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter?))]
-        public AddressValidation.Abstractions.CountryCode? Country { get; set; }
+        public Visus.AddressValidation.Abstractions.CountryCode? Country { get; set; }
         public bool? IsResidential { get; set; }
         public string? PostalCode { get; set; }
         public string? StateOrProvince { get; set; }
     }
     public abstract class AbstractAddressValidationRequestValidator<T> : FluentValidation.AbstractValidator<T>
-        where T : AddressValidation.AbstractAddressValidationRequest
+        where T : Visus.AddressValidation.AbstractAddressValidationRequest
     {
         protected AbstractAddressValidationRequestValidator() { }
     }
-    public abstract class AbstractAddressValidationResponse : AddressValidation.Abstractions.IAddressValidationResponse
+    public abstract class AbstractAddressValidationResponse : Visus.AddressValidation.Abstractions.IAddressValidationResponse
     {
         protected AbstractAddressValidationResponse(FluentValidation.Results.ValidationResult? validationResult) { }
         public System.Collections.Generic.IReadOnlyCollection<string> Errors { get; }
-        public System.Collections.Generic.IReadOnlyCollection<AddressValidation.Abstractions.IAddressValidationResponse> Suggestions { get; set; }
+        public System.Collections.Generic.IReadOnlyCollection<Visus.AddressValidation.Abstractions.IAddressValidationResponse> Suggestions { get; set; }
         public System.Collections.Generic.IReadOnlyCollection<string> Warnings { get; }
         public System.Collections.Generic.IReadOnlyCollection<string> AddressLines { get; init; }
         public string? CityOrTown { get; init; }
-        public AddressValidation.Abstractions.CountryCode Country { get; init; }
+        public Visus.AddressValidation.Abstractions.CountryCode Country { get; init; }
         public string? PostalCode { get; init; }
         public string? StateOrProvince { get; init; }
     }
-    public abstract class AbstractAddressValidationResponse<TResponse> : AddressValidation.AbstractAddressValidationResponse
-        where TResponse : AddressValidation.Http.Abstractions.IApiAddressValidationResponse
+    public abstract class AbstractAddressValidationResponse<TResponse> : Visus.AddressValidation.AbstractAddressValidationResponse
+        where TResponse : Visus.AddressValidation.Http.Abstractions.IApiAddressValidationResponse
     {
         protected AbstractAddressValidationResponse(TResponse response, FluentValidation.Results.ValidationResult? validationResult) { }
     }
-    public abstract class AbstractAddressValidationService<TRequest, TResponse> : AddressValidation.Abstractions.IAddressValidationService<TRequest>
-        where TRequest : AddressValidation.AbstractAddressValidationRequest
-        where TResponse : AddressValidation.Http.Abstractions.IApiAddressValidationResponse
+    public abstract class AbstractAddressValidationService<TRequest, TResponse> : Visus.AddressValidation.Abstractions.IAddressValidationService<TRequest>
+        where TRequest : Visus.AddressValidation.AbstractAddressValidationRequest
+        where TResponse : Visus.AddressValidation.Http.Abstractions.IApiAddressValidationResponse
     {
         protected AbstractAddressValidationService(FluentValidation.IValidator<TRequest> requestValidator, FluentValidation.IValidator<TResponse> responseValidator) { }
         protected abstract System.Threading.Tasks.ValueTask<TResponse?> SendAsync(TRequest request, System.Threading.CancellationToken cancellationToken);
-        public System.Threading.Tasks.ValueTask<AddressValidation.Abstractions.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default) { }
+        public System.Threading.Tasks.ValueTask<Visus.AddressValidation.Abstractions.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default) { }
     }
     public class InvalidImplementationException : System.Exception
     {
@@ -51,7 +51,7 @@ namespace AddressValidation
         public InvalidImplementationException(string message, System.Exception innerException) { }
     }
 }
-namespace AddressValidation.Abstractions
+namespace Visus.AddressValidation.Abstractions
 {
     public enum CountryCode
     {
@@ -560,35 +560,35 @@ namespace AddressValidation.Abstractions
     {
         System.Collections.Generic.IReadOnlyCollection<string> AddressLines { get; }
         string? CityOrTown { get; }
-        AddressValidation.Abstractions.CountryCode Country { get; }
+        Visus.AddressValidation.Abstractions.CountryCode Country { get; }
         System.Collections.Generic.IReadOnlyCollection<string> Errors { get; }
         string? PostalCode { get; }
         string? StateOrProvince { get; }
-        System.Collections.Generic.IReadOnlyCollection<AddressValidation.Abstractions.IAddressValidationResponse> Suggestions { get; }
+        System.Collections.Generic.IReadOnlyCollection<Visus.AddressValidation.Abstractions.IAddressValidationResponse> Suggestions { get; }
         System.Collections.Generic.IReadOnlyCollection<string> Warnings { get; }
     }
     public interface IAddressValidationService<in TRequest>
-        where in TRequest : AddressValidation.AbstractAddressValidationRequest
+        where in TRequest : Visus.AddressValidation.AbstractAddressValidationRequest
     {
-        System.Threading.Tasks.ValueTask<AddressValidation.Abstractions.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.ValueTask<Visus.AddressValidation.Abstractions.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default);
     }
     public interface IAuthenticationService
     {
         System.Threading.Tasks.ValueTask<string?> GetAccessTokenAsync(System.Threading.CancellationToken cancellationToken = default);
     }
 }
-namespace AddressValidation.Http.Abstractions
+namespace Visus.AddressValidation.Http.Abstractions
 {
     public interface IApiAddressValidationResponse
     {
-        AddressValidation.Abstractions.IAddressValidationResponse ToAddressValidationResponse(FluentValidation.Results.ValidationResult? validationResult);
+        Visus.AddressValidation.Abstractions.IAddressValidationResponse ToAddressValidationResponse(FluentValidation.Results.ValidationResult? validationResult);
     }
 }
-namespace AddressValidation.Http.Authentication
+namespace Visus.AddressValidation.Http.Authentication
 {
     public sealed class BearerTokenDelegatingHandler : System.Net.Http.DelegatingHandler
     {
-        public BearerTokenDelegatingHandler(AddressValidation.Abstractions.IAuthenticationService authenticationService) { }
+        public BearerTokenDelegatingHandler(Visus.AddressValidation.Abstractions.IAuthenticationService authenticationService) { }
         protected override System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage> SendAsync(System.Net.Http.HttpRequestMessage request, System.Threading.CancellationToken cancellationToken) { }
     }
     public sealed class QueryStringDelegatingHandler : System.Net.Http.DelegatingHandler
@@ -597,10 +597,10 @@ namespace AddressValidation.Http.Authentication
         protected override System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage> SendAsync(System.Net.Http.HttpRequestMessage request, System.Threading.CancellationToken cancellationToken) { }
     }
 }
-namespace AddressValidation.Model
+namespace Visus.AddressValidation.Model
 {
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    public sealed class EmptyAddressValidationResponse : AddressValidation.AbstractAddressValidationResponse
+    public sealed class EmptyAddressValidationResponse : Visus.AddressValidation.AbstractAddressValidationResponse
     {
         public EmptyAddressValidationResponse(FluentValidation.Results.ValidationResult? validationResult) { }
     }

@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <IsTestProject>true</IsTestProject>
+        <RootNamespace>Visus.AddressValidation.Google.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -31,7 +32,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\AddressValidation.Google\AddressValidation.Google.csproj"/>
-        <ProjectReference Include="..\AddressValidation.Shared.Tests\AddressValidation.Shared.Tests.csproj" />
+        <ProjectReference Include="..\AddressValidation.Shared.Tests\AddressValidation.Shared.Tests.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -54,7 +55,7 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="Fixtures\ErrorResponse.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 

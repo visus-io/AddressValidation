@@ -2,8 +2,8 @@ namespace AddressValidation.Google.Tests;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using Http;
 using PublicApiGenerator;
+using Visus.AddressValidation.Google.Http;
 
 [SuppressMessage("Performance", "CA1822:Mark members as static")]
 public sealed class ApiFacts

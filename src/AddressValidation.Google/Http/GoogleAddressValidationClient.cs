@@ -1,4 +1,4 @@
-namespace AddressValidation.Google.Http;
+namespace Visus.AddressValidation.Google.Http;
 
 using System.Net.Http.Json;
 using Microsoft.Extensions.Logging;

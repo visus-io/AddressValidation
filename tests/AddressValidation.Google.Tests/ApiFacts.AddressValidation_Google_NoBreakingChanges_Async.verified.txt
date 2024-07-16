@@ -1,28 +1,28 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("AddressValidation.Google.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
-namespace AddressValidation.Google.Extensions
+namespace Visus.AddressValidation.Google.Extensions
 {
     public static class ServiceCollectionExtensions
     {
         public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddGoogleAddressValidation(this Microsoft.Extensions.DependencyInjection.IServiceCollection services) { }
     }
 }
-namespace AddressValidation.Google.Http
+namespace Visus.AddressValidation.Google.Http
 {
-    [System.Text.Json.Serialization.JsonConverter(typeof(AddressValidation.Google.Serialization.Json.AddressValidationRequestConverter))]
-    public sealed class GoogleAddressValidationRequest : AddressValidation.AbstractAddressValidationRequest
+    [System.Text.Json.Serialization.JsonConverter(typeof(Visus.AddressValidation.Google.Serialization.Json.AddressValidationRequestConverter))]
+    public sealed class GoogleAddressValidationRequest : Visus.AddressValidation.AbstractAddressValidationRequest
     {
         public GoogleAddressValidationRequest() { }
         public bool EnableUspsCass { get; }
     }
 }
-namespace AddressValidation.Google.Serialization.Json
+namespace Visus.AddressValidation.Google.Serialization.Json
 {
-    public sealed class AddressValidationRequestConverter : System.Text.Json.Serialization.JsonConverter<AddressValidation.Google.Http.GoogleAddressValidationRequest?>
+    public sealed class AddressValidationRequestConverter : System.Text.Json.Serialization.JsonConverter<Visus.AddressValidation.Google.Http.GoogleAddressValidationRequest?>
     {
         public AddressValidationRequestConverter() { }
-        public override AddressValidation.Google.Http.GoogleAddressValidationRequest Read(ref System.Text.Json.Utf8JsonReader reader, System.Type typeToConvert, System.Text.Json.JsonSerializerOptions options) { }
-        public override void Write(System.Text.Json.Utf8JsonWriter writer, AddressValidation.Google.Http.GoogleAddressValidationRequest? value, System.Text.Json.JsonSerializerOptions options) { }
+        public override Visus.AddressValidation.Google.Http.GoogleAddressValidationRequest Read(ref System.Text.Json.Utf8JsonReader reader, System.Type typeToConvert, System.Text.Json.JsonSerializerOptions options) { }
+        public override void Write(System.Text.Json.Utf8JsonWriter writer, Visus.AddressValidation.Google.Http.GoogleAddressValidationRequest? value, System.Text.Json.JsonSerializerOptions options) { }
     }
 }
