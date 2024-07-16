@@ -1,4 +1,4 @@
-namespace AddressValidation.Google.Extensions;
+namespace Visus.AddressValidation.Google.Extensions;
 
 using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Abstractions;

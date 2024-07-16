@@ -1,4 +1,4 @@
-namespace AddressValidation;
+namespace Visus.AddressValidation;
 
 using Abstractions;
 using FluentValidation;
@@ -43,7 +43,7 @@ public abstract class AbstractAddressValidationService<TRequest, TResponse> : IA
 	{
 		_requestValidator = requestValidator ?? throw new ArgumentNullException(nameof(requestValidator));
 		_responseValidator = responseValidator ?? throw new ArgumentNullException(nameof(responseValidator));
-		
+
 		if ( !requestValidator.GetType().IsSubclassOf(typeof(AbstractAddressValidationRequestValidator<TRequest>)) )
 		{
 			throw new InvalidImplementationException($"{nameof(requestValidator)} must implement {nameof(AbstractAddressValidationRequestValidator<TRequest>)}");

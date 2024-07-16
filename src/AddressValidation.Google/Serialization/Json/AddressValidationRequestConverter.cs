@@ -1,4 +1,4 @@
-namespace AddressValidation.Google.Serialization.Json;
+namespace Visus.AddressValidation.Google.Serialization.Json;
 
 using System.Text.Json;
 using System.Text.Json.Serialization;

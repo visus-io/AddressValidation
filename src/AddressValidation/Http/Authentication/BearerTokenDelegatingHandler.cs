@@ -1,4 +1,4 @@
-namespace AddressValidation.Http.Authentication;
+namespace Visus.AddressValidation.Http.Authentication;
 
 using System.Net.Http.Headers;
 using System.Security.Authentication;

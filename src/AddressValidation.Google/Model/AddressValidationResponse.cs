@@ -1,4 +1,4 @@
-namespace AddressValidation.Google.Model;
+namespace Visus.AddressValidation.Google.Model;
 
 using FluentValidation.Results;
 using Http;

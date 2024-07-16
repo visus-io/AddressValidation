@@ -1,7 +1,7 @@
 // ReSharper disable InconsistentNaming
 // ReSharper disable CommentTypo
 
-namespace AddressValidation.Abstractions;
+namespace Visus.AddressValidation.Abstractions;
 
 using System.ComponentModel;
 

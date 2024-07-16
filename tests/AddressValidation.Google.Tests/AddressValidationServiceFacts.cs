@@ -1,7 +1,6 @@
-namespace AddressValidation.Google.Tests;
+namespace Visus.AddressValidation.Google.Tests;
 
 using System.Net;
-using System.Text.Json;
 using AddressValidation.Abstractions;
 using Http;
 using Microsoft.Extensions.Logging;
@@ -19,7 +18,7 @@ public sealed class AddressValidationServiceFacts
 		var mockLogger = new Mock<ILogger<GoogleAddressValidationClient>>();
 
 		var json = await File.ReadAllTextAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Fixtures", "ErrorResponse.json"));
-		
+
 		var requestValidator = new AddressValidationRequestValidator();
 		var responseValidator = new ApiAddressValidationResponseValidator();
 
@@ -36,7 +35,7 @@ public sealed class AddressValidationServiceFacts
 			PostalCode = "94043",
 			Country = CountryCode.US
 		};
-		
+
 		var httpMessageHandlerMock = new MockHttpMessageHandler();
 		httpMessageHandlerMock.Expect("v1:validateAddress")
 							  .Respond(HttpStatusCode.BadRequest, "application/json", json);

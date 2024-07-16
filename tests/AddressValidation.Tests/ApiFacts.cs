@@ -1,8 +1,8 @@
 namespace AddressValidation.Tests;
 
 using System.Runtime.CompilerServices;
-using AddressValidation.Abstractions;
 using PublicApiGenerator;
+using Visus.AddressValidation.Abstractions;
 
 public sealed class ApiFacts
 {

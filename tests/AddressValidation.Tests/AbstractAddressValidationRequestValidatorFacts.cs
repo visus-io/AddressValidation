@@ -1,4 +1,4 @@
-namespace AddressValidation.Tests;
+namespace Visus.AddressValidation.Tests;
 
 using AddressValidation.Abstractions;
 using FluentValidation.TestHelper;

@@ -1,4 +1,4 @@
-namespace AddressValidation.Model;
+namespace Visus.AddressValidation.Model;
 
 using System.Diagnostics.CodeAnalysis;
 using FluentValidation.Results;
@@ -10,7 +10,7 @@ using FluentValidation.Results;
 public sealed class EmptyAddressValidationResponse : AbstractAddressValidationResponse
 {
 	/// <inheritdoc />
-	public EmptyAddressValidationResponse(ValidationResult? validationResult) 
+	public EmptyAddressValidationResponse(ValidationResult? validationResult)
 		: base(validationResult)
 	{
 	}

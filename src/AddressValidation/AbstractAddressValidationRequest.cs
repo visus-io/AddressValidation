@@ -1,4 +1,4 @@
-namespace AddressValidation;
+namespace Visus.AddressValidation;
 
 using System.Text.Json.Serialization;
 using Abstractions;

@@ -3,12 +3,13 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <IsTestProject>true</IsTestProject>
+        <RootNamespace>Visus.AddressValidation.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector">
             <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>            
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="coverlet.msbuild">
             <PrivateAssets>all</PrivateAssets>

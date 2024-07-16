@@ -1,4 +1,4 @@
-namespace AddressValidation.Abstractions;
+namespace Visus.AddressValidation.Abstractions;
 
 /// <summary>
 ///     Abstraction for implementing authentication against a web service

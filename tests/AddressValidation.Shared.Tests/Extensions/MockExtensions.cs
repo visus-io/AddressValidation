@@ -1,4 +1,4 @@
-namespace AddressValidation.Shared.Tests.Extensions;
+namespace Visus.AddressValidation.Shared.Tests.Extensions;
 
 using Microsoft.Extensions.Logging;
 using Moq;

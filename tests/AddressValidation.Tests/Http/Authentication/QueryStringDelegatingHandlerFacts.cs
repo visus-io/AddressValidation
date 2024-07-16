@@ -1,4 +1,4 @@
-namespace AddressValidation.Tests.Http.Authentication;
+namespace Visus.AddressValidation.Tests.Http.Authentication;
 
 using System.Web;
 using Abstractions;

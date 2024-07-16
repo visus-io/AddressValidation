@@ -1,4 +1,4 @@
-namespace AddressValidation.Google.Tests;
+namespace Visus.AddressValidation.Google.Tests;
 
 using AddressValidation.Abstractions;
 using FluentValidation.TestHelper;

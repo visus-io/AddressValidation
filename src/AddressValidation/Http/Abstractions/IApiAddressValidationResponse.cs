@@ -1,4 +1,4 @@
-namespace AddressValidation.Http.Abstractions;
+namespace Visus.AddressValidation.Http.Abstractions;
 
 using AddressValidation.Abstractions;
 using FluentValidation.Results;
