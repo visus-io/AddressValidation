@@ -2,10 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <RootNamespace>Visus.AddressValidation.Google</RootNamespace>
+        <RootNamespace>Visus.AddressValidation.Ups</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="IdentityModel" />
         <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -21,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AddressValidation\AddressValidation.csproj" />
+      <ProjectReference Include="..\src\AddressValidation\AddressValidation.csproj" />
     </ItemGroup>
-
+    
 </Project>

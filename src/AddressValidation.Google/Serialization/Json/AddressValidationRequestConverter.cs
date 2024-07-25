@@ -36,12 +36,10 @@ public sealed class AddressValidationRequestConverter : JsonConverter<GoogleAddr
 		writer.WriteStartObject(AddressPropertyName);
 
 		writer.WriteStartArray(AddressLinesPropertyName);
-
 		foreach ( string addressLine in value.AddressLines )
 		{
 			writer.WriteStringValue(addressLine);
 		}
-
 		writer.WriteEndArray();
 
 		if ( !string.IsNullOrWhiteSpace(value.StateOrProvince) )

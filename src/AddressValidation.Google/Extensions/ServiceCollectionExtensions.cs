@@ -20,7 +20,7 @@ using Validation;
 /// </summary>
 public static class ServiceCollectionExtensions
 {
-	private const string DelegatingHandlerConfigurationKey = "AVE_GOOGLE_API_KEY";
+	private const string DelegatingHandlerConfigurationKey = "VS_AVE_GOOGLE_API_KEY";
 
 	private const string LoggingCategoryName = "AddressValidation.Google";
 

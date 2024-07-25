@@ -53,6 +53,13 @@ namespace Visus.AddressValidation
 }
 namespace Visus.AddressValidation.Abstractions
 {
+    public enum ClientEnvironment
+    {
+        [System.ComponentModel.Description("Development")]
+        DEVELOPMENT = 0,
+        [System.ComponentModel.Description("Production")]
+        PRODUCTION = 1,
+    }
     public enum CountryCode
     {
         [System.ComponentModel.Description("Unknown")]
