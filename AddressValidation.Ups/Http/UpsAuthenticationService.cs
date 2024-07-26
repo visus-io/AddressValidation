@@ -17,11 +17,11 @@ public sealed class UpsAuthenticationService : IAuthenticationService
 
 	private readonly IMemoryCache _cache;
 
+	private readonly string? _cacheKey;
+
 	private readonly IConfiguration _configuration;
 
 	private readonly IHttpClientFactory _httpClientFactory;
-
-	private readonly string? CacheKey;
 
 	public UpsAuthenticationService(IMemoryCache cache,
 									IConfiguration configuration,
@@ -42,17 +42,17 @@ public sealed class UpsAuthenticationService : IAuthenticationService
 			clientEnvironment = Abstractions.ClientEnvironment.PRODUCTION;
 		}
 
-		CacheKey = $"VS_AVE_CACHE_UPS_ACCESS_TOKEN_${accountNumber}:{clientEnvironment}";
+		_cacheKey = $"VS_AVE_CACHE_UPS_ACCESS_TOKEN_${accountNumber}:{clientEnvironment}";
 	}
 
 	public async ValueTask<string?> GetAccessTokenAsync(CancellationToken cancellationToken = default)
 	{
-		if ( string.IsNullOrWhiteSpace(CacheKey) )
+		if ( string.IsNullOrWhiteSpace(_cacheKey) )
 		{
 			return null;
 		}
 
-		string? accessToken = _cache.Get<string?>(CacheKey);
+		string? accessToken = _cache.Get<string?>(_cacheKey);
 		if ( !string.IsNullOrWhiteSpace(accessToken) )
 		{
 			return accessToken;
@@ -77,7 +77,7 @@ public sealed class UpsAuthenticationService : IAuthenticationService
 		DateTimeOffset expires = DateTimeOffset.UtcNow;
 		expires = expires.AddSeconds(response.ExpiresIn);
 
-		_cache.Set(CacheKey, response.AccessToken, expires);
+		_cache.Set(_cacheKey, response.AccessToken, expires);
 
 		return response.AccessToken;
 	}

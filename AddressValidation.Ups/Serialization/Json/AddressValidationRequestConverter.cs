@@ -24,6 +24,8 @@ public class AddressValidationRequestConverter : JsonConverter<UpsAddressValidat
 
 	private const string PostcodePrimaryLowPropertyName = "PostcodePrimaryLow";
 
+	private const string XavRequestPropertyName = "XAVRequest";
+
 	/// <inheritdoc />
 	public override UpsAddressValidationRequest Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 	{
@@ -40,6 +42,7 @@ public class AddressValidationRequestConverter : JsonConverter<UpsAddressValidat
 		}
 
 		writer.WriteStartObject();
+		writer.WriteStartObject(XavRequestPropertyName);
 		writer.WriteStartObject(AddressKeyFormatPropertyName);
 
 		writer.WriteStartArray(AddressLinePropertyName);
@@ -52,25 +55,19 @@ public class AddressValidationRequestConverter : JsonConverter<UpsAddressValidat
 
 		writer.WriteString(PoliticalDivision2PropertyName, value.CityOrTown);
 		writer.WriteString(PoliticalDivision1PropertyName, value.StateOrProvince);
-
-		if ( value.Country == CountryCode.US )
-		{
-			string[] values = value.PostalCode!.Split('-', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-			
-			writer.WriteString(PostcodePrimaryLowPropertyName, values[0]);
-
-			if ( values.Length == 2 )
-			{
-				writer.WriteString(PostcodeExtendedLowPropertyName, values[1]);
-			}
-		}
-		else
-		{
-			writer.WriteString(PostcodePrimaryLowPropertyName, value.PostalCode);
-		}
 		
+		string[] values = value.PostalCode!.Split('-', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+		writer.WriteString(PostcodePrimaryLowPropertyName, values[0]);
+
+		if ( values.Length == 2 )
+		{
+			writer.WriteString(PostcodeExtendedLowPropertyName, values[1]);
+		}
+
 		writer.WriteString(CountryCodePropertyName, value.Country!.Value.ToString());
-		
+
+		writer.WriteEndObject();
 		writer.WriteEndObject();
 		writer.WriteEndObject();
 	}
