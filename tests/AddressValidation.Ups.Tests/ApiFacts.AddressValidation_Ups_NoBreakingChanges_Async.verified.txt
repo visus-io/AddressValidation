@@ -15,11 +15,6 @@ namespace Visus.AddressValidation.Ups.Http
     {
         public UpsAddressValidationRequest() { }
     }
-    public sealed class UpsAuthenticationService : Visus.AddressValidation.Abstractions.IAuthenticationService
-    {
-        public UpsAuthenticationService(Microsoft.Extensions.Caching.Memory.IMemoryCache cache, Microsoft.Extensions.Configuration.IConfiguration configuration, System.Net.Http.IHttpClientFactory httpClientFactory) { }
-        public System.Threading.Tasks.ValueTask<string?> GetAccessTokenAsync(System.Threading.CancellationToken cancellationToken = default) { }
-    }
 }
 namespace Visus.AddressValidation.Ups.Serialization.Json
 {
@@ -28,5 +23,13 @@ namespace Visus.AddressValidation.Ups.Serialization.Json
         public AddressValidationRequestConverter() { }
         public override Visus.AddressValidation.Ups.Http.UpsAddressValidationRequest Read(ref System.Text.Json.Utf8JsonReader reader, System.Type typeToConvert, System.Text.Json.JsonSerializerOptions options) { }
         public override void Write(System.Text.Json.Utf8JsonWriter writer, Visus.AddressValidation.Ups.Http.UpsAddressValidationRequest? value, System.Text.Json.JsonSerializerOptions options) { }
+    }
+}
+namespace Visus.AddressValidation.Ups.Services
+{
+    public sealed class UpsAuthenticationService : Visus.AddressValidation.Abstractions.IAuthenticationService
+    {
+        public UpsAuthenticationService(Microsoft.Extensions.Caching.Memory.IMemoryCache cache, Microsoft.Extensions.Configuration.IConfiguration configuration, System.Net.Http.IHttpClientFactory httpClientFactory) { }
+        public System.Threading.Tasks.ValueTask<string?> GetAccessTokenAsync(System.Threading.CancellationToken cancellationToken = default) { }
     }
 }

@@ -1,4 +1,4 @@
-namespace Visus.AddressValidation.Ups.Http;
+namespace Visus.AddressValidation.Ups.Services;
 
 using Abstractions;
 using IdentityModel.Client;
