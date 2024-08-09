@@ -1,0 +1,35 @@
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("AddressValidation.Ups.Tests")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
+namespace Visus.AddressValidation.Ups.Extensions
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddUpsAddressValidation(this Microsoft.Extensions.DependencyInjection.IServiceCollection services) { }
+    }
+}
+namespace Visus.AddressValidation.Ups.Http
+{
+    [System.Text.Json.Serialization.JsonConverter(typeof(Visus.AddressValidation.Ups.Serialization.Json.AddressValidationRequestConverter))]
+    public sealed class UpsAddressValidationRequest : Visus.AddressValidation.AbstractAddressValidationRequest
+    {
+        public UpsAddressValidationRequest() { }
+    }
+}
+namespace Visus.AddressValidation.Ups.Serialization.Json
+{
+    public class AddressValidationRequestConverter : System.Text.Json.Serialization.JsonConverter<Visus.AddressValidation.Ups.Http.UpsAddressValidationRequest?>
+    {
+        public AddressValidationRequestConverter() { }
+        public override Visus.AddressValidation.Ups.Http.UpsAddressValidationRequest Read(ref System.Text.Json.Utf8JsonReader reader, System.Type typeToConvert, System.Text.Json.JsonSerializerOptions options) { }
+        public override void Write(System.Text.Json.Utf8JsonWriter writer, Visus.AddressValidation.Ups.Http.UpsAddressValidationRequest? value, System.Text.Json.JsonSerializerOptions options) { }
+    }
+}
+namespace Visus.AddressValidation.Ups.Services
+{
+    public sealed class UpsAuthenticationService : Visus.AddressValidation.Abstractions.IAuthenticationService
+    {
+        public UpsAuthenticationService(Microsoft.Extensions.Caching.Memory.IMemoryCache cache, Microsoft.Extensions.Configuration.IConfiguration configuration, System.Net.Http.IHttpClientFactory httpClientFactory) { }
+        public System.Threading.Tasks.ValueTask<string?> GetAccessTokenAsync(System.Threading.CancellationToken cancellationToken = default) { }
+    }
+}
