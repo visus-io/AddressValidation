@@ -1,0 +1,51 @@
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Integration.Google.Tests")]
+namespace Visus.AddressValidation.Integration.Google
+{
+    public static class Constants
+    {
+        public const string PrivateKeyConfigurationKey = "VS_AVE_GCP_SERVICE_ACCOUNT_PRIVATE_KEY";
+        public const string ProjectIdConfigurationKey = "VS_AVE_GCP_PROJECT_ID";
+        public const string ServiceAccountEmailConfigurationKey = "VS_AVE_GCP_SERVICE_ACCOUNT_EMAIL";
+        public static readonly System.Uri ProductionEndpointBaseUri;
+        public static readonly System.Collections.Generic.IReadOnlySet<Visus.AddressValidation.Abstractions.CountryCode> SupportedCountries;
+    }
+}
+namespace Visus.AddressValidation.Integration.Google.Extensions
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddGoogleAddressValidation(this Microsoft.Extensions.DependencyInjection.IServiceCollection services) { }
+    }
+}
+namespace Visus.AddressValidation.Integration.Google.Http
+{
+    [System.Text.Json.Serialization.JsonConverter(typeof(Visus.AddressValidation.Integration.Google.Serialization.Json.AddressValidationRequestConverter))]
+    public sealed class GoogleAddressValidationRequest : Visus.AddressValidation.Http.AbstractAddressValidationRequest
+    {
+        public GoogleAddressValidationRequest() { }
+        public bool EnableUspsCass { get; }
+        public System.Guid? PreviousResponseId { get; set; }
+    }
+}
+namespace Visus.AddressValidation.Integration.Google.Serialization.Json
+{
+    public sealed class AddressValidationRequestConverter : System.Text.Json.Serialization.JsonConverter<Visus.AddressValidation.Integration.Google.Http.GoogleAddressValidationRequest?>
+    {
+        public AddressValidationRequestConverter() { }
+        public override Visus.AddressValidation.Integration.Google.Http.GoogleAddressValidationRequest Read(ref System.Text.Json.Utf8JsonReader reader, System.Type typeToConvert, System.Text.Json.JsonSerializerOptions? options) { }
+        public override void Write(System.Text.Json.Utf8JsonWriter writer, Visus.AddressValidation.Integration.Google.Http.GoogleAddressValidationRequest? value, System.Text.Json.JsonSerializerOptions options) { }
+    }
+    [System.Text.Json.Serialization.JsonSerializable(typeof(Visus.AddressValidation.Integration.Google.Http.GoogleAddressValidationRequest))]
+    [System.Text.Json.Serialization.JsonSourceGenerationOptions(WriteIndented=false)]
+    public class GoogleJsonSerializerContext : System.Text.Json.Serialization.JsonSerializerContext, System.Text.Json.Serialization.Metadata.IJsonTypeInfoResolver
+    {
+        public GoogleJsonSerializerContext() { }
+        public GoogleJsonSerializerContext(System.Text.Json.JsonSerializerOptions options) { }
+        protected override System.Text.Json.JsonSerializerOptions? GeneratedSerializerOptions { get; }
+        public System.Text.Json.Serialization.Metadata.JsonTypeInfo<Visus.AddressValidation.Integration.Google.Http.GoogleAddressValidationRequest> GoogleAddressValidationRequest { get; }
+        public static Visus.AddressValidation.Integration.Google.Serialization.Json.GoogleJsonSerializerContext Default { get; }
+        public override System.Text.Json.Serialization.Metadata.JsonTypeInfo? GetTypeInfo(System.Type type) { }
+    }
+}

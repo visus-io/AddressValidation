@@ -1,0 +1,51 @@
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Integration.Ups.Tests")]
+namespace Visus.AddressValidation.Integration.Ups
+{
+    public static class Constants
+    {
+        public const string AccountNumberConfigurationKey = "VS_AVE_UPS_ACCOUNT_NUMBER";
+        public const string ClientEnvironmentConfigurationKey = "VS_AVE_UPS_CLIENT_ENVIRONMENT";
+        public const string ClientIdConfigurationKey = "VS_AVE_UPS_CLIENT_ID";
+        public const string ClientSecretConfigurationKey = "VS_AVE_UPS_CLIENT_SECRET";
+        public static readonly System.Uri DevelopmentEndpointBaseUri;
+        public static readonly System.Uri ProductionEndpointBaseUri;
+        public static readonly System.Collections.Generic.IReadOnlySet<Visus.AddressValidation.Abstractions.CountryCode> SupportedCountries;
+    }
+}
+namespace Visus.AddressValidation.Integration.Ups.Extensions
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddUpsAddressValidation(this Microsoft.Extensions.DependencyInjection.IServiceCollection services) { }
+    }
+}
+namespace Visus.AddressValidation.Integration.Ups.Http
+{
+    [System.Text.Json.Serialization.JsonConverter(typeof(Visus.AddressValidation.Integration.Ups.Serialization.Json.AddressValidationRequestConverter))]
+    public sealed class UpsAddressValidationRequest : Visus.AddressValidation.Http.AbstractAddressValidationRequest
+    {
+        public UpsAddressValidationRequest() { }
+    }
+}
+namespace Visus.AddressValidation.Integration.Ups.Serialization.Json
+{
+    public sealed class AddressValidationRequestConverter : System.Text.Json.Serialization.JsonConverter<Visus.AddressValidation.Integration.Ups.Http.UpsAddressValidationRequest?>
+    {
+        public AddressValidationRequestConverter() { }
+        public override Visus.AddressValidation.Integration.Ups.Http.UpsAddressValidationRequest Read(ref System.Text.Json.Utf8JsonReader reader, System.Type typeToConvert, System.Text.Json.JsonSerializerOptions options) { }
+        public override void Write(System.Text.Json.Utf8JsonWriter writer, Visus.AddressValidation.Integration.Ups.Http.UpsAddressValidationRequest? value, System.Text.Json.JsonSerializerOptions options) { }
+    }
+    [System.Text.Json.Serialization.JsonSerializable(typeof(Visus.AddressValidation.Integration.Ups.Http.UpsAddressValidationRequest))]
+    [System.Text.Json.Serialization.JsonSourceGenerationOptions(WriteIndented=false)]
+    public class UpsJsonSerializerContext : System.Text.Json.Serialization.JsonSerializerContext, System.Text.Json.Serialization.Metadata.IJsonTypeInfoResolver
+    {
+        public UpsJsonSerializerContext() { }
+        public UpsJsonSerializerContext(System.Text.Json.JsonSerializerOptions options) { }
+        protected override System.Text.Json.JsonSerializerOptions? GeneratedSerializerOptions { get; }
+        public System.Text.Json.Serialization.Metadata.JsonTypeInfo<Visus.AddressValidation.Integration.Ups.Http.UpsAddressValidationRequest> UpsAddressValidationRequest { get; }
+        public static Visus.AddressValidation.Integration.Ups.Serialization.Json.UpsJsonSerializerContext Default { get; }
+        public override System.Text.Json.Serialization.Metadata.JsonTypeInfo? GetTypeInfo(System.Type type) { }
+    }
+}

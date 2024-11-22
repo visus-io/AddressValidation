@@ -1,0 +1,740 @@
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Tests")]
+namespace Visus.AddressValidation.Abstractions
+{
+    public enum ClientEnvironment
+    {
+        [System.ComponentModel.Description("Development")]
+        DEVELOPMENT = 0,
+        [System.ComponentModel.Description("Production")]
+        PRODUCTION = 1,
+    }
+    public enum CountryCode
+    {
+        [System.ComponentModel.Description("Unknown")]
+        ZZ = 0,
+        [System.ComponentModel.Description("Afghanistan")]
+        AF = 4,
+        [System.ComponentModel.Description("Albania")]
+        AL = 8,
+        [System.ComponentModel.Description("Antarctica")]
+        AQ = 10,
+        [System.ComponentModel.Description("Algeria")]
+        DZ = 12,
+        [System.ComponentModel.Description("American Samoa")]
+        AS = 16,
+        [System.ComponentModel.Description("Andorra")]
+        AD = 20,
+        [System.ComponentModel.Description("Angola")]
+        AO = 24,
+        [System.ComponentModel.Description("Antigua and Barbuda")]
+        AG = 28,
+        [System.ComponentModel.Description("Azerbaijan")]
+        AZ = 31,
+        [System.ComponentModel.Description("Argentina")]
+        AR = 32,
+        [System.ComponentModel.Description("Australia")]
+        AU = 36,
+        [System.ComponentModel.Description("Austria")]
+        AT = 40,
+        [System.ComponentModel.Description("Bahamas")]
+        BS = 44,
+        [System.ComponentModel.Description("Bahrain")]
+        BH = 48,
+        [System.ComponentModel.Description("Bangladesh")]
+        BD = 50,
+        [System.ComponentModel.Description("Armenia")]
+        AM = 51,
+        [System.ComponentModel.Description("Barbados")]
+        BB = 52,
+        [System.ComponentModel.Description("Belgium")]
+        BE = 56,
+        [System.ComponentModel.Description("Bermuda")]
+        BM = 60,
+        [System.ComponentModel.Description("Bhutan")]
+        BT = 64,
+        [System.ComponentModel.Description("Bolivia (Plurinational State of)")]
+        BO = 68,
+        [System.ComponentModel.Description("Bosnia and Herzegovina")]
+        BA = 70,
+        [System.ComponentModel.Description("Botswana")]
+        BW = 72,
+        [System.ComponentModel.Description("Bouvet Island")]
+        BV = 74,
+        [System.ComponentModel.Description("Brazil")]
+        BR = 76,
+        [System.ComponentModel.Description("Belize")]
+        BZ = 84,
+        [System.ComponentModel.Description("British Indian Ocean Territory")]
+        IO = 86,
+        [System.ComponentModel.Description("Solomon Islands")]
+        SB = 90,
+        [System.ComponentModel.Description("Virgin Islands (British)")]
+        VG = 92,
+        [System.ComponentModel.Description("Brunei Darussalam")]
+        BN = 96,
+        [System.ComponentModel.Description("Bulgaria")]
+        BG = 100,
+        [System.ComponentModel.Description("Myanmar")]
+        MM = 104,
+        [System.ComponentModel.Description("Burundi")]
+        BI = 108,
+        [System.ComponentModel.Description("Belarus")]
+        BY = 112,
+        [System.ComponentModel.Description("Cambodia")]
+        KH = 116,
+        [System.ComponentModel.Description("Cameroon")]
+        CM = 120,
+        [System.ComponentModel.Description("Canada")]
+        CA = 124,
+        [System.ComponentModel.Description("Cabo Verde")]
+        CV = 132,
+        [System.ComponentModel.Description("Cayman Islands")]
+        KY = 136,
+        [System.ComponentModel.Description("Central African Republic")]
+        CF = 140,
+        [System.ComponentModel.Description("Sri Lanka")]
+        LK = 144,
+        [System.ComponentModel.Description("Chad")]
+        TD = 148,
+        [System.ComponentModel.Description("Chile")]
+        CL = 152,
+        [System.ComponentModel.Description("China")]
+        CN = 156,
+        [System.ComponentModel.Description("Taiwan, Province of China")]
+        TW = 158,
+        [System.ComponentModel.Description("Christmas Island")]
+        CX = 162,
+        [System.ComponentModel.Description("Cocos (Keeling) Islands")]
+        CC = 166,
+        [System.ComponentModel.Description("Colombia")]
+        CO = 170,
+        [System.ComponentModel.Description("Comoros")]
+        KM = 174,
+        [System.ComponentModel.Description("Mayotte")]
+        YT = 175,
+        [System.ComponentModel.Description("Congo")]
+        CG = 178,
+        [System.ComponentModel.Description("Congo, Democratic Republic of the")]
+        CD = 180,
+        [System.ComponentModel.Description("Cook Islands")]
+        CK = 184,
+        [System.ComponentModel.Description("Costa Rica")]
+        CR = 188,
+        [System.ComponentModel.Description("Croatia")]
+        HR = 191,
+        [System.ComponentModel.Description("Cuba")]
+        CU = 192,
+        [System.ComponentModel.Description("Cyprus")]
+        CY = 196,
+        [System.ComponentModel.Description("Czechia")]
+        CZ = 203,
+        [System.ComponentModel.Description("Benin")]
+        BJ = 204,
+        [System.ComponentModel.Description("Denmark")]
+        DK = 208,
+        [System.ComponentModel.Description("Dominica")]
+        DM = 212,
+        [System.ComponentModel.Description("Dominican Republic")]
+        DO = 214,
+        [System.ComponentModel.Description("Ecuador")]
+        EC = 218,
+        [System.ComponentModel.Description("El Salvador")]
+        SV = 222,
+        [System.ComponentModel.Description("Equatorial Guinea")]
+        GQ = 226,
+        [System.ComponentModel.Description("Ethiopia")]
+        ET = 231,
+        [System.ComponentModel.Description("Eritrea")]
+        ER = 232,
+        [System.ComponentModel.Description("Estonia")]
+        EE = 233,
+        [System.ComponentModel.Description("Faroe Islands")]
+        FO = 234,
+        [System.ComponentModel.Description("Falkland Islands (Malvinas)")]
+        FK = 238,
+        [System.ComponentModel.Description("South Georgia and the South Sandwich Islands")]
+        GS = 239,
+        [System.ComponentModel.Description("Fiji")]
+        FJ = 242,
+        [System.ComponentModel.Description("Finland")]
+        FI = 246,
+        [System.ComponentModel.Description("Åland Islands")]
+        AX = 248,
+        [System.ComponentModel.Description("France")]
+        FR = 250,
+        [System.ComponentModel.Description("French Guiana")]
+        GF = 254,
+        [System.ComponentModel.Description("French Polynesia")]
+        PF = 258,
+        [System.ComponentModel.Description("French Southern Territories")]
+        TF = 260,
+        [System.ComponentModel.Description("Djibouti")]
+        DJ = 262,
+        [System.ComponentModel.Description("Gabon")]
+        GA = 266,
+        [System.ComponentModel.Description("Georgia")]
+        GE = 268,
+        [System.ComponentModel.Description("Gambia")]
+        GM = 270,
+        [System.ComponentModel.Description("Palestine, State of")]
+        PS = 275,
+        [System.ComponentModel.Description("Germany")]
+        DE = 276,
+        [System.ComponentModel.Description("Ghana")]
+        GH = 288,
+        [System.ComponentModel.Description("Gibraltar")]
+        GI = 292,
+        [System.ComponentModel.Description("Kiribati")]
+        KI = 296,
+        [System.ComponentModel.Description("Greece")]
+        GR = 300,
+        [System.ComponentModel.Description("Greenland")]
+        GL = 304,
+        [System.ComponentModel.Description("Grenada")]
+        GD = 308,
+        [System.ComponentModel.Description("Guadeloupe")]
+        GP = 312,
+        [System.ComponentModel.Description("Guam")]
+        GU = 316,
+        [System.ComponentModel.Description("Guatemala")]
+        GT = 320,
+        [System.ComponentModel.Description("Guinea")]
+        GN = 324,
+        [System.ComponentModel.Description("Guyana")]
+        GY = 328,
+        [System.ComponentModel.Description("Haiti")]
+        HT = 332,
+        [System.ComponentModel.Description("Heard Island and McDonald Islands")]
+        HM = 334,
+        [System.ComponentModel.Description("Holy See")]
+        VA = 336,
+        [System.ComponentModel.Description("Honduras")]
+        HN = 340,
+        [System.ComponentModel.Description("Hong Kong")]
+        HK = 344,
+        [System.ComponentModel.Description("Hungary")]
+        HU = 348,
+        [System.ComponentModel.Description("Iceland")]
+        IS = 352,
+        [System.ComponentModel.Description("India")]
+        IN = 356,
+        [System.ComponentModel.Description("Indonesia")]
+        ID = 360,
+        [System.ComponentModel.Description("Iran (Islamic Republic of)")]
+        IR = 364,
+        [System.ComponentModel.Description("Iraq")]
+        IQ = 368,
+        [System.ComponentModel.Description("Ireland")]
+        IE = 372,
+        [System.ComponentModel.Description("Israel")]
+        IL = 376,
+        [System.ComponentModel.Description("Italy")]
+        IT = 380,
+        [System.ComponentModel.Description("Côte d\'Ivoire")]
+        CI = 384,
+        [System.ComponentModel.Description("Jamaica")]
+        JM = 388,
+        [System.ComponentModel.Description("Japan")]
+        JP = 392,
+        [System.ComponentModel.Description("Kazakhstan")]
+        KZ = 398,
+        [System.ComponentModel.Description("Jordan")]
+        JO = 400,
+        [System.ComponentModel.Description("Kenya")]
+        KE = 404,
+        [System.ComponentModel.Description("Korea (Democratic People\'s Republic of)")]
+        KP = 408,
+        [System.ComponentModel.Description("Korea, Republic of")]
+        KR = 410,
+        [System.ComponentModel.Description("Kuwait")]
+        KW = 414,
+        [System.ComponentModel.Description("Kyrgyzstan")]
+        KG = 417,
+        [System.ComponentModel.Description("Lao People\'s Democratic Republic")]
+        LA = 418,
+        [System.ComponentModel.Description("Lebanon")]
+        LB = 422,
+        [System.ComponentModel.Description("Lesotho")]
+        LS = 426,
+        [System.ComponentModel.Description("Latvia")]
+        LV = 428,
+        [System.ComponentModel.Description("Liberia")]
+        LR = 430,
+        [System.ComponentModel.Description("Libya")]
+        LY = 434,
+        [System.ComponentModel.Description("Liechtenstein")]
+        LI = 438,
+        [System.ComponentModel.Description("Lithuania")]
+        LT = 440,
+        [System.ComponentModel.Description("Luxembourg")]
+        LU = 442,
+        [System.ComponentModel.Description("Macao")]
+        MO = 446,
+        [System.ComponentModel.Description("Madagascar")]
+        MG = 450,
+        [System.ComponentModel.Description("Malawi")]
+        MW = 454,
+        [System.ComponentModel.Description("Malaysia")]
+        MY = 458,
+        [System.ComponentModel.Description("Maldives")]
+        MV = 462,
+        [System.ComponentModel.Description("Mali")]
+        ML = 466,
+        [System.ComponentModel.Description("Malta")]
+        MT = 470,
+        [System.ComponentModel.Description("Martinique")]
+        MQ = 474,
+        [System.ComponentModel.Description("Mauritania")]
+        MR = 478,
+        [System.ComponentModel.Description("Mauritius")]
+        MU = 480,
+        [System.ComponentModel.Description("Mexico")]
+        MX = 484,
+        [System.ComponentModel.Description("Monaco")]
+        MC = 492,
+        [System.ComponentModel.Description("Mongolia")]
+        MN = 496,
+        [System.ComponentModel.Description("Moldova, Republic of")]
+        MD = 498,
+        [System.ComponentModel.Description("Montenegro")]
+        ME = 499,
+        [System.ComponentModel.Description("Montserrat")]
+        MS = 500,
+        [System.ComponentModel.Description("Morocco")]
+        MA = 504,
+        [System.ComponentModel.Description("Mozambique")]
+        MZ = 508,
+        [System.ComponentModel.Description("Oman")]
+        OM = 512,
+        [System.ComponentModel.Description("Namibia")]
+        NA = 516,
+        [System.ComponentModel.Description("Nauru")]
+        NR = 520,
+        [System.ComponentModel.Description("Nepal")]
+        NP = 524,
+        [System.ComponentModel.Description("Netherlands")]
+        NL = 528,
+        [System.ComponentModel.Description("Curaçao")]
+        CW = 531,
+        [System.ComponentModel.Description("Aruba")]
+        AW = 533,
+        [System.ComponentModel.Description("Sint Maarten (Dutch part)")]
+        SX = 534,
+        [System.ComponentModel.Description("Bonaire, Sint Eustatius and Saba")]
+        BQ = 535,
+        [System.ComponentModel.Description("New Caledonia")]
+        NC = 540,
+        [System.ComponentModel.Description("Vanuatu")]
+        VU = 548,
+        [System.ComponentModel.Description("New Zealand")]
+        NZ = 554,
+        [System.ComponentModel.Description("Nicaragua")]
+        NI = 558,
+        [System.ComponentModel.Description("Niger")]
+        NE = 562,
+        [System.ComponentModel.Description("Nigeria")]
+        NG = 566,
+        [System.ComponentModel.Description("Niue")]
+        NU = 570,
+        [System.ComponentModel.Description("Norfolk Island")]
+        NF = 574,
+        [System.ComponentModel.Description("Norway")]
+        NO = 578,
+        [System.ComponentModel.Description("Northern Mariana Islands")]
+        MP = 580,
+        [System.ComponentModel.Description("United States Minor Outlying Islands")]
+        UM = 581,
+        [System.ComponentModel.Description("Micronesia (Federated States of)")]
+        FM = 583,
+        [System.ComponentModel.Description("Marshall Islands")]
+        MH = 584,
+        [System.ComponentModel.Description("Palau")]
+        PW = 585,
+        [System.ComponentModel.Description("Pakistan")]
+        PK = 586,
+        [System.ComponentModel.Description("Panama")]
+        PA = 591,
+        [System.ComponentModel.Description("Papua New Guinea")]
+        PG = 598,
+        [System.ComponentModel.Description("Paraguay")]
+        PY = 600,
+        [System.ComponentModel.Description("Peru")]
+        PE = 604,
+        [System.ComponentModel.Description("Philippines")]
+        PH = 608,
+        [System.ComponentModel.Description("Pitcairn")]
+        PN = 612,
+        [System.ComponentModel.Description("Poland")]
+        PL = 616,
+        [System.ComponentModel.Description("Portugal")]
+        PT = 620,
+        [System.ComponentModel.Description("Guinea-Bissau")]
+        GW = 624,
+        [System.ComponentModel.Description("Timor-Leste")]
+        TL = 626,
+        [System.ComponentModel.Description("Puerto Rico")]
+        PR = 630,
+        [System.ComponentModel.Description("Qatar")]
+        QA = 634,
+        [System.ComponentModel.Description("Réunion")]
+        RE = 638,
+        [System.ComponentModel.Description("Romania")]
+        RO = 642,
+        [System.ComponentModel.Description("Russian Federation")]
+        RU = 643,
+        [System.ComponentModel.Description("Rwanda")]
+        RW = 646,
+        [System.ComponentModel.Description("Saint Barthélemy")]
+        BL = 652,
+        [System.ComponentModel.Description("Saint Helena, Ascension and Tristan da Cunha")]
+        SH = 654,
+        [System.ComponentModel.Description("Saint Kitts and Nevis")]
+        KN = 659,
+        [System.ComponentModel.Description("Anguilla")]
+        AI = 660,
+        [System.ComponentModel.Description("Saint Lucia")]
+        LC = 662,
+        [System.ComponentModel.Description("Saint Martin (French part)")]
+        MF = 663,
+        [System.ComponentModel.Description("Saint Pierre and Miquelon")]
+        PM = 666,
+        [System.ComponentModel.Description("Saint Vincent and the Grenadines")]
+        VC = 670,
+        [System.ComponentModel.Description("San Marino")]
+        SM = 674,
+        [System.ComponentModel.Description("Sao Tome and Principe")]
+        ST = 678,
+        [System.ComponentModel.Description("Saudi Arabia")]
+        SA = 682,
+        [System.ComponentModel.Description("Senegal")]
+        SN = 686,
+        [System.ComponentModel.Description("Serbia")]
+        RS = 688,
+        [System.ComponentModel.Description("Seychelles")]
+        SC = 690,
+        [System.ComponentModel.Description("Sierra Leone")]
+        SL = 694,
+        [System.ComponentModel.Description("Singapore")]
+        SG = 702,
+        [System.ComponentModel.Description("Slovakia")]
+        SK = 703,
+        [System.ComponentModel.Description("Viet Nam")]
+        VN = 704,
+        [System.ComponentModel.Description("Slovenia")]
+        SI = 705,
+        [System.ComponentModel.Description("Somalia")]
+        SO = 706,
+        [System.ComponentModel.Description("South Africa")]
+        ZA = 710,
+        [System.ComponentModel.Description("Zimbabwe")]
+        ZW = 716,
+        [System.ComponentModel.Description("Spain")]
+        ES = 724,
+        [System.ComponentModel.Description("South Sudan")]
+        SS = 728,
+        [System.ComponentModel.Description("Sudan")]
+        SD = 729,
+        [System.ComponentModel.Description("Western Sahara")]
+        EH = 732,
+        [System.ComponentModel.Description("Suriname")]
+        SR = 740,
+        [System.ComponentModel.Description("Svalbard and Jan Mayen")]
+        SJ = 744,
+        [System.ComponentModel.Description("Eswatini")]
+        SZ = 748,
+        [System.ComponentModel.Description("Sweden")]
+        SE = 752,
+        [System.ComponentModel.Description("Switzerland")]
+        CH = 756,
+        [System.ComponentModel.Description("Syrian Arab Republic")]
+        SY = 760,
+        [System.ComponentModel.Description("Tajikistan")]
+        TJ = 762,
+        [System.ComponentModel.Description("Thailand")]
+        TH = 764,
+        [System.ComponentModel.Description("Togo")]
+        TG = 768,
+        [System.ComponentModel.Description("Tokelau")]
+        TK = 772,
+        [System.ComponentModel.Description("Tonga")]
+        TO = 776,
+        [System.ComponentModel.Description("Trinidad and Tobago")]
+        TT = 780,
+        [System.ComponentModel.Description("United Arab Emirates")]
+        AE = 784,
+        [System.ComponentModel.Description("Tunisia")]
+        TN = 788,
+        [System.ComponentModel.Description("Turkey")]
+        TR = 792,
+        [System.ComponentModel.Description("Turkmenistan")]
+        TM = 795,
+        [System.ComponentModel.Description("Turks and Caicos Islands")]
+        TC = 796,
+        [System.ComponentModel.Description("Tuvalu")]
+        TV = 798,
+        [System.ComponentModel.Description("Uganda")]
+        UG = 800,
+        [System.ComponentModel.Description("Ukraine")]
+        UA = 804,
+        [System.ComponentModel.Description("North Macedonia")]
+        MK = 807,
+        [System.ComponentModel.Description("Egypt")]
+        EG = 818,
+        [System.ComponentModel.Description("United Kingdom of Great Britain and Northern Ireland")]
+        GB = 826,
+        [System.ComponentModel.Description("Guernsey")]
+        GG = 831,
+        [System.ComponentModel.Description("Jersey")]
+        JE = 832,
+        [System.ComponentModel.Description("Isle of Man")]
+        IM = 833,
+        [System.ComponentModel.Description("Tanzania, United Republic of")]
+        TZ = 834,
+        [System.ComponentModel.Description("United States of America")]
+        US = 840,
+        [System.ComponentModel.Description("Virgin Islands (U.S.)")]
+        VI = 850,
+        [System.ComponentModel.Description("Burkina Faso")]
+        BF = 854,
+        [System.ComponentModel.Description("Uruguay")]
+        UY = 858,
+        [System.ComponentModel.Description("Uzbekistan")]
+        UZ = 860,
+        [System.ComponentModel.Description("Venezuela (Bolivarian Republic of)")]
+        VE = 862,
+        [System.ComponentModel.Description("Wallis and Futuna")]
+        WF = 876,
+        [System.ComponentModel.Description("Samoa")]
+        WS = 882,
+        [System.ComponentModel.Description("Yemen")]
+        YE = 887,
+        [System.ComponentModel.Description("Zambia")]
+        ZM = 894,
+    }
+}
+namespace Visus.AddressValidation
+{
+    [System.AttributeUsage(System.AttributeTargets.Property)]
+    public sealed class CustomResponseDataPropertyAttribute : System.Attribute
+    {
+        public CustomResponseDataPropertyAttribute() { }
+        public CustomResponseDataPropertyAttribute(string name) { }
+        public string? Name { get; }
+    }
+    public class InvalidImplementationException : System.Exception
+    {
+        public InvalidImplementationException() { }
+        public InvalidImplementationException(string message) { }
+        public InvalidImplementationException(string message, System.Exception innerException) { }
+    }
+}
+namespace Visus.AddressValidation.Extensions
+{
+    public static class DictionaryExtensions
+    {
+        public static void Merge<TKey, TValue>(this System.Collections.Generic.IDictionary<TKey, TValue> source, System.Collections.Generic.IDictionary<TKey, TValue> dictionary) { }
+        public static void Merge<TKey, TValue>(this System.Collections.Generic.IDictionary<TKey, TValue> source, System.Collections.Generic.IReadOnlyDictionary<TKey, TValue> dictionary) { }
+    }
+}
+namespace Visus.AddressValidation.Http
+{
+    public abstract class AbstractAddressValidationRequest
+    {
+        protected AbstractAddressValidationRequest() { }
+        public System.Collections.Generic.ISet<string> AddressLines { get; }
+        public string? CityOrTown { get; set; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<Visus.AddressValidation.Abstractions.CountryCode>?))]
+        public Visus.AddressValidation.Abstractions.CountryCode? Country { get; set; }
+        public string? PostalCode { get; set; }
+        public string? StateOrProvince { get; set; }
+    }
+    public abstract class AbstractApiResponse
+    {
+        protected AbstractApiResponse() { }
+        public abstract Visus.AddressValidation.Model.IAddressValidationResponse ToAddressValidationResponse(Visus.AddressValidation.Validation.IValidationResult? validationResult = null);
+    }
+    public sealed class BasicAuthenticationHeaderValue : System.Net.Http.Headers.AuthenticationHeaderValue
+    {
+        public BasicAuthenticationHeaderValue(string userName, string? password) { }
+    }
+    public sealed class BearerTokenDelegatingHandler<TClient> : System.Net.Http.DelegatingHandler
+        where TClient : Visus.AddressValidation.Http.IAuthenticationClient
+    {
+        public BearerTokenDelegatingHandler(Visus.AddressValidation.Services.AbstractAuthenticationService<TClient> authenticationService) { }
+        protected override System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage> SendAsync(System.Net.Http.HttpRequestMessage request, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public interface IAuthenticationClient
+    {
+        System.Threading.Tasks.ValueTask<Visus.AddressValidation.Http.TokenResponse?> RequestClientCredentialsTokenAsync(System.Threading.CancellationToken cancellationToken = default);
+    }
+    [System.Text.Json.Serialization.JsonConverter(typeof(Visus.AddressValidation.Serialization.Json.TokenResponseConverter?))]
+    public sealed class TokenResponse
+    {
+        public TokenResponse() { }
+        public string? AccessToken { get; set; }
+        public string? ErrorDescription { get; set; }
+        public int ExpiresIn { get; set; }
+        public string? IdentityToken { get; set; }
+        public string? IssuedTokenType { get; set; }
+        public string? RefreshToken { get; set; }
+        public string? Scope { get; set; }
+        public string? TokenType { get; set; }
+    }
+}
+namespace Visus.AddressValidation.Model
+{
+    public abstract class AbstractAddressValidationResponse : System.IEquatable<Visus.AddressValidation.Model.AbstractAddressValidationResponse>, Visus.AddressValidation.Model.IAddressValidationResponse
+    {
+        protected AbstractAddressValidationResponse(Visus.AddressValidation.Validation.IValidationResult? validationResult = null) { }
+        public System.Collections.Generic.IReadOnlySet<string> Errors { get; }
+        public System.Collections.Generic.IReadOnlySet<string> Warnings { get; }
+        public System.Collections.Generic.IReadOnlySet<string> AddressLines { get; init; }
+        public string? CityOrTown { get; init; }
+        public Visus.AddressValidation.Abstractions.CountryCode Country { get; init; }
+        public System.Collections.Generic.IReadOnlyDictionary<string, object?> CustomResponseData { get; init; }
+        public bool? IsResidential { get; init; }
+        public string? PostalCode { get; init; }
+        public string? StateOrProvince { get; init; }
+        public System.Collections.Generic.IReadOnlyList<Visus.AddressValidation.Model.IAddressValidationResponse> Suggestions { get; init; }
+        public bool Equals(Visus.AddressValidation.Model.AbstractAddressValidationResponse? other) { }
+        public override bool Equals(object? obj) { }
+        public override int GetHashCode() { }
+        public static bool operator !=(Visus.AddressValidation.Model.AbstractAddressValidationResponse? left, Visus.AddressValidation.Model.AbstractAddressValidationResponse? right) { }
+        public static bool operator ==(Visus.AddressValidation.Model.AbstractAddressValidationResponse? left, Visus.AddressValidation.Model.AbstractAddressValidationResponse? right) { }
+    }
+    public abstract class AbstractAddressValidationResponse<TResponse> : Visus.AddressValidation.Model.AbstractAddressValidationResponse
+        where TResponse : Visus.AddressValidation.Http.AbstractApiResponse
+    {
+        protected AbstractAddressValidationResponse(TResponse response, Visus.AddressValidation.Validation.IValidationResult? validationResult = null) { }
+    }
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public sealed class EmptyAddressValidationResponse : Visus.AddressValidation.Model.AbstractAddressValidationResponse
+    {
+        public EmptyAddressValidationResponse(Visus.AddressValidation.Validation.IValidationResult? validationResult = null) { }
+    }
+    public interface IAddressValidationResponse
+    {
+        [System.Text.Json.Serialization.JsonPropertyName("addressLines")]
+        System.Collections.Generic.IReadOnlySet<string> AddressLines { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("cityOrTown")]
+        string? CityOrTown { get; }
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<Visus.AddressValidation.Abstractions.CountryCode>))]
+        [System.Text.Json.Serialization.JsonPropertyName("country")]
+        Visus.AddressValidation.Abstractions.CountryCode Country { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("customResponseData")]
+        System.Collections.Generic.IReadOnlyDictionary<string, object?> CustomResponseData { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("errors")]
+        System.Collections.Generic.IReadOnlySet<string> Errors { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("isResidential")]
+        bool? IsResidential { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("postalCode")]
+        string? PostalCode { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("stateOrProvince")]
+        string? StateOrProvince { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("suggestions")]
+        System.Collections.Generic.IReadOnlyList<Visus.AddressValidation.Model.IAddressValidationResponse> Suggestions { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("warnings")]
+        System.Collections.Generic.IReadOnlySet<string> Warnings { get; }
+    }
+}
+namespace Visus.AddressValidation.Serialization.Json
+{
+    [System.Text.Json.Serialization.JsonSerializable(typeof(Visus.AddressValidation.Http.TokenResponse))]
+    [System.Text.Json.Serialization.JsonSourceGenerationOptions(WriteIndented=false)]
+    public class DefaultJsonSerializerContext : System.Text.Json.Serialization.JsonSerializerContext, System.Text.Json.Serialization.Metadata.IJsonTypeInfoResolver
+    {
+        public DefaultJsonSerializerContext() { }
+        public DefaultJsonSerializerContext(System.Text.Json.JsonSerializerOptions options) { }
+        protected override System.Text.Json.JsonSerializerOptions? GeneratedSerializerOptions { get; }
+        public System.Text.Json.Serialization.Metadata.JsonTypeInfo<Visus.AddressValidation.Http.TokenResponse> TokenResponse { get; }
+        public static Visus.AddressValidation.Serialization.Json.DefaultJsonSerializerContext Default { get; }
+        public override System.Text.Json.Serialization.Metadata.JsonTypeInfo? GetTypeInfo(System.Type type) { }
+    }
+    public sealed class TokenResponseConverter : System.Text.Json.Serialization.JsonConverter<Visus.AddressValidation.Http.TokenResponse>
+    {
+        public TokenResponseConverter() { }
+        public override Visus.AddressValidation.Http.TokenResponse Read(ref System.Text.Json.Utf8JsonReader reader, System.Type typeToConvert, System.Text.Json.JsonSerializerOptions options) { }
+        public override void Write(System.Text.Json.Utf8JsonWriter writer, Visus.AddressValidation.Http.TokenResponse? value, System.Text.Json.JsonSerializerOptions options) { }
+    }
+}
+namespace Visus.AddressValidation.Services
+{
+    public abstract class AbstractAddressValidationService<TRequest, TResponse> : Visus.AddressValidation.Services.IAddressValidationService<TRequest>
+        where TRequest : Visus.AddressValidation.Http.AbstractAddressValidationRequest
+        where TResponse : Visus.AddressValidation.Http.AbstractApiResponse
+    {
+        protected AbstractAddressValidationService(Visus.AddressValidation.Validation.IValidator<TRequest> requestValidator, Visus.AddressValidation.Validation.IValidator<TResponse> responseValidator) { }
+        protected abstract System.Threading.Tasks.ValueTask<TResponse?> SendAsync(TRequest request, System.Threading.CancellationToken cancellationToken);
+        public System.Threading.Tasks.ValueTask<Visus.AddressValidation.Model.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public abstract class AbstractAuthenticationService<TClient>
+        where TClient : Visus.AddressValidation.Http.IAuthenticationClient
+    {
+        protected AbstractAuthenticationService(TClient authenticationClient, Microsoft.Extensions.Caching.Distributed.IDistributedCache cache) { }
+        public string? CacheKey { get; }
+        protected abstract string? GenerateCacheKey();
+        public System.Threading.Tasks.ValueTask<string?> GetAccessTokenAsync(System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public interface IAddressValidationService<in TRequest>
+        where in TRequest : Visus.AddressValidation.Http.AbstractAddressValidationRequest
+    {
+        System.Threading.Tasks.ValueTask<Visus.AddressValidation.Model.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default);
+    }
+}
+namespace Visus.AddressValidation.Validation
+{
+    public abstract class AbstractAddressValidationRequestValidator<T> : System.IDisposable, Visus.AddressValidation.Validation.IValidator<T>
+        where T : Visus.AddressValidation.Http.AbstractAddressValidationRequest
+    {
+        protected AbstractAddressValidationRequestValidator() { }
+        public void Dispose() { }
+        protected virtual void Dispose(bool disposing) { }
+        public System.Threading.Tasks.ValueTask<Visus.AddressValidation.Validation.IValidationResult> ExecuteAsync(T instance, System.Threading.CancellationToken cancellationToken = default) { }
+        protected virtual System.Threading.Tasks.ValueTask<bool> PreValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
+        protected virtual System.Threading.Tasks.ValueTask ValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public abstract class AbstractApiResponseValidator<T> : System.IDisposable, Visus.AddressValidation.Validation.IValidator<T>
+        where T : Visus.AddressValidation.Http.AbstractApiResponse
+    {
+        protected AbstractApiResponseValidator() { }
+        public void Dispose() { }
+        protected virtual void Dispose(bool disposing) { }
+        public System.Threading.Tasks.ValueTask<Visus.AddressValidation.Validation.IValidationResult> ExecuteAsync(T instance, System.Threading.CancellationToken cancellationToken = default) { }
+        protected virtual System.Threading.Tasks.ValueTask<bool> PreValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
+        protected virtual System.Threading.Tasks.ValueTask ValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public interface IValidationResult
+    {
+        System.Collections.Generic.IReadOnlySet<Visus.AddressValidation.Validation.ValidationState> Errors { get; }
+        bool HasErrors { get; }
+        bool HasWarnings { get; }
+        System.Collections.Generic.IReadOnlySet<Visus.AddressValidation.Validation.ValidationState> Warnings { get; }
+    }
+    public interface IValidator<in T>
+        where in T :  class
+    {
+        System.Threading.Tasks.ValueTask<Visus.AddressValidation.Validation.IValidationResult> ExecuteAsync(T instance, System.Threading.CancellationToken cancellationToken = default);
+    }
+    public enum ValidationSeverity
+    {
+        Warning = 0,
+        Error = 1,
+    }
+    public readonly struct ValidationState : System.IEquatable<Visus.AddressValidation.Validation.ValidationState>
+    {
+        public string Message { get; }
+        public Visus.AddressValidation.Validation.ValidationSeverity Severity { get; }
+        public bool Equals(Visus.AddressValidation.Validation.ValidationState other) { }
+        public override bool Equals(object? obj) { }
+        public override int GetHashCode() { }
+        public override string ToString() { }
+        public static Visus.AddressValidation.Validation.ValidationState CreateError(string message, string? propertyName = null) { }
+        public static Visus.AddressValidation.Validation.ValidationState CreateError(string messageFormat, params object[] args) { }
+        public static Visus.AddressValidation.Validation.ValidationState CreateWarning(string message, string? propertyName = null) { }
+        public static Visus.AddressValidation.Validation.ValidationState CreateWarning(string messageFormat, params object[] args) { }
+        public static bool operator !=(Visus.AddressValidation.Validation.ValidationState left, Visus.AddressValidation.Validation.ValidationState right) { }
+        public static bool operator ==(Visus.AddressValidation.Validation.ValidationState left, Visus.AddressValidation.Validation.ValidationState right) { }
+    }
+}

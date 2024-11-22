@@ -1,0 +1,52 @@
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Integration.PitneyBowes.Tests")]
+namespace Visus.AddressValidation.Integration.PitneyBowes
+{
+    public static class Constants
+    {
+        public const string ApiKeyConfigurationKey = "VS_AVE_PB_API_KEY";
+        public const string ApiSecretConfigurationKey = "VS_AVE_PB_API_SECRET";
+        public const string ClientEnvironmentConfigurationKey = "VS_AVE_PB_CLIENT_ENVIRONMENT";
+        public const string DeveloperIdConfigurationKey = "VS_AVE_PB_DEVELOPER_ID";
+        public static readonly System.Uri DevelopmentEndpointBaseUri;
+        public static readonly System.Uri ProductionEndpointBaseUri;
+        public static readonly System.Collections.Generic.IReadOnlySet<Visus.AddressValidation.Abstractions.CountryCode> SupportedCountries;
+    }
+}
+namespace Visus.AddressValidation.Integration.PitneyBowes.Extensions
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddPitneyBowesAddressValidation(this Microsoft.Extensions.DependencyInjection.IServiceCollection services) { }
+    }
+}
+namespace Visus.AddressValidation.Integration.PitneyBowes.Http
+{
+    [System.Text.Json.Serialization.JsonConverter(typeof(Visus.AddressValidation.Integration.PitneyBowes.Serialization.Json.AddressValidationRequestConverter))]
+    public sealed class PitneyBowesAddressValidationRequest : Visus.AddressValidation.Http.AbstractAddressValidationRequest
+    {
+        public PitneyBowesAddressValidationRequest() { }
+        public bool IncludeSuggestions { get; set; }
+    }
+}
+namespace Visus.AddressValidation.Integration.PitneyBowes.Serialization.Json
+{
+    public sealed class AddressValidationRequestConverter : System.Text.Json.Serialization.JsonConverter<Visus.AddressValidation.Integration.PitneyBowes.Http.PitneyBowesAddressValidationRequest?>
+    {
+        public AddressValidationRequestConverter() { }
+        public override Visus.AddressValidation.Integration.PitneyBowes.Http.PitneyBowesAddressValidationRequest? Read(ref System.Text.Json.Utf8JsonReader reader, System.Type typeToConvert, System.Text.Json.JsonSerializerOptions options) { }
+        public override void Write(System.Text.Json.Utf8JsonWriter writer, Visus.AddressValidation.Integration.PitneyBowes.Http.PitneyBowesAddressValidationRequest? value, System.Text.Json.JsonSerializerOptions options) { }
+    }
+    [System.Text.Json.Serialization.JsonSerializable(typeof(Visus.AddressValidation.Integration.PitneyBowes.Http.PitneyBowesAddressValidationRequest))]
+    [System.Text.Json.Serialization.JsonSourceGenerationOptions(WriteIndented=false)]
+    public class PitneyBowesJsonSerializerContext : System.Text.Json.Serialization.JsonSerializerContext, System.Text.Json.Serialization.Metadata.IJsonTypeInfoResolver
+    {
+        public PitneyBowesJsonSerializerContext() { }
+        public PitneyBowesJsonSerializerContext(System.Text.Json.JsonSerializerOptions options) { }
+        protected override System.Text.Json.JsonSerializerOptions? GeneratedSerializerOptions { get; }
+        public System.Text.Json.Serialization.Metadata.JsonTypeInfo<Visus.AddressValidation.Integration.PitneyBowes.Http.PitneyBowesAddressValidationRequest> PitneyBowesAddressValidationRequest { get; }
+        public static Visus.AddressValidation.Integration.PitneyBowes.Serialization.Json.PitneyBowesJsonSerializerContext Default { get; }
+        public override System.Text.Json.Serialization.Metadata.JsonTypeInfo? GetTypeInfo(System.Type type) { }
+    }
+}

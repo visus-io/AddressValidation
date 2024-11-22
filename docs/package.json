@@ -1,0 +1,33 @@
+{
+  "name": "addressvalidation-docs-watch",
+  "description": "Address Validation Library Documentation Watcher",
+  "scripts": {
+    "watch": "npm-watch build",
+    "build": "docfx build --serve"
+  },
+  "watch": {
+    "build": {
+      "patterns": [
+        "api",
+        "docs",
+        "toc",
+        "index"
+      ],
+      "extensions": "md,yml",
+      "quiet": false
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/visus-io/addressvalidation.git"
+  },
+  "author": "Visus Development Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/visus-io/addressvalidation/issues"
+  },
+  "homepage": "https://github.com/visus-io/addressvalidation#readme",
+  "devDependencies": {
+    "npm-watch": "^0.13.0"
+  }
+}

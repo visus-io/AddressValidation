@@ -1,0 +1,26 @@
+- href: ../docs/index.md
+- name: Integrations
+  expanded: true
+  items:
+    - name: Google
+      href: integrations/google.md
+    - name: Pitney Bowes
+      href: integrations/pitney-bowes.md
+    - name: UPS
+      href: integrations/ups.md
+- name: Custom Integration
+  href: integrations/custom/index.md
+  expanded: true
+  items:
+    - name: Introduction
+      href: integrations/custom/introduction.md
+    - name: Authentication Client
+      href: integrations/custom/authentication-client.md
+    - name: Authentication Service
+      href: integrations/custom/authentication-service.md
+    - name: Internal Validators
+    - name: Validation Service
+    - name: Validation Client
+      href: integrations/custom/validation-client.md
+    - name: Registering Services
+      href: integrations/custom/registering-services.md

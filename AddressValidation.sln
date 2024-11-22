@@ -1,0 +1,127 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5EC7A540-5858-4C0A-A0CE-ABCB3D48AFEB}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+		nuget.config = nuget.config
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		README.md = README.md
+		build.cake = build.cake
+		build.ps1 = build.ps1
+		build.sh = build.sh
+		.gitignore = .gitignore
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation", "src\Visus.AddressValidation\Visus.AddressValidation.csproj", "{64B9D329-F983-49D5-A73F-C5EA8B1F16A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01. Foundation", "01. Foundation", "{7EF92B20-2457-4E9A-AF09-610675F68F62}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. Integrations", "02. Integrations", "{458D4B81-3659-4CDC-82E6-F0AC7DA1383D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation.Integration.Google", "src\Visus.AddressValidation.Integration.Google\Visus.AddressValidation.Integration.Google.csproj", "{5BECB362-2B3C-454E-BA26-F3287B237223}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03. Unit Tests", "03. Unit Tests", "{6D41E71C-E6E0-4BE8-934C-6E6E88C3F8C7}"
+	ProjectSection(SolutionItems) = preProject
+		tests\Directory.Build.props = tests\Directory.Build.props
+		tests\.editorconfig = tests\.editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation.Tests", "tests\Visus.AddressValidation.Tests\Visus.AddressValidation.Tests.csproj", "{45F5AE68-6E31-478A-80D3-8A1E3881DDBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation.Integration.Google.Tests", "tests\Visus.AddressValidation.Integration.Google.Tests\Visus.AddressValidation.Integration.Google.Tests.csproj", "{7B3EBF81-F228-4F8B-AC17-5C83DAA8406A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{353B6DBC-61C8-4FEF-8182-C5B36A3B4818}"
+	ProjectSection(SolutionItems) = preProject
+		.github\renovate.json = .github\renovate.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F5F81E7B-F1BF-4C3A-8D56-6D4A486D687C}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\ci.yml = .github\workflows\ci.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation.Integration.Ups", "src\Visus.AddressValidation.Integration.Ups\Visus.AddressValidation.Integration.Ups.csproj", "{B843071E-F639-4E7C-BA8F-93D9469483D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation.Integration.Ups.Tests", "tests\Visus.AddressValidation.Integration.Ups.Tests\Visus.AddressValidation.Integration.Ups.Tests.csproj", "{9A898866-579D-4395-A893-FBD1B359036E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04. Demo", "04. Demo", "{425D5463-85C9-469D-AA3E-33927EE2FF70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressValidation.Demo", "demo\src\AddressValidation.Demo\AddressValidation.Demo.csproj", "{20A59A0F-DFD5-4355-BB00-821D382A42FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation.Integration.PitneyBowes", "src\Visus.AddressValidation.Integration.PitneyBowes\Visus.AddressValidation.Integration.PitneyBowes.csproj", "{6CB8C731-D125-475E-B798-AC81481960D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation.Integration.PitneyBowes.Tests", "tests\Visus.AddressValidation.Integration.PitneyBowes.Tests\Visus.AddressValidation.Integration.PitneyBowes.Tests.csproj", "{03B65269-1328-4B48-8213-21F69557B707}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation.SourceGeneration", "src\Visus.AddressValidation.SourceGeneration\Visus.AddressValidation.SourceGeneration.csproj", "{F57B9E9C-7183-44E4-8EB4-2A39C32E7016}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation.SourceGeneration.Tests", "tests\Visus.AddressValidation.SourceGeneration.Tests\Visus.AddressValidation.SourceGeneration.Tests.csproj", "{370B8EEE-BE35-430E-A01F-3CF779DA8B40}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64B9D329-F983-49D5-A73F-C5EA8B1F16A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64B9D329-F983-49D5-A73F-C5EA8B1F16A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64B9D329-F983-49D5-A73F-C5EA8B1F16A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64B9D329-F983-49D5-A73F-C5EA8B1F16A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BECB362-2B3C-454E-BA26-F3287B237223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BECB362-2B3C-454E-BA26-F3287B237223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BECB362-2B3C-454E-BA26-F3287B237223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BECB362-2B3C-454E-BA26-F3287B237223}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45F5AE68-6E31-478A-80D3-8A1E3881DDBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45F5AE68-6E31-478A-80D3-8A1E3881DDBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45F5AE68-6E31-478A-80D3-8A1E3881DDBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45F5AE68-6E31-478A-80D3-8A1E3881DDBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B3EBF81-F228-4F8B-AC17-5C83DAA8406A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B3EBF81-F228-4F8B-AC17-5C83DAA8406A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B3EBF81-F228-4F8B-AC17-5C83DAA8406A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B3EBF81-F228-4F8B-AC17-5C83DAA8406A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B843071E-F639-4E7C-BA8F-93D9469483D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B843071E-F639-4E7C-BA8F-93D9469483D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B843071E-F639-4E7C-BA8F-93D9469483D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B843071E-F639-4E7C-BA8F-93D9469483D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A898866-579D-4395-A893-FBD1B359036E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A898866-579D-4395-A893-FBD1B359036E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A898866-579D-4395-A893-FBD1B359036E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A898866-579D-4395-A893-FBD1B359036E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20A59A0F-DFD5-4355-BB00-821D382A42FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20A59A0F-DFD5-4355-BB00-821D382A42FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20A59A0F-DFD5-4355-BB00-821D382A42FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20A59A0F-DFD5-4355-BB00-821D382A42FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CB8C731-D125-475E-B798-AC81481960D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CB8C731-D125-475E-B798-AC81481960D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CB8C731-D125-475E-B798-AC81481960D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CB8C731-D125-475E-B798-AC81481960D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03B65269-1328-4B48-8213-21F69557B707}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03B65269-1328-4B48-8213-21F69557B707}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03B65269-1328-4B48-8213-21F69557B707}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03B65269-1328-4B48-8213-21F69557B707}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F57B9E9C-7183-44E4-8EB4-2A39C32E7016}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F57B9E9C-7183-44E4-8EB4-2A39C32E7016}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F57B9E9C-7183-44E4-8EB4-2A39C32E7016}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F57B9E9C-7183-44E4-8EB4-2A39C32E7016}.Release|Any CPU.Build.0 = Release|Any CPU
+		{370B8EEE-BE35-430E-A01F-3CF779DA8B40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{370B8EEE-BE35-430E-A01F-3CF779DA8B40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{370B8EEE-BE35-430E-A01F-3CF779DA8B40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{370B8EEE-BE35-430E-A01F-3CF779DA8B40}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{64B9D329-F983-49D5-A73F-C5EA8B1F16A9} = {7EF92B20-2457-4E9A-AF09-610675F68F62}
+		{5BECB362-2B3C-454E-BA26-F3287B237223} = {458D4B81-3659-4CDC-82E6-F0AC7DA1383D}
+		{45F5AE68-6E31-478A-80D3-8A1E3881DDBB} = {6D41E71C-E6E0-4BE8-934C-6E6E88C3F8C7}
+		{7B3EBF81-F228-4F8B-AC17-5C83DAA8406A} = {6D41E71C-E6E0-4BE8-934C-6E6E88C3F8C7}
+		{353B6DBC-61C8-4FEF-8182-C5B36A3B4818} = {5EC7A540-5858-4C0A-A0CE-ABCB3D48AFEB}
+		{F5F81E7B-F1BF-4C3A-8D56-6D4A486D687C} = {353B6DBC-61C8-4FEF-8182-C5B36A3B4818}
+		{B843071E-F639-4E7C-BA8F-93D9469483D9} = {458D4B81-3659-4CDC-82E6-F0AC7DA1383D}
+		{9A898866-579D-4395-A893-FBD1B359036E} = {6D41E71C-E6E0-4BE8-934C-6E6E88C3F8C7}
+		{20A59A0F-DFD5-4355-BB00-821D382A42FC} = {425D5463-85C9-469D-AA3E-33927EE2FF70}
+		{6CB8C731-D125-475E-B798-AC81481960D4} = {458D4B81-3659-4CDC-82E6-F0AC7DA1383D}
+		{03B65269-1328-4B48-8213-21F69557B707} = {6D41E71C-E6E0-4BE8-934C-6E6E88C3F8C7}
+		{F57B9E9C-7183-44E4-8EB4-2A39C32E7016} = {7EF92B20-2457-4E9A-AF09-610675F68F62}
+		{370B8EEE-BE35-430E-A01F-3CF779DA8B40} = {6D41E71C-E6E0-4BE8-934C-6E6E88C3F8C7}
+	EndGlobalSection
+EndGlobal

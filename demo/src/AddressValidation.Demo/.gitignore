@@ -1,0 +1,9 @@
+# Settings Database
+
+Data/settings.db
+Data/Keys
+
+*.sqlite3-shm
+*.sqlite3-wal
+*.db-shm
+*.db-wal

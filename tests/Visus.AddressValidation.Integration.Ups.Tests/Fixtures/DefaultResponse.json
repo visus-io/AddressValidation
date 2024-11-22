@@ -1,0 +1,34 @@
+{
+	"XAVResponse": {
+		"Response": {
+			"ResponseStatus": {
+				"Code": "1",
+				"Description": "Success"
+			}
+		},
+		"ValidAddressIndicator": "",
+		"AddressClassification": {
+			"Code": "1",
+			"Description": "Commercial"
+		},
+		"Candidate": [
+			{
+				"AddressClassification": {
+					"Code": "1",
+					"Description": "Commercial"
+				},
+				"AddressKeyFormat": {
+					"AddressLine": [
+						"8380 RICHFOOD RD"
+					],
+					"PoliticalDivision2": "MECHANICSVILLE",
+					"PoliticalDivision1": "VA",
+					"PostcodePrimaryLow": "23116",
+					"PostcodeExtendedLow": "2010",
+					"Region": "MECHANICSVILLE VA 23116-2010",
+					"CountryCode": "US"
+				}
+			}
+		]
+	}
+}

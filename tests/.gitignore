@@ -1,0 +1,4 @@
+*.received.txt
+*.g.received.cs
+*.verified.txt.bak
+*.g.verified.cs.bak

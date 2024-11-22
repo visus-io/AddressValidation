@@ -1,0 +1,13 @@
+{
+	"addressLines": [
+		"3200 Summit Blvd"
+	],
+	"cityTown": "West Palm Beach",
+	"stateProvince": "FL",
+	"postalCode": "33416-4001",
+	"countryCode": "US",
+	"residential": true,
+	"deliveryPoint": "99",
+	"carrierRoute": "C770",
+	"status": "VALIDATED_AND_NOT_CHANGED"
+}

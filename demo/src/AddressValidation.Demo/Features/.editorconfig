@@ -1,0 +1,10 @@
+# see https://github.com/dotnet/sdk/issues/39817
+
+[*.razor.cs]
+dotnet_diagnostic.CA1822.severity = suggestion
+dotnet_diagnostic.CA1823.severity = suggestion
+dotnet_diagnostic.IDE0044.severity = suggestion
+dotnet_diagnostic.IDE0051.severity = suggestion
+dotnet_diagnostic.IDE0052.severity = suggestion
+dotnet_diagnostic.IDE0060.severity = none
+dotnet_diagnostic.S1144.severity = suggestion

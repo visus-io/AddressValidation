@@ -1,0 +1,10 @@
+{
+	"response": {
+		"errors": [
+			{
+				"code": "10002",
+				"message": "The request is well formed but the request is not valid"
+			}
+		]
+	}
+}

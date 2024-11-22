@@ -1,0 +1,12 @@
+{
+	"address": {
+		"addressLines": [
+			"111 Richmond Street West"
+		],
+		"administrativeArea": "ON",
+		"locality": "Toronto",
+		"postalCode": "M5H 2G4",
+		"regionCode": "CA"
+	},
+	"enableUspsCass": false
+}

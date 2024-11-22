@@ -1,0 +1,36 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../src",
+          "files": [ "**/*.csproj" ]
+        }
+      ],
+      "dest": "api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [ "index.md", "toc.yml", "**/*.{md,yml}" ],
+        "exclude": [ "_site/**", "node_modules/**" ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [ "images/**" ],
+        "exclude": [ "_site/**", "node_modules/**" ]
+      }
+    ],
+    "output": "_site",
+    "template": [ "default", "modern" ],
+    "globalMetadata": {
+      "_appName": "AddressValidation",
+      "_appTitle": "AddressValidation",
+      "_appFooter": "<span>Copyright &copy; 2024 Visus Development Team. Built with <a href=\"https://docfx.github.io/docfx\">docfx</a>.</span>",
+      "_enableSearch": true,
+      "pdf": false
+    }
+  }
+}
