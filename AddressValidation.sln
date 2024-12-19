@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		build.sh = build.sh
 		.gitignore = .gitignore
 		.editorconfig = .editorconfig
+		renovate.json = renovate.json
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation", "src\Visus.AddressValidation\Visus.AddressValidation.csproj", "{64B9D329-F983-49D5-A73F-C5EA8B1F16A9}"
@@ -31,16 +32,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation.Tests", "tests\Visus.AddressValidation.Tests\Visus.AddressValidation.Tests.csproj", "{45F5AE68-6E31-478A-80D3-8A1E3881DDBB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation.Integration.Google.Tests", "tests\Visus.AddressValidation.Integration.Google.Tests\Visus.AddressValidation.Integration.Google.Tests.csproj", "{7B3EBF81-F228-4F8B-AC17-5C83DAA8406A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{353B6DBC-61C8-4FEF-8182-C5B36A3B4818}"
-	ProjectSection(SolutionItems) = preProject
-		.github\renovate.json = .github\renovate.json
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F5F81E7B-F1BF-4C3A-8D56-6D4A486D687C}"
-	ProjectSection(SolutionItems) = preProject
-		.github\workflows\ci.yml = .github\workflows\ci.yml
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation.Integration.Ups", "src\Visus.AddressValidation.Integration.Ups\Visus.AddressValidation.Integration.Ups.csproj", "{B843071E-F639-4E7C-BA8F-93D9469483D9}"
 EndProject
@@ -114,8 +105,6 @@ Global
 		{5BECB362-2B3C-454E-BA26-F3287B237223} = {458D4B81-3659-4CDC-82E6-F0AC7DA1383D}
 		{45F5AE68-6E31-478A-80D3-8A1E3881DDBB} = {6D41E71C-E6E0-4BE8-934C-6E6E88C3F8C7}
 		{7B3EBF81-F228-4F8B-AC17-5C83DAA8406A} = {6D41E71C-E6E0-4BE8-934C-6E6E88C3F8C7}
-		{353B6DBC-61C8-4FEF-8182-C5B36A3B4818} = {5EC7A540-5858-4C0A-A0CE-ABCB3D48AFEB}
-		{F5F81E7B-F1BF-4C3A-8D56-6D4A486D687C} = {353B6DBC-61C8-4FEF-8182-C5B36A3B4818}
 		{B843071E-F639-4E7C-BA8F-93D9469483D9} = {458D4B81-3659-4CDC-82E6-F0AC7DA1383D}
 		{9A898866-579D-4395-A893-FBD1B359036E} = {6D41E71C-E6E0-4BE8-934C-6E6E88C3F8C7}
 		{20A59A0F-DFD5-4355-BB00-821D382A42FC} = {425D5463-85C9-469D-AA3E-33927EE2FF70}
