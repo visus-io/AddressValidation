@@ -2,6 +2,9 @@
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"configMigration": true,
 	"ignoreDeps": ["Microsoft.CodeAnalysis.CSharp.Workspaces"],
+	"constraints": {
+		"dotnet": "< 9.0.0"
+	},
 	"extends": [
 		"config:recommended",
 		":disableDependencyDashboard",
