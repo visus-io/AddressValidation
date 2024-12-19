@@ -4,7 +4,7 @@
     ".NETStandard,Version=v2.0": {
       "Microsoft.CodeAnalysis.CSharp.Workspaces": {
         "type": "Direct",
-        "requested": "[4.11.0, )",
+        "requested": "[4.11.0, 4.11.0]",
         "resolved": "4.11.0",
         "contentHash": "/oRJPIMvzOfiunIegSF6FEa4VvBAUSXlbLDKxyzXuOZN9nLHg3fHuX6Mr9JZLNIupbe2xqQZEmfsPxgB01vCmg==",
         "dependencies": {
