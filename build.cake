@@ -1,5 +1,5 @@
 #addin nuget:?package=Cake.Coverlet&version=4.0.1
-#tool dotnet:?package=GitVersion.Tool&version=6.0.2
+#tool dotnet:?package=GitVersion.Tool&version=6.1.0
 
 var configuration = Argument("configuration", "Release");
 var target = Argument("target", "Test");
