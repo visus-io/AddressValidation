@@ -1,0 +1,76 @@
+name: Continuous Integration
+
+on:
+    push:
+        branches:
+            - develop
+        paths-ignore:
+            - 'docs/**'
+            - '.github/workflows/release.yml'
+    pull_request:
+        paths-ignore:
+            - 'docs/**'
+            - '.github/workflows/release.yml'
+
+jobs:
+    unit-tests:
+        name: Unit Tests
+        runs-on: ubuntu-latest
+        env:
+            DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+            DOTNET_CLI_TELEMETRY_OPTOUT: 1
+            DOTNET_NOLOGO: 1
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  show-progress: false
+            - name: Install Java SDK
+              uses: actions/setup-java@v4
+              with:
+                  java-version: 17
+                  distribution: 'zulu'
+            - name: Install .NET SDK
+              uses: actions/setup-dotnet@v4
+              with:
+                  global-json-file: global.json
+            - name: NuGet Cache
+              uses: actions/cache@v4
+              with:
+                  path: ~/.nuget/packages
+                  key: ${{ runner.os}}-nuget-${{ hashFiles('**/packages.lock.json') }}
+                  restore-keys: ${{ runner.os }}-nuget
+            - name: Install SonarCloud Scanner Tool
+              run: dotnet tool install dotnet-sonarscanner --tool-path ~/.sonar/scanner
+            - name: Test
+              run: |
+                  ~/.sonar/scanner/dotnet-sonarscanner begin \
+                    /k:"visus:addressvalidation" \
+                    /o:"visus" \
+                    /d:sonar.scanner.skipJreProvisioning=true \
+                    /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
+                    /d:sonar.cs.opencover.reportsPaths=${{ runner.temp }}/CoverageResults/*.xml \
+                    /d:sonar.cs.vstest.reportsPaths=${{ runner.temp }}/TestResults/*.trx \
+                    /d:sonar.host.url="https://sonarcloud.io"
+                  
+                  dotnet test -c release \
+                    --logger:trx \
+                    --results-directory ${{ runner.temp }}/TestResults \
+                    -p:CollectCoverage=true \
+                    -p:CoverletOutput=${{ runner.temp }}/CoverageResults \
+                    -p:MergeWith=${{ runner.temp }}/CoverageResults/coverage.json \
+                    -p:CoverletOutputFormat=\"opencover,json\" \
+                    -m:1
+                  
+                  ~/.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+            - name: Publish Test Results
+              if: always()
+              uses: dorny/test-reporter@v1
+              with:                  
+                  name: Test Results
+                  path: ${{ runner.temp }}/TestResults/*.trx
+                  reporter: dotnet-trx
+                  path-replace-backslashes: true
