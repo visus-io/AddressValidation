@@ -52,7 +52,7 @@ jobs:
                     /o:"visus" \
                     /d:sonar.scanner.skipJreProvisioning=true \
                     /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
-                    /d:sonar.cs.opencover.reportsPaths=${{ runner.temp }}/CoverageResults/*.xml \
+                    /d:sonar.cs.opencover.reportsPaths=${{ runner.temp }}/CoverageResults/coverage.opencover.xml \
                     /d:sonar.cs.vstest.reportsPaths=${{ runner.temp }}/TestResults/*.trx \
                     /d:sonar.host.url="https://sonarcloud.io"
                   
@@ -60,9 +60,9 @@ jobs:
                     --logger:trx \
                     --results-directory ${{ runner.temp }}/TestResults \
                     -p:CollectCoverage=true \
-                    -p:CoverletOutput=${{ runner.temp }}/CoverageResults \
-                    -p:MergeWith=${{ runner.temp }}/CoverageResults/coverage.json \
+                    -p:CoverletOutput=${{ runner.temp }}/CoverageResults/ \
                     -p:CoverletOutputFormat=\"opencover,json\" \
+                    -p:MergeWith=${{ runner.temp }}/CoverageResults/coverage.json \
                     -m:1
                   
                   ~/.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
