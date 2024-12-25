@@ -5,12 +5,18 @@ on:
         branches:
             - develop
         paths-ignore:
+            - 'README.md'
             - 'docs/**'
             - '.github/workflows/release.yml'
     pull_request:
         paths-ignore:
+            - 'README.md'
             - 'docs/**'
             - '.github/workflows/release.yml'
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
 
 jobs:
     unit-tests:
