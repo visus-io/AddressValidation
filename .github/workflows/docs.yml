@@ -1,0 +1,54 @@
+name: Publish Documentation
+
+on:
+    workflow_dispatch:
+        
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    publish_docs:
+        name: Publish
+        runs-on: ubuntu-latest
+        permissions:
+            contents: 'read'
+            id-token: 'write'
+        env:
+            DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+            DOTNET_CLI_TELEMETRY_OPTOUT: 1
+            DOTNET_NOLOGO: 1
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  show-progress: false
+            - name: Google Cloud Authenticate
+              uses: google-github-actions/auth@v2
+              with:
+                  project_id: ${{ secrets.GCLOUD_PROJECT_ID }}
+                  workload_identity_provider: ${{ secrets.GCLOUD_WORKLOAD_IDENTITY_PROVIDER_ID }}
+                  service_account: ${{ secrets.GCLOUD_SERVICE_ACCOUNT }}
+            - name: Setup Google Cloud SDK
+              uses: google-github-actions/setup-gcloud@v2
+            - name: Install .NET SDK
+              uses: actions/setup-dotnet@v4
+              with:
+                  global-json-file: global.json
+            - name: NuGet Cache
+              uses: actions/cache@v4
+              with:
+                  path: ~/.nuget/packages
+                  key: ${{ runner.os}}-nuget-${{ hashFiles('**/packages.lock.json') }}
+                  restore-keys: ${{ runner.os }}-nuget
+            - name: Install docfx Toolchain
+              run: dotnet tool update -g docfx
+            - name: Compile
+              run: dotnet build -c release
+            - name: Build
+              run: docfx ./docs/docfx.json
+            - name: Publish
+              run: |
+                gcloud storage rsync ./docs/_site gs://${{ secrets.GCLOUD_GCS_NAME }} \
+                    --recursive --delete-unmatched-destination-objects
