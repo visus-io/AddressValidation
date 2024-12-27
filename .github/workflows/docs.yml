@@ -50,4 +50,6 @@ jobs:
             - name: Publish
               run: |
                 gcloud storage rsync ./docs/_site gs://${{ secrets.GCLOUD_GCS_NAME }} \
-                    --recursive --delete-unmatched-destination-objects
+                    --checksums-only \
+                    --recursive \
+                    --delete-unmatched-destination-objects
