@@ -25,6 +25,10 @@
     ],
     "output": "_site",
     "template": [ "default", "modern" ],
+    "sitemap": {
+      "baseUrl": "https://ave.projects.visus.io/docs",
+      "changefreq": "monthly"
+    },
     "globalMetadata": {
       "_appName": "AddressValidation",
       "_appTitle": "AddressValidation",

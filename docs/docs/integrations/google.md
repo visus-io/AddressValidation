@@ -72,7 +72,7 @@ The necessary configuration values can be extracted from the `$SA_NAME-key.json`
 > Formatting of the `private_key` value **must** be preserved.
 
 > [!IMPORTANT]
-> `VS_AVE_GCP_SERVICE_ACCOUNT_PRIVATE_KEY` should be stored encrypted at rest. See the [Security(../index.md#security) for additional details.
+> `VS_AVE_GCP_SERVICE_ACCOUNT_PRIVATE_KEY` should be stored encrypted at rest. See the [Security](../index.md#security) for additional details.
 
 ## Standard Example
 
