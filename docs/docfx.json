@@ -26,7 +26,7 @@
     "output": "_site",
     "template": [ "default", "modern" ],
     "sitemap": {
-      "baseUrl": "https://ave.projects.visus.io/docs",
+      "baseUrl": "https://ave.projects.visus.io",
       "changefreq": "monthly"
     },
     "globalMetadata": {
