@@ -51,9 +51,9 @@
       },
       "Radzen.Blazor": {
         "type": "Direct",
-        "requested": "[5.7.4, )",
-        "resolved": "5.7.4",
-        "contentHash": "jKy1zZUp+K0T0YT9eg4kekq9WQNWPezB/CYA9s+VULzphg5zG9Opqa7ARy9bgKBH4GszizrAN+InxPyiGH7grQ==",
+        "requested": "[5.7.5, )",
+        "resolved": "5.7.5",
+        "contentHash": "PcDdNINh8rAMZCKgZsyAhB/N4mHhxWg5kLVP7iOp9MEgd+spERKK9oFD0c+udQxh8paKzR3rd/V9mG8B/scSGA==",
         "dependencies": {
           "DartSassBuilder": "1.0.0",
           "Microsoft.AspNetCore.Components": "8.0.0",
