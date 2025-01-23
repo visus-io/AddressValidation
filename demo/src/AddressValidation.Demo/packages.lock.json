@@ -51,14 +51,14 @@
       },
       "Radzen.Blazor": {
         "type": "Direct",
-        "requested": "[5.7.10, )",
-        "resolved": "5.7.10",
-        "contentHash": "zr03H0/3aDkFd2h5dwZ65tvrGAMnceeI7bslDj5QIQrhvDMVt5ZfPoIBPo1mSg5tnnSI1VPIQQMMgdz1RcfIpQ==",
+        "requested": "[5.8.0, )",
+        "resolved": "5.8.0",
+        "contentHash": "Dl4Czk5oKPZnyn/iYDc228D72GUusLoNbVE2H7/yDB+4UXtzoVed/uw1AQUpdcLoeeFPFixsoAPCfIdnUWOVoA==",
         "dependencies": {
           "DartSassBuilder": "1.1.0",
           "Microsoft.AspNetCore.Components": "8.0.0",
           "Microsoft.AspNetCore.Components.Web": "8.0.0",
-          "System.Linq.Dynamic.Core": "1.3.7"
+          "System.Linq.Dynamic.Core": "1.5.1"
         }
       },
       "Serilog": {
@@ -829,8 +829,8 @@
       },
       "System.Linq.Dynamic.Core": {
         "type": "Transitive",
-        "resolved": "1.3.7",
-        "contentHash": "7J9oS95JCcyOtnKCr0tYUOMAj67Ee3WKal6li20vEeuQFdD7C4XuAABysp3H5dx+wmHkXuUNoxW3+U+OEsx+JQ=="
+        "resolved": "1.5.1",
+        "contentHash": "Uj3xYJHWFs1zXjTrTrPAB3KEPtUirYwFjCmYO+cqcNC/TM0GMjbHtvQYwSr8T3zv/BihVvcpiTOpzn/naVii4g=="
       },
       "System.Memory": {
         "type": "Transitive",
