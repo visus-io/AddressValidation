@@ -24,8 +24,8 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
     <PackageVersion Include="Moq" Version="4.20.72" />
-    <PackageVersion Include="PublicApiGenerator" Version="11.3.0" />
-    <PackageVersion Include="Radzen.Blazor" Version="5.9.0" />
+    <PackageVersion Include="PublicApiGenerator" Version="11.4.1" />
+    <PackageVersion Include="Radzen.Blazor" Version="5.9.7" />
     <PackageVersion Include="RichardSzalay.MockHttp" Version="7.0.0" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.12.10" />
     <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
@@ -37,7 +37,7 @@
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.3.1" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.1.2" />
     <PackageVersion Include="Verify.SourceGenerators" Version="2.5.0" />
-    <PackageVersion Include="Verify.Xunit" Version="28.9.0" />
+    <PackageVersion Include="Verify.Xunit" Version="28.10.1" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.1" />
     <PackageVersion Include="xunit" Version="2.9.3" />
   </ItemGroup>

@@ -588,16 +588,16 @@ namespace Visus.AddressValidation.Model
     public abstract class AbstractAddressValidationResponse : System.IEquatable<Visus.AddressValidation.Model.AbstractAddressValidationResponse>, Visus.AddressValidation.Model.IAddressValidationResponse
     {
         protected AbstractAddressValidationResponse(Visus.AddressValidation.Validation.IValidationResult? validationResult = null) { }
-        public System.Collections.Generic.IReadOnlySet<string> Errors { get; }
-        public System.Collections.Generic.IReadOnlySet<string> Warnings { get; }
         public System.Collections.Generic.IReadOnlySet<string> AddressLines { get; init; }
         public string? CityOrTown { get; init; }
         public Visus.AddressValidation.Abstractions.CountryCode Country { get; init; }
         public System.Collections.Generic.IReadOnlyDictionary<string, object?> CustomResponseData { get; init; }
+        public System.Collections.Generic.IReadOnlySet<string> Errors { get; }
         public bool? IsResidential { get; init; }
         public string? PostalCode { get; init; }
         public string? StateOrProvince { get; init; }
-        public System.Collections.Generic.IReadOnlyList<Visus.AddressValidation.Model.IAddressValidationResponse> Suggestions { get; init; }
+        public System.Collections.Generic.IReadOnlyList<Visus.AddressValidation.Model.IAddressValidationResponse> Suggestions { get; protected init; }
+        public System.Collections.Generic.IReadOnlySet<string> Warnings { get; }
         public bool Equals(Visus.AddressValidation.Model.AbstractAddressValidationResponse? other) { }
         public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
