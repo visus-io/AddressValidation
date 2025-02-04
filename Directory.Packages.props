@@ -27,7 +27,7 @@
     <PackageVersion Include="PublicApiGenerator" Version="11.4.1" />
     <PackageVersion Include="Radzen.Blazor" Version="5.9.7" />
     <PackageVersion Include="RichardSzalay.MockHttp" Version="7.0.0" />
-    <PackageVersion Include="Roslynator.Analyzers" Version="4.12.10" />
+    <PackageVersion Include="Roslynator.Analyzers" Version="4.12.11" />
     <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageVersion Include="Serilog.Enrichers.Environment" Version="3.0.1" />
     <PackageVersion Include="Serilog.Enrichers.Thread" Version="4.0.0" />
