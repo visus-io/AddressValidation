@@ -1,3 +1,5 @@
+using NSubstitute;
+
 namespace Visus.AddressValidation.Integration.Google.Tests;
 
 using System.Text.Json;
@@ -6,7 +8,6 @@ using Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using Moq;
 using RichardSzalay.MockHttp;
 using Services;
 
@@ -55,7 +56,7 @@ public sealed class GoogleAuthenticationServiceFacts(ConfigurationFixture fixtur
 			TokenType = "Bearer"
 		};
 
-		var distributedCacheMock = new Mock<IDistributedCache>();
+		var distributedCacheMock = Substitute.For<IDistributedCache>();
 
 		var httpMessageHandlerMock = new MockHttpMessageHandler();
 		httpMessageHandlerMock.Expect("https://oauth2.googleapis.com/token")
@@ -64,7 +65,7 @@ public sealed class GoogleAuthenticationServiceFacts(ConfigurationFixture fixtur
 
 		var httpClient = httpMessageHandlerMock.ToHttpClient();
 		var client = new GoogleAuthenticationClient(_fixture.Configuration, httpClient);
-		var service = new GoogleAuthenticationService(distributedCacheMock.Object, _fixture.Configuration, client);
+		var service = new GoogleAuthenticationService(distributedCacheMock, _fixture.Configuration, client);
 
 		var result = await service.GetAccessTokenAsync();
 

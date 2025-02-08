@@ -1,9 +1,10 @@
+using NSubstitute;
+
 namespace Visus.AddressValidation.Tests.Http.Authentication;
 
 using Abstractions;
 using AddressValidation.Http;
 using Microsoft.Extensions.Caching.Distributed;
-using Moq;
 using Services;
 
 public sealed class BearerTokenDelegatingHandlerFacts : DelegatingHandlerFacts
@@ -13,9 +14,9 @@ public sealed class BearerTokenDelegatingHandlerFacts : DelegatingHandlerFacts
 	{
 		const string accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
-		var distributedCacheMock = new Mock<IDistributedCache>();
+		var distributedCacheMock = Substitute.For<IDistributedCache>();
 		var authenticationClient = new TestAuthenticationClient();
-		var authenticationService = new TestAuthenticationService(authenticationClient, distributedCacheMock.Object);
+		var authenticationService = new TestAuthenticationService(authenticationClient, distributedCacheMock);
 
 		var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "http://localhost");
 		var handler = new BearerTokenDelegatingHandler<TestAuthenticationClient>(authenticationService)
