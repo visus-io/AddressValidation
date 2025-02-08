@@ -1,3 +1,5 @@
+using NSubstitute;
+
 namespace Visus.AddressValidation.Integration.PitneyBowes.Tests;
 
 using System.Text.Json;
@@ -6,7 +8,6 @@ using Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using Moq;
 using RichardSzalay.MockHttp;
 using Services;
 
@@ -56,7 +57,7 @@ public sealed class PitneyBowesAuthenticationServiceFacts(ConfigurationFixture f
 			TokenType = "Bearer"
 		};
 
-		var distributedCacheMock = new Mock<IDistributedCache>();
+		var distributedCacheMock = Substitute.For<IDistributedCache>();
 
 		var httpMessageHandlerMock = new MockHttpMessageHandler();
 		httpMessageHandlerMock.Expect("/oauth/token")
@@ -65,7 +66,7 @@ public sealed class PitneyBowesAuthenticationServiceFacts(ConfigurationFixture f
 
 		var httpClient = httpMessageHandlerMock.ToHttpClient();
 		var client = new PitneyBowesAuthenticationClient(_fixture.Configuration, httpClient);
-		var service = new PitneyBowesAuthenticationService(distributedCacheMock.Object, _fixture.Configuration, client);
+		var service = new PitneyBowesAuthenticationService(distributedCacheMock, _fixture.Configuration, client);
 
 		var result = await service.GetAccessTokenAsync();
 
