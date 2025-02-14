@@ -3,7 +3,7 @@
 	"configMigration": true,
 	"ignoreDeps": ["Microsoft.CodeAnalysis.CSharp.Workspaces"],
 	"constraints": {
-		"dotnet": "8.0.405"
+		"dotnet": "8.0.406"
 	},
 	"extends": [
 		"config:recommended",
