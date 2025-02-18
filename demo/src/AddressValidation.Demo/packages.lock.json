@@ -51,14 +51,13 @@
       },
       "Radzen.Blazor": {
         "type": "Direct",
-        "requested": "[5.9.9, )",
-        "resolved": "5.9.9",
-        "contentHash": "51o7iNW5lDcFUZEjh04bb458KfQgBXwDa2HBIerI3fhQhWdWYmT99Zs/TnhzQ6CH8e+Ek3UrKTSAON3JuTMsaw==",
+        "requested": "[6.0.12, )",
+        "resolved": "6.0.12",
+        "contentHash": "P2pEw+PglZnYgxu644BhiI5Fv5AdhFtukdm+fvGdrRxAEAkKvuG+lqYj+X/DjsfY/TRdRvFrfbTMS1a2LFmAMA==",
         "dependencies": {
-          "DartSassBuilder": "1.1.0",
           "Microsoft.AspNetCore.Components": "8.0.0",
           "Microsoft.AspNetCore.Components.Web": "8.0.0",
-          "System.Linq.Dynamic.Core": "1.6.0.1"
+          "Microsoft.CodeAnalysis.CSharp": "4.8.0"
         }
       },
       "Serilog": {
@@ -118,11 +117,6 @@
         "dependencies": {
           "Serilog": "4.0.0"
         }
-      },
-      "DartSassBuilder": {
-        "type": "Transitive",
-        "resolved": "1.1.0",
-        "contentHash": "3UKGIRom67Ka/49osw4gBoCGSL3kdEjJ6yFL1rBPkQICMe9LqNoF64xpVnVYo4nA4zfpB20fHF0oJYWPKUJbAQ=="
       },
       "Microsoft.ApplicationInsights": {
         "type": "Transitive",
@@ -322,6 +316,30 @@
         "type": "Transitive",
         "resolved": "9.0.0",
         "contentHash": "bTUtGfpGyJnohQzjdXbtc7MqNzkv7CWUSRz54+ucNm0i32rZiIU0VdVPHDBShOl1qhVKRjW8mnEBz3d2vH93tQ=="
+      },
+      "Microsoft.CodeAnalysis.Analyzers": {
+        "type": "Transitive",
+        "resolved": "3.3.4",
+        "contentHash": "AxkxcPR+rheX0SmvpLVIGLhOUXAKG56a64kV9VQZ4y9gR9ZmPXnqZvHJnmwLSwzrEP6junUF11vuc+aqo5r68g=="
+      },
+      "Microsoft.CodeAnalysis.Common": {
+        "type": "Transitive",
+        "resolved": "4.8.0",
+        "contentHash": "/jR+e/9aT+BApoQJABlVCKnnggGQbvGh7BKq2/wI1LamxC+LbzhcLj4Vj7gXCofl1n4E521YfF9w0WcASGg/KA==",
+        "dependencies": {
+          "Microsoft.CodeAnalysis.Analyzers": "3.3.4",
+          "System.Collections.Immutable": "7.0.0",
+          "System.Reflection.Metadata": "7.0.0",
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        }
+      },
+      "Microsoft.CodeAnalysis.CSharp": {
+        "type": "Transitive",
+        "resolved": "4.8.0",
+        "contentHash": "+3+qfdb/aaGD8PZRCrsdobbzGs1m9u119SkkJt8e/mk3xLJz/udLtS2T6nY27OTXxBBw10HzAbC8Z9w08VyP/g==",
+        "dependencies": {
+          "Microsoft.CodeAnalysis.Common": "[4.8.0]"
+        }
       },
       "Microsoft.Data.Sqlite.Core": {
         "type": "Transitive",
@@ -783,6 +801,11 @@
         "resolved": "4.5.0",
         "contentHash": "pL2ChpaRRWI/p4LXyy4RgeWlYF2sgfj/pnVMvBqwNFr5cXg7CXNnWZWxrOONLg8VGdFB8oB+EG2Qw4MLgTOe+A=="
       },
+      "System.Collections.Immutable": {
+        "type": "Transitive",
+        "resolved": "7.0.0",
+        "contentHash": "dQPcs0U1IKnBdRDBkrCTi1FoajSTBzLcVTpjO4MBCMC7f4pDOIPzgBoX8JjG7X6uZRJ8EBxsi8+DR1JuwjnzOQ=="
+      },
       "System.Configuration.ConfigurationManager": {
         "type": "Transitive",
         "resolved": "6.0.0",
@@ -827,11 +850,6 @@
         "resolved": "9.0.2",
         "contentHash": "UIBaK7c/A3FyQxmX/747xw4rCUkm1BhNiVU617U5jweNJssNjLJkPUGhBsrlDG0BpKWCYKsncD+Kqpy4KmvZZQ=="
       },
-      "System.Linq.Dynamic.Core": {
-        "type": "Transitive",
-        "resolved": "1.6.0.1",
-        "contentHash": "u1ome4HL3OS5lq2QbxIAmHv+i5uewSf2hqosGr8O5FjkseqSx4Fmt1Pn+8fjyex7/rQOOYrXk+iTkxxEgSc9yA=="
-      },
       "System.Memory": {
         "type": "Transitive",
         "resolved": "4.5.3",
@@ -839,8 +857,16 @@
       },
       "System.Reflection.Metadata": {
         "type": "Transitive",
-        "resolved": "1.6.0",
-        "contentHash": "COC1aiAJjCoA5GBF+QKL2uLqEBew4JsCkQmoHKbN3TlOZKa2fKLz5CpiRQKDz0RsAOEGsVKqOD5bomsXq/4STQ=="
+        "resolved": "7.0.0",
+        "contentHash": "MclTG61lsD9sYdpNz9xsKBzjsmsfCtcMZYXz/IUr2zlhaTaABonlr1ESeompTgM+Xk+IwtGYU7/voh3YWB/fWw==",
+        "dependencies": {
+          "System.Collections.Immutable": "7.0.0"
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "/iUeP3tq1S0XdNNoMz5C9twLSrM/TH+qElHkXWaPvuNOt+99G75NrV0OS2EqHx5wMN7popYjpc8oTjC1y16DLg=="
       },
       "System.Security.AccessControl": {
         "type": "Transitive",
