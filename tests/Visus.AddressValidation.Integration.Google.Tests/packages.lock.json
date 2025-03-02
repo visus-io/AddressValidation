@@ -41,9 +41,9 @@
       },
       "PublicApiGenerator": {
         "type": "Direct",
-        "requested": "[11.4.4, )",
-        "resolved": "11.4.4",
-        "contentHash": "kwYuno8uhhg53FbcEDxsWhfY0vCK7GfOn0+bh5AsyrG6xqVKmqLnmps/d3GhBVXZBdBynp+bpvGOqOz8f8rntA==",
+        "requested": "[11.4.5, )",
+        "resolved": "11.4.5",
+        "contentHash": "S9hJcL48erakoKHqXx47IvzbBYH10Y7a8yS2QVkNgQttfX/dNL+WIiaqUsBg7tFjFlxBRiFhd4mLN6QXZ50F/A==",
         "dependencies": {
           "Mono.Cecil": "0.11.6",
           "System.CodeDom": "6.0.0"
