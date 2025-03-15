@@ -1,64 +1,9 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"constraints": {
-		"dotnet": "8.0.407"
-	},
 	"extends": [
 		"local>visus-io/renovate-config",
 		":preserveSemverRanges"
 	],
 	"ignoreDeps": ["Microsoft.CodeAnalysis.CSharp.Workspaces"],
-	"packageRules": [
-		{
-			"automerge": true,
-			"matchUpdateTypes": [
-				"digest",
-				"minor",
-				"patch"
-			],
-			"groupName": "all non-major dependencies",
-			"groupSlug": "all-minor-patch",
-			"labels": [
-				"Dependencies: Minor-Patch"
-			],
-			"schedule": [
-				"after 8:00am"
-			],
-			"matchPackageNames": [
-				"*"
-			]
-		},
-		{
-			"automerge": false,
-			"matchUpdateTypes": [
-				"major"
-			],
-			"labels": [
-				"Dependencies: Major (Breaking)"
-			],
-			"schedule": [
-				"after 8:00am on tuesday"
-			],
-			"matchPackageNames": [
-				"*"
-			]
-		},
-		{
-			"automerge": true,
-			"matchUpdateTypes": [
-				"minor",
-				"patch"
-			],
-			"labels": [
-				"Dependencies: Minor-Patch"
-			],
-			"schedule": [
-				"after 8:00am"
-			],
-			"matchPackageNames": [
-				"dotnet-sdk"
-			]
-		}
-	],
 	"timezone": "America/New_York"
 }
