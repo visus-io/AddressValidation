@@ -1,17 +1,13 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"configMigration": true,
-	"ignoreDeps": ["Microsoft.CodeAnalysis.CSharp.Workspaces"],
 	"constraints": {
-		"dotnet": "8.0.406"
+		"dotnet": "8.0.407"
 	},
 	"extends": [
-		"config:recommended",
-		":disableDependencyDashboard",
-		":gitSignOff",
+		"local>visus-io/renovate-config",
 		":preserveSemverRanges"
 	],
-	"timezone": "America/New_York",
+	"ignoreDeps": ["Microsoft.CodeAnalysis.CSharp.Workspaces"],
 	"packageRules": [
 		{
 			"automerge": true,
@@ -46,6 +42,23 @@
 			"matchPackageNames": [
 				"*"
 			]
+		},
+		{
+			"automerge": true,
+			"matchUpdateTypes": [
+				"minor",
+				"patch"
+			],
+			"labels": [
+				"Dependencies: Minor-Patch"
+			],
+			"schedule": [
+				"after 8:00am"
+			],
+			"matchPackageNames": [
+				"dotnet-sdk"
+			]
 		}
-	]
+	],
+	"timezone": "America/New_York"
 }
