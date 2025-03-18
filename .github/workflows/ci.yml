@@ -77,7 +77,7 @@ jobs:
                   ~/.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
             - name: Publish Test Results
               if: always()
-              uses: dorny/test-reporter@v1
+              uses: dorny/test-reporter@v2
               with:                  
                   name: Test Results
                   path: ${{ runner.temp }}/TestResults/*.trx
