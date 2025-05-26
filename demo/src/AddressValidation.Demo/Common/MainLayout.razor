@@ -10,11 +10,11 @@
 		</RadzenStack>
 	</RadzenHeader>
 	<RadzenSidebar @bind-Expanded="@_isExpanded">
-		<RadzenPanelMenu class="fontawesome-brands">
-			<RadzenPanelMenuItem Text="Home" Match="NavLinkMatch.All" Path="/" Icon="@GlyphService.RenderFontAwesomeGlyph("fa-solid", "fa-house")"/>
-			<RadzenPanelMenuItem Text="Google" Path="/validator/google" Icon="@GlyphService.RenderFontAwesomeGlyph("fa-brands", "fa-google")"/>
-			<RadzenPanelMenuItem Text="UPS" Path="/validator/ups" Icon="@GlyphService.RenderFontAwesomeGlyph("fa-brands", "fa-ups")"/>
-			<RadzenPanelMenuItem Text="Pitney Bowes" Path="/validator/pitney-bowes" Image="images/pbi.svg"/>
+		<RadzenPanelMenu>
+			<RadzenPanelMenuItem class="font-awesome" Text="Home" Match="NavLinkMatch.All" Path="/" Icon="@("\uf015")"/>
+			<RadzenPanelMenuItem class="font-awesome-brands" Text="Google" Path="/validator/google" Icon="@("\uf1a0")"/>
+			<RadzenPanelMenuItem class="font-awesome-brands" Text="UPS" Path="/validator/ups" Icon="@("\uf7e0")"/>
+			<RadzenPanelMenuItem class="font-awesome" Text="Pitney Bowes" Path="/validator/pitney-bowes" Icon="@("\uf1b2")"/>
 		</RadzenPanelMenu>
 	</RadzenSidebar>
 	<RadzenBody>

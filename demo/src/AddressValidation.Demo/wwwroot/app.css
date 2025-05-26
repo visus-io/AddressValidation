@@ -43,3 +43,11 @@ pre {
 	margin: 0 !important;
 	overflow: scroll !important;
 }
+
+.font-awesome {
+	--rz-icon-font-family: 'Font Awesome 6 Free';
+}
+
+.font-awesome-brands {
+	--rz-icon-font-family: 'Font Awesome 6 Brands';
+}

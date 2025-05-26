@@ -64,7 +64,6 @@ internal static class Program
 			builder.Services.AddPitneyBowesAddressValidation();
 			builder.Services.AddUpsAddressValidation();
 
-			builder.Services.AddSingleton<IGlyphService, GlyphService>();
 			builder.Services.AddTransient<IGeographyService, GeographyService>();
 			builder.Services.AddScoped<ILoadingIndicatorService, LoadingIndicatorService>();
 			builder.Services.AddTransient<ISettingsService, SettingsService>();
