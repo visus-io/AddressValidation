@@ -401,3 +401,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 .DS_Store
+
+# SonarQube
+.sonarqube
