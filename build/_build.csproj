@@ -21,4 +21,7 @@
 	  <PackageDownload Include="GitVersion.Tool" Version="[6.3.0]" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute"/>
+	</ItemGroup>
 </Project>

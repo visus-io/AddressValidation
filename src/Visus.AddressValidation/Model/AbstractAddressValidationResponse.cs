@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Model;
 
+using System.Diagnostics.CodeAnalysis;
 using Abstractions;
 using Http;
 using Validation;
@@ -7,6 +8,7 @@ using Validation;
 /// <summary>
 ///     Base class for implementing an <see cref="IAddressValidationResponse" />.
 /// </summary>
+[SuppressMessage("SonarLint", "S4035", Justification = "IEqualityComparer<T> cannot be properly implemented.")]
 public abstract class AbstractAddressValidationResponse :
 	IAddressValidationResponse,
 	IEquatable<AbstractAddressValidationResponse>
@@ -73,7 +75,17 @@ public abstract class AbstractAddressValidationResponse :
 	/// <returns><c>true</c> if <c>left</c> and <c>right</c> are equal; otherwise, <c>false</c>.</returns>
 	public static bool operator ==(AbstractAddressValidationResponse? left, AbstractAddressValidationResponse? right)
 	{
-		return Equals(left, right);
+		if ( ReferenceEquals(left, right) )
+		{
+			return true;
+		}
+
+		if ( left is null || right is null )
+		{
+			return false;
+		}
+
+		return left.Equals(right);
 	}
 
 	/// <summary>
@@ -85,7 +97,7 @@ public abstract class AbstractAddressValidationResponse :
 	/// <returns><c>true</c> if <c>left</c> and <c>right</c> are not equal; otherwise, <c>false</c>.</returns>
 	public static bool operator !=(AbstractAddressValidationResponse? left, AbstractAddressValidationResponse? right)
 	{
-		return !Equals(left, right);
+		return !(left == right);
 	}
 
 	/// <inheritdoc />
