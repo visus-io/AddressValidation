@@ -10,7 +10,7 @@ using AddressValidation.Validation;
 using Model;
 
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
-internal sealed partial class ApiResponse : AbstractApiResponse
+internal sealed partial class ApiResponse : IApiResponse
 {
 	[JsonIgnore]
 	public ApiErrorResponse? ErrorResponse { get; init; }
@@ -22,7 +22,7 @@ internal sealed partial class ApiResponse : AbstractApiResponse
 	[JsonPropertyName("result")]
 	public Response? Result { get; init; }
 
-	public override IAddressValidationResponse ToAddressValidationResponse(IValidationResult? validationResult = null)
+	public IAddressValidationResponse ToAddressValidationResponse(IValidationResult? validationResult = null)
 	{
 		return new AddressValidationResponse(this, validationResult);
 	}
@@ -68,7 +68,7 @@ internal sealed partial class ApiResponse : AbstractApiResponse
 	{
 		[JsonPropertyName("location")]
 		public Location Location { get; set; } = null!;
-		
+
 		[CustomResponseDataProperty("googlePlaceId")]
 		[JsonPropertyName("placeId")]
 		public string PlaceId { get; set; } = null!;

@@ -134,7 +134,7 @@ public abstract class AbstractAddressValidationResponse :
 ///     Base record for implementing an <see cref="IAddressValidationResponse" />.
 /// </summary>
 /// <typeparam name="TResponse">
-///     An instance that implements <see cref="AbstractApiResponse" /> which will be
+///     An instance that implements <see cref="IApiResponse" /> which will be
 ///     returned from the underlying service api.
 /// </typeparam>
 /// <remarks>
@@ -147,5 +147,5 @@ public abstract class AbstractAddressValidationResponse :
 /// </param>
 #pragma warning disable CS9113 // Parameter is unread.
 public abstract class AbstractAddressValidationResponse<TResponse>(TResponse response, IValidationResult? validationResult = null)
-	: AbstractAddressValidationResponse(validationResult) where TResponse : AbstractApiResponse;
+	: AbstractAddressValidationResponse(validationResult) where TResponse : IApiResponse;
 #pragma warning restore CS9113 // Parameter is unread.

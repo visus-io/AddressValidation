@@ -550,11 +550,6 @@ namespace Visus.AddressValidation.Http
         public string? PostalCode { get; set; }
         public string? StateOrProvince { get; set; }
     }
-    public abstract class AbstractApiResponse
-    {
-        protected AbstractApiResponse() { }
-        public abstract Visus.AddressValidation.Model.IAddressValidationResponse ToAddressValidationResponse(Visus.AddressValidation.Validation.IValidationResult? validationResult = null);
-    }
     public sealed class BasicAuthenticationHeaderValue : System.Net.Http.Headers.AuthenticationHeaderValue
     {
         public BasicAuthenticationHeaderValue(string userName, string? password) { }
@@ -564,6 +559,10 @@ namespace Visus.AddressValidation.Http
     {
         public BearerTokenDelegatingHandler(Visus.AddressValidation.Services.AbstractAuthenticationService<TClient> authenticationService) { }
         protected override System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage> SendAsync(System.Net.Http.HttpRequestMessage request, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public interface IApiResponse
+    {
+        Visus.AddressValidation.Model.IAddressValidationResponse ToAddressValidationResponse(Visus.AddressValidation.Validation.IValidationResult? validationResult = null);
     }
     public interface IAuthenticationClient
     {
@@ -605,7 +604,7 @@ namespace Visus.AddressValidation.Model
         public static bool operator ==(Visus.AddressValidation.Model.AbstractAddressValidationResponse? left, Visus.AddressValidation.Model.AbstractAddressValidationResponse? right) { }
     }
     public abstract class AbstractAddressValidationResponse<TResponse> : Visus.AddressValidation.Model.AbstractAddressValidationResponse
-        where TResponse : Visus.AddressValidation.Http.AbstractApiResponse
+        where TResponse : Visus.AddressValidation.Http.IApiResponse
     {
         protected AbstractAddressValidationResponse(TResponse response, Visus.AddressValidation.Validation.IValidationResult? validationResult = null) { }
     }
@@ -663,7 +662,7 @@ namespace Visus.AddressValidation.Services
 {
     public abstract class AbstractAddressValidationService<TRequest, TResponse> : Visus.AddressValidation.Services.IAddressValidationService<TRequest>
         where TRequest : Visus.AddressValidation.Http.AbstractAddressValidationRequest
-        where TResponse : Visus.AddressValidation.Http.AbstractApiResponse
+        where TResponse :  class, Visus.AddressValidation.Http.IApiResponse
     {
         protected AbstractAddressValidationService(Visus.AddressValidation.Validation.IValidator<TRequest> requestValidator, Visus.AddressValidation.Validation.IValidator<TResponse> responseValidator) { }
         protected abstract System.Threading.Tasks.ValueTask<TResponse?> SendAsync(TRequest request, System.Threading.CancellationToken cancellationToken);
@@ -696,7 +695,7 @@ namespace Visus.AddressValidation.Validation
         protected virtual System.Threading.Tasks.ValueTask ValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
     }
     public abstract class AbstractApiResponseValidator<T> : System.IDisposable, Visus.AddressValidation.Validation.IValidator<T>
-        where T : Visus.AddressValidation.Http.AbstractApiResponse
+        where T :  class, Visus.AddressValidation.Http.IApiResponse
     {
         protected AbstractApiResponseValidator() { }
         public void Dispose() { }

@@ -6,9 +6,9 @@ using Http;
 /// <summary>
 ///     Base class for implementing an API response validator.
 /// </summary>
-/// <typeparam name="T">An instance that implements <see cref="AbstractApiResponse" />.</typeparam>
+/// <typeparam name="T">An instance that implements <see cref="IApiResponse" />.</typeparam>
 public abstract class AbstractApiResponseValidator<T> : IValidator<T>, IDisposable
-	where T : AbstractApiResponse
+	where T : class, IApiResponse
 {
 	private readonly SemaphoreSlim _semaphore = new(1, 1);
 

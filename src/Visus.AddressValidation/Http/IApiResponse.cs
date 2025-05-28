@@ -4,9 +4,9 @@ using Model;
 using Validation;
 
 /// <summary>
-///     Base class for processing results returned by an address validation API.
+///     Abstraction for implementing processing of results returned by an address validation API.
 /// </summary>
-public abstract class AbstractApiResponse
+public interface IApiResponse
 {
 	/// <summary>
 	///     Converts the underlying service api response to an instance that implements
@@ -17,5 +17,5 @@ public abstract class AbstractApiResponse
 	///     <see cref="IValidationResult" />.
 	/// </param>
 	/// <returns>An instance that implements <see cref="IAddressValidationResponse" />.</returns>
-	public abstract IAddressValidationResponse ToAddressValidationResponse(IValidationResult? validationResult = null);
+	public IAddressValidationResponse ToAddressValidationResponse(IValidationResult? validationResult = null);
 }

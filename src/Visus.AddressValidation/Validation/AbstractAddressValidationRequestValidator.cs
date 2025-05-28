@@ -122,12 +122,8 @@ public abstract class AbstractAddressValidationRequestValidator<T> : IValidator<
 	{
 		using ( await _semaphore.LockAsync(cancellationToken).ConfigureAwait(false) )
 		{
-			if ( !await PreValidateInternalAsync(context.Instance, context.ValidationResults).ConfigureAwait(false) )
-			{
-				return new ValidationResult(context.ValidationResults);
-			}
-
-			if ( !await PreValidateAsync(context.Instance, context.ValidationResults, cancellationToken).ConfigureAwait(false) )
+			if ( !await PreValidateInternalAsync(context.Instance, context.ValidationResults).ConfigureAwait(false) ||
+				 !await PreValidateAsync(context.Instance, context.ValidationResults, cancellationToken).ConfigureAwait(false) )
 			{
 				return new ValidationResult(context.ValidationResults);
 			}

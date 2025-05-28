@@ -10,7 +10,7 @@ using AddressValidation.Validation;
 using Model;
 
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
-internal sealed class ApiResponse : AbstractApiResponse
+internal sealed class ApiResponse : IApiResponse
 {
 	[JsonIgnore]
 	public ApiErrorResponse? ErrorResponse { get; init; }
@@ -18,7 +18,7 @@ internal sealed class ApiResponse : AbstractApiResponse
 	[JsonPropertyName("XAVResponse")]
 	public XavResponse? Result { get; init; }
 
-	public override IAddressValidationResponse ToAddressValidationResponse(IValidationResult? validationResult = null)
+	public IAddressValidationResponse ToAddressValidationResponse(IValidationResult? validationResult = null)
 	{
 		return new AddressValidationResponse(this, validationResult);
 	}

@@ -13,12 +13,12 @@ using Validation;
 ///     used for validation.
 /// </typeparam>
 /// <typeparam name="TResponse">
-///     An instance that implements <see cref="AbstractApiResponse" /> which will be
+///     An instance that implements <see cref="IApiResponse" /> which will be
 ///     returned from the underlying service api.
 /// </typeparam>
 public abstract class AbstractAddressValidationService<TRequest, TResponse> : IAddressValidationService<TRequest>
 	where TRequest : AbstractAddressValidationRequest
-	where TResponse : AbstractApiResponse
+	where TResponse : class, IApiResponse
 {
 	private readonly IValidator<TRequest> _requestValidator;
 
