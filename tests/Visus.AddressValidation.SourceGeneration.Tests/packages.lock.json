@@ -807,10 +807,7 @@
         }
       },
       "visus.addressvalidation.sourcegeneration": {
-        "type": "Project",
-        "dependencies": {
-          "Microsoft.CodeAnalysis.CSharp.Workspaces": "[4.11.0, 4.11.0]"
-        }
+        "type": "Project"
       },
       "Microsoft.CodeAnalysis.CSharp.Workspaces": {
         "type": "CentralTransitive",
