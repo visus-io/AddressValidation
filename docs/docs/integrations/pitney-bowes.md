@@ -50,7 +50,7 @@ Configuration of the integration is relatively straight forward and all paramete
 | `VS_AVE_PB_API_SECRET`         |                                                                                                     |
 
 > [!NOTE]
-> `VS_AVE_PB_ACCOUNT_NUMBER` is only used for the purposes of constructing a cache key for the authentication cache.
+> `VS_AVE_PB_DEVELOPER_ID` is only used for the purposes of constructing a cache key for the authentication cache.
 
 > [!IMPORTANT]
 > `VS_AVE_PB_API_KEY` and `VS_AVE_PB_API_SECRET` should be stored encrypted at rest. See the [Security](../index.md#security) for additional details.

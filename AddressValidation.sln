@@ -10,7 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		.editorconfig = .editorconfig
 		renovate.json = renovate.json
-		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation", "src\Visus.AddressValidation\Visus.AddressValidation.csproj", "{64B9D329-F983-49D5-A73F-C5EA8B1F16A9}"
@@ -58,6 +57,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00. Build", "00. Build", "{32B364CE-8825-4295-8F73-479C3F13543B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{B104A7C9-1E92-4D16-A823-6FB67366B0FA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05. Documentation", "05. Documentation", "{0F4402B0-2710-4688-A20A-48F255E0A5A0}"
+	ProjectSection(SolutionItems) = preProject
+		docs\docfx.json = docs\docfx.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
