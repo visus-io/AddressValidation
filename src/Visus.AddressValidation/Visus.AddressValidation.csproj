@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <IsAotCompatible>true</IsAotCompatible>
+        <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,4 +15,16 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Visus.AddressValidation.SourceGeneration\Visus.AddressValidation.SourceGeneration.csproj"
+                        ReferenceOutputAssembly="true"
+                        PrivateAssets="all"/>
+    </ItemGroup>
+
+    <Target Name="_AddAnalyzersToOutput">
+        <ItemGroup>
+            <TfmSpecificPackageFile Include="$(OutputPath)\$(AssemblyName).SourceGeneration.dll" PackagePath="analyzers/dotnet/cs" />
+        </ItemGroup>
+    </Target>
+    
 </Project>

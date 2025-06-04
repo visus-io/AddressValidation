@@ -28,4 +28,5 @@
                           SetTargetFramework="TargetFramework=netstandard2.0"
                           ReferenceOutputAssembly="false"/>
     </ItemGroup>
+
 </Project>
