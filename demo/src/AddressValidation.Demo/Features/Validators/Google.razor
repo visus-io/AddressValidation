@@ -7,121 +7,163 @@
 <h1>Google Address Validation Demo</h1>
 
 <div class="rz-p-0 rz-p-md-12" style="padding: 0 !important">
-	<RadzenRow Gap="1rem">
-		<RadzenColumn Size="12" SizeSM="6">
-			<RadzenStack>
-				<LoadingIndicator @ref="SettingsLoadingIndicator">
-					<RadzenTemplateForm TItem="GoogleApiSettingsFormModel" Data="@_settingsFormModel" Submit="OnSettingsFormSubmitAsync">
-						<RadzenFieldset Text="Settings" AllowCollapse="true">
-							<RadzenStack Gap="2rem">
-								<RadzenRow AlignItems="AlignItems.Center">
-									<RadzenFormField AllowFloatingLabel="false" Text="Project ID" Component="ProjectId" Variant="Variant.Outlined" Style="width: 100%">
-										<RadzenTextBox Name="ProjectId" @bind-Value="@_settingsFormModel.ProjectId"/>
-										<RadzenRequiredValidator Component="ProjectId" Popup="true" Style="position: absolute"/>
-									</RadzenFormField>
-									<RadzenFormField AllowFloatingLabel="false" Text="Service Account Email" Component="ServiceAccountEmailAddress" Variant="Variant.Outlined" Style="width: 100%">
-										<RadzenTextBox Name="ServiceAccountEmailAddress" @bind-Value="@_settingsFormModel.ServiceAccountEmailAddress"/>
-										<RadzenEmailValidator Component="ServiceAccountEmailAddress" Popup="true" Style="position: absolute"/>
-										<RadzenRequiredValidator Component="ServiceAccountEmailAddress" Popup="true" Style="position: absolute"/>
-									</RadzenFormField>
-									<RadzenFormField AllowFloatingLabel="false" Text="Private Key" Component="PrivateKey" Variant="Variant.Outlined" Style="width: 100%">
-										<RadzenTextArea Rows="20" Name="PrivateKey" class="avd-input-text-masked" @bind-Value="@_settingsFormModel.PrivateKey" Style="flex: 100%; resize: none"/>
-									</RadzenFormField>
-								</RadzenRow>
-								<RadzenRow>
-									<RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Variant="Variant.Flat" Text="Save"/>
-								</RadzenRow>
-							</RadzenStack>
-						</RadzenFieldset>
-					</RadzenTemplateForm>
-				</LoadingIndicator>
-				<LoadingIndicator @ref="ValidateLoadingIndicator">
-					<RadzenTemplateForm TItem="GoogleAddressValidationFormModel" Data="@AddressValidationFormModel" Submit="OnAddressValidationFormSubmitAsync">
-						<RadzenFieldset Text="Address Validation">
-							<RadzenStack Gap="2rem">
-								<RadzenRow AlignItems="AlignItems.Center">
-									<RadzenFormField AllowFloatingLabel="false" Text="Country" Component="Country" Variant="Variant.Outlined" Style="width: 100%">
-										<RadzenDropDown AllowClear="false"
-										                AllowFiltering="true"
-										                AllowVirtualization="true"
-										                Change="OnCountryChangedAsync"
-										                Data="@Countries"
-										                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-										                Name="Country"
-										                TextProperty="Value"
-										                ValueProperty="Key"
-										                @bind-Value="@AddressValidationFormModel.Country"/>
-										<RadzenRequiredValidator Component="Country" Popup="true" Style="position: absolute"/>
-									</RadzenFormField>
-								</RadzenRow>
-								<RadzenRow AlignItems="AlignItems.Center">
-									<RadzenFormField AllowFloatingLabel="false" Text="Address Line 1" Component="AddressLine1" Variant="Variant.Outlined" Style="width: 100%">
-										<RadzenTextBox Name="AddressLine1" AutoCompleteType="AutoCompleteType.AddressLine1" @bind-Value="@AddressValidationFormModel.AddressLine1"/>
-										<RadzenRequiredValidator Component="AddressLine1" Popup="true" Style="position: absolute"/>
-									</RadzenFormField>
-									<RadzenFormField AllowFloatingLabel="false" Text="Address Line 2" Component="AddressLine1" Variant="Variant.Outlined" Style="width: 100%">
-										<RadzenTextBox Name="AddressLine2" AutoCompleteType="AutoCompleteType.AddressLine2" @bind-Value="@AddressValidationFormModel.AddressLine2"/>
-									</RadzenFormField>
-								</RadzenRow>
-								<RadzenRow AlignItems="AlignItems.Center">
-									<RadzenColumn Size="4">
-										<RadzenFormField AllowFloatingLabel="false" Text="Zip Code" Component="PostalCode" Variant="Variant.Outlined" Style="width: 100%">
-											<RadzenTextBox Name="PostalCode" AutoCompleteType="AutoCompleteType.PostalCode" @bind-Value="@AddressValidationFormModel.PostalCode"/>
-											<RadzenRequiredValidator Component="PostalCode" Popup="true" Style="position: absolute"/>
-										</RadzenFormField>
-									</RadzenColumn>
-									<RadzenColumn Size="4">
-										<RadzenFormField AllowFloatingLabel="false" Text="City" Component="CityOrTown" Variant="Variant.Outlined" Style="width: 100%">
-											<RadzenTextBox Name="CityOrTown" AutoCompleteType="AutoCompleteType.AddressLevel2" @bind-Value="@AddressValidationFormModel.CityOrTown"/>
-										</RadzenFormField>
-									</RadzenColumn>
-									<RadzenColumn Size="4">
-										<RadzenFormField AllowFloatingLabel="false" Text="State / Province" Component="Province" Variant="Variant.Outlined" Style="width: 100%">
-											@if (Provinces.Count > 0)
-											{
-												<RadzenDropDown AllowClear="true"
-												                AllowFiltering="true"
-												                AllowVirtualization="true"
-												                Data="@Provinces"
-												                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-												                Name="Province"
-												                TextProperty="Value"
-												                ValueProperty="Key"
-												                @bind-Value="@AddressValidationFormModel.StateOrProvince"/>
-											}
-											else
-											{
-												<RadzenTextBox Name="Province" AutoCompleteType="AutoCompleteType.AddressLevel3" @bind-Value="@AddressValidationFormModel.StateOrProvince"/>
-											}
-											<RadzenRequiredValidator Component="Province" Popup="true" Style="position: absolute"/>
-										</RadzenFormField>
-									</RadzenColumn>
-								</RadzenRow>
-								<RadzenRow Gap="0.25rem">
-									<RadzenButton Disabled="@ValidateLoadingIndicator.IsVisible" ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Variant="Variant.Flat" Text="Validate"/>
-									<RadzenButton Disabled="@ValidateLoadingIndicator.IsVisible" ButtonStyle="ButtonStyle.Secondary" ButtonType="ButtonType.Reset" Variant="Variant.Flat" Text="Clear"/>
-								</RadzenRow>
-							</RadzenStack>
-						</RadzenFieldset>
-					</RadzenTemplateForm>
-				</LoadingIndicator>
-			</RadzenStack>
-		</RadzenColumn>
-		<RadzenColumn Size="12" SizeSM="6">
-			<RadzenStack>
-				<LoadingIndicator @ref="ResultsLoadingIndicator">
-					<RadzenRow Gap="0.25rem">
-						<RadzenFieldset Text="Request" Style="width: 100%">
-							<SyntaxHighlighter Language="json">@RequestJson</SyntaxHighlighter>
-						</RadzenFieldset>
-					</RadzenRow>
-					<RadzenRow Gap="0.25rem">
-						<RadzenFieldset Text="Response" Style="width: 100%">
-							<SyntaxHighlighter Language="json">@ResponseJson</SyntaxHighlighter>
-						</RadzenFieldset>
-					</RadzenRow>
-				</LoadingIndicator>
-			</RadzenStack>
-		</RadzenColumn>
-	</RadzenRow>
+    <RadzenRow Gap="1rem">
+        <RadzenColumn Size="12" SizeSM="6">
+            <RadzenStack>
+                <LoadingIndicator @ref="SettingsLoadingIndicator">
+                    <RadzenTemplateForm TItem="GoogleApiSettingsFormModel" Data="@_settingsFormModel"
+                                        Submit="OnSettingsFormSubmitAsync">
+                        <RadzenFieldset Text="Settings" AllowCollapse="true">
+                            <RadzenStack Gap="2rem">
+                                <RadzenRow AlignItems="AlignItems.Center">
+                                    <RadzenFormField AllowFloatingLabel="false" Text="Project ID" Component="ProjectId"
+                                                     Variant="Variant.Outlined" Style="width: 100%">
+                                        <RadzenTextBox Name="ProjectId" @bind-Value="@_settingsFormModel.ProjectId"/>
+                                        <RadzenRequiredValidator Component="ProjectId" Popup="true"
+                                                                 Style="position: absolute"/>
+                                    </RadzenFormField>
+                                    <RadzenFormField AllowFloatingLabel="false" Text="Service Account Email"
+                                                     Component="ServiceAccountEmailAddress" Variant="Variant.Outlined"
+                                                     Style="width: 100%">
+                                        <RadzenTextBox Name="ServiceAccountEmailAddress"
+                                                       @bind-Value="@_settingsFormModel.ServiceAccountEmailAddress"/>
+                                        <RadzenEmailValidator Component="ServiceAccountEmailAddress" Popup="true"
+                                                              Style="position: absolute"/>
+                                        <RadzenRequiredValidator Component="ServiceAccountEmailAddress" Popup="true"
+                                                                 Style="position: absolute"/>
+                                    </RadzenFormField>
+                                    <RadzenFormField AllowFloatingLabel="false" Text="Private Key"
+                                                     Component="PrivateKey" Variant="Variant.Outlined"
+                                                     Style="width: 100%">
+                                        <RadzenTextArea Rows="20" Name="PrivateKey" class="avd-input-text-masked"
+                                                        @bind-Value="@_settingsFormModel.PrivateKey"
+                                                        Style="flex: 100%; resize: none"/>
+                                    </RadzenFormField>
+                                </RadzenRow>
+                                <RadzenRow>
+                                    <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit"
+                                                  Variant="Variant.Flat" Text="Save"/>
+                                </RadzenRow>
+                            </RadzenStack>
+                        </RadzenFieldset>
+                    </RadzenTemplateForm>
+                </LoadingIndicator>
+                <LoadingIndicator @ref="ValidateLoadingIndicator">
+                    <RadzenTemplateForm TItem="GoogleAddressValidationFormModel" Data="@AddressValidationFormModel"
+                                        Submit="OnAddressValidationFormSubmitAsync">
+                        <RadzenFieldset Text="Address Validation">
+                            <RadzenStack Gap="2rem">
+                                <RadzenRow AlignItems="AlignItems.Center">
+                                    <RadzenFormField AllowFloatingLabel="false" Text="Country" Component="Country"
+                                                     Variant="Variant.Outlined" Style="width: 100%">
+                                        <RadzenDropDown AllowClear="false"
+                                                        AllowFiltering="true"
+                                                        AllowVirtualization="true"
+                                                        Change="OnCountryChangedAsync"
+                                                        Data="@Countries"
+                                                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                        Name="Country"
+                                                        TextProperty="Value"
+                                                        ValueProperty="Key"
+                                                        @bind-Value="@AddressValidationFormModel.Country"/>
+                                        <RadzenRequiredValidator Component="Country" Popup="true"
+                                                                 Style="position: absolute"/>
+                                    </RadzenFormField>
+                                </RadzenRow>
+                                <RadzenRow AlignItems="AlignItems.Center">
+                                    <RadzenFormField AllowFloatingLabel="false" Text="Address Line 1"
+                                                     Component="AddressLine1" Variant="Variant.Outlined"
+                                                     Style="width: 100%">
+                                        <RadzenTextBox Name="AddressLine1"
+                                                       AutoCompleteType="AutoCompleteType.AddressLine1"
+                                                       @bind-Value="@AddressValidationFormModel.AddressLine1"/>
+                                        <RadzenRequiredValidator Component="AddressLine1" Popup="true"
+                                                                 Style="position: absolute"/>
+                                    </RadzenFormField>
+                                    <RadzenFormField AllowFloatingLabel="false" Text="Address Line 2"
+                                                     Component="AddressLine1" Variant="Variant.Outlined"
+                                                     Style="width: 100%">
+                                        <RadzenTextBox Name="AddressLine2"
+                                                       AutoCompleteType="AutoCompleteType.AddressLine2"
+                                                       @bind-Value="@AddressValidationFormModel.AddressLine2"/>
+                                    </RadzenFormField>
+                                </RadzenRow>
+                                <RadzenRow AlignItems="AlignItems.Center">
+                                    <RadzenColumn Size="4">
+                                        <RadzenFormField AllowFloatingLabel="false" Text="Zip Code"
+                                                         Component="PostalCode" Variant="Variant.Outlined"
+                                                         Style="width: 100%">
+                                            <RadzenTextBox Name="PostalCode"
+                                                           AutoCompleteType="AutoCompleteType.PostalCode"
+                                                           @bind-Value="@AddressValidationFormModel.PostalCode"/>
+                                            <RadzenRequiredValidator Component="PostalCode" Popup="true"
+                                                                     Style="position: absolute"/>
+                                        </RadzenFormField>
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="4">
+                                        <RadzenFormField AllowFloatingLabel="false" Text="City" Component="CityOrTown"
+                                                         Variant="Variant.Outlined" Style="width: 100%">
+                                            <RadzenTextBox Name="CityOrTown"
+                                                           AutoCompleteType="AutoCompleteType.AddressLevel2"
+                                                           @bind-Value="@AddressValidationFormModel.CityOrTown"/>
+                                        </RadzenFormField>
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="4">
+                                        <RadzenFormField AllowFloatingLabel="false" Text="State / Province"
+                                                         Component="Province" Variant="Variant.Outlined"
+                                                         Style="width: 100%">
+                                            @if (Provinces.Count > 0)
+                                            {
+                                                <RadzenDropDown AllowClear="true"
+                                                                AllowFiltering="true"
+                                                                AllowVirtualization="true"
+                                                                Data="@Provinces"
+                                                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                                Name="Province"
+                                                                TextProperty="Value"
+                                                                ValueProperty="Key"
+                                                                @bind-Value="@AddressValidationFormModel.StateOrProvince"/>
+                                            }
+                                            else
+                                            {
+                                                <RadzenTextBox Name="Province"
+                                                               AutoCompleteType="AutoCompleteType.AddressLevel3"
+                                                               @bind-Value="@AddressValidationFormModel.StateOrProvince"/>
+                                            }
+                                            <RadzenRequiredValidator Component="Province" Popup="true"
+                                                                     Style="position: absolute"/>
+                                        </RadzenFormField>
+                                    </RadzenColumn>
+                                </RadzenRow>
+                                <RadzenRow Gap="0.25rem">
+                                    <RadzenButton Disabled="@ValidateLoadingIndicator.IsVisible"
+                                                  ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit"
+                                                  Variant="Variant.Flat" Text="Validate"/>
+                                    <RadzenButton Disabled="@ValidateLoadingIndicator.IsVisible"
+                                                  ButtonStyle="ButtonStyle.Secondary" ButtonType="ButtonType.Reset"
+                                                  Variant="Variant.Flat" Text="Clear"/>
+                                </RadzenRow>
+                            </RadzenStack>
+                        </RadzenFieldset>
+                    </RadzenTemplateForm>
+                </LoadingIndicator>
+            </RadzenStack>
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeSM="6">
+            <RadzenStack>
+                <LoadingIndicator @ref="ResultsLoadingIndicator">
+                    <RadzenRow Gap="0.25rem">
+                        <RadzenFieldset Text="Request" Style="width: 100%">
+                            <SyntaxHighlighter Language="json">@RequestJson</SyntaxHighlighter>
+                        </RadzenFieldset>
+                    </RadzenRow>
+                    <RadzenRow Gap="0.25rem">
+                        <RadzenFieldset Text="Response" Style="width: 100%">
+                            <SyntaxHighlighter Language="json">@ResponseJson</SyntaxHighlighter>
+                        </RadzenFieldset>
+                    </RadzenRow>
+                </LoadingIndicator>
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
 </div>

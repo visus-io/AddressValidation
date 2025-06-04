@@ -1,26 +1,26 @@
 {
-	"address": {
-		"addressLines": [
-			"3 1st Ave NW"
-		],
-		"cityTown": "Litz",
-		"stateProvince": "FL",
-		"postalCode": "33549",
-		"countryCode": "US",
-		"deliveryPoint": "99",
-		"status": "VALIDATED_AND_NOT_CHANGED"
-	},
-	"suggestions": {
-		"suggestionType": "street",
-		"address": [
-			{
-				"addressLines": [
-					"3 1ST AVE NE"
-				],
-				"cityTown": "Litz",
-				"stateProvince": "FL",
-				"postalCode": "33549"
-			}
-		]
-	}
+    "address": {
+        "addressLines": [
+            "3 1st Ave NW"
+        ],
+        "cityTown": "Litz",
+        "stateProvince": "FL",
+        "postalCode": "33549",
+        "countryCode": "US",
+        "deliveryPoint": "99",
+        "status": "VALIDATED_AND_NOT_CHANGED"
+    },
+    "suggestions": {
+        "suggestionType": "street",
+        "address": [
+            {
+                "addressLines": [
+                    "3 1ST AVE NE"
+                ],
+                "cityTown": "Litz",
+                "stateProvince": "FL",
+                "postalCode": "33549"
+            }
+        ]
+    }
 }

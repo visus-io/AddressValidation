@@ -13,19 +13,19 @@ using System.Text;
 /// <param name="userName">The name of the user.</param>
 /// <param name="password">The password for the given user.</param>
 public sealed class BasicAuthenticationHeaderValue(string userName, string? password)
-	: AuthenticationHeaderValue("Basic", EncodeCredentials(userName, password))
+    : AuthenticationHeaderValue("Basic", EncodeCredentials(userName, password))
 {
-	private static string EncodeCredentials(string username, string? password)
-	{
-		ArgumentException.ThrowIfNullOrWhiteSpace(username);
+    private static string EncodeCredentials(string username, string? password)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(username);
 
-		if ( string.IsNullOrWhiteSpace(password) )
-		{
-			password = string.Empty;
-		}
+        if ( string.IsNullOrWhiteSpace(password) )
+        {
+            password = string.Empty;
+        }
 
-		string credential = $"{username}:{password}";
+        string credential = $"{username}:{password}";
 
-		return Convert.ToBase64String(Encoding.UTF8.GetBytes(credential));
-	}
+        return Convert.ToBase64String(Encoding.UTF8.GetBytes(credential));
+    }
 }

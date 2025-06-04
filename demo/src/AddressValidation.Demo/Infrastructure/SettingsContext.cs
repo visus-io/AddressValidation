@@ -6,12 +6,12 @@ using Models.Entities;
 
 public sealed class SettingsContext(DbContextOptions<SettingsContext> options) : DbContext(options)
 {
-	public DbSet<SettingsModel> Config { get; set; }
+    public DbSet<SettingsModel> Config { get; set; }
 
-	protected override void OnModelCreating(ModelBuilder modelBuilder)
-	{
-		ArgumentNullException.ThrowIfNull(modelBuilder);
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        ArgumentNullException.ThrowIfNull(modelBuilder);
 
-		modelBuilder.ApplyConfiguration(new SettingsConfig());
-	}
+        modelBuilder.ApplyConfiguration(new SettingsConfig());
+    }
 }

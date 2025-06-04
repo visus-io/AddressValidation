@@ -10,71 +10,71 @@ using Visus.AddressValidation.Integration.Ups.Http;
 
 public partial class Ups : AbstractValidatorComponent<UpsAddressValidationRequest, UpsAddressValidationFormModel>
 {
-	private readonly Dictionary<string, ClientEnvironment> _clientEnvironments = new(StringComparer.OrdinalIgnoreCase)
-	{
-		[nameof(ClientEnvironment.DEVELOPMENT)] = ClientEnvironment.DEVELOPMENT,
-		[nameof(ClientEnvironment.PRODUCTION)] = ClientEnvironment.PRODUCTION
-	};
+    private readonly Dictionary<string, ClientEnvironment> _clientEnvironments = new(StringComparer.OrdinalIgnoreCase)
+    {
+        [nameof(ClientEnvironment.DEVELOPMENT)] = ClientEnvironment.DEVELOPMENT,
+        [nameof(ClientEnvironment.PRODUCTION)] = ClientEnvironment.PRODUCTION
+    };
 
-	private readonly UpsApiSettingsFormModel _settingsFormModel = new();
+    private readonly UpsApiSettingsFormModel _settingsFormModel = new();
 
-	protected override IEnumerable<CountryCode> InitializeCountries()
-	{
-		return Constants.SupportedCountries;
-	}
+    protected override IEnumerable<CountryCode> InitializeCountries()
+    {
+        return Constants.SupportedCountries;
+    }
 
-	protected override async Task OnInitializedAsync()
-	{
-		await base.OnInitializedAsync();
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
 
-		_settingsFormModel.AccountNumber = Configuration.GetValue<string>(Constants.AccountNumberConfigurationKey);
+        _settingsFormModel.AccountNumber = Configuration.GetValue<string>(Constants.AccountNumberConfigurationKey);
 
-		string? clientEnvironmentValue = Configuration.GetValue<string>(Constants.ClientEnvironmentConfigurationKey);
-		if ( !Enum.TryParse(clientEnvironmentValue, out ClientEnvironment clientEnvironment) )
-		{
-			_settingsFormModel.ClientEnvironment = ClientEnvironment.DEVELOPMENT;
-		}
+        string? clientEnvironmentValue = Configuration.GetValue<string>(Constants.ClientEnvironmentConfigurationKey);
+        if ( !Enum.TryParse(clientEnvironmentValue, out ClientEnvironment clientEnvironment) )
+        {
+            _settingsFormModel.ClientEnvironment = ClientEnvironment.DEVELOPMENT;
+        }
 
-		_settingsFormModel.ClientEnvironment = clientEnvironment;
-		_settingsFormModel.ClientId = Configuration.GetValue<string>(Constants.ClientIdConfigurationKey);
-		_settingsFormModel.ClientSecret = Configuration.GetValue<string>(Constants.ClientSecretConfigurationKey);
-	}
+        _settingsFormModel.ClientEnvironment = clientEnvironment;
+        _settingsFormModel.ClientId = Configuration.GetValue<string>(Constants.ClientIdConfigurationKey);
+        _settingsFormModel.ClientSecret = Configuration.GetValue<string>(Constants.ClientSecretConfigurationKey);
+    }
 
-	private async Task OnSettingsFormSubmitAsync()
-	{
-		await SettingsLoadingIndicator.ShowAsync();
+    private async Task OnSettingsFormSubmitAsync()
+    {
+        await SettingsLoadingIndicator.ShowAsync();
 
-		try
-		{
-			bool[] results =
-			[
-				await SettingsService.AddOrUpdateAsync(Constants.AccountNumberConfigurationKey, _settingsFormModel.AccountNumber),
-				await SettingsService.AddOrUpdateAsync(Constants.ClientEnvironmentConfigurationKey, _settingsFormModel.ClientEnvironment.ToString()),
-				await SettingsService.AddOrUpdateAsync(Constants.ClientIdConfigurationKey, _settingsFormModel.ClientId, true),
-				await SettingsService.AddOrUpdateAsync(Constants.ClientSecretConfigurationKey, _settingsFormModel.ClientSecret, true)
-			];
+        try
+        {
+            bool[] results =
+            [
+                await SettingsService.AddOrUpdateAsync(Constants.AccountNumberConfigurationKey, _settingsFormModel.AccountNumber),
+                await SettingsService.AddOrUpdateAsync(Constants.ClientEnvironmentConfigurationKey, _settingsFormModel.ClientEnvironment.ToString()),
+                await SettingsService.AddOrUpdateAsync(Constants.ClientIdConfigurationKey, _settingsFormModel.ClientId, true),
+                await SettingsService.AddOrUpdateAsync(Constants.ClientSecretConfigurationKey, _settingsFormModel.ClientSecret, true)
+            ];
 
-			if ( results.All(a => a) )
-			{
-				NotificationService.Notify(NotificationSeverity.Success, "Configuration Updated");
+            if ( results.All(a => a) )
+            {
+                NotificationService.Notify(NotificationSeverity.Success, "Configuration Updated");
 
-				// remark: refresh underlying IConfiguration provider for validation services
-				if ( Configuration is IConfigurationRoot configurationRoot )
-				{
-					IConfigurationProvider? provider = configurationRoot.Providers.FirstOrDefault(f => f is SqliteConfigurationProvider);
-					provider?.Load();
-				}
-			}
-			else
-			{
-				NotificationService.Notify(NotificationSeverity.Error, "Configuration Update Failed");
-			}
-		}
-		finally
-		{
-			await SettingsLoadingIndicator.HideAsync();
-		}
+                // remark: refresh underlying IConfiguration provider for validation services
+                if ( Configuration is IConfigurationRoot configurationRoot )
+                {
+                    IConfigurationProvider? provider = configurationRoot.Providers.FirstOrDefault(f => f is SqliteConfigurationProvider);
+                    provider?.Load();
+                }
+            }
+            else
+            {
+                NotificationService.Notify(NotificationSeverity.Error, "Configuration Update Failed");
+            }
+        }
+        finally
+        {
+            await SettingsLoadingIndicator.HideAsync();
+        }
 
-		await InvokeAsync(StateHasChanged);
-	}
+        await InvokeAsync(StateHasChanged);
+    }
 }

@@ -13,25 +13,25 @@ using Model;
 [AttributeUsage(AttributeTargets.Property)]
 public sealed class CustomResponseDataPropertyAttribute : Attribute
 {
-	/// <summary>
-	///     Initializes a new instance of <see cref="CustomResponseDataPropertyAttribute" />.
-	/// </summary>
-	public CustomResponseDataPropertyAttribute()
-	{
-	}
+    /// <summary>
+    ///     Initializes a new instance of <see cref="CustomResponseDataPropertyAttribute" />.
+    /// </summary>
+    public CustomResponseDataPropertyAttribute()
+    {
+    }
 
-	/// <summary>
-	///     Initializes a new instance of <see cref="CustomResponseDataPropertyAttribute" /> with the specified name.
-	/// </summary>
-	/// <param name="name">The name to use instead of the property name.</param>
-	public CustomResponseDataPropertyAttribute(string name)
-	{
-		ArgumentException.ThrowIfNullOrWhiteSpace(name);
+    /// <summary>
+    ///     Initializes a new instance of <see cref="CustomResponseDataPropertyAttribute" /> with the specified name.
+    /// </summary>
+    /// <param name="name">The name to use instead of the property name.</param>
+    public CustomResponseDataPropertyAttribute(string name)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
-		Name = name;
-	}
+        Name = name;
+    }
 
-	/// <summary>
-	/// </summary>
-	public string? Name { get; }
+    /// <summary>
+    /// </summary>
+    public string? Name { get; }
 }

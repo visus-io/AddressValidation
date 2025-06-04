@@ -6,19 +6,19 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 
 internal sealed class GoogleAuthenticationService(
-	IDistributedCache cache,
-	IConfiguration configuration,
-	GoogleAuthenticationClient authenticationClient)
-	: AbstractAuthenticationService<GoogleAuthenticationClient>(authenticationClient, cache)
+    IDistributedCache cache,
+    IConfiguration configuration,
+    GoogleAuthenticationClient authenticationClient)
+    : AbstractAuthenticationService<GoogleAuthenticationClient>(authenticationClient, cache)
 {
-	private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
-	protected override string? GenerateCacheKey()
-	{
-		string? projectId = _configuration[Constants.ProjectIdConfigurationKey];
+    protected override string? GenerateCacheKey()
+    {
+        string? projectId = _configuration[Constants.ProjectIdConfigurationKey];
 
-		return string.IsNullOrWhiteSpace(projectId)
-				   ? null
-				   : $"VS_AVE_CACHE_GOOGLE_ACCESS_TOKEN_{projectId}";
-	}
+        return string.IsNullOrWhiteSpace(projectId)
+                   ? null
+                   : $"VS_AVE_CACHE_GOOGLE_ACCESS_TOKEN_{projectId}";
+    }
 }

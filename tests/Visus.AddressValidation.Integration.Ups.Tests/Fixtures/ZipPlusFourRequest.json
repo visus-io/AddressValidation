@@ -1,14 +1,14 @@
 {
-	"XAVRequest": {
-		"AddressKeyFormat": {
-			"AddressLine": [
-				"8380 Richfood Rd"
-			],
-			"PoliticalDivision2": "Mechanicsville",
-			"PoliticalDivision1": "VA",
-			"PostcodePrimaryLow": "23116",
-			"PostcodeExtendedLow": "2010",
-			"CountryCode": "US"
-		}
-	}
+    "XAVRequest": {
+        "AddressKeyFormat": {
+            "AddressLine": [
+                "8380 Richfood Rd"
+            ],
+            "PoliticalDivision2": "Mechanicsville",
+            "PoliticalDivision1": "VA",
+            "PostcodePrimaryLow": "23116",
+            "PostcodeExtendedLow": "2010",
+            "CountryCode": "US"
+        }
+    }
 }

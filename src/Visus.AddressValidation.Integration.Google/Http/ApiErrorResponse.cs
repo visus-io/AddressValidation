@@ -5,15 +5,15 @@ using System.Text.Json.Serialization;
 
 internal sealed class ApiErrorResponse
 {
-	[JsonPropertyName("error")]
-	public ErrorResponse Error { get; set; } = null!;
+    [JsonPropertyName("error")]
+    public ErrorResponse Error { get; set; } = null!;
 
-	internal sealed class ErrorResponse
-	{
-		[JsonPropertyName("code")]
-		public HttpStatusCode Code { get; set; }
+    internal sealed class ErrorResponse
+    {
+        [JsonPropertyName("code")]
+        public HttpStatusCode Code { get; set; }
 
-		[JsonPropertyName("message")]
-		public string? Message { get; set; }
-	}
+        [JsonPropertyName("message")]
+        public string? Message { get; set; }
+    }
 }

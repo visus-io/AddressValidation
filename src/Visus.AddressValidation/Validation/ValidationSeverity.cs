@@ -5,13 +5,13 @@ namespace Visus.AddressValidation.Validation;
 /// </summary>
 public enum ValidationSeverity
 {
-	/// <summary>
-	///     Warning
-	/// </summary>
-	Warning,
+    /// <summary>
+    ///     Warning
+    /// </summary>
+    Warning,
 
-	/// <summary>
-	///     Error
-	/// </summary>
-	Error
+    /// <summary>
+    ///     Error
+    /// </summary>
+    Error
 }

@@ -9,15 +9,15 @@ using System.Diagnostics.CodeAnalysis;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public enum ClientEnvironment
 {
-	/// <summary>
-	///     Development
-	/// </summary>
-	[Description("Development")]
-	DEVELOPMENT = 0,
+    /// <summary>
+    ///     Development
+    /// </summary>
+    [Description("Development")]
+    DEVELOPMENT = 0,
 
-	/// <summary>
-	///     Production
-	/// </summary>
-	[Description("Production")]
-	PRODUCTION = 1
+    /// <summary>
+    ///     Production
+    /// </summary>
+    [Description("Production")]
+    PRODUCTION = 1
 }

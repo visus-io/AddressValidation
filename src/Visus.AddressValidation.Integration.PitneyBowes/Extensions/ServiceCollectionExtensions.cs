@@ -14,35 +14,35 @@ using Validation;
 /// </summary>
 public static class ServiceCollectionExtensions
 {
-	/// <summary>
-	///     Adds <see cref="IAddressValidationService{TRequest}" /> and related services to the
-	///     <see cref="IServiceCollection" />.
-	/// </summary>
-	/// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
-	/// <returns>The same service collection so that multiple calls can be chained.</returns>
-	public static IServiceCollection AddPitneyBowesAddressValidation(this IServiceCollection services)
-	{
-		ArgumentNullException.ThrowIfNull(services);
+    /// <summary>
+    ///     Adds <see cref="IAddressValidationService{TRequest}" /> and related services to the
+    ///     <see cref="IServiceCollection" />.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
+    /// <returns>The same service collection so that multiple calls can be chained.</returns>
+    public static IServiceCollection AddPitneyBowesAddressValidation(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
 
-		services.TryAddSingleton<PitneyBowesAuthenticationService>();
+        services.TryAddSingleton<PitneyBowesAuthenticationService>();
 
-		services.TryAddScoped<IValidator<PitneyBowesAddressValidationRequest>, AddressValidationRequestValidator>();
-		services.TryAddScoped<IValidator<ApiResponse>, ApiResponseValidator>();
+        services.TryAddScoped<IValidator<PitneyBowesAddressValidationRequest>, AddressValidationRequestValidator>();
+        services.TryAddScoped<IValidator<ApiResponse>, ApiResponseValidator>();
 
-		services.TryAddScoped<IAddressValidationService<PitneyBowesAddressValidationRequest>, AddressValidationService>();
+        services.TryAddScoped<IAddressValidationService<PitneyBowesAddressValidationRequest>, AddressValidationService>();
 
-		services.AddHttpClient<PitneyBowesAuthenticationClient>()
-				.AddStandardResilienceHandler();
+        services.AddHttpClient<PitneyBowesAuthenticationClient>()
+                .AddStandardResilienceHandler();
 
-		services.AddHttpClient<PitneyBowesAddressValidationClient>()
-				.RedactLoggedHeaders(["Authorization"])
-				.AddHttpMessageHandler(provider =>
-									   {
-										   PitneyBowesAuthenticationService authenticationService = provider.GetRequiredService<PitneyBowesAuthenticationService>();
-										   return new BearerTokenDelegatingHandler<PitneyBowesAuthenticationClient>(authenticationService);
-									   })
-				.AddStandardResilienceHandler();
+        services.AddHttpClient<PitneyBowesAddressValidationClient>()
+                .RedactLoggedHeaders(["Authorization"])
+                .AddHttpMessageHandler(provider =>
+                                       {
+                                           PitneyBowesAuthenticationService authenticationService = provider.GetRequiredService<PitneyBowesAuthenticationService>();
+                                           return new BearerTokenDelegatingHandler<PitneyBowesAuthenticationClient>(authenticationService);
+                                       })
+                .AddStandardResilienceHandler();
 
-		return services;
-	}
+        return services;
+    }
 }

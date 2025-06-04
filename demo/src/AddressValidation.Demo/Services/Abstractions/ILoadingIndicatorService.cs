@@ -4,17 +4,17 @@ using Common.Components;
 
 public interface ILoadingIndicatorService
 {
-	bool? IsLoading { get; }
+    bool? IsLoading { get; }
 
-	bool? IsVisible { get; }
+    bool? IsVisible { get; }
 
-	Task HideAsync();
+    Task HideAsync();
 
-	Task SetIsLoadingAsync(bool value);
+    Task SetIsLoadingAsync(bool value);
 
-	Task ShowAsync();
+    Task ShowAsync();
 
-	public void Subscribe(LoadingIndicator loadIndicator);
+    public void Subscribe(LoadingIndicator loadIndicator);
 
-	public void Unsubscribe(LoadingIndicator loadIndicator);
+    public void Unsubscribe(LoadingIndicator loadIndicator);
 }
