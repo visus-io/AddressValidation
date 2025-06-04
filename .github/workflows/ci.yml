@@ -9,7 +9,7 @@ on:
             - 'docs/**'
             - '.github/workflows/docs.yml'
             - '.github/workflows/release.yml'
-            
+    
     pull_request:
         paths-ignore:
             - 'README.md'
@@ -30,30 +30,30 @@ jobs:
             SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
             SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-            
+        
         steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0
-                  show-progress: false               
-            - name: Install .NET SDK
-              uses: actions/setup-dotnet@v4
-              with:
-                  global-json-file: global.json
-            - name: NuGet Cache
-              uses: actions/cache@v4
-              with:
-                  path: ~/.nuget/packages
-                  key: ${{ runner.os}}-nuget-${{ hashFiles('**/packages.lock.json') }}
-                  restore-keys: ${{ runner.os }}-nuget
-            - name: Test
-              run: ./build.sh Test
-            - name: Publish Test Results
-              if: always()
-              uses: dorny/test-reporter@v2
-              with:                  
-                  name: Test Results
-                  path: .nuke/temp/TestResults/*.trx
-                  reporter: dotnet-trx
-                  path-replace-backslashes: true
+            -   name: Checkout
+                uses: actions/checkout@v4
+                with:
+                    fetch-depth: 0
+                    show-progress: false
+            -   name: Install .NET SDK
+                uses: actions/setup-dotnet@v4
+                with:
+                    global-json-file: global.json
+            -   name: NuGet Cache
+                uses: actions/cache@v4
+                with:
+                    path: ~/.nuget/packages
+                    key: ${{ runner.os}}-nuget-${{ hashFiles('**/packages.lock.json') }}
+                    restore-keys: ${{ runner.os }}-nuget
+            -   name: Test
+                run: ./build.sh Test
+            -   name: Publish Test Results
+                if: always()
+                uses: dorny/test-reporter@v2
+                with:
+                    name: Test Results
+                    path: .nuke/temp/TestResults/*.trx
+                    reporter: dotnet-trx
+                    path-replace-backslashes: true
