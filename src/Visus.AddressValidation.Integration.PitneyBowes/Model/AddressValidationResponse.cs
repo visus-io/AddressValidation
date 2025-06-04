@@ -8,55 +8,55 @@ using Http;
 
 internal sealed class AddressSuggestionValidationResponse : AbstractAddressValidationResponse
 {
-	public AddressSuggestionValidationResponse(ApiResponse.AddressResult addressResult, CountryCode countryCode, string? postalCode)
-	{
-		AddressLines = addressResult.AddressLines
-									.Select(s => s.ToUpperInvariant())
-									.ToHashSet(StringComparer.OrdinalIgnoreCase);
+    public AddressSuggestionValidationResponse(ApiResponse.AddressResult addressResult, CountryCode countryCode, string? postalCode)
+    {
+        AddressLines = addressResult.AddressLines
+                                    .Select(s => s.ToUpperInvariant())
+                                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-		CityOrTown = addressResult.CityTown?.ToUpperInvariant();
-		Country = countryCode;
-		PostalCode = postalCode?.ToUpperInvariant();
-		StateOrProvince = addressResult.StateProvince?.ToUpperInvariant();
-		IsResidential = addressResult.Residential;
-	}
+        CityOrTown = addressResult.CityTown?.ToUpperInvariant();
+        Country = countryCode;
+        PostalCode = postalCode?.ToUpperInvariant();
+        StateOrProvince = addressResult.StateProvince?.ToUpperInvariant();
+        IsResidential = addressResult.Residential;
+    }
 }
 
 internal sealed class AddressValidationResponse : AbstractAddressValidationResponse<ApiResponse>
 {
-	public AddressValidationResponse(ApiResponse response, IValidationResult? validationResult = null)
-		: base(response, validationResult)
-	{
-		if ( response.Result is null )
-		{
-			return;
-		}
+    public AddressValidationResponse(ApiResponse response, IValidationResult? validationResult = null)
+        : base(response, validationResult)
+    {
+        if ( response.Result is null )
+        {
+            return;
+        }
 
-		AddressLines = response.Result.AddressLines
-							   .Select(s => s.ToUpperInvariant())
-							   .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        AddressLines = response.Result.AddressLines
+                               .Select(s => s.ToUpperInvariant())
+                               .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-		CityOrTown = response.Result.CityTown?.ToUpperInvariant();
-		Country = response.Result.CountryCode;
-		PostalCode = response.Result.PostalCode?.ToUpperInvariant();
-		StateOrProvince = response.Result.StateProvince?.ToUpperInvariant();
-		IsResidential = response.Result.Residential;
-		Suggestions = ListSuggestions(response);
-		
-		CustomResponseData = response.Result.GetCustomResponseData();
-	}
+        CityOrTown = response.Result.CityTown?.ToUpperInvariant();
+        Country = response.Result.CountryCode;
+        PostalCode = response.Result.PostalCode?.ToUpperInvariant();
+        StateOrProvince = response.Result.StateProvince?.ToUpperInvariant();
+        IsResidential = response.Result.Residential;
+        Suggestions = ListSuggestions(response);
 
-	private static ReadOnlyCollection<IAddressValidationResponse> ListSuggestions(ApiResponse response)
-	{
-		if ( response.Result is null || response.Suggestions?.Addresses is null )
-		{
-			return ReadOnlyCollection<IAddressValidationResponse>.Empty;
-		}
+        CustomResponseData = response.Result.GetCustomResponseData();
+    }
 
-		HashSet<AddressSuggestionValidationResponse> results = response.Suggestions.Addresses
-																	   .Select(s => new AddressSuggestionValidationResponse(s, response.Result.CountryCode, response.Result.PostalCode))
-																	   .ToHashSet();
+    private static ReadOnlyCollection<IAddressValidationResponse> ListSuggestions(ApiResponse response)
+    {
+        if ( response.Result is null || response.Suggestions?.Addresses is null )
+        {
+            return ReadOnlyCollection<IAddressValidationResponse>.Empty;
+        }
 
-		return new ReadOnlyCollection<IAddressValidationResponse>([.. results]);
-	}
+        HashSet<AddressSuggestionValidationResponse> results = response.Suggestions.Addresses
+                                                                       .Select(s => new AddressSuggestionValidationResponse(s, response.Result.CountryCode, response.Result.PostalCode))
+                                                                       .ToHashSet();
+
+        return new ReadOnlyCollection<IAddressValidationResponse>([.. results]);
+    }
 }

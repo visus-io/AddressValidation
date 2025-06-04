@@ -6,15 +6,15 @@ using Models.Entities;
 
 public sealed class GeoContext(DbContextOptions<GeoContext> options) : DbContext(options)
 {
-	public DbSet<CountryModel> Countries { get; set; }
+    public DbSet<CountryModel> Countries { get; set; }
 
-	public DbSet<StateModel> States { get; set; }
+    public DbSet<StateModel> States { get; set; }
 
-	protected override void OnModelCreating(ModelBuilder modelBuilder)
-	{
-		ArgumentNullException.ThrowIfNull(modelBuilder);
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        ArgumentNullException.ThrowIfNull(modelBuilder);
 
-		modelBuilder.ApplyConfiguration(new CountryConfig());
-		modelBuilder.ApplyConfiguration(new StateConfig());
-	}
+        modelBuilder.ApplyConfiguration(new CountryConfig());
+        modelBuilder.ApplyConfiguration(new StateConfig());
+    }
 }

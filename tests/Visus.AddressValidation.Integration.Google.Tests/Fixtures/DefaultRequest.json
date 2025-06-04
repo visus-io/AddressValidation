@@ -1,12 +1,12 @@
 {
-	"address": {
-		"addressLines": [
-			"1600 Amphitheatre Pkwy"
-		],
-		"administrativeArea": "CA",
-		"locality": "Mountain View",
-		"postalCode": "94043",
-		"regionCode": "US"
-	},
-	"enableUspsCass": true
+    "address": {
+        "addressLines": [
+            "1600 Amphitheatre Pkwy"
+        ],
+        "administrativeArea": "CA",
+        "locality": "Mountain View",
+        "postalCode": "94043",
+        "regionCode": "US"
+    },
+    "enableUspsCass": true
 }

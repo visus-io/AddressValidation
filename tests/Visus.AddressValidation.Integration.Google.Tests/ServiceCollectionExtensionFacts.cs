@@ -9,23 +9,23 @@ using Microsoft.Extensions.DependencyInjection;
 
 public sealed class ServiceCollectionExtensionFacts
 {
-	[Fact]
-	public void AddGoogleAddressValidation_Default()
-	{
-		var serviceCollection = new ServiceCollection();
+    [Fact]
+    public void AddGoogleAddressValidation_Default()
+    {
+        var serviceCollection = new ServiceCollection();
 
-		serviceCollection.AddDistributedMemoryCache();
-		serviceCollection.AddSingleton<IConfiguration>(_ => new ConfigurationBuilder().Build());
-		serviceCollection.AddGoogleAddressValidation();
+        serviceCollection.AddDistributedMemoryCache();
+        serviceCollection.AddSingleton<IConfiguration>(_ => new ConfigurationBuilder().Build());
+        serviceCollection.AddGoogleAddressValidation();
 
-		var serviceProvider = serviceCollection.BuildServiceProvider();
+        var serviceProvider = serviceCollection.BuildServiceProvider();
 
-		using ( var scope = serviceProvider.CreateScope() )
-		{
-			Assert.NotNull(scope.ServiceProvider.GetService<IValidator<GoogleAddressValidationRequest>>());
-			Assert.NotNull(scope.ServiceProvider.GetService<IAddressValidationService<GoogleAddressValidationRequest>>());
-		}
+        using ( var scope = serviceProvider.CreateScope() )
+        {
+            Assert.NotNull(scope.ServiceProvider.GetService<IValidator<GoogleAddressValidationRequest>>());
+            Assert.NotNull(scope.ServiceProvider.GetService<IAddressValidationService<GoogleAddressValidationRequest>>());
+        }
 
-		Assert.NotNull(serviceProvider.GetService<GoogleAddressValidationClient>());
-	}
+        Assert.NotNull(serviceProvider.GetService<GoogleAddressValidationClient>());
+    }
 }

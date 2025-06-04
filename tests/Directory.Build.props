@@ -1,19 +1,19 @@
 <Project>
-	<PropertyGroup>
-		<IsPackable>false</IsPackable>
-		<GenerateDocumentationFile>false</GenerateDocumentationFile>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>true</ImplicitUsings>
-		<IsPackable>false</IsPackable>
-		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-	</PropertyGroup>
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>true</ImplicitUsings>
+        <IsPackable>false</IsPackable>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(CI)' == 'true'">
-		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-		<RestoreLockedMode>true</RestoreLockedMode>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(CI)' == 'true'">
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <RestoreLockedMode>true</RestoreLockedMode>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute"/>
-	</ItemGroup>
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute"/>
+    </ItemGroup>
 </Project>

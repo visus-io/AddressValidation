@@ -1,7 +1,7 @@
 {
-	"error": {
-		"code": 400,
-		"message": "Address is missing from request.",
-		"status": "INVALID_ARGUMENT"
-	}
+    "error": {
+        "code": 400,
+        "message": "Address is missing from request.",
+        "status": "INVALID_ARGUMENT"
+    }
 }

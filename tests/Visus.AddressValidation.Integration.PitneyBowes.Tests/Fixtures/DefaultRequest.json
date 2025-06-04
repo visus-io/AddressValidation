@@ -1,9 +1,9 @@
 {
-	"addressLines": [
-		"3200 Summit Blvd"
-	],
-	"cityTown": "West Palm Beach",
-	"stateProvince": "FL",
-	"postalCode": "33416",
-	"countryCode": "US"
+    "addressLines": [
+        "3200 Summit Blvd"
+    ],
+    "cityTown": "West Palm Beach",
+    "stateProvince": "FL",
+    "postalCode": "33416",
+    "countryCode": "US"
 }

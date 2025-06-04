@@ -15,4 +15,4 @@ using Validation;
 /// </param>
 [ExcludeFromCodeCoverage]
 public sealed class EmptyAddressValidationResponse(IValidationResult? validationResult = null)
-	: AbstractAddressValidationResponse(validationResult);
+    : AbstractAddressValidationResponse(validationResult);

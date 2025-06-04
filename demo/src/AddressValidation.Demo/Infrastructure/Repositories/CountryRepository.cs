@@ -5,4 +5,4 @@ using Microsoft.EntityFrameworkCore;
 using Models.Entities;
 
 public sealed class CountryRepository(IDbContextFactory<GeoContext> contextFactory, ILogger<CountryRepository> logger)
-	: SqlRepository<CountryModel, GeoContext>(contextFactory, logger), ICountryRepository;
+    : SqlRepository<CountryModel, GeoContext>(contextFactory, logger), ICountryRepository;
