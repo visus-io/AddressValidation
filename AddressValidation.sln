@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		.editorconfig = .editorconfig
 		renovate.json = renovate.json
+		Directory.Build.targets = Directory.Build.targets
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation", "src\Visus.AddressValidation\Visus.AddressValidation.csproj", "{64B9D329-F983-49D5-A73F-C5EA8B1F16A9}"

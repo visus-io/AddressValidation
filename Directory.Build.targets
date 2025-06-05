@@ -1,0 +1,47 @@
+<Project>
+    <PropertyGroup>
+        <GeneratorProjectBaseTargetPath>analyzers/dotnet</GeneratorProjectBaseTargetPath>
+        <GeneratorProjectBaseTargetPath Condition="'$(AnalyzerLanguage)' != ''">$(GeneratorProjectBaseTargetPath)/$(AnalyzerLanguage)</GeneratorProjectBaseTargetPath>
+        <NoWarn Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">$(NoWarn);RS1041</NoWarn>
+    </PropertyGroup>
+
+    <ItemDefinitionGroup>
+        <TargetPathWithTargetPlatformMoniker>
+            <GeneratorProjectBaseTargetPath>$(GeneratorProjectBaseTargetPath)</GeneratorProjectBaseTargetPath>
+        </TargetPathWithTargetPlatformMoniker>
+    </ItemDefinitionGroup>
+    
+    <Target Name="IncludeAnalyzersInPackage"
+            Condition="'@(ProjectReference)' != '' and @(ProjectReference->AnyHaveMetadataValue('PackAsAnalyzer', 'true'))">
+        <MSBuild Projects="@(ProjectReference->WithMetadataValue('PackAsAnalyzer', 'true'))"
+                 Targets="GetAnalyzerPackFiles"
+                 RemoveProperties="SetTargetFramework">
+            <Output TaskParameter="TargetOutputs" ItemName="_AnalyzerFile"/>
+        </MSBuild>
+
+        <ItemGroup>
+            <Content Include="@(_AnalyzerFile)" Pack="True" Condition="!%(_AnalyzerFile.IsSymbol)" />
+            <_TargetPathsToSymbols Include="@(_AnalyzerFile)" TargetPath="/%(_AnalyzerFile.PackagePath)" Condition="%(_AnalyzerFile.IsSymbol)" />
+        </ItemGroup>
+    </Target>
+
+    <Target Name="GetAnalyzerPackFiles"
+            DependsOnTargets="$(GenerateNuspecDependsOn)"
+            Returns="@(_AnalyzerPackFile)">
+
+        <PropertyGroup>
+            <_AnalyzerPath>analyzers/dotnet</_AnalyzerPath>
+            <_AnalyzerPath Condition="'$(AnalyzerRoslynVersion)' != ''">$(_AnalyzerPath)/roslyn$(AnalyzerRoslynVersion)</_AnalyzerPath>
+            <_AnalyzerPath Condition="'$(AnalyzerLanguage)' != ''">$(_AnalyzerPath)/$(AnalyzerLanguage)</_AnalyzerPath>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <_AnalyzerPackFile Include="@(_BuildOutputInPackage->WithMetadataValue('TargetFramework', 'netstandard2.0'))" IsSymbol="false" />
+            <_AnalyzerPackFile Include="@(_TargetPathsToSymbols->WithMetadataValue('TargetFramework', 'netstandard2.0'))" IsSymbol="true" />
+            <_AnalyzerPackFile PackagePath="$(_AnalyzerPath)/%(TargetPath)" />
+        </ItemGroup>
+
+        <Error Text="Analyzers must target netstandard2.0 since they run in the compiler which targets netstandard2.0. $(MSBuildProjectFullPath) targets '$([MSBuild]::ValueOrDefault('$(TargetFrameworks)', '$(TargetFramework)'))' instead."
+               Condition="'@(_AnalyzerPackFile)' == ''" />
+    </Target>
+</Project>

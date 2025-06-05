@@ -6,7 +6,6 @@
         <AnalyzerLanguage>cs</AnalyzerLanguage>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-        <IncludeBuildOutput>false</IncludeBuildOutput>
         <IsPackable>false</IsPackable>
         <IsRoslynComponent>true</IsRoslynComponent>
     </PropertyGroup>

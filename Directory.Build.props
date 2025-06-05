@@ -1,4 +1,5 @@
 <Project>
+    
     <PropertyGroup>
         <Authors>Visus Development Team</Authors>
         <Copyright>Copyright (c) 2024 Visus Development Team</Copyright>
@@ -32,6 +33,10 @@
         <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
         <RestoreLockedMode>true</RestoreLockedMode>
     </PropertyGroup>
+    
+    <PropertyGroup>
+        <BeforePack>$(BeforePack);IncludeAnalyzersInPackage</BeforePack>
+    </PropertyGroup>
 
     <ItemGroup>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
@@ -41,4 +46,5 @@
             <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
+    
 </Project>
