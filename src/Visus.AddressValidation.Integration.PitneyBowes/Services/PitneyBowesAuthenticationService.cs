@@ -6,13 +6,17 @@ using Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 
-internal sealed class PitneyBowesAuthenticationService(
-    IDistributedCache cache,
-    IConfiguration configuration,
-    PitneyBowesAuthenticationClient authenticationClient)
-    : AbstractAuthenticationService<PitneyBowesAuthenticationClient>(authenticationClient, cache)
+internal sealed class PitneyBowesAuthenticationService : AbstractAuthenticationService<PitneyBowesAuthenticationClient>
 {
-    private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    private readonly IConfiguration _configuration;
+
+    public PitneyBowesAuthenticationService(IDistributedCache cache,
+                                            IConfiguration configuration,
+                                            PitneyBowesAuthenticationClient authenticationClient) 
+        : base(authenticationClient, cache)
+    {
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    }
 
     protected override string? GenerateCacheKey()
     {

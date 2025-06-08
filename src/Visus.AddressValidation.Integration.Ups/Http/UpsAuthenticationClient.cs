@@ -6,12 +6,17 @@ using AddressValidation.Http;
 using AddressValidation.Serialization.Json;
 using Microsoft.Extensions.Configuration;
 
-internal sealed class UpsAuthenticationClient(IConfiguration configuration, HttpClient httpClient)
-    : IAuthenticationClient
+internal sealed class UpsAuthenticationClient : IAuthenticationClient
 {
-    private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    private readonly IConfiguration _configuration;
 
-    private readonly HttpClient _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+    private readonly HttpClient _httpClient;
+
+    public UpsAuthenticationClient(IConfiguration configuration, HttpClient httpClient)
+    {
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+    }
 
     public async ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {

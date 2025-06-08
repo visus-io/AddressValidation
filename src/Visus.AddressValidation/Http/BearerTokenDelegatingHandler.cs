@@ -8,14 +8,22 @@ using Services;
 /// <summary>
 ///     An HTTP delegate handler that injects a Bearer token into each request.
 /// </summary>
-/// <param name="authenticationService">
-///     An instance of <see cref="AbstractAuthenticationService{T}" /> that retrieves the
-///     access_token.
-/// </param>
-public sealed class BearerTokenDelegatingHandler<TClient>(AbstractAuthenticationService<TClient> authenticationService) : DelegatingHandler
+public sealed class BearerTokenDelegatingHandler<TClient> : DelegatingHandler
     where TClient : IAuthenticationClient
 {
-    private readonly AbstractAuthenticationService<TClient> _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
+    private readonly AbstractAuthenticationService<TClient> _authenticationService;
+
+    /// <summary>
+    ///     An HTTP delegate handler that injects a Bearer token into each request.
+    /// </summary>
+    /// <param name="authenticationService">
+    ///     An instance of <see cref="AbstractAuthenticationService{T}" /> that retrieves the
+    ///     access_token.
+    /// </param>
+    public BearerTokenDelegatingHandler(AbstractAuthenticationService<TClient> authenticationService)
+    {
+        _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
+    }
 
     /// <inheritdoc />
     /// <exception cref="InvalidCredentialException">Provided credentials were rejected by the server.</exception>

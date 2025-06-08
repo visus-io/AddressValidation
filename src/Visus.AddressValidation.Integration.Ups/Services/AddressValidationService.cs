@@ -4,13 +4,17 @@ using AddressValidation.Services;
 using AddressValidation.Validation;
 using Http;
 
-internal sealed class AddressValidationService(
-    UpsAddressValidationClient client,
-    IValidator<UpsAddressValidationRequest> requestValidator,
-    IValidator<ApiResponse> responseValidator)
-    : AbstractAddressValidationService<UpsAddressValidationRequest, ApiResponse>(requestValidator, responseValidator)
+internal sealed class AddressValidationService : AbstractAddressValidationService<UpsAddressValidationRequest, ApiResponse>
 {
-    private readonly UpsAddressValidationClient _client = client ?? throw new ArgumentNullException(nameof(client));
+    private readonly UpsAddressValidationClient _client;
+
+    public AddressValidationService(UpsAddressValidationClient client,
+                                    IValidator<UpsAddressValidationRequest> requestValidator,
+                                    IValidator<ApiResponse> responseValidator) 
+        : base(requestValidator, responseValidator)
+    {
+        _client = client ?? throw new ArgumentNullException(nameof(client));
+    }
 
     protected override async ValueTask<ApiResponse?> SendAsync(UpsAddressValidationRequest request, CancellationToken cancellationToken)
     {

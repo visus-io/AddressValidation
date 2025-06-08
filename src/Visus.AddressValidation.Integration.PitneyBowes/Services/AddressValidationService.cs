@@ -4,13 +4,17 @@ using AddressValidation.Services;
 using AddressValidation.Validation;
 using Http;
 
-internal sealed class AddressValidationService(
-    PitneyBowesAddressValidationClient client,
-    IValidator<PitneyBowesAddressValidationRequest> requestValidator,
-    IValidator<ApiResponse> responseValidator)
-    : AbstractAddressValidationService<PitneyBowesAddressValidationRequest, ApiResponse>(requestValidator, responseValidator)
+internal sealed class AddressValidationService : AbstractAddressValidationService<PitneyBowesAddressValidationRequest, ApiResponse>
 {
-    private readonly PitneyBowesAddressValidationClient _client = client ?? throw new ArgumentNullException(nameof(client));
+    private readonly PitneyBowesAddressValidationClient _client;
+
+    public AddressValidationService(PitneyBowesAddressValidationClient client,
+                                    IValidator<PitneyBowesAddressValidationRequest> requestValidator,
+                                    IValidator<ApiResponse> responseValidator) 
+        : base(requestValidator, responseValidator)
+    {
+        _client = client ?? throw new ArgumentNullException(nameof(client));
+    }
 
     protected override async ValueTask<ApiResponse?> SendAsync(PitneyBowesAddressValidationRequest request, CancellationToken cancellationToken)
     {

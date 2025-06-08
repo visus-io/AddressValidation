@@ -5,13 +5,17 @@ using Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 
-internal sealed class GoogleAuthenticationService(
-    IDistributedCache cache,
-    IConfiguration configuration,
-    GoogleAuthenticationClient authenticationClient)
-    : AbstractAuthenticationService<GoogleAuthenticationClient>(authenticationClient, cache)
+internal sealed class GoogleAuthenticationService : AbstractAuthenticationService<GoogleAuthenticationClient>
 {
-    private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    private readonly IConfiguration _configuration;
+
+    public GoogleAuthenticationService(IDistributedCache cache,
+                                       IConfiguration configuration,
+                                       GoogleAuthenticationClient authenticationClient) 
+        : base(authenticationClient, cache)
+    {
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    }
 
     protected override string? GenerateCacheKey()
     {
