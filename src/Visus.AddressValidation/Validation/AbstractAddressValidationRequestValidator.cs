@@ -88,7 +88,10 @@ public abstract class AbstractAddressValidationRequestValidator<T> : IValidator<
         {
             case 0:
             case > 0 when instance.AddressLines.All(string.IsNullOrWhiteSpace):
-                results.Add(ValidationState.CreateError("Value cannot be null or empty.", nameof(instance.AddressLines)));
+                results.Add(ValidationState.CreateError("Cannot be null or empty.", nameof(instance.AddressLines)));
+                break;
+            case > 3:
+                results.Add(ValidationState.CreateError("Cannot contain more than 3 entries.", nameof(instance.AddressLines)));
                 break;
         }
 

@@ -883,6 +883,16 @@
           "Microsoft.Extensions.Configuration.Abstractions": "[9.0.6, )"
         }
       },
+      "visus.addressvalidation.integration.fedex": {
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.Extensions.Caching.Memory": "[9.0.6, )",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "[9.0.6, )",
+          "Microsoft.Extensions.Http": "[9.0.6, )",
+          "Microsoft.Extensions.Http.Resilience": "[9.6.0, )",
+          "Visus.AddressValidation": "[0.0.1, )"
+        }
+      },
       "visus.addressvalidation.integration.google": {
         "type": "Project",
         "dependencies": {

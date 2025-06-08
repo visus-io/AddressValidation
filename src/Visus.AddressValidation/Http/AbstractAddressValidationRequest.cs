@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Http;
 
-using System.Text.Json.Serialization;
 using Abstractions;
 
 /// <summary>
@@ -32,7 +31,6 @@ public abstract class AbstractAddressValidationRequest
     ///     <see cref="CountryCode.PR" /> or <see cref="CountryCode.VI" /> will automatically change the country to
     ///     <see cref="CountryCode.US" /> and set the appropriate <see cref="StateOrProvince" /> value.
     /// </remarks>
-    [JsonConverter(typeof(JsonStringEnumConverter<CountryCode>))]
     public CountryCode? Country
     {
         get => _country;

@@ -5,10 +5,10 @@ using Configuration;
 using Models.Forms;
 using Radzen;
 using Visus.AddressValidation.Abstractions;
-using Visus.AddressValidation.Integration.Ups;
-using Visus.AddressValidation.Integration.Ups.Http;
+using Visus.AddressValidation.Integration.FedEx;
+using Visus.AddressValidation.Integration.FedEx.Http;
 
-public partial class Ups : AbstractValidatorComponent<UpsAddressValidationRequest, UpsAddressValidationFormModel>
+public partial class FedEx : AbstractValidatorComponent<FedExAddressValidationRequest, FedExAddressValidationFormModel>
 {
     private readonly Dictionary<string, ClientEnvironment> _clientEnvironments = new(StringComparer.OrdinalIgnoreCase)
     {

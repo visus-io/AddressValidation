@@ -64,6 +64,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05. Documentation", "05. Do
 		docs\docfx.json = docs\docfx.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation.Integration.FedEx", "src\Visus.AddressValidation.Integration.FedEx\Visus.AddressValidation.Integration.FedEx.csproj", "{088A30F2-4105-4AD1-8D0E-5B0A92AAE59F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visus.AddressValidation.Integration.FedEx.Tests", "tests\Visus.AddressValidation.Integration.FedEx.Tests\Visus.AddressValidation.Integration.FedEx.Tests.csproj", "{F2C51F6E-9C90-4BBC-8EC5-0CC52DAC28ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +120,14 @@ Global
 		{370B8EEE-BE35-430E-A01F-3CF779DA8B40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{370B8EEE-BE35-430E-A01F-3CF779DA8B40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{370B8EEE-BE35-430E-A01F-3CF779DA8B40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{088A30F2-4105-4AD1-8D0E-5B0A92AAE59F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{088A30F2-4105-4AD1-8D0E-5B0A92AAE59F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{088A30F2-4105-4AD1-8D0E-5B0A92AAE59F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{088A30F2-4105-4AD1-8D0E-5B0A92AAE59F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2C51F6E-9C90-4BBC-8EC5-0CC52DAC28ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2C51F6E-9C90-4BBC-8EC5-0CC52DAC28ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2C51F6E-9C90-4BBC-8EC5-0CC52DAC28ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2C51F6E-9C90-4BBC-8EC5-0CC52DAC28ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{64B9D329-F983-49D5-A73F-C5EA8B1F16A9} = {7EF92B20-2457-4E9A-AF09-610675F68F62}
@@ -132,5 +144,7 @@ Global
 		{EF31F8F1-4EE0-446B-A017-555AE37362CB} = {5EC7A540-5858-4C0A-A0CE-ABCB3D48AFEB}
 		{E49A8B03-9020-4B86-9029-9B0901F864A8} = {EF31F8F1-4EE0-446B-A017-555AE37362CB}
 		{B104A7C9-1E92-4D16-A823-6FB67366B0FA} = {32B364CE-8825-4295-8F73-479C3F13543B}
+		{088A30F2-4105-4AD1-8D0E-5B0A92AAE59F} = {458D4B81-3659-4CDC-82E6-F0AC7DA1383D}
+		{F2C51F6E-9C90-4BBC-8EC5-0CC52DAC28ED} = {6D41E71C-E6E0-4BE8-934C-6E6E88C3F8C7}
 	EndGlobalSection
 EndGlobal

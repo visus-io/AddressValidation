@@ -14,6 +14,7 @@ using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using Services;
 using Services.Abstractions;
+using Visus.AddressValidation.Integration.FedEx.Extensions;
 using Visus.AddressValidation.Integration.Google.Extensions;
 using Visus.AddressValidation.Integration.PitneyBowes.Extensions;
 using Visus.AddressValidation.Integration.Ups.Extensions;
@@ -60,6 +61,7 @@ internal static class Program
 
             builder.Services.AddDistributedMemoryCache();
 
+            builder.Services.AddFedExAddressValidation();
             builder.Services.AddGoogleAddressValidation();
             builder.Services.AddPitneyBowesAddressValidation();
             builder.Services.AddUpsAddressValidation();

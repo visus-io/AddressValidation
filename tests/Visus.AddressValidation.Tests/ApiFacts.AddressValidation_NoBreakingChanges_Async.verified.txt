@@ -10,6 +10,7 @@ namespace Visus.AddressValidation.Abstractions
         [System.ComponentModel.Description("Production")]
         PRODUCTION = 1,
     }
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<Visus.AddressValidation.Abstractions.CountryCode>))]
     public enum CountryCode
     {
         [System.ComponentModel.Description("Unknown")]
@@ -545,7 +546,6 @@ namespace Visus.AddressValidation.Http
         protected AbstractAddressValidationRequest() { }
         public System.Collections.Generic.ISet<string> AddressLines { get; }
         public string? CityOrTown { get; set; }
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<Visus.AddressValidation.Abstractions.CountryCode>?))]
         public Visus.AddressValidation.Abstractions.CountryCode? Country { get; set; }
         public string? PostalCode { get; set; }
         public string? StateOrProvince { get; set; }
@@ -619,7 +619,6 @@ namespace Visus.AddressValidation.Model
         System.Collections.Generic.IReadOnlySet<string> AddressLines { get; }
         [System.Text.Json.Serialization.JsonPropertyName("cityOrTown")]
         string? CityOrTown { get; }
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<Visus.AddressValidation.Abstractions.CountryCode>))]
         [System.Text.Json.Serialization.JsonPropertyName("country")]
         Visus.AddressValidation.Abstractions.CountryCode Country { get; }
         [System.Text.Json.Serialization.JsonPropertyName("customResponseData")]
@@ -650,6 +649,18 @@ namespace Visus.AddressValidation.Serialization.Json
         public System.Text.Json.Serialization.Metadata.JsonTypeInfo<Visus.AddressValidation.Http.TokenResponse> TokenResponse { get; }
         public static Visus.AddressValidation.Serialization.Json.DefaultJsonSerializerContext Default { get; }
         public override System.Text.Json.Serialization.Metadata.JsonTypeInfo? GetTypeInfo(System.Type type) { }
+    }
+    public sealed class JsonStringBooleanConverter : System.Text.Json.Serialization.JsonConverter<bool>
+    {
+        public JsonStringBooleanConverter() { }
+        public override bool Read(ref System.Text.Json.Utf8JsonReader reader, System.Type typeToConvert, System.Text.Json.JsonSerializerOptions options) { }
+        public override void Write(System.Text.Json.Utf8JsonWriter writer, bool value, System.Text.Json.JsonSerializerOptions options) { }
+    }
+    public sealed class JsonStringDateOnlyConverter : System.Text.Json.Serialization.JsonConverter<System.DateOnly?>
+    {
+        public JsonStringDateOnlyConverter() { }
+        public override System.DateOnly? Read(ref System.Text.Json.Utf8JsonReader reader, System.Type typeToConvert, System.Text.Json.JsonSerializerOptions options) { }
+        public override void Write(System.Text.Json.Utf8JsonWriter writer, System.DateOnly? value, System.Text.Json.JsonSerializerOptions options) { }
     }
     public sealed class TokenResponseConverter : System.Text.Json.Serialization.JsonConverter<Visus.AddressValidation.Http.TokenResponse>
     {

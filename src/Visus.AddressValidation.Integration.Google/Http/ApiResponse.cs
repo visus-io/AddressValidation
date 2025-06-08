@@ -112,7 +112,6 @@ internal sealed partial class ApiResponse : IApiResponse
         public string? PostalCode { get; set; }
 
         [JsonPropertyName("regionCode")]
-        [JsonConverter(typeof(JsonStringEnumConverter<CountryCode>))]
         public CountryCode RegionCode { get; set; }
     }
 
