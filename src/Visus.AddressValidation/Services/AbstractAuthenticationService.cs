@@ -8,20 +8,33 @@ using Microsoft.Extensions.Caching.Memory;
 ///     Abstraction for implementing an authentication service that relies on an
 ///     <see cref="IAuthenticationClient" /> implementation.
 /// </summary>
-/// <param name="authenticationClient">An <see cref="IAuthenticationClient" /> instance.</param>
-/// <param name="cache">An <see cref="IMemoryCache" /> instance.</param>
 /// <typeparam name="TClient">
 ///     An instance that implements the <see cref="IAuthenticationClient" />
 ///     interface.
 /// </typeparam>
-public abstract class AbstractAuthenticationService<TClient>(TClient authenticationClient, IDistributedCache cache)
-    where TClient : IAuthenticationClient
+public abstract class AbstractAuthenticationService<TClient> where TClient : IAuthenticationClient
 {
-    private readonly TClient _authenticationClient = authenticationClient ?? throw new ArgumentNullException(nameof(authenticationClient));
+    private readonly TClient _authenticationClient;
 
-    private readonly IDistributedCache _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+    private readonly IDistributedCache _cache;
 
     private string? _cacheKey;
+
+    /// <summary>
+    ///     Abstraction for implementing an authentication service that relies on an
+    ///     <see cref="IAuthenticationClient" /> implementation.
+    /// </summary>
+    /// <param name="authenticationClient">An <see cref="IAuthenticationClient" /> instance.</param>
+    /// <param name="cache">An <see cref="IMemoryCache" /> instance.</param>
+    /// <typeparam name="TClient">
+    ///     An instance that implements the <see cref="IAuthenticationClient" />
+    ///     interface.
+    /// </typeparam>
+    protected AbstractAuthenticationService(TClient authenticationClient, IDistributedCache cache)
+    {
+        _authenticationClient = authenticationClient ?? throw new ArgumentNullException(nameof(authenticationClient));
+        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+    }
 
     /// <summary>
     ///     Key used by the underlying cache service to retrieve the cached access token.

@@ -6,13 +6,18 @@ using AddressValidation.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Serialization.Json;
 
-internal sealed class UpsAddressValidationClient(
-    IConfiguration configuration,
-    HttpClient httpClient)
+internal sealed class UpsAddressValidationClient
 {
-    private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    private readonly IConfiguration _configuration;
 
-    private readonly HttpClient _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+    private readonly HttpClient _httpClient;
+
+    public UpsAddressValidationClient(IConfiguration configuration,
+                                      HttpClient httpClient)
+    {
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ValueTask<ApiResponse?> ValidateAddressAsync(UpsAddressValidationRequest request, CancellationToken cancellationToken = default)

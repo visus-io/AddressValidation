@@ -6,13 +6,17 @@ using Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 
-internal sealed class UpsAuthenticationService(
-    IDistributedCache cache,
-    IConfiguration configuration,
-    UpsAuthenticationClient authenticationClient)
-    : AbstractAuthenticationService<UpsAuthenticationClient>(authenticationClient, cache)
+internal sealed class UpsAuthenticationService : AbstractAuthenticationService<UpsAuthenticationClient>
 {
-    private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    private readonly IConfiguration _configuration;
+
+    public UpsAuthenticationService(IDistributedCache cache,
+                                    IConfiguration configuration,
+                                    UpsAuthenticationClient authenticationClient) 
+        : base(authenticationClient, cache)
+    {
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    }
 
     protected override string? GenerateCacheKey()
     {

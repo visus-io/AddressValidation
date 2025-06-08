@@ -10,14 +10,19 @@ using AddressValidation.Serialization.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-internal sealed class GoogleAuthenticationClient(IConfiguration configuration, HttpClient httpClient)
-    : IAuthenticationClient
+internal sealed class GoogleAuthenticationClient : IAuthenticationClient
 {
     private static readonly Uri AuthenticationUrl = new("https://oauth2.googleapis.com/token");
 
-    private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    private readonly IConfiguration _configuration;
 
-    private readonly HttpClient _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+    private readonly HttpClient _httpClient;
+
+    public GoogleAuthenticationClient(IConfiguration configuration, HttpClient httpClient)
+    {
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+    }
 
     public async ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
