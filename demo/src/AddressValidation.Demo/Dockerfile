@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0-azurelinux3.0@sha256:a5a4fbba750e1ea13c419236293651d347e691c9a03fb35a4231c853abd77ae7 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0-azurelinux3.0@sha256:32c0f0db277220891763553b2f315f146e4553ced6c98aa2e72fdf15cb9c6f3b AS build
 
 WORKDIR /source
 
@@ -13,7 +13,7 @@ RUN set -x \
 
 # =====================================================================================================================
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-azurelinux3.0@sha256:338f596560cea519f6dc51429a48d1acb71b9cb16d08cd203b8ce67b418ee4a4
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-azurelinux3.0@sha256:3e427de07aa2b28d64aadb9caa15e3354961da3e5747c3536e5fabbae62c9810
 
 ENV ASPNETCORE_HTTP_PORTS=80
 
