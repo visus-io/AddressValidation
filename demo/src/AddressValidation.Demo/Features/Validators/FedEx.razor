@@ -1,11 +1,11 @@
-@page "/validator/ups"
+@page "/validator/fedex"
 @using AddressValidation.Demo.Models.Forms
 @using Visus.AddressValidation.Abstractions
-@inherits AddressValidation.Demo.Features.Validators.Abstractions.AbstractValidatorComponent<Visus.AddressValidation.Integration.Ups.Http.UpsAddressValidationRequest, AddressValidation.Demo.Models.Forms.UpsAddressValidationFormModel>
+@inherits AddressValidation.Demo.Features.Validators.Abstractions.AbstractValidatorComponent<Visus.AddressValidation.Integration.FedEx.Http.FedExAddressValidationRequest, AddressValidation.Demo.Models.Forms.FedExAddressValidationFormModel>
 
-<PageTitle>UPS Address Validation</PageTitle>
+<PageTitle>FedEx Address Validation</PageTitle>
 
-<h1>UPS Address Validation Demo</h1>
+<h1>FedEx Address Validation Demo</h1>
 
 <div class="rz-p-0 rz-p-md-12" style="padding: 0 !important">
     <RadzenRow Gap="1rem">
@@ -63,7 +63,7 @@
                     </RadzenTemplateForm>
                 </LoadingIndicator>
                 <LoadingIndicator @ref="ValidateLoadingIndicator">
-                    <RadzenTemplateForm TItem="UpsAddressValidationFormModel" Data="@AddressValidationFormModel"
+                    <RadzenTemplateForm TItem="FedExAddressValidationFormModel" Data="@AddressValidationFormModel"
                                         Submit="OnAddressValidationFormSubmitAsync">
                         <RadzenFieldset Text="Address Validation">
                             <RadzenStack Gap="2rem">

@@ -35,8 +35,7 @@ internal sealed partial class ApiResponse : IApiResponse
 
         [JsonPropertyName("cityTown")]
         public string? CityTown { get; set; }
-
-        [JsonConverter(typeof(JsonStringEnumConverter<CountryCode>))]
+        
         [JsonPropertyName("countryCode")]
         public CountryCode CountryCode { get; set; }
 

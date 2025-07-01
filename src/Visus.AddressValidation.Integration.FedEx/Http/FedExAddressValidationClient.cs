@@ -1,0 +1,69 @@
+namespace Visus.AddressValidation.Integration.FedEx.Http;
+
+using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
+using Abstractions;
+using AddressValidation.Abstractions;
+using Microsoft.Extensions.Configuration;
+using Serialization.Json;
+
+internal sealed class FedExAddressValidationClient(
+    IConfiguration configuration,
+    HttpClient httpClient)
+{
+    private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+
+    private readonly HttpClient _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ValueTask<ApiResponse?> ValidateAddressAsync(FedExAddressValidationRequest request,
+                                                        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return ValidateAddressInternalAsync(request, cancellationToken);
+    }
+
+    private async ValueTask<ApiResponse?> ValidateAddressInternalAsync(FedExAddressValidationRequest request,
+                                                                       CancellationToken cancellationToken = default)
+    {
+        if ( !Enum.TryParse(_configuration[Constants.ClientEnvironmentConfigurationKey], out ClientEnvironment clientEnvironment) )
+        {
+            clientEnvironment = ClientEnvironment.DEVELOPMENT;
+        }
+
+        Uri baseUri = clientEnvironment switch
+        {
+            ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
+            ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
+            _ => Constants.DevelopmentEndpointBaseUri
+        };
+
+        Uri requestUri = new(baseUri, "/address/v1/addresses/resolve");
+
+        using HttpRequestMessage httpRequest = new(HttpMethod.Post, requestUri);
+
+        httpRequest.Content = JsonContent.Create(request, FedExJsonSerializerContext.Default.FedExAddressValidationRequest);
+
+        using HttpResponseMessage response = await _httpClient.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
+        if ( response.IsSuccessStatusCode )
+        {
+            return await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiResponse,
+                                                            cancellationToken)
+                                 .ConfigureAwait(false);
+        }
+
+        ApiErrorResponse? errorResponse = await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiErrorResponse,
+                                                                                   cancellationToken)
+                                                        .ConfigureAwait(false);
+
+        if ( errorResponse is not null )
+        {
+            return new ApiResponse
+            {
+                ErrorResponse = errorResponse
+            };
+        }
+
+        return null;
+    }
+}

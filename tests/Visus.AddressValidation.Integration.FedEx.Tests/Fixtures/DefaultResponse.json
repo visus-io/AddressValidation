@@ -1,0 +1,56 @@
+{
+    "transactionId": "75981cc2-00b0-4b1e-8369-b74bae75c986",
+    "customerTransactionId": "12c9c03f-88cf-416b-b98a-e57879e0a4e1",
+    "output": {
+        "resolvedAddresses": [
+            {
+                "streetLinesToken": [
+                    "1145 BARNETT DR"
+                ],
+                "city": "LAKE WORTH",
+                "stateOrProvinceCode": "FL",
+                "postalCode": "33461-2614",
+                "parsedPostalCode": {
+                    "base": "33461",
+                    "addOn": "2614",
+                    "deliveryPoint": "45"
+                },
+                "countryCode": "US",
+                "classification": "BUSINESS",
+                "ruralRouteHighwayContract": false,
+                "generalDelivery": false,
+                "customerMessages": [],
+                "normalizedStatusNameDPV": true,
+                "standardizedStatusNameMatchSource": "Postal",
+                "resolutionMethodName": "USPS_VALIDATE",
+                "attributes": {
+                    "POBox": "false",
+                    "POBoxOnlyZIP": "false",
+                    "SplitZIP": "false",
+                    "SuiteRequiredButMissing": "false",
+                    "InvalidSuiteNumber": "false",
+                    "ResolutionInput": "RAW_ADDRESS",
+                    "DPV": "true",
+                    "ResolutionMethod": "USPS_VALIDATE",
+                    "DataVintage": "February 2023",
+                    "MatchSource": "Postal",
+                    "CountrySupported": "true",
+                    "ValidlyFormed": "true",
+                    "Matched": "true",
+                    "Resolved": "true",
+                    "Inserted": "false",
+                    "MultiUnitBase": "false",
+                    "ZIP11Match": "true",
+                    "ZIP4Match": "true",
+                    "UniqueZIP": "false",
+                    "StreetAddress": "true",
+                    "RRConversion": "false",
+                    "ValidMultiUnit": "false",
+                    "AddressType": "STANDARDIZED",
+                    "AddressPrecision": "STREET_ADDRESS",
+                    "MultipleMatches": "false"
+                }
+            }
+        ]
+    }
+}

@@ -34,8 +34,7 @@ internal sealed class ApiResponse : IApiResponse
     internal sealed class AddressKeyFormat
     {
         public string[] AddressLine { get; set; } = [];
-
-        [JsonConverter(typeof(JsonStringEnumConverter<CountryCode>))]
+        
         public CountryCode CountryCode { get; set; }
 
         public string? PoliticalDivision1 { get; set; }

@@ -1,0 +1,52 @@
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Integration.FedEx.Tests")]
+namespace Visus.AddressValidation.Integration.FedEx
+{
+    public static class Constants
+    {
+        public const string AccountNumberConfigurationKey = "VS_AVE_FDX_ACCOUNT_NUMBER";
+        public const string ClientEnvironmentConfigurationKey = "VS_AVE_FDX_CLIENT_ENVIRONMENT";
+        public const string ClientIdConfigurationKey = "VS_AVE_FDX_CLIENT_ID";
+        public const string ClientSecretConfigurationKey = "VS_AVE_FDX_CLIENT_SECRET";
+        public static readonly System.Uri DevelopmentEndpointBaseUri;
+        public static readonly System.Uri ProductionEndpointBaseUri;
+        public static readonly System.Collections.Generic.IReadOnlySet<Visus.AddressValidation.Abstractions.CountryCode> SupportedCountries;
+    }
+}
+namespace Visus.AddressValidation.Integration.FedEx.Extensions
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddFedExAddressValidation(this Microsoft.Extensions.DependencyInjection.IServiceCollection services) { }
+    }
+}
+namespace Visus.AddressValidation.Integration.FedEx.Http
+{
+    [System.Text.Json.Serialization.JsonConverter(typeof(Visus.AddressValidation.Integration.FedEx.Serialization.Json.AddressValidationRequestConverter?))]
+    public sealed class FedExAddressValidationRequest : Visus.AddressValidation.Http.AbstractAddressValidationRequest
+    {
+        public FedExAddressValidationRequest() { }
+        public string? ClientReferenceId { get; set; }
+    }
+}
+namespace Visus.AddressValidation.Integration.FedEx.Serialization.Json
+{
+    public sealed class AddressValidationRequestConverter : System.Text.Json.Serialization.JsonConverter<Visus.AddressValidation.Integration.FedEx.Http.FedExAddressValidationRequest?>
+    {
+        public AddressValidationRequestConverter() { }
+        public override Visus.AddressValidation.Integration.FedEx.Http.FedExAddressValidationRequest? Read(ref System.Text.Json.Utf8JsonReader reader, System.Type typeToConvert, System.Text.Json.JsonSerializerOptions? options) { }
+        public override void Write(System.Text.Json.Utf8JsonWriter writer, Visus.AddressValidation.Integration.FedEx.Http.FedExAddressValidationRequest? value, System.Text.Json.JsonSerializerOptions options) { }
+    }
+    [System.Text.Json.Serialization.JsonSerializable(typeof(Visus.AddressValidation.Integration.FedEx.Http.FedExAddressValidationRequest))]
+    [System.Text.Json.Serialization.JsonSourceGenerationOptions(WriteIndented=false)]
+    public class FedExJsonSerializerContext : System.Text.Json.Serialization.JsonSerializerContext, System.Text.Json.Serialization.Metadata.IJsonTypeInfoResolver
+    {
+        public FedExJsonSerializerContext() { }
+        public FedExJsonSerializerContext(System.Text.Json.JsonSerializerOptions options) { }
+        public System.Text.Json.Serialization.Metadata.JsonTypeInfo<Visus.AddressValidation.Integration.FedEx.Http.FedExAddressValidationRequest> FedExAddressValidationRequest { get; }
+        protected override System.Text.Json.JsonSerializerOptions? GeneratedSerializerOptions { get; }
+        public static Visus.AddressValidation.Integration.FedEx.Serialization.Json.FedExJsonSerializerContext Default { get; }
+        public override System.Text.Json.Serialization.Metadata.JsonTypeInfo? GetTypeInfo(System.Type type) { }
+    }
+}

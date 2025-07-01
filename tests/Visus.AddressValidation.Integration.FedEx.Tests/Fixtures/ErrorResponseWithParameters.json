@@ -1,0 +1,16 @@
+{
+    "transactionId": "d3c35e98-e08e-49d5-a73d-3debb0355e86",
+    "customerTransactionId": "12c9c03f-88cf-416b-b98a-e57879e0a4e1",
+    "errors": [
+        {
+            "code": "INVALID.INPUT.EXCEPTION",
+            "message": "Validation failed for object='addressResolutionInputVO'. Error count: 1",
+            "parameterList": [
+                {
+                    "key": "NotNull.addressResolutionInputVO.addressesToValidate[0].address.streetLines",
+                    "value": "streetLines can not be null"
+                }
+            ]
+        }
+    ]
+}

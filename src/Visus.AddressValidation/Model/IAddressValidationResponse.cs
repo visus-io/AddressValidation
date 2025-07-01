@@ -24,7 +24,6 @@ public interface IAddressValidationResponse
     ///     Gets the country code
     /// </summary>
     /// <remarks>Refer to <see cref="Country" /> for values.</remarks>
-    [JsonConverter(typeof(JsonStringEnumConverter<CountryCode>))]
     [JsonPropertyName("country")]
     public CountryCode Country { get; }
 

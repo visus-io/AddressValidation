@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\src\Visus.AddressValidation.Integration.FedEx\Visus.AddressValidation.Integration.FedEx.csproj" />
         <ProjectReference Include="..\..\..\src\Visus.AddressValidation.Integration.PitneyBowes\Visus.AddressValidation.Integration.PitneyBowes.csproj"/>
         <ProjectReference Include="..\..\..\src\Visus.AddressValidation.Integration.Ups\Visus.AddressValidation.Integration.Ups.csproj"/>
         <ProjectReference Include="..\..\..\src\Visus.AddressValidation.Integration.Google\Visus.AddressValidation.Integration.Google.csproj"/>

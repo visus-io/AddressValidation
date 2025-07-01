@@ -1,0 +1,15 @@
+{
+    "addressesToValidate": [
+        {
+            "address": {
+                "streetLines": [
+                    "1145 Barnett Dr"
+                ],
+                "city": "Lake Worth",
+                "stateOrProvince": "FL",
+                "postalCode": "33461",
+                "countryCode": "US"
+            }
+        }
+    ]
+}
