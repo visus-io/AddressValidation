@@ -25,7 +25,6 @@ internal sealed class ApiResponse : IApiResponse
 
     internal sealed class AddressClassification
     {
-        [JsonConverter(typeof(JsonStringEnumConverter<AddressClassificationCode>))]
         public AddressClassificationCode? Code { get; set; }
 
         public string? Message { get; set; }
@@ -62,7 +61,6 @@ internal sealed class ApiResponse : IApiResponse
 
     internal sealed class ResponseStatus
     {
-        [JsonConverter(typeof(JsonStringEnumConverter<ResponseStatusCode>))]
         public ResponseStatusCode? Code { get; set; }
 
         public string? Message { get; set; }
