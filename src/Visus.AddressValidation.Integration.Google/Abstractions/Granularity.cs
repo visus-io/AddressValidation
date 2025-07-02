@@ -2,8 +2,10 @@
 
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
+[JsonConverter(typeof(JsonStringEnumConverter<Granularity>))]
 internal enum Granularity
 {
     [Description("Default value. This value is unused.")]

@@ -5,5 +5,5 @@ using Http;
 
 [JsonSerializable(typeof(ApiErrorResponse))]
 [JsonSerializable(typeof(ApiResponse))]
-[JsonSourceGenerationOptions(WriteIndented = false)]
+[JsonSourceGenerationOptions(WriteIndented = false, PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 internal partial class ApiJsonSerializerContext : JsonSerializerContext;
