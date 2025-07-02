@@ -16,7 +16,6 @@ internal sealed partial class ApiResponse : IApiResponse
     [JsonPropertyName("address")]
     public AddressResult? Result { get; set; }
 
-    [JsonPropertyName("suggestions")]
     public AddressSuggestion? Suggestions { get; set; }
 
     public IAddressValidationResponse ToAddressValidationResponse(IValidationResult? validationResult = null)
@@ -26,34 +25,24 @@ internal sealed partial class ApiResponse : IApiResponse
 
     internal sealed partial class AddressResult
     {
-        [JsonPropertyName("addressLines")]
         public string[] AddressLines { get; set; } = [];
 
-        [CustomResponseDataProperty("carrierRoute")]
-        [JsonPropertyName("carrierRoute")]
+        [CustomResponseDataProperty]
         public string? CarrierRoute { get; set; }
 
-        [JsonPropertyName("cityTown")]
         public string? CityTown { get; set; }
-        
-        [JsonPropertyName("countryCode")]
+
         public CountryCode CountryCode { get; set; }
 
-        [CustomResponseDataProperty("deliveryPoint")]
-        [JsonPropertyName("deliveryPoint")]
+        [CustomResponseDataProperty]
         public string? DeliveryPoint { get; set; }
 
-        [JsonPropertyName("postalCode")]
         public string? PostalCode { get; set; }
 
-        [JsonPropertyName("residential")]
         public bool? Residential { get; set; }
 
-        [JsonPropertyName("stateProvince")]
         public string? StateProvince { get; set; }
 
-        [JsonConverter(typeof(JsonStringEnumConverter<StatusCode>))]
-        [JsonPropertyName("status")]
         public StatusCode Status { get; set; }
     }
 
@@ -62,7 +51,6 @@ internal sealed partial class ApiResponse : IApiResponse
         [JsonPropertyName("address")]
         public AddressResult[]? Addresses { get; set; }
 
-        [JsonPropertyName("suggestion")]
         public string? Suggestion { get; set; }
     }
 }
