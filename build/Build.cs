@@ -52,6 +52,11 @@ class Build : NukeBuild
                                       {
                                           Directory.Delete(DocsArtifactsDirectory, true);
                                       }
+
+                                      if ( Directory.Exists(DemoArtifactsDirectory) )
+                                      {
+                                          Directory.Delete(DemoArtifactsDirectory, true);
+                                      }
                                   });
 
     Target Compile => _ => _
@@ -74,6 +79,10 @@ class Build : NukeBuild
                                         });
 
     AbsolutePath CoverageResultsDirectory => TemporaryDirectory / "CoverageResults";
+
+    AbsolutePath DemoArtifactsDirectory => TemporaryDirectory / "AddressValidation.Demo";
+
+    AbsolutePath DemoProjectDirectory => RootDirectory / "demo" / "src" / "AddressValidation.Demo";
 
     Target DeployDocs => _ => _
                              .DependsOn(CompileDocs)
@@ -101,6 +110,19 @@ class Build : NukeBuild
     AbsolutePath DocsArtifactsDirectory => TemporaryDirectory / "docs";
 
     AbsolutePath DocsDirectory => RootDirectory / "docs";
+
+    Target PublishDemo => _ => _
+                              .DependsOn(Clean)
+                              .Executes(() =>
+                                        {
+                                            DotNetPublish(_ => _
+                                                              .SetProject(DemoProjectDirectory / "AddressValidation.Demo.csproj")
+                                                              .SetConfiguration(Configuration)
+                                                              .SetOutput(DemoArtifactsDirectory)
+                                                              .SetSelfContained(false)
+                                                              .EnableNoLogo()
+                                                         );
+                                        });
 
     Target Restore => _ => _
                           .DependsOn(Clean)

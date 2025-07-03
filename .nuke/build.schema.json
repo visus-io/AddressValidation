@@ -28,6 +28,7 @@
         "Compile",
         "CompileDocs",
         "DeployDocs",
+        "PublishDemo",
         "Restore",
         "SonarScanBegin",
         "SonarScanEnd",
