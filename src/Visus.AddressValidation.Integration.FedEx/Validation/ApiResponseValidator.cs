@@ -6,7 +6,7 @@ using AddressValidation.Http;
 using AddressValidation.Validation;
 using Http;
 
-internal sealed class ApiResponseValidator : AbstractApiResponseValidator<ApiResponse>
+internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 {
     protected override ValueTask<bool> PreValidateAsync(ApiResponse instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {

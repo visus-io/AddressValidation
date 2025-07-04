@@ -12,6 +12,6 @@ internal sealed class AddressValidationRequestValidator : AbstractAddressValidat
             results.Add(ValidationState.CreateError("{0}: {1} is currently not supported by the Pitney Bowes Address Validation API.", nameof(instance.Country), instance.Country));
         }
 
-        return ValueTask.CompletedTask;
+        return base.ValidateAsync(instance, results, cancellationToken);
     }
 }

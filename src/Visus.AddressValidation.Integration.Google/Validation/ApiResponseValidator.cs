@@ -5,7 +5,7 @@ using Abstractions;
 using AddressValidation.Validation;
 using Http;
 
-internal sealed class ApiResponseValidator : AbstractApiResponseValidator<ApiResponse>
+internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 {
     private readonly HashSet<Granularity> _confirmedGranularity =
     [
