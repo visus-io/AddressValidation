@@ -535,8 +535,10 @@ namespace Visus.AddressValidation.Extensions
 {
     public static class DictionaryExtensions
     {
-        public static void Merge<TKey, TValue>(this System.Collections.Generic.IDictionary<TKey, TValue> source, System.Collections.Generic.IDictionary<TKey, TValue> dictionary) { }
-        public static void Merge<TKey, TValue>(this System.Collections.Generic.IDictionary<TKey, TValue> source, System.Collections.Generic.IReadOnlyDictionary<TKey, TValue> dictionary) { }
+        public static void Merge<TKey, TValue>(this System.Collections.Generic.IDictionary<TKey, TValue> source, System.Collections.Generic.IDictionary<TKey, TValue> dictionary)
+            where TKey :  notnull { }
+        public static void Merge<TKey, TValue>(this System.Collections.Generic.IDictionary<TKey, TValue> source, System.Collections.Generic.IReadOnlyDictionary<TKey, TValue> dictionary)
+            where TKey :  notnull { }
     }
 }
 namespace Visus.AddressValidation.Http
