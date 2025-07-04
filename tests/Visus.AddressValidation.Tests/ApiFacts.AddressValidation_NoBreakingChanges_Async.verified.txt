@@ -695,20 +695,18 @@ namespace Visus.AddressValidation.Services
 }
 namespace Visus.AddressValidation.Validation
 {
-    public abstract class AbstractAddressValidationRequestValidator<T> : System.IDisposable, Visus.AddressValidation.Validation.IValidator<T>
+    public abstract class AbstractAddressValidationRequestValidator<T> : Visus.AddressValidation.Validation.AbstractValidator<T>
         where T : Visus.AddressValidation.Http.AbstractAddressValidationRequest
     {
         protected AbstractAddressValidationRequestValidator() { }
-        public void Dispose() { }
-        protected virtual void Dispose(bool disposing) { }
-        public System.Threading.Tasks.ValueTask<Visus.AddressValidation.Validation.IValidationResult> ExecuteAsync(T instance, System.Threading.CancellationToken cancellationToken = default) { }
-        protected virtual System.Threading.Tasks.ValueTask<bool> PreValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
-        protected virtual System.Threading.Tasks.ValueTask ValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
+        protected override void Dispose(bool disposing) { }
+        protected override System.Threading.Tasks.ValueTask<bool> PreValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
+        protected override System.Threading.Tasks.ValueTask ValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
     }
-    public abstract class AbstractApiResponseValidator<T> : System.IDisposable, Visus.AddressValidation.Validation.IValidator<T>
-        where T :  class, Visus.AddressValidation.Http.IApiResponse
+    public abstract class AbstractValidator<T> : System.IDisposable, Visus.AddressValidation.Validation.IValidator<T>
+        where T :  class
     {
-        protected AbstractApiResponseValidator() { }
+        protected AbstractValidator() { }
         public void Dispose() { }
         protected virtual void Dispose(bool disposing) { }
         public System.Threading.Tasks.ValueTask<Visus.AddressValidation.Validation.IValidationResult> ExecuteAsync(T instance, System.Threading.CancellationToken cancellationToken = default) { }

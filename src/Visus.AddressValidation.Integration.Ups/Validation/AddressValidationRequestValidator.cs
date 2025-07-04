@@ -53,6 +53,6 @@ internal sealed class AddressValidationRequestValidator(IConfiguration configura
                                                     ClientEnvironment.DEVELOPMENT));
         }
 
-        return ValueTask.CompletedTask;
+        return base.ValidateAsync(instance, results, cancellationToken);
     }
 }

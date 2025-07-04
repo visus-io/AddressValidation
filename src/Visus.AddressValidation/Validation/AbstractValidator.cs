@@ -1,14 +1,14 @@
 namespace Visus.AddressValidation.Validation;
 
+using System.Runtime.CompilerServices;
 using Extensions;
-using Http;
 
 /// <summary>
-///     Base class for implementing an API response validator.
+///     Base class for implemented a validator.
 /// </summary>
-/// <typeparam name="T">An instance that implements <see cref="IApiResponse" />.</typeparam>
-public abstract class AbstractApiResponseValidator<T> : IValidator<T>, IDisposable
-    where T : class, IApiResponse
+/// <typeparam name="T">The object instance to be validated.</typeparam>
+public abstract class AbstractValidator<T> : IValidator<T>, IDisposable
+    where T : class
 {
     private readonly SemaphoreSlim _semaphore = new(1, 1);
 
@@ -22,6 +22,7 @@ public abstract class AbstractApiResponseValidator<T> : IValidator<T>, IDisposab
     }
 
     /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ValueTask<IValidationResult> ExecuteAsync(T instance, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(instance);
