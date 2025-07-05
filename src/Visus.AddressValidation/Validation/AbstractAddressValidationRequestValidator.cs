@@ -9,19 +9,6 @@ using Http;
 public abstract class AbstractAddressValidationRequestValidator<T> : AbstractValidator<T>
     where T : AbstractAddressValidationRequest
 {
-    private readonly SemaphoreSlim _semaphore = new(1, 1);
-
-    /// <inheritdoc />
-    protected override void Dispose(bool disposing)
-    {
-        if ( disposing )
-        {
-            _semaphore.Dispose();
-        }
-
-        base.Dispose(disposing);
-    }
-
     /// <inheritdoc />
     protected override ValueTask<bool> PreValidateAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
