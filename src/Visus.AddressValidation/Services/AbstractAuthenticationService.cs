@@ -26,10 +26,6 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     /// </summary>
     /// <param name="authenticationClient">An <see cref="IAuthenticationClient" /> instance.</param>
     /// <param name="cache">An <see cref="IMemoryCache" /> instance.</param>
-    /// <typeparam name="TClient">
-    ///     An instance that implements the <see cref="IAuthenticationClient" />
-    ///     interface.
-    /// </typeparam>
     protected AbstractAuthenticationService(TClient authenticationClient, IDistributedCache cache)
     {
         _authenticationClient = authenticationClient ?? throw new ArgumentNullException(nameof(authenticationClient));
