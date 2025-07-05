@@ -20,10 +20,84 @@ public sealed class GeographyService(
 
     private readonly IStateRepository _stateRepository = stateRepository ?? throw new ArgumentNullException(nameof(stateRepository));
 
-    public async ValueTask<IReadOnlyDictionary<string, string>> ListCountriesAsDictionaryAsync(params CountryCode[] supportedCountryCodes)
-    {
-        ArgumentNullException.ThrowIfNull(supportedCountryCodes);
+    private readonly HashSet<string> autonomousTypes =
+    [
+        "autonomous region",
+        "city"
+    ];
 
+    public ValueTask<IReadOnlySet<string>> ListAutonomousCitiesAsync(string countryCode)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(countryCode);
+        return ListAutonomousCitiesInternalAsync(countryCode);
+    }
+
+    public ValueTask<IReadOnlyDictionary<string, string>> ListCountriesAsDictionaryAsync(params CountryCode[] countryCodes)
+    {
+        ArgumentNullException.ThrowIfNull(countryCodes);
+        return ListCountriesAsDictionaryInternalAsync(countryCodes);
+    }
+
+    public ValueTask<IReadOnlyDictionary<string, string>> ListProvincesAsDictionaryAsync(string countryCode)
+    {
+        if ( !Enum.TryParse(countryCode, true, out CountryCode _) )
+        {
+            throw new ArgumentException($"'{countryCode}' is not a valid country code.", nameof(countryCode));
+        }
+
+        return ListProvincesAsDictionaryInternalAsync(countryCode);
+    }
+
+    private static async ValueTask<string> GenerateCacheKeyAsync(string prefix, IReadOnlySet<string> values)
+    {
+        using SHA256 sha = SHA256.Create();
+
+        byte[] checksum = await sha.ComputeHashAsync(Stream.Null).ConfigureAwait(false);
+        if ( values.Count == 0 )
+        {
+            return prefix + "_" + BitConverter.ToString(checksum).Replace("-", string.Empty, StringComparison.OrdinalIgnoreCase);
+        }
+
+        string content = string.Join(";", values);
+        using MemoryStream stream = new(Encoding.UTF8.GetBytes(content));
+
+        checksum = await sha.ComputeHashAsync(stream).ConfigureAwait(false);
+
+        return prefix + "_" + BitConverter.ToString(checksum).Replace("-", string.Empty, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private async ValueTask<IReadOnlySet<string>> ListAutonomousCitiesInternalAsync(string countryCode)
+    {
+        string cacheKey = await GenerateCacheKeyAsync($"autonomous_cities_{countryCode}", new HashSet<string>
+        {
+            countryCode
+        }).ConfigureAwait(false);
+
+        string? response = await _cache.GetStringAsync(cacheKey).ConfigureAwait(false);
+        if ( !string.IsNullOrWhiteSpace(response) )
+        {
+            return JsonSerializer.Deserialize<HashSet<string>>(response)!;
+        }
+
+        IReadOnlyList<string> results = await _stateRepository.ListAsync(l => l.CountryCode == countryCode
+                                                                           && autonomousTypes.Contains(l.Type!),
+                                                                         l => l.Name).ConfigureAwait(false);
+
+        HashSet<string> set = [.. results];
+
+        await _cache.SetStringAsync(cacheKey,
+                                    JsonSerializer.Serialize(set),
+                                    new DistributedCacheEntryOptions
+                                    {
+                                        AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
+                                    }
+                                   ).ConfigureAwait(false);
+
+        return set;
+    }
+
+    private async ValueTask<IReadOnlyDictionary<string, string>> ListCountriesAsDictionaryInternalAsync(params CountryCode[] supportedCountryCodes)
+    {
         HashSet<string> countryCodes = new(StringComparer.OrdinalIgnoreCase);
         if ( supportedCountryCodes.Length > 0 )
         {
@@ -64,34 +138,6 @@ public sealed class GeographyService(
                                     }).ConfigureAwait(false);
 
         return dict;
-    }
-
-    public ValueTask<IReadOnlyDictionary<string, string>> ListProvincesAsDictionaryAsync(string countryCode)
-    {
-        if ( !Enum.TryParse(countryCode, true, out CountryCode _) )
-        {
-            throw new ArgumentException($"'{countryCode}' is not a valid country code.", nameof(countryCode));
-        }
-
-        return ListProvincesAsDictionaryInternalAsync(countryCode);
-    }
-
-    private static async ValueTask<string> GenerateCacheKeyAsync(string prefix, IReadOnlySet<string> values)
-    {
-        using SHA256 sha = SHA256.Create();
-
-        byte[] checksum = await sha.ComputeHashAsync(Stream.Null).ConfigureAwait(false);
-        if ( values.Count == 0 )
-        {
-            return prefix + "_" + BitConverter.ToString(checksum).Replace("-", string.Empty, StringComparison.OrdinalIgnoreCase);
-        }
-
-        string content = string.Join(";", values);
-        using MemoryStream stream = new(Encoding.UTF8.GetBytes(content));
-
-        checksum = await sha.ComputeHashAsync(stream).ConfigureAwait(false);
-
-        return prefix + "_" + BitConverter.ToString(checksum).Replace("-", string.Empty, StringComparison.OrdinalIgnoreCase);
     }
 
     private async ValueTask<IReadOnlyDictionary<string, string>> ListProvincesAsDictionaryInternalAsync(string countryCode)

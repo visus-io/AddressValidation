@@ -118,6 +118,7 @@
                                         <RadzenFormField AllowFloatingLabel="false" Text="City" Component="CityOrTown"
                                                          Variant="Variant.Outlined" Style="width: 100%">
                                             <RadzenTextBox Name="CityOrTown"
+                                                           Disabled="IsCityOrTownDisabled"
                                                            AutoCompleteType="AutoCompleteType.AddressLevel2"
                                                            @bind-Value="@AddressValidationFormModel.CityOrTown"/>
                                         </RadzenFormField>
@@ -131,6 +132,7 @@
                                                 <RadzenDropDown AllowClear="true"
                                                                 AllowFiltering="true"
                                                                 AllowVirtualization="true"
+                                                                Change="OnProvinceChangedAsync"
                                                                 Data="@Provinces"
                                                                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                                                                 Name="Province"
@@ -166,16 +168,7 @@
         <RadzenColumn Size="12" SizeSM="6">
             <RadzenStack>
                 <LoadingIndicator @ref="ResultsLoadingIndicator">
-                    <RadzenRow Gap="0.25rem">
-                        <RadzenFieldset Text="Request" Style="width: 100%">
-                            <SyntaxHighlighter Language="json">@RequestJson</SyntaxHighlighter>
-                        </RadzenFieldset>
-                    </RadzenRow>
-                    <RadzenRow Gap="0.25rem">
-                        <RadzenFieldset Text="Response" Style="width: 100%">
-                            <SyntaxHighlighter Language="json">@ResponseJson</SyntaxHighlighter>
-                        </RadzenFieldset>
-                    </RadzenRow>
+                    <ResponseRequestJsonRenderer RequestJson="@RequestJson" ResponseJson="@ResponseJson"/>
                 </LoadingIndicator>
             </RadzenStack>
         </RadzenColumn>

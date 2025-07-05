@@ -22,19 +22,38 @@ public abstract class AbstractValidatorComponent<TValidationRequest, TValidation
 
     protected TValidationForm AddressValidationFormModel { get; } = new();
 
+    protected bool IsCityOrTownDisabled
+    {
+        get
+        {
+            if ( string.IsNullOrWhiteSpace(AddressValidationFormModel.CityOrTown) ||
+                 string.IsNullOrWhiteSpace(AddressValidationFormModel.StateOrProvince))
+            {
+                return false;
+            }
+
+            string? stateOrProvinceName = Provinces!.GetValueOrDefault(AddressValidationFormModel.StateOrProvince);
+
+            return !string.IsNullOrWhiteSpace(stateOrProvinceName)
+                && string.Equals(stateOrProvinceName,
+                                 AddressValidationFormModel.CityOrTown,
+                                 StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
     [Inject]
-    protected IConfiguration Configuration { get; set; } = default!;
+    protected IConfiguration Configuration { get; set; } = null!;
 
     protected IReadOnlyDictionary<string, string> Countries { get; private set; } = new Dictionary<string, string>();
 
     [Inject]
-    protected IGeographyService GeographyService { get; set; } = default!;
+    protected IGeographyService GeographyService { get; set; } = null!;
 
     [Inject]
-    protected IJSRuntime JsRuntime { get; set; } = default!;
+    protected IJSRuntime JsRuntime { get; set; } = null!;
 
     [Inject]
-    protected NotificationService NotificationService { get; set; } = default!;
+    protected NotificationService NotificationService { get; set; } = null!;
 
     protected IReadOnlyDictionary<string, string> Provinces { get; private set; } = new Dictionary<string, string>();
 
@@ -42,17 +61,17 @@ public abstract class AbstractValidatorComponent<TValidationRequest, TValidation
 
     protected MarkupString? ResponseJson { get; private set; }
 
-    protected LoadingIndicator ResultsLoadingIndicator { get; set; } = default!;
+    protected LoadingIndicator ResultsLoadingIndicator { get; set; } = null!;
 
-    protected LoadingIndicator SettingsLoadingIndicator { get; set; } = default!;
-
-    [Inject]
-    protected ISettingsService SettingsService { get; set; } = default!;
-
-    protected LoadingIndicator ValidateLoadingIndicator { get; set; } = default!;
+    protected LoadingIndicator SettingsLoadingIndicator { get; set; } = null!;
 
     [Inject]
-    protected IAddressValidationService<TValidationRequest> ValidationService { get; set; } = default!;
+    protected ISettingsService SettingsService { get; set; } = null!;
+
+    protected LoadingIndicator ValidateLoadingIndicator { get; set; } = null!;
+
+    [Inject]
+    protected IAddressValidationService<TValidationRequest> ValidationService { get; set; } = null!;
 
     protected virtual IEnumerable<CountryCode> InitializeCountries()
     {
@@ -108,18 +127,45 @@ public abstract class AbstractValidatorComponent<TValidationRequest, TValidation
         }
 
         return Task.Run(async () => await GeographyService.ListProvincesAsDictionaryAsync(AddressValidationFormModel.Country))
-                   .ContinueWith(t => { Provinces = t.Result; }, CancellationToken.None, TaskContinuationOptions.LongRunning, TaskScheduler.Default);
+                   .ContinueWith(t =>
+                                 {
+                                     Provinces = t.Result;
+                                 }, CancellationToken.None, TaskContinuationOptions.LongRunning, TaskScheduler.Default);
     }
 
     protected override void OnInitialized()
     {
-        AddressValidationFormModel.Country = CountryCode.US.ToString();
+        AddressValidationFormModel.Country = nameof(CountryCode.US);
+    }
+
+    protected Task OnProvinceChangedAsync()
+    {
+        AddressValidationFormModel.CityOrTown = null;
+
+        if ( string.IsNullOrWhiteSpace(AddressValidationFormModel.Country) ||
+             string.IsNullOrWhiteSpace(AddressValidationFormModel.StateOrProvince) )
+        {
+            return Task.CompletedTask;
+        }
+
+        return Task.Run(async () => await GeographyService.ListAutonomousCitiesAsync(AddressValidationFormModel.Country))
+                   .ContinueWith(t =>
+                                 {
+                                     string? stateOrProvinceName = Provinces.GetValueOrDefault(AddressValidationFormModel.StateOrProvince);
+                                     if ( !string.IsNullOrWhiteSpace(stateOrProvinceName) && t.Result.Contains(stateOrProvinceName) )
+                                     {
+                                         AddressValidationFormModel.CityOrTown = stateOrProvinceName;
+                                     }
+                                 }, CancellationToken.None, TaskContinuationOptions.LongRunning, TaskScheduler.Default);
     }
 
     private Task LoadCountriesAsync()
     {
         return Task.Run(async () => await GeographyService.ListCountriesAsDictionaryAsync())
-                   .ContinueWith(t => { Countries = t.Result; }, CancellationToken.None, TaskContinuationOptions.LongRunning, TaskScheduler.Default);
+                   .ContinueWith(t =>
+                                 {
+                                     Countries = t.Result;
+                                 }, CancellationToken.None, TaskContinuationOptions.LongRunning, TaskScheduler.Default);
     }
 
     private async Task RenderRequestJsonAsync()

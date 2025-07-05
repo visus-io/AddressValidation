@@ -8,13 +8,13 @@ public sealed class LoadingIndicatorService : ILoadingIndicatorService
 {
     private readonly ConcurrentDictionary<LoadingIndicator, byte> _indicators = new();
 
-    private Func<bool?> _isLoading = default!;
+    private Func<bool?> _isLoading = null!;
 
-    private Func<bool?> _isVisible = default!;
+    private Func<bool?> _isVisible = null!;
 
-    private Func<bool, Task> _setIsLoading = default!;
+    private Func<bool, Task> _setIsLoading = null!;
 
-    private Func<bool, Task> _setIsVisible = default!;
+    private Func<bool, Task> _setIsVisible = null!;
 
     public LoadingIndicatorService()
     {

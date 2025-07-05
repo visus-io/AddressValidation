@@ -24,6 +24,10 @@ public interface ISqlRepository<TEntity>
 
     ValueTask<IReadOnlyList<TEntity>> ListAsync(CancellationToken cancellationToken = default);
 
+    ValueTask<IReadOnlyList<TResult>> ListAsync<TResult>(Expression<Func<TEntity, TResult>> keySelector, CancellationToken cancellationToken = default);
+
+    ValueTask<IReadOnlyList<TResult>> ListAsync<TResult>(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, TResult>> keySelector, CancellationToken cancellationToken = default);
+
     ValueTask<IReadOnlyList<TEntity>> ListAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
     ValueTask<long> LongCountAsync(CancellationToken cancellationToken = default);
