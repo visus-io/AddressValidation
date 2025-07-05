@@ -13,7 +13,7 @@ public sealed partial class LoadingIndicator : ComponentBase, IDisposable
     }
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
+    public RenderFragment ChildContent { get; set; } = null!;
 
     [Parameter]
     public bool IsLoading { get; set; }

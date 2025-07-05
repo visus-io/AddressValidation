@@ -35,7 +35,6 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
         {
             case 0:
             case > 0 when instance.AddressLines.All(string.IsNullOrWhiteSpace):
-
                 results.Add(ValidationState.CreateError("Cannot be null or empty.", nameof(instance.AddressLines)));
                 break;
             case > 3:

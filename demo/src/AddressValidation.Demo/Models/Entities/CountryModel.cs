@@ -4,7 +4,7 @@ public sealed class CountryModel
 {
     public int Id { get; set; }
 
-    public string IsoCode { get; set; } = default!;
+    public string IsoCode { get; set; } = null!;
 
-    public string Name { get; set; } = default!;
+    public string Name { get; set; } = null!;
 }

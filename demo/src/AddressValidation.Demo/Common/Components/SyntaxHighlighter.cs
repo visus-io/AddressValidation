@@ -8,7 +8,7 @@ public sealed class SyntaxHighlighter : ComponentBase
     public RenderFragment? ChildContent { get; set; }
 
     [Parameter]
-    public string Language { get; set; } = default!;
+    public string Language { get; set; } = null!;
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)
     {
