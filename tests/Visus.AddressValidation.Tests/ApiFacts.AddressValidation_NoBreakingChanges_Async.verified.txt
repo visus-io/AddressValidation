@@ -701,7 +701,6 @@ namespace Visus.AddressValidation.Validation
         where T : Visus.AddressValidation.Http.AbstractAddressValidationRequest
     {
         protected AbstractAddressValidationRequestValidator() { }
-        protected override void Dispose(bool disposing) { }
         protected override System.Threading.Tasks.ValueTask<bool> PreValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
         protected override System.Threading.Tasks.ValueTask ValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
     }
