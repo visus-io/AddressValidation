@@ -25,7 +25,7 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     ///     <see cref="IAuthenticationClient" /> implementation.
     /// </summary>
     /// <param name="authenticationClient">An <see cref="IAuthenticationClient" /> instance.</param>
-    /// <param name="cache">An <see cref="IMemoryCache" /> instance.</param>
+    /// <param name="cache">An <see cref="IDistributedCache" /> instance.</param>
     protected AbstractAuthenticationService(TClient authenticationClient, IDistributedCache cache)
     {
         _authenticationClient = authenticationClient ?? throw new ArgumentNullException(nameof(authenticationClient));
@@ -55,7 +55,7 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     /// <returns>
     ///     Current access token returned by the service, an empty string, or <see langword="null" />.
     /// </returns>
-    /// <remarks>An instance of <see cref="IMemoryCache" /> is utilized to cache the token by its defined lifetime.</remarks>
+    /// <remarks>An instance of <see cref="IDistributedCache" /> is utilized to cache the token by its defined lifetime.</remarks>
     public async ValueTask<string?> GetAccessTokenAsync(CancellationToken cancellationToken = default)
     {
         if ( string.IsNullOrWhiteSpace(CacheKey) )
