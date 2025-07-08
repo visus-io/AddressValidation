@@ -47,7 +47,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
                 results.Add(ValidationState.CreateWarning("Value could not be verified.", propertyName));
             }
 
-            if ( !address.Attributes.IsValidPostalCode )
+            if ( !address.Attributes.IsValidPostalCode && address.CountryCode == CountryCode.US )
             {
                 const string propertyName = nameof(AbstractAddressValidationRequest.PostalCode);
                 results.Add(ValidationState.CreateError("Value could not be verified.", propertyName));

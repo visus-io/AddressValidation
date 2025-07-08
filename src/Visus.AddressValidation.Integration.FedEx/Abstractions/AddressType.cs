@@ -1,8 +1,10 @@
 namespace Visus.AddressValidation.Integration.FedEx.Abstractions;
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
+[JsonConverter(typeof(JsonStringEnumConverter<AddressType>))]
 internal enum AddressType
 {
     /// <summary>

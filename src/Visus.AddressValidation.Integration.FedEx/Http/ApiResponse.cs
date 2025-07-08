@@ -31,12 +31,10 @@ internal sealed partial class ApiResponse : IApiResponse
     internal sealed partial class Attribute
     {
         [CustomResponseDataProperty]
-        [JsonConverter(typeof(JsonStringEnumConverter<AddressPrecision>))]
         [JsonPropertyName(nameof(AddressPrecision))]
-        public AddressPrecision AddressPrecision { get; set; }
+        public string? AddressPrecision { get; set; }
 
         [CustomResponseDataProperty]
-        [JsonConverter(typeof(JsonStringEnumConverter<AddressType>))]
         [JsonPropertyName(nameof(AddressType))]
         public AddressType AddressType { get; set; }
 
@@ -150,7 +148,7 @@ internal sealed partial class ApiResponse : IApiResponse
         public Attribute Attributes { get; set; } = null!;
 
         public string City { get; set; } = null!;
-        
+
         public AddressClassification Classification { get; set; }
 
         public CountryCode CountryCode { get; set; }
@@ -166,7 +164,7 @@ internal sealed partial class ApiResponse : IApiResponse
 
         public string PostalCode { get; set; } = null!;
 
-        [CustomResponseDataProperty]
+        [JsonPropertyName("resolutionMethodName")]
         public ResolutionMethod ResolutionMethod { get; set; }
 
         [CustomResponseDataProperty]

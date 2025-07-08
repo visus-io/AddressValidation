@@ -39,7 +39,7 @@ namespace Visus.AddressValidation.Integration.FedEx.Serialization.Json
         public override void Write(System.Text.Json.Utf8JsonWriter writer, Visus.AddressValidation.Integration.FedEx.Http.FedExAddressValidationRequest? value, System.Text.Json.JsonSerializerOptions options) { }
     }
     [System.Text.Json.Serialization.JsonSerializable(typeof(Visus.AddressValidation.Integration.FedEx.Http.FedExAddressValidationRequest))]
-    [System.Text.Json.Serialization.JsonSourceGenerationOptions(WriteIndented=false)]
+    [System.Text.Json.Serialization.JsonSourceGenerationOptions(PropertyNamingPolicy=System.Text.Json.Serialization.JsonKnownNamingPolicy.CamelCase, WriteIndented=false)]
     public class FedExJsonSerializerContext : System.Text.Json.Serialization.JsonSerializerContext, System.Text.Json.Serialization.Metadata.IJsonTypeInfoResolver
     {
         public FedExJsonSerializerContext() { }
