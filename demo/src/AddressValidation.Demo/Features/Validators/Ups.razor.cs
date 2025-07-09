@@ -16,7 +16,7 @@ public partial class Ups : AbstractValidatorComponent<UpsAddressValidationReques
         [nameof(ClientEnvironment.PRODUCTION)] = ClientEnvironment.PRODUCTION
     };
 
-    private readonly GenericApiSettingsFormModel _settingsFormModel = new();
+    private readonly OAuthApiSettingsFormModel _settingsFormModel = new();
 
     protected override IEnumerable<CountryCode> InitializeCountries()
     {

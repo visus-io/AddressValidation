@@ -11,23 +11,23 @@ using Visus.AddressValidation.Http;
 using Visus.AddressValidation.Model;
 using Visus.AddressValidation.Services;
 
-public abstract class AbstractValidatorComponent<TValidationRequest, TValidationForm> : ComponentBase
+public abstract class AbstractValidatorComponent<TValidationRequest, TValidationFormModel> : ComponentBase
     where TValidationRequest : AbstractAddressValidationRequest, new()
-    where TValidationForm : AbstractAddressValidationFormModel<TValidationRequest>, new()
+    where TValidationFormModel : AbstractAddressValidationFormModel<TValidationRequest>, new()
 {
     private readonly JsonSerializerOptions _serializerOptions = new()
     {
         WriteIndented = true
     };
 
-    protected TValidationForm AddressValidationFormModel { get; } = new();
+    protected TValidationFormModel AddressValidationFormModel { get; } = new();
 
     protected bool IsCityOrTownDisabled
     {
         get
         {
             if ( string.IsNullOrWhiteSpace(AddressValidationFormModel.CityOrTown) ||
-                 string.IsNullOrWhiteSpace(AddressValidationFormModel.StateOrProvince))
+                 string.IsNullOrWhiteSpace(AddressValidationFormModel.StateOrProvince) )
             {
                 return false;
             }
@@ -59,9 +59,11 @@ public abstract class AbstractValidatorComponent<TValidationRequest, TValidation
 
     protected MarkupString? RequestJson { get; private set; }
 
+    protected LoadingIndicator RequestLoadingIndicator { get; set; } = null!;
+
     protected MarkupString? ResponseJson { get; private set; }
 
-    protected LoadingIndicator ResultsLoadingIndicator { get; set; } = null!;
+    protected LoadingIndicator ResponseLoadingIndicator { get; set; } = null!;
 
     protected LoadingIndicator SettingsLoadingIndicator { get; set; } = null!;
 
@@ -81,7 +83,8 @@ public abstract class AbstractValidatorComponent<TValidationRequest, TValidation
     protected async Task OnAddressValidationFormSubmitAsync()
     {
         await ValidateLoadingIndicator.ShowAsync();
-        await ResultsLoadingIndicator.ShowAsync();
+        await RequestLoadingIndicator.ShowAsync();
+        await ResponseLoadingIndicator.ShowAsync();
 
         try
         {
@@ -96,7 +99,8 @@ public abstract class AbstractValidatorComponent<TValidationRequest, TValidation
         finally
         {
             await ValidateLoadingIndicator.HideAsync();
-            await ResultsLoadingIndicator.HideAsync();
+            await RequestLoadingIndicator.HideAsync();
+            await ResponseLoadingIndicator.HideAsync();
         }
     }
 
@@ -140,8 +144,6 @@ public abstract class AbstractValidatorComponent<TValidationRequest, TValidation
 
     protected Task OnProvinceChangedAsync()
     {
-        AddressValidationFormModel.CityOrTown = null;
-
         if ( string.IsNullOrWhiteSpace(AddressValidationFormModel.Country) ||
              string.IsNullOrWhiteSpace(AddressValidationFormModel.StateOrProvince) )
         {

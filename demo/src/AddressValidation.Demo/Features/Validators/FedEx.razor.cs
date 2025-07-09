@@ -1,5 +1,6 @@
 namespace AddressValidation.Demo.Features.Validators;
 
+using System.Diagnostics.CodeAnalysis;
 using Abstractions;
 using Configuration;
 using Models.Forms;
@@ -8,6 +9,7 @@ using Visus.AddressValidation.Abstractions;
 using Visus.AddressValidation.Integration.FedEx;
 using Visus.AddressValidation.Integration.FedEx.Http;
 
+[SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix")]
 public partial class FedEx : AbstractValidatorComponent<FedExAddressValidationRequest, FedExAddressValidationFormModel>
 {
     private readonly Dictionary<string, ClientEnvironment> _clientEnvironments = new(StringComparer.OrdinalIgnoreCase)
@@ -16,7 +18,7 @@ public partial class FedEx : AbstractValidatorComponent<FedExAddressValidationRe
         [nameof(ClientEnvironment.PRODUCTION)] = ClientEnvironment.PRODUCTION
     };
 
-    private readonly GenericApiSettingsFormModel _settingsFormModel = new();
+    private readonly OAuthApiSettingsFormModel _settingsFormModel = new();
 
     protected override IEnumerable<CountryCode> InitializeCountries()
     {
