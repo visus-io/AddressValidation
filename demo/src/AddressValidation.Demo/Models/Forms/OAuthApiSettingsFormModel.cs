@@ -2,7 +2,7 @@ namespace AddressValidation.Demo.Models.Forms;
 
 using Visus.AddressValidation.Abstractions;
 
-public class GenericApiSettingsFormModel
+public class OAuthApiSettingsFormModel
 {
     public string? AccountNumber { get; set; }
 
