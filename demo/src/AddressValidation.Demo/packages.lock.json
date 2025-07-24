@@ -51,9 +51,9 @@
       },
       "Radzen.Blazor": {
         "type": "Direct",
-        "requested": "[7.1.5, )",
-        "resolved": "7.1.5",
-        "contentHash": "df6ORa91CxeETczcCRTYnkGc2gvkVN+tZ7ACvJj/2VHtjNrb5VDi++f0ng5/D2L2gVWfF/WtSDu0PsaQtFyqWg==",
+        "requested": "[7.1.6, )",
+        "resolved": "7.1.6",
+        "contentHash": "M9AtbaTU1jW7m9IvMPGOsl7gTibgfSvdvowc4MAgEVq8HUmVIT090Dx1Dk2LjKC4llKcVgsKB77kI5gpOcdpuw==",
         "dependencies": {
           "Microsoft.AspNetCore.Components": "8.0.0",
           "Microsoft.AspNetCore.Components.Web": "8.0.0"
