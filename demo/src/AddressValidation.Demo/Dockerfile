@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-noble-chiseled-extra@sha256:479b9a3f71f169960d909f599f1b0da82af99bbd6b1179216923eb730217db0d
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-noble-chiseled-extra@sha256:f27f42210a09b63d8e16e3f2753a7f05983f58bfd2eaa233c7c6a42c5b8cc5b4
 
 WORKDIR /app
 
