@@ -32,7 +32,7 @@ jobs:
             -   name: Setup Google Cloud SDK
                 uses: google-github-actions/setup-gcloud@v3
             -   name: Install .NET SDK
-                uses: actions/setup-dotnet@v4
+                uses: actions/setup-dotnet@v5
                 with:
                     global-json-file: global.json
             -   name: NuGet Cache
