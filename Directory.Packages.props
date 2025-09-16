@@ -30,7 +30,7 @@
         <PackageVersion Include="Nuke.Common" Version="9.0.4"/>
         <PackageVersion Include="Nuke.Components" Version="9.0.4"/>
         <PackageVersion Include="PublicApiGenerator" Version="11.4.6"/>
-        <PackageVersion Include="Radzen.Blazor" Version="7.3.4"/>
+        <PackageVersion Include="Radzen.Blazor" Version="7.3.5"/>
         <PackageVersion Include="RichardSzalay.MockHttp" Version="7.0.0"/>
         <PackageVersion Include="Roslynator.Analyzers" Version="4.14.0"/>
         <PackageVersion Include="Spectre.Console" Version="0.51.1"/>
