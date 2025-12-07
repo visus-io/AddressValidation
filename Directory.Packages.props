@@ -4,9 +4,9 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AWSSDK.S3" Version="4.0.14" />
-    <PackageVersion Include="AWSSDK.SSO" Version="4.0.2.5" />
-    <PackageVersion Include="AWSSDK.SSOOIDC" Version="4.0.3.6" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.0.14.1" />
+    <PackageVersion Include="AWSSDK.SSO" Version="4.0.2.6" />
+    <PackageVersion Include="AWSSDK.SSOOIDC" Version="4.0.3.7" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
     <PackageVersion Include="JunitXml.TestLogger" Version="7.0.2" />
@@ -29,8 +29,8 @@
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <PackageVersion Include="Nuke.Common" Version="9.0.4" />
     <PackageVersion Include="Nuke.Components" Version="9.0.4" />
-    <PackageVersion Include="PublicApiGenerator" Version="11.5.3" />
-    <PackageVersion Include="Radzen.Blazor" Version="8.3.6" />
+    <PackageVersion Include="PublicApiGenerator" Version="11.5.4" />
+    <PackageVersion Include="Radzen.Blazor" Version="8.3.8" />
     <PackageVersion Include="RichardSzalay.MockHttp" Version="7.0.0" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.14.1" />
     <PackageVersion Include="Spectre.Console" Version="0.54.0" />
