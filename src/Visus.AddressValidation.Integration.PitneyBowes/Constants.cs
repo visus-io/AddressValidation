@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes;
 
+using System.Collections.Frozen;
 using AddressValidation.Abstractions;
 
 /// <summary>
@@ -40,8 +41,8 @@ public static class Constants
     /// <summary>
     ///     Countries that are supported by the Pitney Bowes Address Validation API.
     /// </summary>
-    public static readonly IReadOnlySet<CountryCode> SupportedCountries = new HashSet<CountryCode>
+    public static readonly FrozenSet<CountryCode> SupportedCountries = new HashSet<CountryCode>
     {
         CountryCode.US,
-    };
+    }.ToFrozenSet();
 }

@@ -1,20 +1,21 @@
 namespace Visus.AddressValidation.Serialization.Json;
 
+using System.Collections.Frozen;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 public sealed class JsonStringBooleanConverter : JsonConverter<bool>
 {
-    private static readonly HashSet<string> PossibleBooleanFalseStrings = new(StringComparer.OrdinalIgnoreCase)
+    private static readonly FrozenSet<string> PossibleBooleanFalseStrings = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
         "0",
         "F",
         "False",
         "N",
         "NO",
-    };
+    }.ToFrozenSet();
 
-    private static readonly HashSet<string> PossibleBooleanTrueStrings = new(StringComparer.OrdinalIgnoreCase)
+    private static readonly FrozenSet<string> PossibleBooleanTrueStrings = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
         "-1",
         "1",
@@ -22,7 +23,7 @@ public sealed class JsonStringBooleanConverter : JsonConverter<bool>
         "True",
         "Y",
         "YES",
-    };
+    }.ToFrozenSet();
 
     /// <inheritdoc />
     public override bool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.Ups;
 
+using System.Collections.Frozen;
 using AddressValidation.Abstractions;
 
 /// <summary>
@@ -40,9 +41,9 @@ public static class Constants
     /// <summary>
     ///     Countries that are supported by the UPS Address Validation API.
     /// </summary>
-    public static readonly IReadOnlySet<CountryCode> SupportedCountries = new HashSet<CountryCode>
+    public static readonly FrozenSet<CountryCode> SupportedCountries = new HashSet<CountryCode>
     {
         CountryCode.US,
         CountryCode.PR,
-    };
+    }.ToFrozenSet();
 }

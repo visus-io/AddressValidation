@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Serialization.Json;
 
+using System.Collections.Frozen;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Http;
@@ -23,7 +24,7 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
 
     private const string TokenTypePropertyName = "token_type";
 
-    private readonly Dictionary<string, string> _propertyMappings = new(StringComparer.OrdinalIgnoreCase)
+    private readonly FrozenDictionary<string, string> _propertyMappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
     {
         { AccessTokenPropertyName, nameof(TokenResponse.AccessToken) },
         { ErrorDescriptionPropertyName, nameof(TokenResponse.ErrorDescription) },
@@ -39,7 +40,7 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
         { nameof(TokenResponse.IssuedTokenType), nameof(TokenResponse.IssuedTokenType) },
         { nameof(TokenResponse.RefreshToken), nameof(TokenResponse.RefreshToken) },
         { nameof(TokenResponse.TokenType), nameof(TokenResponse.TokenType) },
-    };
+    }.ToFrozenDictionary();
 
     /// <inheritdoc />
     public override TokenResponse Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

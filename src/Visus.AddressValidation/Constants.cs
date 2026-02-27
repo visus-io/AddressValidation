@@ -1,17 +1,18 @@
 namespace Visus.AddressValidation;
 
+using System.Collections.Frozen;
 using Abstractions;
 
 internal static class Constants
 {
-    public static IReadOnlySet<CountryCode> CityStates => new HashSet<CountryCode>
+    public static FrozenSet<CountryCode> CityStates => new HashSet<CountryCode>
     {
         CountryCode.MC,
         CountryCode.SG,
         CountryCode.VA,
-    };
+    }.ToFrozenSet();
 
-    public static IReadOnlySet<CountryCode> NoPostalCode => new HashSet<CountryCode>
+    public static FrozenSet<CountryCode> NoPostalCode => new HashSet<CountryCode>
     {
         CountryCode.AE,
         CountryCode.AG,
@@ -72,5 +73,5 @@ internal static class Constants
         CountryCode.YE,
         CountryCode.ZW,
         CountryCode.ZZ,
-    };
+    }.ToFrozenSet();
 }

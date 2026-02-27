@@ -9,10 +9,6 @@ public abstract class AbstractAddressValidationRequest
 {
     private CountryCode? _country;
 
-    private string? _postalCode;
-
-    private string? _stateOrProvince;
-
     /// <summary>
     ///     Gets or sets address lines
     /// </summary>
@@ -68,18 +64,18 @@ public abstract class AbstractAddressValidationRequest
     /// </remarks>
     public string? PostalCode
     {
-        get => _postalCode;
+        get;
         set
         {
             if ( _country is null )
             {
-                _postalCode = value;
+                field = value;
                 return;
             }
 
-            _postalCode = Constants.NoPostalCode.Contains(_country.Value)
-                              ? null
-                              : value;
+            field = Constants.NoPostalCode.Contains(_country.Value)
+                        ? null
+                        : value;
         }
     }
 
@@ -92,18 +88,18 @@ public abstract class AbstractAddressValidationRequest
     /// </remarks>
     public string? StateOrProvince
     {
-        get => _stateOrProvince;
+        get;
         set
         {
             if ( _country is null )
             {
-                _stateOrProvince = value;
+                field = value;
                 return;
             }
 
-            _stateOrProvince = Constants.CityStates.Contains(_country.Value)
-                                   ? null
-                                   : value;
+            field = Constants.CityStates.Contains(_country.Value)
+                        ? null
+                        : value;
         }
     }
 }

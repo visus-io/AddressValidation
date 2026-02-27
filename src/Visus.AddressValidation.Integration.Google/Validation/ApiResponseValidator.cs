@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.Google.Validation;
 
+using System.Collections.Frozen;
 using System.Diagnostics;
 using Abstractions;
 using AddressValidation.Validation;
@@ -7,19 +8,19 @@ using Http;
 
 internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 {
-    private readonly HashSet<Granularity> _confirmedGranularity =
+    private readonly FrozenSet<Granularity> _confirmedGranularity =
     [
         Granularity.PREMISE,
         Granularity.SUB_PREMISE,
     ];
 
-    private readonly HashSet<ConfirmationLevel> _tenuousConfirmations =
+    private readonly FrozenSet<ConfirmationLevel> _tenuousConfirmations =
     [
         ConfirmationLevel.UNCONFIRMED_BUT_PLAUSIBLE,
         ConfirmationLevel.UNCONFIRMED_AND_SUSPICIOUS,
     ];
 
-    private readonly HashSet<Granularity> _tenuousGranularity =
+    private readonly FrozenSet<Granularity> _tenuousGranularity =
     [
         Granularity.BLOCK,
         Granularity.GRANULARITY_UNSPECIFIED,

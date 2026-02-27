@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.FedEx;
 
+using System.Collections.Frozen;
 using AddressValidation.Abstractions;
 
 /// <summary>
@@ -40,7 +41,7 @@ public static class Constants
     /// <summary>
     ///     Countries that are supported by the FedEx Address Validation API.
     /// </summary>
-    public static readonly IReadOnlySet<CountryCode> SupportedCountries = new HashSet<CountryCode>
+    public static readonly FrozenSet<CountryCode> SupportedCountries = new HashSet<CountryCode>
     {
         CountryCode.AR,
         CountryCode.AT,
@@ -86,5 +87,5 @@ public static class Constants
         CountryCode.VE,
         CountryCode.VI,
         CountryCode.ZA,
-    };
+    }.ToFrozenSet();
 }
