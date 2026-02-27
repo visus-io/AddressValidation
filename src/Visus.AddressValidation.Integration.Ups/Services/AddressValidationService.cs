@@ -10,7 +10,7 @@ internal sealed class AddressValidationService : AbstractAddressValidationServic
 
     public AddressValidationService(UpsAddressValidationClient client,
                                     IValidator<UpsAddressValidationRequest> requestValidator,
-                                    IValidator<ApiResponse> responseValidator) 
+                                    IValidator<ApiResponse> responseValidator)
         : base(requestValidator, responseValidator)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));

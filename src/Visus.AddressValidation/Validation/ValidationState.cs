@@ -128,7 +128,7 @@ public readonly struct ValidationState : IEquatable<ValidationState>
         HashCode hashCode = new();
 
         hashCode.Add(Message, StringComparer.OrdinalIgnoreCase);
-        hashCode.Add((int) Severity);
+        hashCode.Add((int)Severity);
 
         return hashCode.ToHashCode();
     }

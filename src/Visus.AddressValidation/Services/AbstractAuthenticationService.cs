@@ -2,7 +2,6 @@ namespace Visus.AddressValidation.Services;
 
 using Http;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.Memory;
 
 /// <summary>
 ///     Abstraction for implementing an authentication service that relies on an
@@ -79,7 +78,7 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
 
         await _cache.SetStringAsync(CacheKey, response.AccessToken, new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = expires
+            AbsoluteExpiration = expires,
         }, cancellationToken).ConfigureAwait(false);
 
         return response.AccessToken;

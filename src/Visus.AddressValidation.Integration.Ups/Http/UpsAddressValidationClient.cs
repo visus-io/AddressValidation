@@ -37,7 +37,7 @@ internal sealed class UpsAddressValidationClient
         {
             ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
             ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
-            _ => Constants.DevelopmentEndpointBaseUri
+            _ => Constants.DevelopmentEndpointBaseUri,
         };
 
         Uri requestUri = new(baseUri, "/api/addressvalidation/v2/3");
@@ -50,18 +50,18 @@ internal sealed class UpsAddressValidationClient
         if ( response.IsSuccessStatusCode )
         {
             return await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiResponse,
-                                                            cancellationToken)
+                                      cancellationToken)
                                  .ConfigureAwait(false);
         }
 
         ApiErrorResponse? errorResponse = await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiErrorResponse,
-                                                                                   cancellationToken)
+                                                             cancellationToken)
                                                         .ConfigureAwait(false);
         if ( errorResponse is not null )
         {
             return new ApiResponse
             {
-                ErrorResponse = errorResponse
+                ErrorResponse = errorResponse,
             };
         }
 

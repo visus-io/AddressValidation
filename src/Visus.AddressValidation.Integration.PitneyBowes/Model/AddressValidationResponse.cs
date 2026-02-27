@@ -57,6 +57,6 @@ internal sealed class AddressValidationResponse : AbstractAddressValidationRespo
                                                                        .Select(s => new AddressSuggestionValidationResponse(s, response.Result.CountryCode, response.Result.PostalCode))
                                                                        .ToHashSet();
 
-        return new ReadOnlyCollection<IAddressValidationResponse>([.. results]);
+        return new ReadOnlyCollection<IAddressValidationResponse>([.. results,]);
     }
 }

@@ -1,11 +1,8 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": [
-        "local>visus-io/renovate-config",
-        ":preserveSemverRanges"
-    ],
-    "ignoreDeps": [
-        "Microsoft.CodeAnalysis.CSharp.Workspaces"
-    ],
-    "timezone": "America/New_York"
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": [
+		"local>visus-io/renovate-config",
+		":preserveSemverRanges"
+	],
+	"timezone": "America/New_York"
 }

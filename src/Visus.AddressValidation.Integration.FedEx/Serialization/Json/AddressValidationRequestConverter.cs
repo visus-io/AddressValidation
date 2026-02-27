@@ -38,12 +38,13 @@ public sealed class AddressValidationRequestConverter : JsonConverter<FedExAddre
         writer.WriteStartArray(AddressesToValidatePropertyName);
         writer.WriteStartObject();
         writer.WriteStartObject(AddressPropertyName);
-        
+
         writer.WriteStartArray(StreetLinesPropertyName);
         foreach ( string addressLine in value.AddressLines )
         {
             writer.WriteStringValue(addressLine);
         }
+
         writer.WriteEndArray();
 
         if ( !string.IsNullOrWhiteSpace(value.CityOrTown) )
@@ -60,9 +61,9 @@ public sealed class AddressValidationRequestConverter : JsonConverter<FedExAddre
         {
             writer.WriteString(PostalCodePropertyName, value.PostalCode);
         }
-        
+
         writer.WriteString(CountryCodePropertyName, value.Country.Value.ToString());
-        
+
         writer.WriteEndObject();
         writer.WriteEndObject();
         writer.WriteEndArray();

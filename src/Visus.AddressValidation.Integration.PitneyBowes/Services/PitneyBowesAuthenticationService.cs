@@ -12,7 +12,7 @@ internal sealed class PitneyBowesAuthenticationService : AbstractAuthenticationS
 
     public PitneyBowesAuthenticationService(IDistributedCache cache,
                                             IConfiguration configuration,
-                                            PitneyBowesAuthenticationClient authenticationClient) 
+                                            PitneyBowesAuthenticationClient authenticationClient)
         : base(authenticationClient, cache)
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));

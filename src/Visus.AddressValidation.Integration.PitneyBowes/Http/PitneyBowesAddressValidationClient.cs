@@ -37,7 +37,7 @@ internal sealed class PitneyBowesAddressValidationClient
         {
             ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
             ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
-            _ => Constants.DevelopmentEndpointBaseUri
+            _ => Constants.DevelopmentEndpointBaseUri,
         };
 
         Uri requestUri = request.IncludeSuggestions
@@ -55,27 +55,27 @@ internal sealed class PitneyBowesAddressValidationClient
             if ( request.IncludeSuggestions )
             {
                 return await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiResponse,
-                                                                cancellationToken)
+                                          cancellationToken)
                                      .ConfigureAwait(false);
             }
 
             ApiResponse.AddressResult? result = await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.AddressResult,
-                                                                                         cancellationToken)
+                                                                   cancellationToken)
                                                               .ConfigureAwait(false);
             return new ApiResponse
             {
-                Result = result
+                Result = result,
             };
         }
 
         ApiErrorResponse? errorResponse = await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiErrorResponse,
-                                                                                   cancellationToken)
+                                                             cancellationToken)
                                                         .ConfigureAwait(false);
         if ( errorResponse is not null )
         {
             return new ApiResponse
             {
-                ErrorResponse = errorResponse
+                ErrorResponse = errorResponse,
             };
         }
 

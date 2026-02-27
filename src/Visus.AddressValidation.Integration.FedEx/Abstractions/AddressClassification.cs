@@ -25,5 +25,5 @@ internal enum AddressClassification
     /// <summary>
     ///     Residential Address
     /// </summary>
-    RESIDENTIAL
+    RESIDENTIAL,
 }

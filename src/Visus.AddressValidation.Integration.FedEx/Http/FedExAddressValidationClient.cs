@@ -2,7 +2,6 @@ namespace Visus.AddressValidation.Integration.FedEx.Http;
 
 using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
-using Abstractions;
 using AddressValidation.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Serialization.Json;
@@ -35,7 +34,7 @@ internal sealed class FedExAddressValidationClient(
         {
             ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
             ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
-            _ => Constants.DevelopmentEndpointBaseUri
+            _ => Constants.DevelopmentEndpointBaseUri,
         };
 
         Uri requestUri = new(baseUri, "/address/v1/addresses/resolve");
@@ -48,19 +47,19 @@ internal sealed class FedExAddressValidationClient(
         if ( response.IsSuccessStatusCode )
         {
             return await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiResponse,
-                                                            cancellationToken)
+                                      cancellationToken)
                                  .ConfigureAwait(false);
         }
 
         ApiErrorResponse? errorResponse = await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiErrorResponse,
-                                                                                   cancellationToken)
+                                                             cancellationToken)
                                                         .ConfigureAwait(false);
 
         if ( errorResponse is not null )
         {
             return new ApiResponse
             {
-                ErrorResponse = errorResponse
+                ErrorResponse = errorResponse,
             };
         }
 

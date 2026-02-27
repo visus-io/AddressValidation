@@ -17,5 +17,5 @@ public interface IApiResponse
     ///     <see cref="IValidationResult" />.
     /// </param>
     /// <returns>An instance that implements <see cref="IAddressValidationResponse" />.</returns>
-    public IAddressValidationResponse ToAddressValidationResponse(IValidationResult? validationResult = null);
+    IAddressValidationResponse ToAddressValidationResponse(IValidationResult? validationResult = null);
 }

@@ -35,12 +35,12 @@ public static class ServiceCollectionExtensions
                 .AddStandardResilienceHandler();
 
         services.AddHttpClient<PitneyBowesAddressValidationClient>()
-                .RedactLoggedHeaders(["Authorization"])
+                .RedactLoggedHeaders(["Authorization",])
                 .AddHttpMessageHandler(provider =>
-                                       {
-                                           PitneyBowesAuthenticationService authenticationService = provider.GetRequiredService<PitneyBowesAuthenticationService>();
-                                           return new BearerTokenDelegatingHandler<PitneyBowesAuthenticationClient>(authenticationService);
-                                       })
+                 {
+                     PitneyBowesAuthenticationService authenticationService = provider.GetRequiredService<PitneyBowesAuthenticationService>();
+                     return new BearerTokenDelegatingHandler<PitneyBowesAuthenticationClient>(authenticationService);
+                 })
                 .AddStandardResilienceHandler();
 
         return services;

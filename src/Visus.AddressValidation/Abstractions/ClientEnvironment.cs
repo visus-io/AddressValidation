@@ -19,5 +19,5 @@ public enum ClientEnvironment
     ///     Production
     /// </summary>
     [Description("Production")]
-    PRODUCTION = 1
+    PRODUCTION = 1,
 }

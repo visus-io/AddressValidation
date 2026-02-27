@@ -41,7 +41,7 @@ internal sealed class FedExAuthenticationClient : IAuthenticationClient
         {
             ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
             ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
-            _ => Constants.DevelopmentEndpointBaseUri
+            _ => Constants.DevelopmentEndpointBaseUri,
         };
 
         Uri requestUri = new(baseUri, "/oauth/token");
@@ -50,7 +50,7 @@ internal sealed class FedExAuthenticationClient : IAuthenticationClient
         [
             new("client_id", clientId),
             new("client_secret", clientSecret),
-            new("grant_type", "client_credentials")
+            new("grant_type", "client_credentials"),
         ];
 
         using HttpRequestMessage request = new(HttpMethod.Post, requestUri);
@@ -64,7 +64,7 @@ internal sealed class FedExAuthenticationClient : IAuthenticationClient
         }
 
         return await response.Content.ReadFromJsonAsync(DefaultJsonSerializerContext.Default.TokenResponse,
-                                                        cancellationToken)
+                                  cancellationToken)
                              .ConfigureAwait(false);
     }
 }

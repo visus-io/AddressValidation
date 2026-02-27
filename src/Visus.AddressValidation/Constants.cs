@@ -8,7 +8,7 @@ internal static class Constants
     {
         CountryCode.MC,
         CountryCode.SG,
-        CountryCode.VA
+        CountryCode.VA,
     };
 
     public static IReadOnlySet<CountryCode> NoPostalCode => new HashSet<CountryCode>
@@ -71,6 +71,6 @@ internal static class Constants
         CountryCode.VU,
         CountryCode.YE,
         CountryCode.ZW,
-        CountryCode.ZZ
+        CountryCode.ZZ,
     };
 }

@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.FedEx;
 
-using Abstractions;
 using AddressValidation.Abstractions;
 
 /// <summary>
@@ -86,6 +85,6 @@ public static class Constants
         CountryCode.UY,
         CountryCode.VE,
         CountryCode.VI,
-        CountryCode.ZA
+        CountryCode.ZA,
     };
 }

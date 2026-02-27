@@ -22,7 +22,7 @@ internal sealed record TypeInfo(
             Accessibility.Internal => SyntaxKind.InternalKeyword,
             Accessibility.Private => SyntaxKind.PrivateKeyword,
             Accessibility.Protected => SyntaxKind.ProtectedKeyword,
-            _ => SyntaxKind.None
+            _ => SyntaxKind.None,
         };
 
     public Accessibility DeclaredAccessibility { get; } = DeclaredAccessibility;
@@ -43,7 +43,7 @@ internal sealed record TypeInfo(
                 RecordDeclaration(Token(SyntaxKind.RecordKeyword), QualifiedName)
                    .WithOpenBraceToken(Token(SyntaxKind.OpenBraceToken))
                    .WithCloseBraceToken(Token(SyntaxKind.CloseBraceToken)),
-            _ => ClassDeclaration(QualifiedName)
+            _ => ClassDeclaration(QualifiedName),
         };
     }
 }

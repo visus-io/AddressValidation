@@ -27,7 +27,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 
     protected override ValueTask ValidateAsync(ApiResponse instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
-        Debug.Assert(instance.Result != null, "instance.Result != null");
+        Debug.Assert(instance.Result != null);
 
         for ( int i = 0; i < instance.Result.ResolvedAddresses.Length; i++ )
         {
@@ -37,8 +37,8 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
             {
                 const string propertyName = nameof(address.StreetLinesToken);
                 results.Add(ValidationState.CreateError("[Row {0}] {1}: {2}", i,
-                                                        propertyName,
-                                                        "Invalid suite number was provided in the request."));
+                    propertyName,
+                    "Invalid suite number was provided in the request."));
             }
 
             if ( !address.Attributes.IsValidStreetAddress && address.CountryCode != CountryCode.US )
@@ -57,8 +57,8 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
             {
                 const string propertyName = nameof(address.StreetLinesToken);
                 results.Add(ValidationState.CreateWarning("[Row {0}] {1}: {2}", i,
-                                                          propertyName,
-                                                          "Suite number was not provided in the request."));
+                    propertyName,
+                    "Suite number was not provided in the request."));
             }
         }
 

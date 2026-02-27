@@ -3,7 +3,6 @@ namespace Visus.AddressValidation.Integration.FedEx.Services;
 using AddressValidation.Services;
 using AddressValidation.Validation;
 using Http;
-using Validation;
 
 internal sealed class AddressValidationService : AbstractAddressValidationService<FedExAddressValidationRequest, ApiResponse>
 {

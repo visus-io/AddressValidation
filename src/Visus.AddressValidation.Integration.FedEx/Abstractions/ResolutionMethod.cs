@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.FedEx.Abstractions;
 
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
@@ -31,5 +30,5 @@ internal enum ResolutionMethod
     /// <summary>
     ///     US Geo/Map Validated
     /// </summary>
-    TELEATLAS_GEO_VALIDATE
+    TELEATLAS_GEO_VALIDATE,
 }

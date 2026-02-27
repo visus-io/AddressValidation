@@ -35,12 +35,12 @@ public static class ServiceCollectionExtensions
                 .AddStandardResilienceHandler();
 
         services.AddHttpClient<GoogleAddressValidationClient>()
-                .RedactLoggedHeaders(["Authorization", "X-Goog-User-Project"])
+                .RedactLoggedHeaders(["Authorization", "X-Goog-User-Project",])
                 .AddHttpMessageHandler(provider =>
-                                       {
-                                           GoogleAuthenticationService authenticationService = provider.GetRequiredService<GoogleAuthenticationService>();
-                                           return new BearerTokenDelegatingHandler<GoogleAuthenticationClient>(authenticationService);
-                                       })
+                 {
+                     GoogleAuthenticationService authenticationService = provider.GetRequiredService<GoogleAuthenticationService>();
+                     return new BearerTokenDelegatingHandler<GoogleAuthenticationClient>(authenticationService);
+                 })
                 .AddStandardResilienceHandler();
 
 

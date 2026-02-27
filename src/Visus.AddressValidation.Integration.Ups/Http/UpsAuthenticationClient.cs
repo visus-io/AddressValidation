@@ -40,14 +40,14 @@ internal sealed class UpsAuthenticationClient : IAuthenticationClient
         {
             ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
             ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
-            _ => Constants.DevelopmentEndpointBaseUri
+            _ => Constants.DevelopmentEndpointBaseUri,
         };
 
         Uri requestUri = new(baseUri, "/security/v1/oauth/token");
 
         List<KeyValuePair<string, string>> payload =
         [
-            new("grant_type", "client_credentials")
+            new("grant_type", "client_credentials"),
         ];
 
         using HttpRequestMessage request = new(HttpMethod.Post, requestUri);
@@ -63,7 +63,7 @@ internal sealed class UpsAuthenticationClient : IAuthenticationClient
         }
 
         return await response.Content.ReadFromJsonAsync(DefaultJsonSerializerContext.Default.TokenResponse,
-                                                        cancellationToken)
+                                  cancellationToken)
                              .ConfigureAwait(false);
     }
 }

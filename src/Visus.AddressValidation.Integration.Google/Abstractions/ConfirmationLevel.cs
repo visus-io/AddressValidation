@@ -18,5 +18,5 @@ internal enum ConfirmationLevel
     UNCONFIRMED_BUT_PLAUSIBLE = 2,
 
     [Description("This component was not confirmed and is likely to be wrong. For example, a neighborhood that does not fit the rest of the address.")]
-    UNCONFIRMED_AND_SUSPICIOUS = 3
+    UNCONFIRMED_AND_SUSPICIOUS = 3,
 }

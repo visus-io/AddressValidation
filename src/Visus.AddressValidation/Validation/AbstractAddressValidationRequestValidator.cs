@@ -14,7 +14,7 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
     {
         Debug.Assert(instance != null, nameof(instance) + " != null");
         Debug.Assert(results != null, nameof(results) + " != null");
-        
+
         if ( instance.Country is not null )
         {
             return ValueTask.FromResult(true);
@@ -30,7 +30,7 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
     {
         Debug.Assert(instance != null, nameof(instance) + " != null");
         Debug.Assert(results != null, nameof(results) + " != null");
-        
+
         switch ( instance.AddressLines.Count )
         {
             case 0:

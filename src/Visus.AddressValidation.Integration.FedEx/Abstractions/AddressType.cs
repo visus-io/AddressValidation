@@ -8,17 +8,17 @@ using System.Text.Json.Serialization;
 internal enum AddressType
 {
     /// <summary>
-    /// Address country not supported
+    ///     Address country not supported
     /// </summary>
     RAW,
-    
+
     /// <summary>
-    /// Address country supported, but unable to match the address against reference data.
+    ///     Address country supported, but unable to match the address against reference data.
     /// </summary>
     NORMAL,
-    
+
     /// <summary>
-    /// Address service was able to successfully match the address against reference data.
+    ///     Address service was able to successfully match the address against reference data.
     /// </summary>
-    STANDARDIZED
+    STANDARDIZED,
 }

@@ -1510,5 +1510,5 @@ public enum CountryCode
     ///     Zambia
     /// </summary>
     [Description("Zambia")]
-    ZM = 894
+    ZM = 894,
 }
