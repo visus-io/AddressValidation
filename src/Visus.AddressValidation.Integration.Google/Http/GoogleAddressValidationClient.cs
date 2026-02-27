@@ -26,26 +26,26 @@ internal sealed class GoogleAddressValidationClient
     private async ValueTask<ApiResponse?> ValidateAddressInternalAsync(GoogleAddressValidationRequest request, CancellationToken cancellationToken)
     {
         using HttpResponseMessage response = await _httpClient.PostAsJsonAsync("/v1:validateAddress",
-                                                                               request,
-                                                                               GoogleJsonSerializerContext.Default.GoogleAddressValidationRequest,
-                                                                               cancellationToken)
+                                                                   request,
+                                                                   GoogleJsonSerializerContext.Default.GoogleAddressValidationRequest,
+                                                                   cancellationToken)
                                                               .ConfigureAwait(false);
         if ( response.IsSuccessStatusCode )
         {
             return await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiResponse,
-                                                            cancellationToken)
+                                      cancellationToken)
                                  .ConfigureAwait(false);
         }
 
         ApiErrorResponse? errorResponse = await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiErrorResponse,
-                                                                                   cancellationToken)
+                                                             cancellationToken)
                                                         .ConfigureAwait(false);
 
         if ( errorResponse is not null )
         {
             return new ApiResponse
             {
-                ErrorResponse = errorResponse
+                ErrorResponse = errorResponse,
             };
         }
 

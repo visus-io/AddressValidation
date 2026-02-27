@@ -42,6 +42,6 @@ public static class Constants
     /// </summary>
     public static readonly IReadOnlySet<CountryCode> SupportedCountries = new HashSet<CountryCode>
     {
-        CountryCode.US
+        CountryCode.US,
     };
 }

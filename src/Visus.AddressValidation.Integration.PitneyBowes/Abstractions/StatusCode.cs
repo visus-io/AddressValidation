@@ -9,5 +9,5 @@ internal enum StatusCode
 {
     VALIDATED_CHANGED,
     VALIDATED_AND_NOT_CHANGED,
-    NOT_CHANGED
+    NOT_CHANGED,
 }

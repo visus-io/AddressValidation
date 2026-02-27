@@ -38,7 +38,7 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
         { nameof(TokenResponse.IdentityToken), nameof(TokenResponse.IdentityToken) },
         { nameof(TokenResponse.IssuedTokenType), nameof(TokenResponse.IssuedTokenType) },
         { nameof(TokenResponse.RefreshToken), nameof(TokenResponse.RefreshToken) },
-        { nameof(TokenResponse.TokenType), nameof(TokenResponse.TokenType) }
+        { nameof(TokenResponse.TokenType), nameof(TokenResponse.TokenType) },
     };
 
     /// <inheritdoc />

@@ -41,15 +41,15 @@ internal sealed partial class HierarchyInfo : IEquatable<HierarchyInfo>
              parent = parent.ContainingType )
         {
             hierarchy.AddLast(new TypeInfo(parent.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat),
-                                           parent.TypeKind,
-                                           parent.DeclaredAccessibility,
-                                           parent.IsRecord,
-                                           parent.IsSealed));
+                parent.TypeKind,
+                parent.DeclaredAccessibility,
+                parent.IsRecord,
+                parent.IsSealed));
         }
 
         return new HierarchyInfo(typeSymbol.ToDisplayString(new SymbolDisplayFormat(typeQualificationStyle: NameAndContainingTypesAndNamespaces)),
-                                 typeSymbol.ContainingNamespace.ToDisplayString(new SymbolDisplayFormat(typeQualificationStyle: NameAndContainingTypesAndNamespaces)),
-                                 [..hierarchy]);
+            typeSymbol.ContainingNamespace.ToDisplayString(new SymbolDisplayFormat(typeQualificationStyle: NameAndContainingTypesAndNamespaces)),
+            [..hierarchy,]);
     }
 
     public static bool operator ==(HierarchyInfo? left, HierarchyInfo? right)

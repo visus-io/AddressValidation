@@ -11,7 +11,7 @@ internal sealed class GoogleAuthenticationService : AbstractAuthenticationServic
 
     public GoogleAuthenticationService(IDistributedCache cache,
                                        IConfiguration configuration,
-                                       GoogleAuthenticationClient authenticationClient) 
+                                       GoogleAuthenticationClient authenticationClient)
         : base(authenticationClient, cache)
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));

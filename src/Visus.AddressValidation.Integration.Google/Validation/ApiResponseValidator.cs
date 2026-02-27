@@ -10,13 +10,13 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
     private readonly HashSet<Granularity> _confirmedGranularity =
     [
         Granularity.PREMISE,
-        Granularity.SUB_PREMISE
+        Granularity.SUB_PREMISE,
     ];
 
     private readonly HashSet<ConfirmationLevel> _tenuousConfirmations =
     [
         ConfirmationLevel.UNCONFIRMED_BUT_PLAUSIBLE,
-        ConfirmationLevel.UNCONFIRMED_AND_SUSPICIOUS
+        ConfirmationLevel.UNCONFIRMED_AND_SUSPICIOUS,
     ];
 
     private readonly HashSet<Granularity> _tenuousGranularity =
@@ -24,7 +24,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
         Granularity.BLOCK,
         Granularity.GRANULARITY_UNSPECIFIED,
         Granularity.PREMISE_PROXIMITY,
-        Granularity.ROUTE
+        Granularity.ROUTE,
     ];
 
     protected override ValueTask<bool> PreValidateAsync(ApiResponse instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
@@ -52,7 +52,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
             return ValueTask.FromResult(false);
         }
 
-        if ( instance.Result.Verdict is not { ValidationGranularity: Granularity.OTHER, AddressComplete: false } )
+        if ( instance.Result.Verdict is not { ValidationGranularity: Granularity.OTHER, AddressComplete: false, } )
         {
             return ValueTask.FromResult(true);
         }
@@ -65,7 +65,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 
     protected override ValueTask ValidateAsync(ApiResponse instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
-        Debug.Assert(instance.Result != null, "instance.Result != null");
+        Debug.Assert(instance.Result != null);
 
         // provide a validation warning if the validationGranularity is BLOCK or GRANULARITY_UNSPECIFIED or PREMISE_PROXIMITY
         // or ROUTE along with having either hasInferredComponents = true or hasReplacedComponents = true
@@ -82,7 +82,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
                 continue;
             }
 
-            Debug.Assert(component.ComponentName != null, "component.ComponentName != null");
+            Debug.Assert(component.ComponentName != null);
             results.Add(ValidationState.CreateWarning("{0}: {1}", component.ComponentName.Text!, component.ConfirmationLevel));
         }
 

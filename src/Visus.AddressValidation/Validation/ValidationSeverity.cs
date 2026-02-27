@@ -13,5 +13,5 @@ public enum ValidationSeverity
     /// <summary>
     ///     Error
     /// </summary>
-    Error
+    Error,
 }

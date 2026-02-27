@@ -12,7 +12,7 @@ internal sealed class UpsAuthenticationService : AbstractAuthenticationService<U
 
     public UpsAuthenticationService(IDistributedCache cache,
                                     IConfiguration configuration,
-                                    UpsAuthenticationClient authenticationClient) 
+                                    UpsAuthenticationClient authenticationClient)
         : base(authenticationClient, cache)
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));

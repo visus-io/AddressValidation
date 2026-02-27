@@ -18,35 +18,35 @@ internal static class IncrementalValuesProviderExtensions
         where TElement : IEquatable<TElement>
     {
         return source.Collect().SelectMany((item, token) =>
-                                           {
-                                               Dictionary<TKey, ImmutableArray<TElement>.Builder> map = new();
+        {
+            Dictionary<TKey, ImmutableArray<TElement>.Builder> map = new();
 
-                                               foreach ( (TLeft, TRight) pair in item )
-                                               {
-                                                   TKey key = keySelector(pair);
-                                                   TElement element = elementSelector(pair);
+            foreach ( (TLeft, TRight) pair in item )
+            {
+                TKey key = keySelector(pair);
+                TElement element = elementSelector(pair);
 
-                                                   if ( !map.TryGetValue(key, out ImmutableArray<TElement>.Builder builder) )
-                                                   {
-                                                       builder = ImmutableArray.CreateBuilder<TElement>();
+                if ( !map.TryGetValue(key, out ImmutableArray<TElement>.Builder builder) )
+                {
+                    builder = ImmutableArray.CreateBuilder<TElement>();
 
-                                                       map.Add(key, builder);
-                                                   }
+                    map.Add(key, builder);
+                }
 
-                                                   builder.Add(element);
-                                               }
+                builder.Add(element);
+            }
 
-                                               token.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
 
-                                               ImmutableArray<(TKey Key, ImmutableArray<TElement> Elements)>.Builder result =
-                                                   ImmutableArray.CreateBuilder<(TKey, ImmutableArray<TElement>)>();
+            ImmutableArray<(TKey Key, ImmutableArray<TElement> Elements)>.Builder result =
+                ImmutableArray.CreateBuilder<(TKey, ImmutableArray<TElement>)>();
 
-                                               foreach ( KeyValuePair<TKey, ImmutableArray<TElement>.Builder> entry in map )
-                                               {
-                                                   result.Add(( entry.Key, entry.Value.ToImmutable() ));
-                                               }
+            foreach ( KeyValuePair<TKey, ImmutableArray<TElement>.Builder> entry in map )
+            {
+                result.Add(( entry.Key, entry.Value.ToImmutable() ));
+            }
 
-                                               return result;
-                                           });
+            return result;
+        });
     }
 }

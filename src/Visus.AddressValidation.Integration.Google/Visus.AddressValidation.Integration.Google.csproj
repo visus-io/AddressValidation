@@ -1,32 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <IsAotCompatible>true</IsAotCompatible>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsAotCompatible>true</IsAotCompatible>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
-        <PackageReference Include="Microsoft.Extensions.Http"/>
-        <PackageReference Include="Microsoft.Extensions.Http.Resilience"/>
-        <PackageReference Include="Microsoft.IdentityModel.Tokens"/>
-        <PackageReference Include="Microsoft.SourceLink.GitHub">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt"/>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+    <PackageReference Include="Microsoft.Extensions.Http"/>
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience"/>
+    <PackageReference Include="Microsoft.IdentityModel.Tokens"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt"/>
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\Visus.AddressValidation\Visus.AddressValidation.csproj"/>
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Visus.AddressValidation\Visus.AddressValidation.csproj"/>
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\Visus.AddressValidation.SourceGeneration\Visus.AddressValidation.SourceGeneration.csproj"
-                          OutputItemType="Analyzer"
-                          SetTargetFramework="TargetFramework=netstandard2.0"
-                          ReferenceOutputAssembly="false"/>
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Visus.AddressValidation.SourceGeneration\Visus.AddressValidation.SourceGeneration.csproj"
+                      OutputItemType="Analyzer"
+                      SetTargetFramework="TargetFramework=netstandard2.0"
+                      ReferenceOutputAssembly="false"/>
+  </ItemGroup>
 
 </Project>

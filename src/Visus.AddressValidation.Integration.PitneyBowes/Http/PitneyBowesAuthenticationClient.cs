@@ -37,14 +37,14 @@ internal sealed class PitneyBowesAuthenticationClient : IAuthenticationClient
         {
             ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
             ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
-            _ => Constants.DevelopmentEndpointBaseUri
+            _ => Constants.DevelopmentEndpointBaseUri,
         };
 
         Uri requestUri = new(baseUri, "/oauth/token");
 
         List<KeyValuePair<string, string>> payload =
         [
-            new("grant_type", "client_credentials")
+            new("grant_type", "client_credentials"),
         ];
 
         using HttpRequestMessage request = new(HttpMethod.Post, requestUri);
@@ -59,7 +59,7 @@ internal sealed class PitneyBowesAuthenticationClient : IAuthenticationClient
         }
 
         return await response.Content.ReadFromJsonAsync(DefaultJsonSerializerContext.Default.TokenResponse,
-                                                        cancellationToken)
+                                  cancellationToken)
                              .ConfigureAwait(false);
     }
 }

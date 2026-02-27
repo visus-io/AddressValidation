@@ -11,7 +11,7 @@ public sealed class JsonStringBooleanConverter : JsonConverter<bool>
         "F",
         "False",
         "N",
-        "NO"
+        "NO",
     };
 
     private static readonly HashSet<string> PossibleBooleanTrueStrings = new(StringComparer.OrdinalIgnoreCase)
@@ -21,7 +21,7 @@ public sealed class JsonStringBooleanConverter : JsonConverter<bool>
         "T",
         "True",
         "Y",
-        "YES"
+        "YES",
     };
 
     /// <inheritdoc />
@@ -32,7 +32,7 @@ public sealed class JsonStringBooleanConverter : JsonConverter<bool>
             JsonTokenType.True => true,
             JsonTokenType.False => false,
             JsonTokenType.String => ToBoolOrDefault(reader.GetString()),
-            _ => throw new JsonException()
+            _ => throw new JsonException(),
         };
     }
 

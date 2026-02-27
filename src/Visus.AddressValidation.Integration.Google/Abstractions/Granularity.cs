@@ -27,5 +27,5 @@ internal enum Granularity
     ROUTE = 5,
 
     [Description("All other granularities, which are bucketed together since they are not deliverable.")]
-    OTHER = 6
+    OTHER = 6,
 }

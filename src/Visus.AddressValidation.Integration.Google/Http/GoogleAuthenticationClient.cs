@@ -39,7 +39,7 @@ internal sealed class GoogleAuthenticationClient : IAuthenticationClient
         [
             new(JwtRegisteredClaimNames.Iat, currentDateTimeOffset.ToUnixTimeSeconds().ToString(CultureInfo.InvariantCulture), ClaimValueTypes.Integer64),
             new(JwtRegisteredClaimNames.Exp, currentDateTimeOffset.AddMinutes(60).ToUnixTimeSeconds().ToString(CultureInfo.InvariantCulture), ClaimValueTypes.Integer64),
-            new("scope", "https://www.googleapis.com/auth/cloud-platform")
+            new("scope", "https://www.googleapis.com/auth/cloud-platform"),
         ];
 
         string[] privateKeyBlocks = privateKey.Split('-', StringSplitOptions.RemoveEmptyEntries);
@@ -55,14 +55,14 @@ internal sealed class GoogleAuthenticationClient : IAuthenticationClient
         {
             CryptoProviderFactory = new CryptoProviderFactory
             {
-                CacheSignatureProviders = false
-            }
+                CacheSignatureProviders = false,
+            },
         };
 
         JwtSecurityToken token = new(issuer,
-                                     AuthenticationUrl.ToString(),
-                                     claims,
-                                     signingCredentials: credentials);
+            AuthenticationUrl.ToString(),
+            claims,
+            signingCredentials: credentials);
 
         string? jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
         if ( string.IsNullOrWhiteSpace(jwtToken) )
@@ -73,7 +73,7 @@ internal sealed class GoogleAuthenticationClient : IAuthenticationClient
         List<KeyValuePair<string, string>> payload =
         [
             new("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer"),
-            new("assertion", jwtToken)
+            new("assertion", jwtToken),
         ];
 
         using HttpRequestMessage request = new(HttpMethod.Post, AuthenticationUrl);
@@ -89,7 +89,7 @@ internal sealed class GoogleAuthenticationClient : IAuthenticationClient
         }
 
         return await response.Content.ReadFromJsonAsync(DefaultJsonSerializerContext.Default.TokenResponse,
-                                                        cancellationToken)
+                                  cancellationToken)
                              .ConfigureAwait(false);
     }
 }

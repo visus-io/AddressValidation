@@ -5,7 +5,6 @@ using AddressValidation.Extensions;
 using AddressValidation.Model;
 using AddressValidation.Validation;
 using Http;
-using Validation;
 
 internal sealed class AddressValidationResponse : AbstractAddressValidationResponse<ApiResponse>
 {
@@ -28,13 +27,13 @@ internal sealed class AddressValidationResponse : AbstractAddressValidationRespo
         PostalCode = primaryAddress.PostalCode;
         StateOrProvince = primaryAddress.StateOrProvince;
         IsResidential = primaryAddress.Classification == AddressClassification.RESIDENTIAL;
-        
+
         Dictionary<string, object?> customResponseData = new(StringComparer.OrdinalIgnoreCase);
-        
+
         customResponseData.Merge(response.GetCustomResponseData());
         customResponseData.Merge(primaryAddress.GetCustomResponseData());
         customResponseData.Merge(primaryAddress.Attributes.GetCustomResponseData());
-        
+
         CustomResponseData = customResponseData;
     }
 }

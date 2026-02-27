@@ -35,12 +35,12 @@ public static class ServiceCollectionExtensions
                 .AddStandardResilienceHandler();
 
         services.AddHttpClient<UpsAddressValidationClient>()
-                .RedactLoggedHeaders(["Authorization"])
+                .RedactLoggedHeaders(["Authorization",])
                 .AddHttpMessageHandler(provider =>
-                                       {
-                                           UpsAuthenticationService authenticationService = provider.GetRequiredService<UpsAuthenticationService>();
-                                           return new BearerTokenDelegatingHandler<UpsAuthenticationClient>(authenticationService);
-                                       })
+                 {
+                     UpsAuthenticationService authenticationService = provider.GetRequiredService<UpsAuthenticationService>();
+                     return new BearerTokenDelegatingHandler<UpsAuthenticationClient>(authenticationService);
+                 })
                 .AddStandardResilienceHandler();
 
         return services;

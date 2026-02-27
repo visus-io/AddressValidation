@@ -6,5 +6,5 @@ using System.Text.Json.Serialization;
 internal enum ResponseStatusCode
 {
     FAILURE = 0,
-    SUCCESS = 1
+    SUCCESS = 1,
 }

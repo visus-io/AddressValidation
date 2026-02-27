@@ -133,7 +133,7 @@ public abstract class AbstractAddressValidationResponse :
         }
 
         hashCode.Add(CityOrTown, StringComparer.OrdinalIgnoreCase);
-        hashCode.Add((int) Country);
+        hashCode.Add((int)Country);
         hashCode.Add(IsResidential);
         hashCode.Add(PostalCode, StringComparer.OrdinalIgnoreCase);
         hashCode.Add(StateOrProvince, StringComparer.OrdinalIgnoreCase);

@@ -69,6 +69,6 @@ public static class Constants
         CountryCode.SG,
         CountryCode.SI,
         CountryCode.SK,
-        CountryCode.US
+        CountryCode.US,
     };
 }

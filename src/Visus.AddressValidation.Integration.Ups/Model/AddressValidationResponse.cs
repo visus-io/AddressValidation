@@ -61,10 +61,10 @@ internal sealed class AddressValidationResponse : AbstractAddressValidationRespo
         HashSet<string?> codes = new(StringComparer.OrdinalIgnoreCase)
         {
             addressKeyFormat.PostcodePrimaryLow,
-            addressKeyFormat.PostcodeExtendedLow
+            addressKeyFormat.PostcodeExtendedLow,
         };
 
-        return string.Join("-", [.. codes]).ToUpperInvariant();
+        return string.Join("-", [.. codes,]).ToUpperInvariant();
     }
 
     private static ReadOnlyCollection<IAddressValidationResponse> ListSuggestions(IEnumerable<ApiResponse.Candidate> candidates)
@@ -73,6 +73,6 @@ internal sealed class AddressValidationResponse : AbstractAddressValidationRespo
                                                               .Select(s => new AddressSuggestionValidationResponse(s))
                                                               .ToHashSet();
 
-        return new ReadOnlyCollection<IAddressValidationResponse>([.. results]);
+        return new ReadOnlyCollection<IAddressValidationResponse>([.. results,]);
     }
 }
