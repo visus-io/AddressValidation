@@ -19,9 +19,7 @@
     <Project Path="tests/Visus.AddressValidation.SourceGeneration.Tests/Visus.AddressValidation.SourceGeneration.Tests.csproj" />
     <Project Path="tests/Visus.AddressValidation.Tests/Visus.AddressValidation.Tests.csproj" />
   </Folder>
-  <Folder Name="/04. Demo/">
-    <Project Path="demo/src/AddressValidation.Demo/AddressValidation.Demo.csproj" />
-  </Folder>
+  <Folder Name="/04. Demo/" />
   <Folder Name="/05. Documentation/">
     <File Path="docs/docfx.json" />
   </Folder>
