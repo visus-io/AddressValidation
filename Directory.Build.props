@@ -2,14 +2,11 @@
     
     <PropertyGroup>
         <Authors>Visus Development Team</Authors>
-        <Copyright>Copyright (c) 2024 Visus Development Team</Copyright>
+        <Copyright>Copyright (c) 2024-2026 Visus Development Team</Copyright>
         <ImplicitUsings>enable</ImplicitUsings>
-        <IsTrimmable>false</IsTrimmable>
-        <LangVersion>12</LangVersion>
+        <LangVersion>14</LangVersion>
         <NeutralLanguage>en-US</NeutralLanguage>
         <Nullable>enable</Nullable>
-        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <Version>0.0.1</Version>
     </PropertyGroup>
 
     <PropertyGroup>
