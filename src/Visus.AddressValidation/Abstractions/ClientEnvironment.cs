@@ -1,12 +1,10 @@
 namespace Visus.AddressValidation.Abstractions;
 
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 
 /// <summary>
 ///     Enumeration of potential client environments
 /// </summary>
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 public enum ClientEnvironment
 {
     /// <summary>

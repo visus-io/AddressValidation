@@ -72,7 +72,10 @@ public abstract class AbstractAddressValidationResponse :
     /// </summary>
     /// <param name="left">The first object to compare.</param>
     /// <param name="right">The second object to compare.</param>
-    /// <returns><c>true</c> if <c>left</c> and <c>right</c> are equal; otherwise, <c>false</c>.</returns>
+    /// <returns>
+    ///     <see langword="true" /> if <paramref name="left" /> and <paramref name="right" /> are equal; otherwise,
+    ///     <see langword="false" />.
+    /// </returns>
     public static bool operator ==(AbstractAddressValidationResponse? left, AbstractAddressValidationResponse? right)
     {
         if ( ReferenceEquals(left, right) )
@@ -94,7 +97,10 @@ public abstract class AbstractAddressValidationResponse :
     /// </summary>
     /// <param name="left">The first object to compare.</param>
     /// <param name="right">The second object to compare.</param>
-    /// <returns><c>true</c> if <c>left</c> and <c>right</c> are not equal; otherwise, <c>false</c>.</returns>
+    /// <returns>
+    ///     <see langword="true" /> if <paramref name="left" /> and <paramref name="right" /> are not equal; otherwise,
+    ///     <see langword="false" />.
+    /// </returns>
     public static bool operator !=(AbstractAddressValidationResponse? left, AbstractAddressValidationResponse? right)
     {
         return !( left == right );

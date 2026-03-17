@@ -32,7 +32,10 @@ public abstract class AbstractValidator<T> : IValidator<T>, IDisposable
     /// <summary>
     ///     Performs application-defined tasks associated with freeing, release or resetting managed and unmanaged resources.
     /// </summary>
-    /// <param name="disposing"><c>true</c> if managed resources should be disposed; otherwise, <c>false</c>.</param>
+    /// <param name="disposing">
+    ///     <see langword="true" /> if managed resources should be disposed; otherwise,
+    ///     <see langword="false" />.
+    /// </param>
     protected virtual void Dispose(bool disposing)
     {
         if ( _isDisposed )
@@ -55,7 +58,7 @@ public abstract class AbstractValidator<T> : IValidator<T>, IDisposable
     /// <param name="instance">The instance to perform validation against.</param>
     /// <param name="results">The set (collection) of <see cref="ValidationState" /> objects for the current instance.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
-    /// <returns><c>true</c> to continue with validation; otherwise, <c>false</c>.</returns>
+    /// <returns><see langword="true" /> to continue with validation; otherwise, <see langword="false" />.</returns>
     protected virtual ValueTask<bool> PreValidateAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
         return ValueTask.FromResult(true);

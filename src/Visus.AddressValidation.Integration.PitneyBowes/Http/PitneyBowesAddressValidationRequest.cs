@@ -13,6 +13,9 @@ public sealed class PitneyBowesAddressValidationRequest : AbstractAddressValidat
     /// <summary>
     ///     Indicates whether to include suggested address as part of the request.
     /// </summary>
-    /// <remarks>By default, this value is <c>false</c>, it should only be set to <c>true</c> if the initial request fails.</remarks>
+    /// <remarks>
+    ///     By default, this value is <see langword="false" />, it should only be set to <see langword="true" /> if the
+    ///     initial request fails.
+    /// </remarks>
     public bool IncludeSuggestions { get; set; }
 }
