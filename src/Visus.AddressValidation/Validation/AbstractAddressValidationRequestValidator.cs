@@ -12,15 +12,15 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
     /// <inheritdoc />
     protected override ValueTask<bool> PreValidateAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
-        Debug.Assert(instance != null, nameof(instance) + " != null");
-        Debug.Assert(results != null, nameof(results) + " != null");
+        Debug.Assert(instance != null);
+        Debug.Assert(results != null);
 
         if ( instance.Country is not null )
         {
             return ValueTask.FromResult(true);
         }
 
-        results.Add(ValidationState.CreateError("Value cannot be null.", nameof(instance.Country)));
+        results.Add(ValidationState.CreateError(ValidationMessages.ValueCannotBeNull, nameof(instance.Country)));
 
         return ValueTask.FromResult(false);
     }
@@ -28,17 +28,17 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
     /// <inheritdoc />
     protected override ValueTask ValidateAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
-        Debug.Assert(instance != null, nameof(instance) + " != null");
-        Debug.Assert(results != null, nameof(results) + " != null");
+        Debug.Assert(instance != null);
+        Debug.Assert(results != null);
 
         switch ( instance.AddressLines.Count )
         {
             case 0:
             case > 0 when instance.AddressLines.All(string.IsNullOrWhiteSpace):
-                results.Add(ValidationState.CreateError("Cannot be null or empty.", nameof(instance.AddressLines)));
+                results.Add(ValidationState.CreateError(ValidationMessages.CannotBeNullOrEmpty, nameof(instance.AddressLines)));
                 break;
             case > 3:
-                results.Add(ValidationState.CreateError("Cannot contain more than 3 entries.", nameof(instance.AddressLines)));
+                results.Add(ValidationState.CreateError(ValidationMessages.AddressLinesCannotExceedThree, nameof(instance.AddressLines)));
                 break;
         }
 
@@ -46,23 +46,23 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
         {
             if ( string.IsNullOrWhiteSpace(instance.CityOrTown) )
             {
-                results.Add(ValidationState.CreateError("Value cannot be null or empty.", nameof(instance.CityOrTown)));
+                results.Add(ValidationState.CreateError(ValidationMessages.ValueCannotBeNullOrEmpty, nameof(instance.CityOrTown)));
             }
 
             if ( string.IsNullOrWhiteSpace(instance.StateOrProvince) )
             {
-                results.Add(ValidationState.CreateError("Value cannot be null or empty.", nameof(instance.StateOrProvince)));
+                results.Add(ValidationState.CreateError(ValidationMessages.ValueCannotBeNullOrEmpty, nameof(instance.StateOrProvince)));
             }
         }
 
         if ( !Constants.NoPostalCode.Contains(instance.Country!.Value) && string.IsNullOrWhiteSpace(instance.PostalCode) )
         {
-            results.Add(ValidationState.CreateError("Value cannot be null or empty.", nameof(instance.PostalCode)));
+            results.Add(ValidationState.CreateError(ValidationMessages.ValueCannotBeNullOrEmpty, nameof(instance.PostalCode)));
         }
 
         if ( Constants.NoPostalCode.Contains(instance.Country!.Value) )
         {
-            results.Add(ValidationState.CreateError("{0}: {1} is currently not supported for address validation.", nameof(instance.Country), instance.Country));
+            results.Add(ValidationState.CreateError(ValidationMessages.CountryNotSupportedForAddressValidation, nameof(instance.Country), instance.Country));
         }
 
         return base.ValidateAsync(instance, results, cancellationToken);

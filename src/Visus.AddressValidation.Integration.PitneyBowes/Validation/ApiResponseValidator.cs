@@ -19,7 +19,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
             {
                 results.Add(string.IsNullOrWhiteSpace(error.ErrorCode)
                                 ? ValidationState.CreateError(error.ErrorDescription)
-                                : ValidationState.CreateError("{0}: {1}", error.ErrorCode, error.ErrorDescription));
+                                : ValidationState.CreateError(ValidationMessages.ApiErrorWithCode, error.ErrorCode, error.ErrorDescription));
             }
 
             if ( !string.IsNullOrWhiteSpace(error.AdditionalInfo) )
@@ -37,7 +37,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 
         if ( string.IsNullOrWhiteSpace(instance.Result.PostalCode) )
         {
-            results.Add(ValidationState.CreateWarning("Value is null or empty.", nameof(instance.Result.PostalCode)));
+            results.Add(ValidationState.CreateWarning(ValidationMessages.CannotBeNullOrEmpty, nameof(instance.Result.PostalCode)));
         }
 
         return ValueTask.CompletedTask;

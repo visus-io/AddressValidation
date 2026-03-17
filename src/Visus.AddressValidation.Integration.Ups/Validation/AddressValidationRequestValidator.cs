@@ -20,9 +20,10 @@ internal sealed class AddressValidationRequestValidator(IConfiguration configura
     {
         if ( !Constants.SupportedCountries.Contains(instance.Country!.Value) )
         {
-            results.Add(ValidationState.CreateError("{0}: {1} is currently not supported by the UPS Address Validation API.",
+            results.Add(ValidationState.CreateError(ValidationMessages.CountryNotSupportedByProvider,
                 nameof(instance.Country),
-                instance.Country));
+                instance.Country,
+                "UPS"));
         }
 
         if ( !Enum.TryParse(_configuration[Constants.ClientEnvironmentConfigurationKey], out ClientEnvironment clientEnvironment) )
@@ -37,9 +38,10 @@ internal sealed class AddressValidationRequestValidator(IConfiguration configura
 
         if ( instance.Country.Value != CountryCode.US )
         {
-            results.Add(ValidationState.CreateError("{0}: Only the value {1} is supported by the UPS Address Validation API while in {2} mode.",
+            results.Add(ValidationState.CreateError(ValidationMessages.OnlyValueSupportedInDevelopmentMode,
                 nameof(instance.Country),
                 CountryCode.US,
+                "UPS",
                 ClientEnvironment.DEVELOPMENT));
         }
 
@@ -47,9 +49,10 @@ internal sealed class AddressValidationRequestValidator(IConfiguration configura
           && !string.IsNullOrWhiteSpace(instance.StateOrProvince)
           && !_supportedDevelopmentRegions.Contains(instance.StateOrProvince) )
         {
-            results.Add(ValidationState.CreateError("{0}: Only the values {1} are supported by the UPS Address Validation API while in {2} mode.",
+            results.Add(ValidationState.CreateError(ValidationMessages.OnlyValuesSupportedInDevelopmentMode,
                 nameof(instance.StateOrProvince),
                 string.Join(", ", _supportedDevelopmentRegions),
+                "UPS",
                 ClientEnvironment.DEVELOPMENT));
         }
 

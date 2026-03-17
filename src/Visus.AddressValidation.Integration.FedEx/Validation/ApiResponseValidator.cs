@@ -19,7 +19,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
         {
             results.Add(string.IsNullOrWhiteSpace(error.Message)
                             ? ValidationState.CreateError(error.Code)
-                            : ValidationState.CreateError("{0}: {1}", error.Code, error.Message));
+                            : ValidationState.CreateError(ValidationMessages.ApiErrorWithCode, error.Code, error.Message));
         }
 
         return ValueTask.FromResult(false);
@@ -36,7 +36,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
             if ( address.Attributes.InvalidSuiteNumber )
             {
                 const string propertyName = nameof(address.StreetLinesToken);
-                results.Add(ValidationState.CreateError("[Row {0}] {1}: {2}", i,
+                results.Add(ValidationState.CreateError(ValidationMessages.RowValueCouldNotBeVerified, i,
                     propertyName,
                     "Invalid suite number was provided in the request."));
             }
@@ -44,19 +44,19 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
             if ( !address.Attributes.IsValidStreetAddress && address.CountryCode != CountryCode.US )
             {
                 const string propertyName = nameof(AbstractAddressValidationRequest.AddressLines);
-                results.Add(ValidationState.CreateWarning("Value could not be verified.", propertyName));
+                results.Add(ValidationState.CreateWarning(ValidationMessages.ValueCouldNotBeVerified, propertyName));
             }
 
             if ( !address.Attributes.IsValidPostalCode && address.CountryCode == CountryCode.US )
             {
                 const string propertyName = nameof(AbstractAddressValidationRequest.PostalCode);
-                results.Add(ValidationState.CreateError("Value could not be verified.", propertyName));
+                results.Add(ValidationState.CreateError(ValidationMessages.ValueCouldNotBeVerified, propertyName));
             }
 
             if ( address.Attributes.SuiteRequiredButMissing )
             {
                 const string propertyName = nameof(address.StreetLinesToken);
-                results.Add(ValidationState.CreateWarning("[Row {0}] {1}: {2}", i,
+                results.Add(ValidationState.CreateWarning(ValidationMessages.RowValueCouldNotBeVerified, i,
                     propertyName,
                     "Suite number was not provided in the request."));
             }

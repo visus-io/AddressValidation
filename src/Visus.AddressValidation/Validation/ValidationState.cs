@@ -52,6 +52,8 @@ public readonly struct ValidationState : IEquatable<ValidationState>
     public static ValidationState CreateError(string messageFormat, params object[] args)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(messageFormat);
+        ArgumentNullException.ThrowIfNull(args);
+        
         string message = string.Format(CultureInfo.InvariantCulture, messageFormat, args);
         return CreateError(message);
     }
@@ -83,6 +85,8 @@ public readonly struct ValidationState : IEquatable<ValidationState>
     public static ValidationState CreateWarning(string messageFormat, params object[] args)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(messageFormat);
+        ArgumentNullException.ThrowIfNull(args);
+        
         string message = string.Format(CultureInfo.InvariantCulture, messageFormat, args);
         return CreateWarning(message);
     }

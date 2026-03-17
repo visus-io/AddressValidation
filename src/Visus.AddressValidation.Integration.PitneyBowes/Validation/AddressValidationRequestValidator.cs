@@ -9,7 +9,7 @@ internal sealed class AddressValidationRequestValidator : AbstractAddressValidat
     {
         if ( !Constants.SupportedCountries.Contains(instance.Country!.Value) )
         {
-            results.Add(ValidationState.CreateError("{0}: {1} is currently not supported by the Pitney Bowes Address Validation API.", nameof(instance.Country), instance.Country));
+            results.Add(ValidationState.CreateError(ValidationMessages.CountryNotSupportedByProvider, nameof(instance.Country), instance.Country, "Pitney Bowes"));
         }
 
         return base.ValidateAsync(instance, results, cancellationToken);

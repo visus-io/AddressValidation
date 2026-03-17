@@ -35,7 +35,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
         {
             results.Add(string.IsNullOrWhiteSpace(instance.ErrorResponse.Error.Message)
                             ? ValidationState.CreateError(instance.ErrorResponse.Error.Code.ToString())
-                            : ValidationState.CreateError("{0}: {1}", instance.ErrorResponse.Error.Code, instance.ErrorResponse.Error.Message));
+                            : ValidationState.CreateError(ValidationMessages.ApiErrorWithCode, instance.ErrorResponse.Error.Code, instance.ErrorResponse.Error.Message));
 
             return ValueTask.FromResult(false);
         }
@@ -84,7 +84,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
             }
 
             Debug.Assert(component.ComponentName != null);
-            results.Add(ValidationState.CreateWarning("{0}: {1}", component.ComponentName.Text!, component.ConfirmationLevel));
+            results.Add(ValidationState.CreateWarning(ValidationMessages.ApiErrorWithCode, component.ComponentName.Text!, component.ConfirmationLevel));
         }
 
         return ValueTask.CompletedTask;
