@@ -21,7 +21,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 
             results.Add(string.IsNullOrWhiteSpace(error.Code)
                             ? ValidationState.CreateError(error.Message)
-                            : ValidationState.CreateError(ValidationMessages.ApiErrorWithCode, error.Code, error.Message));
+                            : ValidationState.CreateError($"{error.Code}: {error.Message}"));
         }
 
         return ValueTask.FromResult(false);

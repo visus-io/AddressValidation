@@ -3,6 +3,7 @@ namespace Visus.AddressValidation.Integration.PitneyBowes.Validation;
 using System.Diagnostics;
 using AddressValidation.Validation;
 using Http;
+using Resources;
 
 internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 {
@@ -19,7 +20,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
             {
                 results.Add(string.IsNullOrWhiteSpace(error.ErrorCode)
                                 ? ValidationState.CreateError(error.ErrorDescription)
-                                : ValidationState.CreateError(ValidationMessages.ApiErrorWithCode, error.ErrorCode, error.ErrorDescription));
+                                : ValidationState.CreateError($"{error.ErrorCode}: {error.ErrorDescription}"));
             }
 
             if ( !string.IsNullOrWhiteSpace(error.AdditionalInfo) )
@@ -37,7 +38,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 
         if ( string.IsNullOrWhiteSpace(instance.Result.PostalCode) )
         {
-            results.Add(ValidationState.CreateWarning(ValidationMessages.CannotBeNullOrEmpty, nameof(instance.Result.PostalCode)));
+            results.Add(ValidationState.CreateWarning(Resources.Validation_Field_CannotBeNullOrEmpty, nameof(instance.Result.PostalCode)));
         }
 
         return ValueTask.CompletedTask;

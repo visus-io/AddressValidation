@@ -1,7 +1,10 @@
 namespace Visus.AddressValidation.Validation;
 
+using System.Collections.Frozen;
 using System.Diagnostics;
+using Abstractions;
 using Http;
+using Resources;
 
 /// <summary>
 ///     Base Validator for <see cref="AbstractAddressValidationRequest" /> instances.
@@ -9,6 +12,16 @@ using Http;
 public abstract class AbstractAddressValidationRequestValidator<T> : AbstractValidator<T>
     where T : AbstractAddressValidationRequest
 {
+    /// <summary>
+    ///     Gets the display name of the address validation provider.
+    /// </summary>
+    protected abstract string ProviderName { get; }
+
+    /// <summary>
+    ///     Gets the countries supported by the address validation provider.
+    /// </summary>
+    protected abstract FrozenSet<CountryCode> SupportedCountries { get; }
+
     /// <inheritdoc />
     protected override ValueTask<bool> PreValidateAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
@@ -17,10 +30,16 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
 
         if ( instance.Country is not null )
         {
-            return ValueTask.FromResult(true);
+            if ( SupportedCountries.Contains(instance.Country.Value) )
+            {
+                return ValueTask.FromResult(true);
+            }
+
+            results.Add(ValidationState.CreateError(Resources.Validation_Provider_CountryNotSupported, nameof(instance.Country), instance.Country, ProviderName));
+            return ValueTask.FromResult(false);
         }
 
-        results.Add(ValidationState.CreateError(ValidationMessages.ValueCannotBeNull, nameof(instance.Country)));
+        results.Add(ValidationState.CreateError(Resources.Validation_Field_CannotBeNullOrEmpty, nameof(instance.Country)));
 
         return ValueTask.FromResult(false);
     }
@@ -35,10 +54,10 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
         {
             case 0:
             case > 0 when instance.AddressLines.All(string.IsNullOrWhiteSpace):
-                results.Add(ValidationState.CreateError(ValidationMessages.CannotBeNullOrEmpty, nameof(instance.AddressLines)));
+                results.Add(ValidationState.CreateError(Resources.Validation_Field_CannotBeNullOrEmpty, nameof(instance.AddressLines)));
                 break;
             case > 3:
-                results.Add(ValidationState.CreateError(ValidationMessages.AddressLinesCannotExceedThree, nameof(instance.AddressLines)));
+                results.Add(ValidationState.CreateError(Resources.Validation_Address_LinesCannotExceedThree, nameof(instance.AddressLines)));
                 break;
         }
 
@@ -46,23 +65,23 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
         {
             if ( string.IsNullOrWhiteSpace(instance.CityOrTown) )
             {
-                results.Add(ValidationState.CreateError(ValidationMessages.ValueCannotBeNullOrEmpty, nameof(instance.CityOrTown)));
+                results.Add(ValidationState.CreateError(Resources.Validation_Field_CannotBeNullOrEmpty, nameof(instance.CityOrTown)));
             }
 
             if ( string.IsNullOrWhiteSpace(instance.StateOrProvince) )
             {
-                results.Add(ValidationState.CreateError(ValidationMessages.ValueCannotBeNullOrEmpty, nameof(instance.StateOrProvince)));
+                results.Add(ValidationState.CreateError(Resources.Validation_Field_CannotBeNullOrEmpty, nameof(instance.StateOrProvince)));
             }
         }
 
         if ( !Constants.NoPostalCode.Contains(instance.Country!.Value) && string.IsNullOrWhiteSpace(instance.PostalCode) )
         {
-            results.Add(ValidationState.CreateError(ValidationMessages.ValueCannotBeNullOrEmpty, nameof(instance.PostalCode)));
+            results.Add(ValidationState.CreateError(Resources.Validation_Field_CannotBeNullOrEmpty, nameof(instance.PostalCode)));
         }
 
         if ( Constants.NoPostalCode.Contains(instance.Country!.Value) )
         {
-            results.Add(ValidationState.CreateError(ValidationMessages.CountryNotSupportedForAddressValidation, nameof(instance.Country), instance.Country));
+            results.Add(ValidationState.CreateError(Resources.Validation_Address_CountryNotSupported, nameof(instance.Country), instance.Country));
         }
 
         return base.ValidateAsync(instance, results, cancellationToken);
