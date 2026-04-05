@@ -1,6 +1,5 @@
 <Solution>
   <Folder Name="/01. Foundation/">
-    <Project Path="src/Visus.AddressValidation.SourceGeneration/Visus.AddressValidation.SourceGeneration.csproj" />
     <Project Path="src/Visus.AddressValidation/Visus.AddressValidation.csproj" />
   </Folder>
   <Folder Name="/02. Integrations/">
@@ -16,7 +15,6 @@
     <Project Path="tests/Visus.AddressValidation.Integration.Google.Tests/Visus.AddressValidation.Integration.Google.Tests.csproj" />
     <Project Path="tests/Visus.AddressValidation.Integration.PitneyBowes.Tests/Visus.AddressValidation.Integration.PitneyBowes.Tests.csproj" />
     <Project Path="tests/Visus.AddressValidation.Integration.Ups.Tests/Visus.AddressValidation.Integration.Ups.Tests.csproj" />
-    <Project Path="tests/Visus.AddressValidation.SourceGeneration.Tests/Visus.AddressValidation.SourceGeneration.Tests.csproj" />
     <Project Path="tests/Visus.AddressValidation.Tests/Visus.AddressValidation.Tests.csproj" />
   </Folder>
   <Folder Name="/04. Demo/" />
@@ -27,7 +25,6 @@
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
     <File Path="Directory.Build.props" />
-    <File Path="Directory.Build.targets" />
     <File Path="Directory.Packages.props" />
     <File Path="global.json" />
     <File Path="nuget.config" />

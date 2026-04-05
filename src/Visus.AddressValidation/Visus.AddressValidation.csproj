@@ -15,12 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Visus.AddressValidation.SourceGeneration\Visus.AddressValidation.SourceGeneration.csproj"
-                      ReferenceOutputAssembly="false"
-                      PackAsAnalyzer="true"/>
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Update="Resources\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
