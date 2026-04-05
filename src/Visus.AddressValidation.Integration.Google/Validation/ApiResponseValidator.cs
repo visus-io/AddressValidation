@@ -35,7 +35,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
         {
             results.Add(string.IsNullOrWhiteSpace(instance.ErrorResponse.Error.Message)
                             ? ValidationState.CreateError(instance.ErrorResponse.Error.Code.ToString())
-                            : ValidationState.CreateError("{0}: {1}", instance.ErrorResponse.Error.Code, instance.ErrorResponse.Error.Message));
+                            : ValidationState.CreateError($"{instance.ErrorResponse.Error.Code}: {instance.ErrorResponse.Error.Message}"));
 
             return ValueTask.FromResult(false);
         }
@@ -60,7 +60,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 
         // if the response coming back has a validationGranularity = OTHER and addressComplete = false
         // terminate the validation early.
-        results.Add(ValidationState.CreateError(VerificationResult.UNVERIFIED.ToString()));
+        results.Add(ValidationState.CreateError(nameof(VerificationResult.UNVERIFIED)));
         return ValueTask.FromResult(false);
     }
 
@@ -73,7 +73,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
         if ( _tenuousGranularity.Contains(instance.Result.Verdict.ValidationGranularity)
           && ( instance.Result.Verdict.HasInferredComponents || instance.Result.Verdict.HasReplacedComponents ) )
         {
-            results.Add(ValidationState.CreateWarning(VerificationResult.PARTIALLY_VERIFIED.ToString()));
+            results.Add(ValidationState.CreateWarning(nameof(VerificationResult.PARTIALLY_VERIFIED)));
         }
 
         foreach ( ApiResponse.AddressComponent component in instance.Result.Address.AddressComponents.Where(w => w.ComponentName is not null) )
@@ -84,7 +84,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
             }
 
             Debug.Assert(component.ComponentName != null);
-            results.Add(ValidationState.CreateWarning("{0}: {1}", component.ComponentName.Text!, component.ConfirmationLevel));
+            results.Add(ValidationState.CreateWarning($"{component.ComponentName.Text!}: {component.ConfirmationLevel}"));
         }
 
         return ValueTask.CompletedTask;

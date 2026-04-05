@@ -1,54 +1,20 @@
 namespace Visus.AddressValidation.Validation;
 
 using System.Runtime.CompilerServices;
-using Extensions;
 
 /// <summary>
 ///     Base class for implemented a validator.
 /// </summary>
 /// <typeparam name="T">The object instance to be validated.</typeparam>
-public abstract class AbstractValidator<T> : IValidator<T>, IDisposable
+public abstract class AbstractValidator<T> : IValidator<T>
     where T : class
 {
-    private readonly SemaphoreSlim _semaphore = new(1, 1);
-
-    private bool _isDisposed;
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
     /// <inheritdoc />
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ValueTask<IValidationResult> ExecuteAsync(T instance, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(instance);
         return ExecuteInternalAsync(new ValidationContext<T>(instance), cancellationToken);
-    }
-
-    /// <summary>
-    ///     Performs application-defined tasks associated with freeing, release or resetting managed and unmanaged resources.
-    /// </summary>
-    /// <param name="disposing">
-    ///     <see langword="true" /> if managed resources should be disposed; otherwise,
-    ///     <see langword="false" />.
-    /// </param>
-    protected virtual void Dispose(bool disposing)
-    {
-        if ( _isDisposed )
-        {
-            return;
-        }
-
-        if ( disposing )
-        {
-            _semaphore.Dispose();
-        }
-
-        _isDisposed = true;
     }
 
     /// <summary>
@@ -78,16 +44,13 @@ public abstract class AbstractValidator<T> : IValidator<T>, IDisposable
 
     private async ValueTask<IValidationResult> ExecuteInternalAsync(ValidationContext<T> context, CancellationToken cancellationToken)
     {
-        using ( await _semaphore.LockAsync(cancellationToken).ConfigureAwait(false) )
+        if ( !await PreValidateAsync(context.Instance, context.ValidationResults, cancellationToken).ConfigureAwait(false) )
         {
-            if ( !await PreValidateAsync(context.Instance, context.ValidationResults, cancellationToken).ConfigureAwait(false) )
-            {
-                return new ValidationResult(context.ValidationResults);
-            }
-
-            await ValidateAsync(context.Instance, context.ValidationResults, cancellationToken).ConfigureAwait(false);
-
             return new ValidationResult(context.ValidationResults);
         }
+
+        await ValidateAsync(context.Instance, context.ValidationResults, cancellationToken).ConfigureAwait(false);
+
+        return new ValidationResult(context.ValidationResults);
     }
 }

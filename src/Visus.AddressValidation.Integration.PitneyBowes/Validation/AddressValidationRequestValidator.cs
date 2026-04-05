@@ -1,17 +1,15 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Validation;
 
+using System.Collections.Frozen;
+using AddressValidation.Abstractions;
 using AddressValidation.Validation;
 using Http;
 
 internal sealed class AddressValidationRequestValidator : AbstractAddressValidationRequestValidator<PitneyBowesAddressValidationRequest>
 {
-    protected override ValueTask ValidateAsync(PitneyBowesAddressValidationRequest instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
-    {
-        if ( !Constants.SupportedCountries.Contains(instance.Country!.Value) )
-        {
-            results.Add(ValidationState.CreateError("{0}: {1} is currently not supported by the Pitney Bowes Address Validation API.", nameof(instance.Country), instance.Country));
-        }
+    /// <inheritdoc />
+    protected override string ProviderName => "Pitney Bowes";
 
-        return base.ValidateAsync(instance, results, cancellationToken);
-    }
+    /// <inheritdoc />
+    protected override FrozenSet<CountryCode> SupportedCountries => Constants.SupportedCountries;
 }

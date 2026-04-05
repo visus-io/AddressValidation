@@ -1,9 +1,11 @@
 namespace Visus.AddressValidation.Integration.Ups.Validation;
 
+using System.Collections.Frozen;
 using AddressValidation.Abstractions;
 using AddressValidation.Validation;
 using Http;
 using Microsoft.Extensions.Configuration;
+using Resources;
 
 internal sealed class AddressValidationRequestValidator(IConfiguration configuration)
     : AbstractAddressValidationRequestValidator<UpsAddressValidationRequest>
@@ -16,13 +18,17 @@ internal sealed class AddressValidationRequestValidator(IConfiguration configura
         "NY",
     };
 
-    protected override ValueTask ValidateAsync(UpsAddressValidationRequest instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    protected override string ProviderName => "UPS";
+
+    /// <inheritdoc />
+    protected override FrozenSet<CountryCode> SupportedCountries => Constants.SupportedCountries;
+
+    protected override async ValueTask<bool> PreValidateAsync(UpsAddressValidationRequest instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
-        if ( !Constants.SupportedCountries.Contains(instance.Country!.Value) )
+        if ( !await base.PreValidateAsync(instance, results, cancellationToken).ConfigureAwait(false) )
         {
-            results.Add(ValidationState.CreateError("{0}: {1} is currently not supported by the UPS Address Validation API.",
-                nameof(instance.Country),
-                instance.Country));
+            return false;
         }
 
         if ( !Enum.TryParse(_configuration[Constants.ClientEnvironmentConfigurationKey], out ClientEnvironment clientEnvironment) )
@@ -32,27 +38,33 @@ internal sealed class AddressValidationRequestValidator(IConfiguration configura
 
         if ( clientEnvironment != ClientEnvironment.DEVELOPMENT )
         {
-            return ValueTask.CompletedTask;
+            return true;
         }
 
-        if ( instance.Country.Value != CountryCode.US )
+        if ( instance.Country.HasValue && instance.Country.Value != CountryCode.US )
         {
-            results.Add(ValidationState.CreateError("{0}: Only the value {1} is supported by the UPS Address Validation API while in {2} mode.",
+            results.Add(ValidationState.CreateError(Resources.Validation_Provider_OnlyValueSupportedInMode,
                 nameof(instance.Country),
                 CountryCode.US,
+                "UPS",
                 ClientEnvironment.DEVELOPMENT));
+
+            return false;
         }
 
-        if ( instance.Country.Value == CountryCode.US
-          && !string.IsNullOrWhiteSpace(instance.StateOrProvince)
-          && !_supportedDevelopmentRegions.Contains(instance.StateOrProvince) )
+        if ( instance.Country is not CountryCode.US
+          || string.IsNullOrWhiteSpace(instance.StateOrProvince)
+          || _supportedDevelopmentRegions.Contains(instance.StateOrProvince) )
         {
-            results.Add(ValidationState.CreateError("{0}: Only the values {1} are supported by the UPS Address Validation API while in {2} mode.",
-                nameof(instance.StateOrProvince),
-                string.Join(", ", _supportedDevelopmentRegions),
-                ClientEnvironment.DEVELOPMENT));
+            return true;
         }
 
-        return base.ValidateAsync(instance, results, cancellationToken);
+        results.Add(ValidationState.CreateError(Resources.Validation_Provider_OnlyValuesSupportedInMode,
+            nameof(instance.StateOrProvince),
+            string.Join(", ", _supportedDevelopmentRegions),
+            "UPS",
+            ClientEnvironment.DEVELOPMENT));
+
+        return false;
     }
 }
