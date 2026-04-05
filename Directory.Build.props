@@ -31,10 +31,6 @@
     <RestoreLockedMode>true</RestoreLockedMode>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <BeforePack>$(BeforePack);IncludeAnalyzersInPackage</BeforePack>
-  </PropertyGroup>
-
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>$(AssemblyName).Tests</_Parameter1>
