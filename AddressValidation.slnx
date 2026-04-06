@@ -9,8 +9,6 @@
     <Project Path="src/Visus.AddressValidation.Integration.Ups/Visus.AddressValidation.Integration.Ups.csproj" />
   </Folder>
   <Folder Name="/03. Unit Tests/">
-    <File Path="tests/.editorconfig" />
-    <File Path="tests/Directory.Build.props" />
     <Project Path="tests/Visus.AddressValidation.Integration.FedEx.Tests/Visus.AddressValidation.Integration.FedEx.Tests.csproj" />
     <Project Path="tests/Visus.AddressValidation.Integration.Google.Tests/Visus.AddressValidation.Integration.Google.Tests.csproj" />
     <Project Path="tests/Visus.AddressValidation.Integration.PitneyBowes.Tests/Visus.AddressValidation.Integration.PitneyBowes.Tests.csproj" />
