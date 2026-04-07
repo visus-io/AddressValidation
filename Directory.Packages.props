@@ -4,9 +4,10 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="coverlet.collector" Version="8.0.1" />
-    <PackageVersion Include="coverlet.msbuild" Version="8.0.1" />
-    <PackageVersion Include="JunitXml.TestLogger" Version="8.0.0" />
+    <PackageVersion Include="AutoFixture" Version="4.18.1" />
+    <PackageVersion Include="AutoFixture.AutoNSubstitute" Version="4.18.1" />
+    <PackageVersion Include="AwesomeAssertions" Version="9.4.0" />
+    <PackageVersion Include="AwesomeAssertions.Analyzers" Version="9.0.8" />
     <PackageVersion Include="Meziantou.Analyzer" Version="3.0.44" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.5" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="10.0.5" />
@@ -23,16 +24,29 @@
     <PackageVersion Include="RichardSzalay.MockHttp" Version="7.0.0" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.15.0" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.17.0" />
+    <PackageVersion Include="TUnit" Version="1.28.7" />
+    <PackageVersion Include="Verify" Version="31.14.0" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.1.2" />
-    <PackageVersion Include="Verify.SourceGenerators" Version="2.5.0" />
-    <PackageVersion Include="Verify.Xunit" Version="31.12.5" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
-    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="Verify.TUnit" Version="31.14.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Meziantou.Analyzer">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>analyzers</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
+    <PackageReference Include="AutoFixture" />
+    <PackageReference Include="AutoFixture.AutoNSubstitute" />
+    <PackageReference Include="AwesomeAssertions" />
+    <PackageReference Include="AwesomeAssertions.Analyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NSubstitute" />
+    <PackageReference Include="PublicApiGenerator" />
+    <PackageReference Include="Verify" />
+    <PackageReference Include="Verify.DiffPlex" />
+    <PackageReference Include="Verify.TUnit" />
   </ItemGroup>
 </Project>

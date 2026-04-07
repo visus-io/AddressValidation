@@ -26,6 +26,10 @@
     <RepositoryUrl>https://github.com/visus-io/addressvalidation.git</RepositoryUrl>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(CI)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <RestoreLockedMode>true</RestoreLockedMode>

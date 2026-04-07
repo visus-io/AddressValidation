@@ -4,6 +4,9 @@ using System.Collections.Frozen;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+/// <summary>
+///     Converts JSON strings representing boolean values to and from <see cref="bool" />.
+/// </summary>
 public sealed class JsonStringBooleanConverter : JsonConverter<bool>
 {
     private static readonly FrozenSet<string> PossibleBooleanFalseStrings = new HashSet<string>(StringComparer.OrdinalIgnoreCase)

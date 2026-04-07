@@ -4,6 +4,9 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+/// <summary>
+///     Converts JSON strings representing dates to and from <see cref="Nullable{DateOnly}" />.
+/// </summary>
 public sealed class JsonStringDateOnlyConverter : JsonConverter<DateOnly?>
 {
     /// <inheritdoc />

@@ -1,6 +1,7 @@
 namespace Visus.AddressValidation.Serialization.Json;
 
 using System.Collections.Frozen;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Http;
@@ -77,23 +78,7 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
                     tokenResponse.ErrorDescription = reader.GetString();
                     break;
                 case nameof(TokenResponse.ExpiresIn):
-                {
-                    // remark: some implementations may return this as string rather than an integer
-                    int expiresIn;
-                    if ( reader.TokenType == JsonTokenType.String )
-                    {
-                        if ( !int.TryParse(reader.GetString(), out expiresIn) )
-                        {
-                            expiresIn = 0;
-                        }
-                    }
-                    else
-                    {
-                        expiresIn = reader.GetInt32();
-                    }
-
-                    tokenResponse.ExpiresIn = expiresIn;
-                }
+                    tokenResponse.ExpiresIn = ParseExpiresIn(ref reader);
                     break;
                 case nameof(TokenResponse.IdentityToken):
                     tokenResponse.IdentityToken = reader.GetString();
@@ -111,6 +96,17 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
         }
 
         return tokenResponse;
+    }
+
+    // remark: some implementations may return expires_in as a string rather than an integer
+    private static int ParseExpiresIn(ref Utf8JsonReader reader)
+    {
+        if ( reader.TokenType == JsonTokenType.String )
+        {
+            return int.TryParse(reader.GetString(), CultureInfo.InvariantCulture, out int expiresIn) ? expiresIn : 0;
+        }
+
+        return reader.GetInt32();
     }
 
     /// <inheritdoc />
