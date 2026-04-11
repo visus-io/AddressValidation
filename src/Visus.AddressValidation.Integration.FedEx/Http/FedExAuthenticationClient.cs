@@ -4,40 +4,31 @@ using System.Net.Http.Json;
 using AddressValidation.Abstractions;
 using AddressValidation.Http;
 using AddressValidation.Serialization.Json;
-using Microsoft.Extensions.Configuration;
+using Configuration;
+using Microsoft.Extensions.Options;
 
 internal sealed class FedExAuthenticationClient : IAuthenticationClient
 {
-    private readonly IConfiguration _configuration;
-
     private readonly HttpClient _httpClient;
 
-    public FedExAuthenticationClient(IConfiguration configuration,
-                                     HttpClient httpClient)
+    private readonly IOptions<FedExServiceOptions> _options;
+
+    public FedExAuthenticationClient(HttpClient httpClient, IOptions<FedExServiceOptions> options)
     {
-        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
     public async ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
-        string? clientId = _configuration[Constants.ClientIdConfigurationKey];
-        string? clientSecret = _configuration[Constants.ClientSecretConfigurationKey];
-        string? accountNumber = _configuration[Constants.AccountNumberConfigurationKey];
-
-        if ( string.IsNullOrWhiteSpace(clientId) ||
-             string.IsNullOrWhiteSpace(clientSecret) ||
-             string.IsNullOrWhiteSpace(accountNumber) )
+        if ( string.IsNullOrWhiteSpace(_options.Value.ClientId) ||
+             string.IsNullOrWhiteSpace(_options.Value.ClientSecret) ||
+             string.IsNullOrWhiteSpace(_options.Value.AccountNumber) )
         {
-            throw new InvalidOperationException($"{Constants.ClientIdConfigurationKey}, {Constants.ClientSecretConfigurationKey}, and {Constants.AccountNumberConfigurationKey} are required.");
+            throw new InvalidOperationException($"{nameof(FedExServiceOptions.ClientId)}, {nameof(FedExServiceOptions.ClientSecret)}, and {nameof(_options.Value.AccountNumber)} are required.");
         }
-
-        if ( !Enum.TryParse(_configuration[Constants.ClientEnvironmentConfigurationKey], out ClientEnvironment clientEnvironment) )
-        {
-            clientEnvironment = ClientEnvironment.DEVELOPMENT;
-        }
-
-        Uri baseUri = clientEnvironment switch
+        
+        Uri baseUri = _options.Value.ClientEnvironment switch
         {
             ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
             ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
@@ -48,8 +39,8 @@ internal sealed class FedExAuthenticationClient : IAuthenticationClient
 
         List<KeyValuePair<string, string>> payload =
         [
-            new("client_id", clientId),
-            new("client_secret", clientSecret),
+            new("client_id", _options.Value.ClientId),
+            new("client_secret", _options.Value.ClientSecret),
             new("grant_type", "client_credentials"),
         ];
 

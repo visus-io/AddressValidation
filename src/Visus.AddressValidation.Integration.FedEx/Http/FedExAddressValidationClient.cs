@@ -3,16 +3,21 @@ namespace Visus.AddressValidation.Integration.FedEx.Http;
 using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
 using AddressValidation.Abstractions;
-using Microsoft.Extensions.Configuration;
+using Configuration;
+using Microsoft.Extensions.Options;
 using Serialization.Json;
 
-internal sealed class FedExAddressValidationClient(
-    IConfiguration configuration,
-    HttpClient httpClient)
+internal sealed class FedExAddressValidationClient
 {
-    private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    private readonly HttpClient _httpClient;
 
-    private readonly HttpClient _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+    private readonly IOptions<FedExServiceOptions> _options;
+
+    public FedExAddressValidationClient(HttpClient httpClient, IOptions<FedExServiceOptions> options)
+    {
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        _options = options ?? throw new ArgumentNullException(nameof(options));
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ValueTask<ApiResponse?> ValidateAddressAsync(FedExAddressValidationRequest request,
@@ -25,12 +30,7 @@ internal sealed class FedExAddressValidationClient(
     private async ValueTask<ApiResponse?> ValidateAddressInternalAsync(FedExAddressValidationRequest request,
                                                                        CancellationToken cancellationToken = default)
     {
-        if ( !Enum.TryParse(_configuration[Constants.ClientEnvironmentConfigurationKey], out ClientEnvironment clientEnvironment) )
-        {
-            clientEnvironment = ClientEnvironment.DEVELOPMENT;
-        }
-
-        Uri baseUri = clientEnvironment switch
+        Uri baseUri = _options.Value.ClientEnvironment switch
         {
             ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
             ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,

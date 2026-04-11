@@ -9,26 +9,6 @@ using AddressValidation.Abstractions;
 public static class Constants
 {
     /// <summary>
-    ///     FedEx Account Number Configuration Key
-    /// </summary>
-    public const string AccountNumberConfigurationKey = "VS_AVE_FDX_ACCOUNT_NUMBER";
-
-    /// <summary>
-    ///     Client Environment Configuration Key
-    /// </summary>
-    public const string ClientEnvironmentConfigurationKey = "VS_AVE_FDX_CLIENT_ENVIRONMENT";
-
-    /// <summary>
-    ///     OAuth2 Client ID Configuration Key
-    /// </summary>
-    public const string ClientIdConfigurationKey = "VS_AVE_FDX_CLIENT_ID";
-
-    /// <summary>
-    ///     OAuth2 Client Secret Configuration Key
-    /// </summary>
-    public const string ClientSecretConfigurationKey = "VS_AVE_FDX_CLIENT_SECRET";
-
-    /// <summary>
     ///     FedEx API Development Endpoint
     /// </summary>
     public static readonly Uri DevelopmentEndpointBaseUri = new("https://apis-sandbox.fedex.com");

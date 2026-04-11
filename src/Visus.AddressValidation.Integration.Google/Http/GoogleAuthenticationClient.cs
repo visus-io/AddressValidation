@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.Google.Http;
 
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
@@ -7,30 +8,32 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using AddressValidation.Http;
 using AddressValidation.Serialization.Json;
-using Microsoft.Extensions.Configuration;
+using Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 internal sealed class GoogleAuthenticationClient : IAuthenticationClient
 {
     private static readonly Uri AuthenticationUrl = new("https://oauth2.googleapis.com/token");
 
-    private readonly IConfiguration _configuration;
-
     private readonly HttpClient _httpClient;
 
-    public GoogleAuthenticationClient(IConfiguration configuration, HttpClient httpClient)
+    private readonly IOptions<GoogleServiceOptions> _options;
+
+    public GoogleAuthenticationClient(HttpClient httpClient, IOptions<GoogleServiceOptions> options)
     {
-        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
+    [SuppressMessage("Design",
+        "MA0051:Method is too long",
+        Justification = "The method is responsible for generating a JWT token and making an HTTP request to Google's OAuth 2.0 token endpoint, which requires multiple steps that are logically grouped together.")]
     public async ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
-        string? issuer = _configuration[Constants.ServiceAccountEmailConfigurationKey];
-        string? privateKey = _configuration[Constants.PrivateKeyConfigurationKey];
-        if ( string.IsNullOrWhiteSpace(issuer) || string.IsNullOrWhiteSpace(privateKey) )
+        if ( string.IsNullOrWhiteSpace(_options.Value.ServiceAccountEmail) || string.IsNullOrWhiteSpace(_options.Value.PrivateKey) )
         {
-            throw new InvalidOperationException($"{Constants.ServiceAccountEmailConfigurationKey} and {Constants.PrivateKeyConfigurationKey} are required.");
+            throw new InvalidOperationException($"{nameof(GoogleServiceOptions.ServiceAccountEmail)} and {nameof(GoogleServiceOptions.PrivateKey)} are required.");
         }
 
         DateTimeOffset currentDateTimeOffset = DateTimeOffset.UtcNow;
@@ -42,10 +45,10 @@ internal sealed class GoogleAuthenticationClient : IAuthenticationClient
             new("scope", "https://www.googleapis.com/auth/cloud-platform"),
         ];
 
-        string[] privateKeyBlocks = privateKey.Split('-', StringSplitOptions.RemoveEmptyEntries);
+        string[] privateKeyBlocks = _options.Value.PrivateKey.Split('-', StringSplitOptions.RemoveEmptyEntries);
         if ( !string.Equals(privateKeyBlocks[0], "BEGIN PRIVATE KEY", StringComparison.OrdinalIgnoreCase) )
         {
-            throw new InvalidOperationException($"{Constants.PrivateKeyConfigurationKey} is not a valid PKCS#8 PEM value.");
+            throw new InvalidOperationException($"{nameof(GoogleServiceOptions.PrivateKey)} is not a valid PKCS#8 PEM value.");
         }
 
         using RSA rsa = RSA.Create();
@@ -59,7 +62,7 @@ internal sealed class GoogleAuthenticationClient : IAuthenticationClient
             },
         };
 
-        JwtSecurityToken token = new(issuer,
+        JwtSecurityToken token = new(_options.Value.ServiceAccountEmail,
             AuthenticationUrl.ToString(),
             claims,
             signingCredentials: credentials);

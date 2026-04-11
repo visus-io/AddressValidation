@@ -1,0 +1,41 @@
+namespace Visus.AddressValidation.Integration.FedEx.Configuration;
+
+using AddressValidation.Abstractions;
+
+/// <summary>
+///     Configuration options for the FedEx address validation service.
+/// </summary>
+public sealed class FedExServiceOptions
+{
+    /// <summary>
+    ///     The configuration section path used to bind these options from
+    ///     <c>appsettings.json</c> or other configuration sources.
+    /// </summary>
+    public const string SectionName = "AddressValidationSettings:FedEx";
+
+    /// <summary>
+    ///     Gets or sets the FedEx account number used to authenticate API
+    ///     requests.
+    /// </summary>
+    public required string AccountNumber { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the target client environment, which determines
+    ///     whether requests are sent to the FedEx sandbox or production
+    ///     endpoint. Defaults to
+    ///     <see cref="AddressValidation.Abstractions.ClientEnvironment.DEVELOPMENT" />.
+    /// </summary>
+    public ClientEnvironment ClientEnvironment { get; set; } = ClientEnvironment.DEVELOPMENT;
+
+    /// <summary>
+    ///     Gets or sets the OAuth 2.0 client ID issued by FedEx for the
+    ///     registered application.
+    /// </summary>
+    public required string ClientId { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the OAuth 2.0 client secret issued by FedEx for the
+    ///     registered application.
+    /// </summary>
+    public required string ClientSecret { get; set; }
+}

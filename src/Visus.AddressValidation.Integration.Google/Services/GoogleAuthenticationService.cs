@@ -1,28 +1,27 @@
 namespace Visus.AddressValidation.Integration.Google.Services;
 
 using AddressValidation.Services;
+using Configuration;
 using Http;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 internal sealed class GoogleAuthenticationService : AbstractAuthenticationService<GoogleAuthenticationClient>
 {
-    private readonly IConfiguration _configuration;
+    private readonly IOptions<GoogleServiceOptions> _options;
 
     public GoogleAuthenticationService(IDistributedCache cache,
-                                       IConfiguration configuration,
+                                       IOptions<GoogleServiceOptions> options,
                                        GoogleAuthenticationClient authenticationClient)
         : base(authenticationClient, cache)
     {
-        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
     protected override string? GenerateCacheKey()
     {
-        string? projectId = _configuration[Constants.ProjectIdConfigurationKey];
-
-        return string.IsNullOrWhiteSpace(projectId)
+        return string.IsNullOrWhiteSpace(_options.Value.ProjectId)
                    ? null
-                   : $"VS_AVE_CACHE_GOOGLE_ACCESS_TOKEN_{projectId}";
+                   : $"VS_AVE_CACHE_GOOGLE_ACCESS_TOKEN_{_options.Value.ProjectId}";
     }
 }

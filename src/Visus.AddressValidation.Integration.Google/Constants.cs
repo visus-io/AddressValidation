@@ -9,24 +9,9 @@ using AddressValidation.Abstractions;
 public static class Constants
 {
     /// <summary>
-    ///     Service Account Private Key
-    /// </summary>
-    public const string PrivateKeyConfigurationKey = "VS_AVE_GCP_SERVICE_ACCOUNT_PRIVATE_KEY";
-
-    /// <summary>
     ///     Google API Production Endpoint
     /// </summary>
     public static readonly Uri ProductionEndpointBaseUri = new("https://addressvalidation.googleapis.com");
-
-    /// <summary>
-    ///     Google Project ID
-    /// </summary>
-    public const string ProjectIdConfigurationKey = "VS_AVE_GCP_PROJECT_ID";
-
-    /// <summary>
-    ///     Service Account Email Address
-    /// </summary>
-    public const string ServiceAccountEmailConfigurationKey = "VS_AVE_GCP_SERVICE_ACCOUNT_EMAIL";
 
     /// <summary>
     ///     Countries that are supported by the Google Address Validation API.

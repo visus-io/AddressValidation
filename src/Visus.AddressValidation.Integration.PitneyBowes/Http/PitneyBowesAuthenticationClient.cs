@@ -4,36 +4,30 @@ using System.Net.Http.Json;
 using AddressValidation.Abstractions;
 using AddressValidation.Http;
 using AddressValidation.Serialization.Json;
-using Microsoft.Extensions.Configuration;
+using Configuration;
+using Microsoft.Extensions.Options;
 
 internal sealed class PitneyBowesAuthenticationClient : IAuthenticationClient
 {
-    private readonly IConfiguration _configuration;
-
     private readonly HttpClient _httpClient;
+    private readonly IOptions<PitneyBowesServiceOptions> _options;
 
-    public PitneyBowesAuthenticationClient(IConfiguration configuration, HttpClient httpClient)
+    public PitneyBowesAuthenticationClient(HttpClient httpClient, IOptions<PitneyBowesServiceOptions> options)
     {
-        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
     public async ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
-        string? apiKey = _configuration[Constants.ApiKeyConfigurationKey];
-        string? apiSecret = _configuration[Constants.ApiSecretConfigurationKey];
-
-        if ( string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(apiSecret) )
+        if ( string.IsNullOrWhiteSpace(_options.Value.ApiKey)
+          || string.IsNullOrWhiteSpace(_options.Value.ApiSecret)
+          || string.IsNullOrWhiteSpace(_options.Value.DeveloperId) )
         {
-            throw new InvalidOperationException($"{Constants.ApiKeyConfigurationKey} and {Constants.ApiSecretConfigurationKey} are required.");
+            throw new InvalidOperationException($"{nameof(PitneyBowesServiceOptions.ApiKey)}, {nameof(PitneyBowesServiceOptions.ApiSecret)} and {nameof(PitneyBowesServiceOptions.DeveloperId)} are required.");
         }
 
-        if ( !Enum.TryParse(_configuration[Constants.ClientEnvironmentConfigurationKey], out ClientEnvironment clientEnvironment) )
-        {
-            clientEnvironment = ClientEnvironment.DEVELOPMENT;
-        }
-
-        Uri baseUri = clientEnvironment switch
+        Uri baseUri = _options.Value.ClientEnvironment switch
         {
             ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
             ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
@@ -50,7 +44,7 @@ internal sealed class PitneyBowesAuthenticationClient : IAuthenticationClient
         using HttpRequestMessage request = new(HttpMethod.Post, requestUri);
 
         request.Content = new FormUrlEncodedContent(payload);
-        request.Headers.Authorization = new BasicAuthenticationHeaderValue(apiKey, apiSecret);
+        request.Headers.Authorization = new BasicAuthenticationHeaderValue(_options.Value.ApiKey, _options.Value.ApiSecret);
 
         using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
         if ( !response.IsSuccessStatusCode )
