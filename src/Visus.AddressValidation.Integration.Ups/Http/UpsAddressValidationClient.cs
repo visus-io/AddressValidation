@@ -1,17 +1,15 @@
 namespace Visus.AddressValidation.Integration.Ups.Http;
 
 using System.Net.Http.Json;
-using AddressValidation.Abstractions;
 using Configuration;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Serialization.Json;
 
 internal sealed class UpsAddressValidationClient
 {
-    private readonly IOptions<UpsServiceOptions> _options;
-
     private readonly HttpClient _httpClient;
+
+    private readonly IOptions<UpsServiceOptions> _options;
 
     public UpsAddressValidationClient(HttpClient httpClient, IOptions<UpsServiceOptions> options)
     {
@@ -27,14 +25,7 @@ internal sealed class UpsAddressValidationClient
 
     private async ValueTask<ApiResponse?> ValidateAddressInternalAsync(UpsAddressValidationRequest request, CancellationToken cancellationToken)
     {
-        Uri baseUri = _options.Value.ClientEnvironment switch
-        {
-            ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
-            ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
-            _ => Constants.DevelopmentEndpointBaseUri,
-        };
-
-        Uri requestUri = new(baseUri, "/api/addressvalidation/v2/3");
+        Uri requestUri = new(_options.Value.EndpointBaseUri, "/api/addressvalidation/v2/3");
 
         using HttpRequestMessage httpRequest = new(HttpMethod.Post, requestUri);
 

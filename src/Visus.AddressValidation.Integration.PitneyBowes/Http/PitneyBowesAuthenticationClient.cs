@@ -1,7 +1,6 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Http;
 
 using System.Net.Http.Json;
-using AddressValidation.Abstractions;
 using AddressValidation.Http;
 using AddressValidation.Serialization.Json;
 using Configuration;
@@ -27,14 +26,7 @@ internal sealed class PitneyBowesAuthenticationClient : IAuthenticationClient
             throw new InvalidOperationException($"{nameof(PitneyBowesServiceOptions.ApiKey)}, {nameof(PitneyBowesServiceOptions.ApiSecret)} and {nameof(PitneyBowesServiceOptions.DeveloperId)} are required.");
         }
 
-        Uri baseUri = _options.Value.ClientEnvironment switch
-        {
-            ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
-            ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
-            _ => Constants.DevelopmentEndpointBaseUri,
-        };
-
-        Uri requestUri = new(baseUri, "/oauth/token");
+        Uri requestUri = new(_options.Value.EndpointBaseUri, "/oauth/token");
 
         List<KeyValuePair<string, string>> payload =
         [

@@ -1,7 +1,6 @@
 namespace Visus.AddressValidation.Integration.Ups.Http;
 
 using System.Net.Http.Json;
-using AddressValidation.Abstractions;
 using AddressValidation.Http;
 using AddressValidation.Serialization.Json;
 using Configuration;
@@ -28,14 +27,7 @@ internal sealed class UpsAuthenticationClient : IAuthenticationClient
             throw new InvalidOperationException($"{nameof(UpsServiceOptions.ClientId)}, {nameof(UpsServiceOptions.ClientSecret)}, and {nameof(UpsServiceOptions.AccountNumber)} are required.");
         }
 
-        Uri baseUri = _options.Value.ClientEnvironment switch
-        {
-            ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
-            ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
-            _ => Constants.DevelopmentEndpointBaseUri,
-        };
-
-        Uri requestUri = new(baseUri, "/security/v1/oauth/token");
+        Uri requestUri = new(_options.Value.EndpointBaseUri, "/security/v1/oauth/token");
 
         List<KeyValuePair<string, string>> payload =
         [

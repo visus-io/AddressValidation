@@ -14,6 +14,18 @@ public sealed class FedExServiceOptions
     public const string SectionName = "AddressValidationSettings:FedEx";
 
     /// <summary>
+    ///     Gets the base URI of the FedEx API endpoint, derived from the
+    ///     current <see cref="ClientEnvironment" /> value.
+    /// </summary>
+    public Uri EndpointBaseUri =>
+        ClientEnvironment switch
+        {
+            ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
+            ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
+            _ => Constants.DevelopmentEndpointBaseUri,
+        };
+
+    /// <summary>
     ///     Gets or sets the FedEx account number used to authenticate API
     ///     requests.
     /// </summary>

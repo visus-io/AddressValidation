@@ -11,6 +11,7 @@ namespace Visus.AddressValidation.Integration.PitneyBowes.Configuration
         public required string ApiSecret { get; set; }
         public Visus.AddressValidation.Abstractions.ClientEnvironment ClientEnvironment { get; set; }
         public required string DeveloperId { get; set; }
+        public System.Uri EndpointBaseUri { get; }
     }
 }
 namespace Visus.AddressValidation.Integration.PitneyBowes

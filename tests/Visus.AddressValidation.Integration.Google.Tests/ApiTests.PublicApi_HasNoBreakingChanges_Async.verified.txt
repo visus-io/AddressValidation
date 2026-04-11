@@ -16,7 +16,6 @@ namespace Visus.AddressValidation.Integration.Google
 {
     public static class Constants
     {
-        public static readonly System.Uri ProductionEndpointBaseUri;
         public static readonly System.Collections.Frozen.FrozenSet<Visus.AddressValidation.Abstractions.CountryCode> SupportedCountries;
     }
 }

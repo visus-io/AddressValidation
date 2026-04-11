@@ -9,11 +9,6 @@ using AddressValidation.Abstractions;
 public static class Constants
 {
     /// <summary>
-    ///     Google API Production Endpoint
-    /// </summary>
-    public static readonly Uri ProductionEndpointBaseUri = new("https://addressvalidation.googleapis.com");
-
-    /// <summary>
     ///     Countries that are supported by the Google Address Validation API.
     /// </summary>
     public static readonly FrozenSet<CountryCode> SupportedCountries = new HashSet<CountryCode>

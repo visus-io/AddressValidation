@@ -14,6 +14,18 @@ public class UpsServiceOptions
     public const string SectionName = "AddressValidationSettings:Ups";
 
     /// <summary>
+    ///     Gets the base URI of the UPS API endpoint, derived from the
+    ///     current <see cref="ClientEnvironment" /> value.
+    /// </summary>
+    public Uri EndpointBaseUri =>
+        ClientEnvironment switch
+        {
+            ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
+            ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
+            _ => Constants.DevelopmentEndpointBaseUri,
+        };
+
+    /// <summary>
     ///     Gets or sets the UPS account number used to authenticate API
     ///     requests.
     /// </summary>

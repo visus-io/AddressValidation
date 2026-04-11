@@ -1,17 +1,15 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Http;
 
 using System.Net.Http.Json;
-using AddressValidation.Abstractions;
 using Configuration;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Serialization.Json;
 
 internal sealed class PitneyBowesAddressValidationClient
 {
-    private readonly IOptions<PitneyBowesServiceOptions> _options;
-
     private readonly HttpClient _httpClient;
+
+    private readonly IOptions<PitneyBowesServiceOptions> _options;
 
     public PitneyBowesAddressValidationClient(HttpClient httpClient, IOptions<PitneyBowesServiceOptions> options)
     {
@@ -27,16 +25,9 @@ internal sealed class PitneyBowesAddressValidationClient
 
     private async ValueTask<ApiResponse?> ValidateAddressInternalAsync(PitneyBowesAddressValidationRequest request, CancellationToken cancellationToken)
     {
-        Uri baseUri = _options.Value.ClientEnvironment switch
-        {
-            ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
-            ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
-            _ => Constants.DevelopmentEndpointBaseUri,
-        };
-
         Uri requestUri = request.IncludeSuggestions
-                             ? new Uri(baseUri, "/shippingservices/v1/addresses/verify-suggest?returnSuggestions=true")
-                             : new Uri(baseUri, "/shippingservices/v1/addresses/verify?minimalAddressValidation=false");
+                             ? new Uri(_options.Value.EndpointBaseUri, "/shippingservices/v1/addresses/verify-suggest?returnSuggestions=true")
+                             : new Uri(_options.Value.EndpointBaseUri, "/shippingservices/v1/addresses/verify?minimalAddressValidation=false");
 
         using HttpRequestMessage httpRequest = new(HttpMethod.Post, requestUri);
 

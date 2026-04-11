@@ -14,6 +14,18 @@ public sealed class PitneyBowesServiceOptions
     public const string SectionName = "AddressValidationSettings:PitneyBowes";
 
     /// <summary>
+    ///     Gets the base URI of the Pitney Bowes API endpoint, derived from the
+    ///     current <see cref="ClientEnvironment" /> value.
+    /// </summary>
+    public Uri EndpointBaseUri =>
+        ClientEnvironment switch
+        {
+            ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
+            ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
+            _ => Constants.DevelopmentEndpointBaseUri,
+        };
+
+    /// <summary>
     ///     Gets or sets the API key issued by Pitney Bowes for the registered
     ///     application.
     /// </summary>
