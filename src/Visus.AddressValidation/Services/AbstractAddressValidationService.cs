@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Services;
 
-using System.Runtime.CompilerServices;
 using Http;
 using Model;
 using Validation;
@@ -56,7 +55,6 @@ public abstract class AbstractAddressValidationService<TRequest, TResponse> : IA
     }
 
     /// <inheritdoc />
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ValueTask<IAddressValidationResponse?> ValidateAsync(TRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);

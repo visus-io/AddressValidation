@@ -1,7 +1,5 @@
 namespace Visus.AddressValidation.Validation;
 
-using System.Runtime.CompilerServices;
-
 /// <summary>
 ///     Base class for implemented a validator.
 /// </summary>
@@ -10,7 +8,6 @@ public abstract class AbstractValidator<T> : IValidator<T>
     where T : class
 {
     /// <inheritdoc />
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ValueTask<IValidationResult> ExecuteAsync(T instance, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(instance);

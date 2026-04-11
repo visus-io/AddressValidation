@@ -1,7 +1,6 @@
 namespace Visus.AddressValidation.Http;
 
 using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
 using System.Security.Authentication;
 using Services;
 
@@ -27,7 +26,6 @@ public sealed class BearerTokenDelegatingHandler<TClient> : DelegatingHandler
 
     /// <inheritdoc />
     /// <exception cref="InvalidCredentialException">Provided credentials were rejected by the server.</exception>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);

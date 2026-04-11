@@ -1,7 +1,6 @@
 namespace Visus.AddressValidation.Integration.FedEx.Http;
 
 using System.Net.Http.Json;
-using System.Runtime.CompilerServices;
 using AddressValidation.Abstractions;
 using Configuration;
 using Microsoft.Extensions.Options;
@@ -19,7 +18,6 @@ internal sealed class FedExAddressValidationClient
         _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ValueTask<ApiResponse?> ValidateAddressAsync(FedExAddressValidationRequest request,
                                                         CancellationToken cancellationToken = default)
     {

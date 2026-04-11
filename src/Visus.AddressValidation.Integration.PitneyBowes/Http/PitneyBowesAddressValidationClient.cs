@@ -1,7 +1,6 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Http;
 
 using System.Net.Http.Json;
-using System.Runtime.CompilerServices;
 using AddressValidation.Abstractions;
 using Configuration;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +19,6 @@ internal sealed class PitneyBowesAddressValidationClient
         _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ValueTask<ApiResponse?> ValidateAddressAsync(PitneyBowesAddressValidationRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);

@@ -1,7 +1,6 @@
 namespace Visus.AddressValidation.Integration.Google.Http;
 
 using System.Net.Http.Json;
-using System.Runtime.CompilerServices;
 using Configuration;
 using Microsoft.Extensions.Options;
 using Serialization.Json;
@@ -19,7 +18,6 @@ internal sealed class GoogleAddressValidationClient
         _httpClient.DefaultRequestHeaders.Add("X-Goog-User-Project", options.Value.ProjectId);
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ValueTask<ApiResponse?> ValidateAddressAsync(GoogleAddressValidationRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
