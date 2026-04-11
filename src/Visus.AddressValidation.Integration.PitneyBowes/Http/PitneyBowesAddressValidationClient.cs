@@ -3,20 +3,21 @@ namespace Visus.AddressValidation.Integration.PitneyBowes.Http;
 using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
 using AddressValidation.Abstractions;
+using Configuration;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Serialization.Json;
 
 internal sealed class PitneyBowesAddressValidationClient
 {
-    private readonly IConfiguration _configuration;
+    private readonly IOptions<PitneyBowesServiceOptions> _options;
 
     private readonly HttpClient _httpClient;
 
-    public PitneyBowesAddressValidationClient(IConfiguration configuration,
-                                              HttpClient httpClient)
+    public PitneyBowesAddressValidationClient(HttpClient httpClient, IOptions<PitneyBowesServiceOptions> options)
     {
-        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -28,12 +29,7 @@ internal sealed class PitneyBowesAddressValidationClient
 
     private async ValueTask<ApiResponse?> ValidateAddressInternalAsync(PitneyBowesAddressValidationRequest request, CancellationToken cancellationToken)
     {
-        if ( !Enum.TryParse(_configuration[Constants.ClientEnvironmentConfigurationKey], out ClientEnvironment clientEnvironment) )
-        {
-            clientEnvironment = ClientEnvironment.DEVELOPMENT;
-        }
-
-        Uri baseUri = clientEnvironment switch
+        Uri baseUri = _options.Value.ClientEnvironment switch
         {
             ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
             ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,

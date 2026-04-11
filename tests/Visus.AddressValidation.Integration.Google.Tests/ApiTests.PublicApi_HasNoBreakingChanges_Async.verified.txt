@@ -1,13 +1,21 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguage("en")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Integration.Google.Tests")]
+namespace Visus.AddressValidation.Integration.Google.Configuration
+{
+    public sealed class GoogleServiceOptions
+    {
+        public const string SectionName = "AddressValidationSettings:Google";
+        public GoogleServiceOptions() { }
+        public required string PrivateKey { get; set; }
+        public required string ProjectId { get; set; }
+        public required string ServiceAccountEmail { get; set; }
+    }
+}
 namespace Visus.AddressValidation.Integration.Google
 {
     public static class Constants
     {
-        public const string PrivateKeyConfigurationKey = "VS_AVE_GCP_SERVICE_ACCOUNT_PRIVATE_KEY";
-        public const string ProjectIdConfigurationKey = "VS_AVE_GCP_PROJECT_ID";
-        public const string ServiceAccountEmailConfigurationKey = "VS_AVE_GCP_SERVICE_ACCOUNT_EMAIL";
         public static readonly System.Uri ProductionEndpointBaseUri;
         public static readonly System.Collections.Frozen.FrozenSet<Visus.AddressValidation.Abstractions.CountryCode> SupportedCountries;
     }
@@ -16,7 +24,7 @@ namespace Visus.AddressValidation.Integration.Google.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddGoogleAddressValidation(this Microsoft.Extensions.DependencyInjection.IServiceCollection services) { }
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddGoogleAddressValidation(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration) { }
     }
 }
 namespace Visus.AddressValidation.Integration.Google.Http

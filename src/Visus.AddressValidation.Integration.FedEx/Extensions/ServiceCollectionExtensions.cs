@@ -3,7 +3,9 @@ namespace Visus.AddressValidation.Integration.FedEx.Extensions;
 using AddressValidation.Http;
 using AddressValidation.Services;
 using AddressValidation.Validation;
+using Configuration;
 using Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Services;
@@ -19,10 +21,14 @@ public static class ServiceCollectionExtensions
     ///     <see cref="IServiceCollection" />.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
+    /// <param name="configuration">The <see cref="IConfiguration" /> used to bind <see cref="FedExServiceOptions" />.</param>
     /// <returns>The same service collection so that multiple calls can be chained.</returns>
-    public static IServiceCollection AddFedExAddressValidation(this IServiceCollection services)
+    public static IServiceCollection AddFedExAddressValidation(this IServiceCollection services, IConfiguration configuration)
     {
         ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(configuration);
+        
+        services.Configure<FedExServiceOptions>(configuration.GetSection(FedExServiceOptions.SectionName));
 
         services.TryAddSingleton<FedExAuthenticationService>();
 

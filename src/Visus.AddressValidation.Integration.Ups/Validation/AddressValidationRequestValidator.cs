@@ -3,20 +3,25 @@ namespace Visus.AddressValidation.Integration.Ups.Validation;
 using System.Collections.Frozen;
 using AddressValidation.Abstractions;
 using AddressValidation.Validation;
+using Configuration;
 using Http;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Resources;
 
-internal sealed class AddressValidationRequestValidator(IConfiguration configuration)
-    : AbstractAddressValidationRequestValidator<UpsAddressValidationRequest>
+internal sealed class AddressValidationRequestValidator : AbstractAddressValidationRequestValidator<UpsAddressValidationRequest>
 {
-    private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    private readonly IOptions<UpsServiceOptions> _options;
 
     private readonly HashSet<string> _supportedDevelopmentRegions = new(StringComparer.OrdinalIgnoreCase)
     {
         "CA",
         "NY",
     };
+
+    public AddressValidationRequestValidator(IOptions<UpsServiceOptions> options)
+    {
+        _options = options ?? throw new ArgumentNullException(nameof(options));
+    }
 
     /// <inheritdoc />
     protected override string ProviderName => "UPS";
@@ -31,12 +36,7 @@ internal sealed class AddressValidationRequestValidator(IConfiguration configura
             return false;
         }
 
-        if ( !Enum.TryParse(_configuration[Constants.ClientEnvironmentConfigurationKey], out ClientEnvironment clientEnvironment) )
-        {
-            clientEnvironment = ClientEnvironment.DEVELOPMENT;
-        }
-
-        if ( clientEnvironment != ClientEnvironment.DEVELOPMENT )
+        if ( _options.Value.ClientEnvironment != ClientEnvironment.DEVELOPMENT )
         {
             return true;
         }

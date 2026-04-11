@@ -1,36 +1,27 @@
 namespace Visus.AddressValidation.Integration.Ups.Services;
 
-using AddressValidation.Abstractions;
 using AddressValidation.Services;
+using Configuration;
 using Http;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 internal sealed class UpsAuthenticationService : AbstractAuthenticationService<UpsAuthenticationClient>
 {
-    private readonly IConfiguration _configuration;
+    private readonly IOptions<UpsServiceOptions> _options;
 
     public UpsAuthenticationService(IDistributedCache cache,
-                                    IConfiguration configuration,
+                                    IOptions<UpsServiceOptions> options,
                                     UpsAuthenticationClient authenticationClient)
         : base(authenticationClient, cache)
     {
-        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
     protected override string? GenerateCacheKey()
     {
-        string? accountNumber = _configuration[Constants.AccountNumberConfigurationKey];
-        if ( string.IsNullOrWhiteSpace(accountNumber) )
-        {
-            return null;
-        }
-
-        if ( !Enum.TryParse(_configuration[Constants.ClientEnvironmentConfigurationKey], out ClientEnvironment clientEnvironment) )
-        {
-            clientEnvironment = ClientEnvironment.DEVELOPMENT;
-        }
-
-        return $"VS_AVE_CACHE_UPS_ACCESS_TOKEN_{accountNumber}:{clientEnvironment}";
+        return string.IsNullOrWhiteSpace(_options.Value.AccountNumber)
+                   ? null
+                   : $"VS_AVE_CACHE_UPS_ACCESS_TOKEN_{_options.Value.AccountNumber}:{_options.Value.ClientEnvironment}";
     }
 }

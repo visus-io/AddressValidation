@@ -2,18 +2,21 @@ namespace Visus.AddressValidation.Integration.Google.Http;
 
 using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
-using Microsoft.Extensions.Configuration;
+using Configuration;
+using Microsoft.Extensions.Options;
 using Serialization.Json;
 
 internal sealed class GoogleAddressValidationClient
 {
     private readonly HttpClient _httpClient;
 
-    public GoogleAddressValidationClient(IConfiguration configuration, HttpClient httpClient)
+    public GoogleAddressValidationClient(HttpClient httpClient, IOptions<GoogleServiceOptions> options)
     {
+        ArgumentNullException.ThrowIfNull(options);
+
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         _httpClient.BaseAddress = Constants.ProductionEndpointBaseUri;
-        _httpClient.DefaultRequestHeaders.Add("X-Goog-User-Project", configuration[Constants.ProjectIdConfigurationKey]);
+        _httpClient.DefaultRequestHeaders.Add("X-Goog-User-Project", options.Value.ProjectId);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
