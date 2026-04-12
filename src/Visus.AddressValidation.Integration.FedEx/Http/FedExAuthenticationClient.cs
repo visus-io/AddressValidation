@@ -20,13 +20,6 @@ internal sealed class FedExAuthenticationClient : IAuthenticationClient
 
     public async ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
-        if ( string.IsNullOrWhiteSpace(_options.Value.ClientId) ||
-             string.IsNullOrWhiteSpace(_options.Value.ClientSecret) ||
-             string.IsNullOrWhiteSpace(_options.Value.AccountNumber) )
-        {
-            throw new InvalidOperationException($"{nameof(FedExServiceOptions.ClientId)}, {nameof(FedExServiceOptions.ClientSecret)}, and {nameof(_options.Value.AccountNumber)} are required.");
-        }
-
         Uri requestUri = new(_options.Value.EndpointBaseUri, "/oauth/token");
 
         List<KeyValuePair<string, string>> payload =

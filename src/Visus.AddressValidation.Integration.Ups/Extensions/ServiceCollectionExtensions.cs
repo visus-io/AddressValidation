@@ -8,6 +8,7 @@ using Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Services;
 using Validation;
 
@@ -27,8 +28,12 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(configuration);
+
+        services.AddOptions<UpsServiceOptions>()
+                .Bind(configuration.GetSection(UpsServiceOptions.SectionName))
+                .ValidateOnStart();
         
-        services.Configure<UpsServiceOptions>(configuration.GetSection(UpsServiceOptions.SectionName));
+        services.TryAddSingleton<IValidateOptions<UpsServiceOptions>, UpsServiceOptionsValidator>();
 
         services.TryAddSingleton<UpsAuthenticationService>();
 

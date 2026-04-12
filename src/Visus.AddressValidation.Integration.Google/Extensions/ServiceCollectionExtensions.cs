@@ -8,6 +8,7 @@ using Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Services;
 using Validation;
 
@@ -28,8 +29,12 @@ public static class ServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(configuration);
         
-        services.Configure<GoogleServiceOptions>(configuration.GetSection(GoogleServiceOptions.SectionName));
+        services.AddOptions<GoogleServiceOptions>()
+                .Bind(configuration.GetSection(GoogleServiceOptions.SectionName))
+                .ValidateOnStart();
 
+        services.TryAddSingleton<IValidateOptions<GoogleServiceOptions>, GoogleServiceOptionsValidator>();
+        
         services.TryAddSingleton<GoogleAuthenticationService>();
 
         services.TryAddScoped<IValidator<GoogleAddressValidationRequest>, AddressValidationRequestValidator>();

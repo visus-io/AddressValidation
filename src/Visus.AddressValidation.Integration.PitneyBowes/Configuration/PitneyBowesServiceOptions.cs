@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Configuration;
 
+using System.ComponentModel.DataAnnotations;
 using AddressValidation.Abstractions;
 
 /// <summary>
@@ -29,12 +30,14 @@ public sealed class PitneyBowesServiceOptions
     ///     Gets or sets the API key issued by Pitney Bowes for the registered
     ///     application.
     /// </summary>
+    [Required(AllowEmptyStrings = false)]
     public required string ApiKey { get; set; }
 
     /// <summary>
     ///     Gets or sets the API secret issued by Pitney Bowes for the
     ///     registered application.
     /// </summary>
+    [Required(AllowEmptyStrings = false)]
     public required string ApiSecret { get; set; }
 
     /// <summary>
@@ -49,5 +52,6 @@ public sealed class PitneyBowesServiceOptions
     ///     Gets or sets the Pitney Bowes developer ID associated with the
     ///     registered application.
     /// </summary>
+    [Required(AllowEmptyStrings = false)]
     public required string DeveloperId { get; set; }
 }

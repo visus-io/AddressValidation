@@ -8,6 +8,7 @@ using Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Services;
 using Validation;
 
@@ -28,7 +29,11 @@ public static class ServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(configuration);
 
-        services.Configure<PitneyBowesServiceOptions>(configuration.GetSection(PitneyBowesServiceOptions.SectionName));
+        services.AddOptions<PitneyBowesServiceOptions>()
+                .Bind(configuration.GetSection(nameof(PitneyBowesServiceOptions)))
+                .ValidateOnStart();
+        
+        services.TryAddSingleton<IValidateOptions<PitneyBowesServiceOptions>,  PitneyBowesServiceOptionsValidator>();
 
         services.TryAddSingleton<PitneyBowesAuthenticationService>();
 

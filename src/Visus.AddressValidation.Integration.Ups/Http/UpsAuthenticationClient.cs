@@ -20,13 +20,6 @@ internal sealed class UpsAuthenticationClient : IAuthenticationClient
 
     public async ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
-        if ( string.IsNullOrWhiteSpace(_options.Value.ClientId) ||
-             string.IsNullOrWhiteSpace(_options.Value.ClientSecret) ||
-             string.IsNullOrWhiteSpace(_options.Value.AccountNumber) )
-        {
-            throw new InvalidOperationException($"{nameof(UpsServiceOptions.ClientId)}, {nameof(UpsServiceOptions.ClientSecret)}, and {nameof(UpsServiceOptions.AccountNumber)} are required.");
-        }
-
         Uri requestUri = new(_options.Value.EndpointBaseUri, "/security/v1/oauth/token");
 
         List<KeyValuePair<string, string>> payload =

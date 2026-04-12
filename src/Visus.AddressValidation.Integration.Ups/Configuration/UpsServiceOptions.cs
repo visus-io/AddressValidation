@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.Ups.Configuration;
 
+using System.ComponentModel.DataAnnotations;
 using AddressValidation.Abstractions;
 
 /// <summary>
@@ -29,6 +30,7 @@ public class UpsServiceOptions
     ///     Gets or sets the UPS account number used to authenticate API
     ///     requests.
     /// </summary>
+    [Required(AllowEmptyStrings = false)]
     public required string AccountNumber { get; set; }
 
     /// <summary>
@@ -43,11 +45,13 @@ public class UpsServiceOptions
     ///     Gets or sets the OAuth 2.0 client ID issued by UPS for the
     ///     registered application.
     /// </summary>
+    [Required(AllowEmptyStrings = false)]
     public required string ClientId { get; set; }
 
     /// <summary>
     ///     Gets or sets the OAuth 2.0 client secret issued by UPS for the
     ///     registered application.
     /// </summary>
+    [Required(AllowEmptyStrings = false)]
     public required string ClientSecret { get; set; }
 }

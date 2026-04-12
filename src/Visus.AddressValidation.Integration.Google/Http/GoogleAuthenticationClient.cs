@@ -25,17 +25,9 @@ internal sealed class GoogleAuthenticationClient : IAuthenticationClient
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         _options = options ?? throw new ArgumentNullException(nameof(options));
     }
-
-    [SuppressMessage("Design",
-        "MA0051:Method is too long",
-        Justification = "The method is responsible for generating a JWT token and making an HTTP request to Google's OAuth 2.0 token endpoint, which requires multiple steps that are logically grouped together.")]
+    
     public async ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
-        if ( string.IsNullOrWhiteSpace(_options.Value.ServiceAccountEmail) || string.IsNullOrWhiteSpace(_options.Value.PrivateKey) )
-        {
-            throw new InvalidOperationException($"{nameof(GoogleServiceOptions.ServiceAccountEmail)} and {nameof(GoogleServiceOptions.PrivateKey)} are required.");
-        }
-
         DateTimeOffset currentDateTimeOffset = DateTimeOffset.UtcNow;
 
         Claim[] claims =

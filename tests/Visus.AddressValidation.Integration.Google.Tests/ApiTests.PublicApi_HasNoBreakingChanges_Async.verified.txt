@@ -7,9 +7,18 @@ namespace Visus.AddressValidation.Integration.Google.Configuration
     {
         public const string SectionName = "AddressValidationSettings:Google";
         public GoogleServiceOptions() { }
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string PrivateKey { get; set; }
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ProjectId { get; set; }
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ServiceAccountEmail { get; set; }
+    }
+    [Microsoft.Extensions.Options.OptionsValidator]
+    public sealed class GoogleServiceOptionsValidator : Microsoft.Extensions.Options.IValidateOptions<Visus.AddressValidation.Integration.Google.Configuration.GoogleServiceOptions>
+    {
+        public GoogleServiceOptionsValidator() { }
+        public Microsoft.Extensions.Options.ValidateOptionsResult Validate(string? name, Visus.AddressValidation.Integration.Google.Configuration.GoogleServiceOptions options) { }
     }
 }
 namespace Visus.AddressValidation.Integration.Google

@@ -7,11 +7,20 @@ namespace Visus.AddressValidation.Integration.PitneyBowes.Configuration
     {
         public const string SectionName = "AddressValidationSettings:PitneyBowes";
         public PitneyBowesServiceOptions() { }
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ApiKey { get; set; }
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ApiSecret { get; set; }
         public Visus.AddressValidation.Abstractions.ClientEnvironment ClientEnvironment { get; set; }
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string DeveloperId { get; set; }
         public System.Uri EndpointBaseUri { get; }
+    }
+    [Microsoft.Extensions.Options.OptionsValidator]
+    public sealed class PitneyBowesServiceOptionsValidator : Microsoft.Extensions.Options.IValidateOptions<Visus.AddressValidation.Integration.PitneyBowes.Configuration.PitneyBowesServiceOptions>
+    {
+        public PitneyBowesServiceOptionsValidator() { }
+        public Microsoft.Extensions.Options.ValidateOptionsResult Validate(string? name, Visus.AddressValidation.Integration.PitneyBowes.Configuration.PitneyBowesServiceOptions options) { }
     }
 }
 namespace Visus.AddressValidation.Integration.PitneyBowes

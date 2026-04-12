@@ -7,11 +7,20 @@ namespace Visus.AddressValidation.Integration.Ups.Configuration
     {
         public const string SectionName = "AddressValidationSettings:Ups";
         public UpsServiceOptions() { }
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string AccountNumber { get; set; }
         public Visus.AddressValidation.Abstractions.ClientEnvironment ClientEnvironment { get; set; }
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ClientId { get; set; }
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ClientSecret { get; set; }
         public System.Uri EndpointBaseUri { get; }
+    }
+    [Microsoft.Extensions.Options.OptionsValidator]
+    public sealed class UpsServiceOptionsValidator : Microsoft.Extensions.Options.IValidateOptions<Visus.AddressValidation.Integration.Ups.Configuration.UpsServiceOptions>
+    {
+        public UpsServiceOptionsValidator() { }
+        public Microsoft.Extensions.Options.ValidateOptionsResult Validate(string? name, Visus.AddressValidation.Integration.Ups.Configuration.UpsServiceOptions options) { }
     }
 }
 namespace Visus.AddressValidation.Integration.Ups

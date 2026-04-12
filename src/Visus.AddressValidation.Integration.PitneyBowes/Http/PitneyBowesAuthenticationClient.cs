@@ -19,13 +19,6 @@ internal sealed class PitneyBowesAuthenticationClient : IAuthenticationClient
 
     public async ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
-        if ( string.IsNullOrWhiteSpace(_options.Value.ApiKey)
-          || string.IsNullOrWhiteSpace(_options.Value.ApiSecret)
-          || string.IsNullOrWhiteSpace(_options.Value.DeveloperId) )
-        {
-            throw new InvalidOperationException($"{nameof(PitneyBowesServiceOptions.ApiKey)}, {nameof(PitneyBowesServiceOptions.ApiSecret)} and {nameof(PitneyBowesServiceOptions.DeveloperId)} are required.");
-        }
-
         Uri requestUri = new(_options.Value.EndpointBaseUri, "/oauth/token");
 
         List<KeyValuePair<string, string>> payload =

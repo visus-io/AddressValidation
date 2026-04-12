@@ -8,6 +8,7 @@ using Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Services;
 using Validation;
 
@@ -28,8 +29,12 @@ public static class ServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(configuration);
         
-        services.Configure<FedExServiceOptions>(configuration.GetSection(FedExServiceOptions.SectionName));
+        services.AddOptions<FedExServiceOptions>()
+                .BindConfiguration(FedExServiceOptions.SectionName)
+                .ValidateOnStart();
 
+        services.TryAddSingleton<IValidateOptions<FedExServiceOptions>, FedExServiceOptionsValidator>();
+        
         services.TryAddSingleton<FedExAuthenticationService>();
 
         services.TryAddScoped<IValidator<FedExAddressValidationRequest>, AddressValidationRequestValidator>();

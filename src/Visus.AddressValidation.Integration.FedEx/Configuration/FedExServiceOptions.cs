@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.FedEx.Configuration;
 
+using System.ComponentModel.DataAnnotations;
 using AddressValidation.Abstractions;
 
 /// <summary>
@@ -29,6 +30,7 @@ public sealed class FedExServiceOptions
     ///     Gets or sets the FedEx account number used to authenticate API
     ///     requests.
     /// </summary>
+    [Required(AllowEmptyStrings = false)]
     public required string AccountNumber { get; set; }
 
     /// <summary>
@@ -43,11 +45,13 @@ public sealed class FedExServiceOptions
     ///     Gets or sets the OAuth 2.0 client ID issued by FedEx for the
     ///     registered application.
     /// </summary>
+    [Required(AllowEmptyStrings = false)]
     public required string ClientId { get; set; }
 
     /// <summary>
     ///     Gets or sets the OAuth 2.0 client secret issued by FedEx for the
     ///     registered application.
     /// </summary>
+    [Required(AllowEmptyStrings = false)]
     public required string ClientSecret { get; set; }
 }
