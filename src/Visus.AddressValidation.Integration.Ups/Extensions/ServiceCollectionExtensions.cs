@@ -32,7 +32,7 @@ public static class ServiceCollectionExtensions
         services.AddOptions<UpsServiceOptions>()
                 .Bind(configuration.GetSection(UpsServiceOptions.SectionName))
                 .ValidateOnStart();
-        
+
         services.TryAddSingleton<IValidateOptions<UpsServiceOptions>, UpsServiceOptionsValidator>();
 
         services.TryAddSingleton<UpsAuthenticationService>();

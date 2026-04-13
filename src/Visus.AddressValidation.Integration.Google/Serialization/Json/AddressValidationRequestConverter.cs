@@ -6,7 +6,7 @@ using AddressValidation.Abstractions;
 using Http;
 
 /// <summary>
-///     Converts an <see cref="GoogleAddressValidationRequest" /> object to and from json.
+///     Converts an <see cref="GoogleAddressValidationRequest" /> object to and from JSON.
 /// </summary>
 public sealed class AddressValidationRequestConverter : JsonConverter<GoogleAddressValidationRequest?>
 {
@@ -19,7 +19,11 @@ public sealed class AddressValidationRequestConverter : JsonConverter<GoogleAddr
     private const string PreviousResponseId = "previousResponseId";
     private const string RegionCodePropertyName = "regionCode";
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Reads a <see cref="GoogleAddressValidationRequest" /> from JSON, mapping <c>address.addressLines</c>,
+    ///     <c>administrativeArea</c>, <c>locality</c>, <c>postalCode</c>, and <c>regionCode</c> to their
+    ///     request properties.
+    /// </summary>
     public override GoogleAddressValidationRequest Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions? options)
     {
         GoogleAddressValidationRequest request = new();
@@ -95,7 +99,13 @@ public sealed class AddressValidationRequestConverter : JsonConverter<GoogleAddr
         return request;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Writes a <see cref="GoogleAddressValidationRequest" /> as JSON in Google's address validation request
+    ///     format, producing an <c>address</c> object with <c>addressLines</c>, <c>administrativeArea</c>,
+    ///     <c>locality</c>, <c>postalCode</c>, and <c>regionCode</c>, followed by the optional
+    ///     <c>previousResponseId</c> and the <c>enableUspsCass</c> flag.
+    ///     Writes <see langword="null" /> if <see cref="GoogleAddressValidationRequest.Country" /> is not set.
+    /// </summary>
     public override void Write(Utf8JsonWriter writer, GoogleAddressValidationRequest? value, JsonSerializerOptions options)
     {
         ArgumentNullException.ThrowIfNull(writer);

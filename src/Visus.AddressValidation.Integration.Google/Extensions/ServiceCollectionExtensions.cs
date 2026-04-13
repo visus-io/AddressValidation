@@ -28,13 +28,13 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(configuration);
-        
+
         services.AddOptions<GoogleServiceOptions>()
                 .Bind(configuration.GetSection(GoogleServiceOptions.SectionName))
                 .ValidateOnStart();
 
         services.TryAddSingleton<IValidateOptions<GoogleServiceOptions>, GoogleServiceOptionsValidator>();
-        
+
         services.TryAddSingleton<GoogleAuthenticationService>();
 
         services.TryAddScoped<IValidator<GoogleAddressValidationRequest>, AddressValidationRequestValidator>();

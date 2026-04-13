@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.Google.Http;
 
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
@@ -25,7 +24,7 @@ internal sealed class GoogleAuthenticationClient : IAuthenticationClient
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         _options = options ?? throw new ArgumentNullException(nameof(options));
     }
-    
+
     public async ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
         DateTimeOffset currentDateTimeOffset = DateTimeOffset.UtcNow;

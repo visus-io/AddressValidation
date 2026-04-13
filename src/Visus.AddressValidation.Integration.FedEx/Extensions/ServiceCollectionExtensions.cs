@@ -28,13 +28,13 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(configuration);
-        
+
         services.AddOptions<FedExServiceOptions>()
                 .BindConfiguration(FedExServiceOptions.SectionName)
                 .ValidateOnStart();
 
         services.TryAddSingleton<IValidateOptions<FedExServiceOptions>, FedExServiceOptionsValidator>();
-        
+
         services.TryAddSingleton<FedExAuthenticationService>();
 
         services.TryAddScoped<IValidator<FedExAddressValidationRequest>, AddressValidationRequestValidator>();

@@ -13,7 +13,7 @@ public sealed class GoogleServiceOptions
     ///     <c>appsettings.json</c> or other configuration sources.
     /// </summary>
     public const string SectionName = "AddressValidationSettings:Google";
-    
+
     /// <summary>
     ///     Gets or sets the RSA private key associated with the service account,
     ///     used to sign JWT tokens for authentication.

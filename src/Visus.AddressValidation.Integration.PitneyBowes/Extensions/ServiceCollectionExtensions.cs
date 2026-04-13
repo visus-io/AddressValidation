@@ -32,8 +32,8 @@ public static class ServiceCollectionExtensions
         services.AddOptions<PitneyBowesServiceOptions>()
                 .Bind(configuration.GetSection(nameof(PitneyBowesServiceOptions)))
                 .ValidateOnStart();
-        
-        services.TryAddSingleton<IValidateOptions<PitneyBowesServiceOptions>,  PitneyBowesServiceOptionsValidator>();
+
+        services.TryAddSingleton<IValidateOptions<PitneyBowesServiceOptions>, PitneyBowesServiceOptionsValidator>();
 
         services.TryAddSingleton<PitneyBowesAuthenticationService>();
 
