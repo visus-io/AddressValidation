@@ -1,7 +1,5 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Http;
 
-using System.Collections.ObjectModel;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using Abstractions;
 using AddressValidation.Abstractions;
@@ -10,7 +8,7 @@ using AddressValidation.Model;
 using AddressValidation.Validation;
 using Model;
 
-internal sealed class ApiResponse : IApiResponse
+internal sealed partial class ApiResponse : IApiResponse
 {
     [JsonIgnore]
     public ApiErrorResponse? ErrorResponse { get; set; }
@@ -25,16 +23,18 @@ internal sealed class ApiResponse : IApiResponse
         return new AddressValidationResponse(this, validationResult);
     }
 
-    internal sealed class AddressResult : ICustomResponseData
+    internal sealed partial class AddressResult
     {
         public string[] AddressLines { get; set; } = [];
 
+        [CustomResponseDataProperty]
         public string? CarrierRoute { get; set; }
 
         public string? CityTown { get; set; }
 
         public CountryCode CountryCode { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DeliveryPoint { get; set; }
 
         public string? PostalCode { get; set; }
@@ -44,17 +44,6 @@ internal sealed class ApiResponse : IApiResponse
         public string? StateProvince { get; set; }
 
         public StatusCode Status { get; set; }
-
-        public IReadOnlyDictionary<string, object?> GetCustomResponseData()
-        {
-            JsonNamingPolicy policy = JsonNamingPolicy.CamelCase;
-
-            return new ReadOnlyDictionary<string, object?>(new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
-            {
-                { policy.ConvertName(nameof(CarrierRoute)), CarrierRoute },
-                { policy.ConvertName(nameof(DeliveryPoint)), DeliveryPoint },
-            });
-        }
     }
 
     internal sealed class AddressSuggestion

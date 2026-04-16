@@ -12,22 +12,15 @@ using AddressValidation.Validation;
 using Model;
 
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
-internal sealed class ApiResponse : IApiResponse, ICustomResponseData
+internal sealed partial class ApiResponse : IApiResponse
 {
     [JsonIgnore]
     public ApiErrorResponse? ErrorResponse { get; init; }
 
+    [CustomResponseDataProperty]
     public Guid ResponseId { get; init; }
 
     public Response? Result { get; init; }
-
-    public IReadOnlyDictionary<string, object?> GetCustomResponseData()
-    {
-        return new ReadOnlyDictionary<string, object?>(new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
-        {
-            { "responseId", ResponseId },
-        });
-    }
 
     public IAddressValidationResponse ToAddressValidationResponse(IValidationResult? validationResult = null)
     {
@@ -61,37 +54,21 @@ internal sealed class ApiResponse : IApiResponse, ICustomResponseData
         public string? Text { get; set; }
     }
 
-    internal sealed class Geocode : ICustomResponseData
+    internal sealed partial class Geocode
     {
         public Location Location { get; set; } = null!;
 
+        [CustomResponseDataProperty("googlePlaceId")]
         public string PlaceId { get; set; } = null!;
-
-        public IReadOnlyDictionary<string, object?> GetCustomResponseData()
-        {
-            return new ReadOnlyDictionary<string, object?>(new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
-            {
-                { "googlePlaceId", PlaceId },
-            });
-        }
     }
 
-    internal sealed class Location : ICustomResponseData
+    internal sealed partial class Location
     {
+        [CustomResponseDataProperty]
         public decimal Latitude { get; set; }
 
+        [CustomResponseDataProperty]
         public decimal Longitude { get; set; }
-
-        public IReadOnlyDictionary<string, object?> GetCustomResponseData()
-        {
-            JsonNamingPolicy policy = JsonNamingPolicy.CamelCase;
-
-            return new ReadOnlyDictionary<string, object?>(new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
-            {
-                { policy.ConvertName(nameof(Latitude)), Latitude },
-                { policy.ConvertName(nameof(Longitude)), Longitude },
-            });
-        }
     }
 
     internal sealed class Metadata
@@ -129,91 +106,82 @@ internal sealed class ApiResponse : IApiResponse, ICustomResponseData
         public Verdict Verdict { get; set; } = null!;
     }
 
-    internal sealed class UspsData : ICustomResponseData
+    internal sealed partial class UspsData
     {
+        [CustomResponseDataProperty]
         public string? AddressRecordType { get; set; }
 
+        [CustomResponseDataProperty]
         public string? CarrierRoute { get; set; }
 
+        [CustomResponseDataProperty]
         public string? CarrierRouteIndicator { get; set; }
 
+        [CustomResponseDataProperty]
         public bool? CassProcessed { get; set; }
 
+        [CustomResponseDataProperty]
         public string? County { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DeliveryPointCheckDigit { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DeliveryPointCode { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DpvCmra { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DpvConfirmation { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DpvDoorNotAccessible { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DpvDrop { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DpvEnhancedDeliveryCode { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DpvFootnote { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DpvNonDeliveryDays { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DpvNoSecureLocation { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DpvNoStat { get; set; }
 
+        [CustomResponseDataProperty]
         public int? DpvNoStatReasonCode { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DpvPbsa { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DpvThrowback { get; set; }
 
+        [CustomResponseDataProperty]
         public string? DpvVacant { get; set; }
 
+        [CustomResponseDataProperty]
         public string? ElotFlag { get; set; }
 
+        [CustomResponseDataProperty]
         public string? ElotNumber { get; set; }
 
+        [CustomResponseDataProperty]
         public string? FipsCountyCode { get; set; }
 
+        [CustomResponseDataProperty]
         public string? PostOfficeCity { get; set; }
 
+        [CustomResponseDataProperty]
         public string? PostOfficeState { get; set; }
-
-        public IReadOnlyDictionary<string, object?> GetCustomResponseData()
-        {
-            JsonNamingPolicy policy = JsonNamingPolicy.CamelCase;
-
-            return new ReadOnlyDictionary<string, object?>(new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
-            {
-                { policy.ConvertName(nameof(AddressRecordType)), AddressRecordType },
-                { policy.ConvertName(nameof(CarrierRoute)), CarrierRoute },
-                { policy.ConvertName(nameof(CarrierRouteIndicator)), CarrierRouteIndicator },
-                { policy.ConvertName(nameof(CassProcessed)), CassProcessed },
-                { policy.ConvertName(nameof(County)), County },
-                { policy.ConvertName(nameof(DeliveryPointCheckDigit)), DeliveryPointCheckDigit },
-                { policy.ConvertName(nameof(DeliveryPointCode)), DeliveryPointCode },
-                { policy.ConvertName(nameof(DpvCmra)), DpvCmra },
-                { policy.ConvertName(nameof(DpvConfirmation)), DpvConfirmation },
-                { policy.ConvertName(nameof(DpvDoorNotAccessible)), DpvDoorNotAccessible },
-                { policy.ConvertName(nameof(DpvDrop)), DpvDrop },
-                { policy.ConvertName(nameof(DpvEnhancedDeliveryCode)), DpvEnhancedDeliveryCode },
-                { policy.ConvertName(nameof(DpvFootnote)), DpvFootnote },
-                { policy.ConvertName(nameof(DpvNonDeliveryDays)), DpvNonDeliveryDays },
-                { policy.ConvertName(nameof(DpvNoSecureLocation)), DpvNoSecureLocation },
-                { policy.ConvertName(nameof(DpvNoStat)), DpvNoStat },
-                { policy.ConvertName(nameof(DpvNoStatReasonCode)), DpvNoStatReasonCode },
-                { policy.ConvertName(nameof(DpvPbsa)), DpvPbsa },
-                { policy.ConvertName(nameof(DpvThrowback)), DpvThrowback },
-                { policy.ConvertName(nameof(DpvVacant)), DpvVacant },
-                { policy.ConvertName(nameof(ElotFlag)), ElotFlag },
-                { policy.ConvertName(nameof(ElotNumber)), ElotNumber },
-                { policy.ConvertName(nameof(FipsCountyCode)), FipsCountyCode },
-                { policy.ConvertName(nameof(PostOfficeCity)), PostOfficeCity },
-                { policy.ConvertName(nameof(PostOfficeState)), PostOfficeState },
-            });
-        }
     }
 
     internal sealed class Verdict

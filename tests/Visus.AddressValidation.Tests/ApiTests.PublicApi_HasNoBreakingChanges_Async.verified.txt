@@ -515,6 +515,22 @@ namespace Visus.AddressValidation.Abstractions
         ZM = 894,
     }
 }
+namespace Visus.AddressValidation
+{
+    [System.AttributeUsage(System.AttributeTargets.Property)]
+    public sealed class CustomResponseDataPropertyAttribute : System.Attribute
+    {
+        public CustomResponseDataPropertyAttribute() { }
+        public CustomResponseDataPropertyAttribute(string name) { }
+        public string? Name { get; }
+    }
+    public class InvalidImplementationException : System.Exception
+    {
+        public InvalidImplementationException() { }
+        public InvalidImplementationException(string message) { }
+        public InvalidImplementationException(string message, System.Exception innerException) { }
+    }
+}
 namespace Visus.AddressValidation.Extensions
 {
     public static class DictionaryExtensions
@@ -554,10 +570,6 @@ namespace Visus.AddressValidation.Http
     {
         System.Threading.Tasks.ValueTask<Visus.AddressValidation.Http.TokenResponse?> RequestClientCredentialsTokenAsync(System.Threading.CancellationToken cancellationToken = default);
     }
-    public interface ICustomResponseData
-    {
-        System.Collections.Generic.IReadOnlyDictionary<string, object?> GetCustomResponseData();
-    }
     [System.Text.Json.Serialization.JsonConverter(typeof(Visus.AddressValidation.Serialization.Json.TokenResponseConverter?))]
     public sealed class TokenResponse
     {
@@ -570,15 +582,6 @@ namespace Visus.AddressValidation.Http
         public string? RefreshToken { get; set; }
         public string? Scope { get; set; }
         public string? TokenType { get; set; }
-    }
-}
-namespace Visus.AddressValidation
-{
-    public class InvalidImplementationException : System.Exception
-    {
-        public InvalidImplementationException() { }
-        public InvalidImplementationException(string message) { }
-        public InvalidImplementationException(string message, System.Exception innerException) { }
     }
 }
 namespace Visus.AddressValidation.Model
