@@ -23,4 +23,11 @@
     <ProjectReference Include="..\Visus.AddressValidation\Visus.AddressValidation.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Visus.AddressValidation.SourceGeneration\Visus.AddressValidation.SourceGeneration.csproj"
+                      OutputItemType="Analyzer"
+                      SetTargetFramework="TargetFramework=netstandard2.0"
+                      ReferenceOutputAssembly="false"/>
+  </ItemGroup>
+
 </Project>
