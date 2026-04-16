@@ -568,7 +568,7 @@ namespace Visus.AddressValidation.Http
     }
     public interface IAuthenticationClient
     {
-        System.Threading.Tasks.ValueTask<Visus.AddressValidation.Http.TokenResponse?> RequestClientCredentialsTokenAsync(System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<Visus.AddressValidation.Http.TokenResponse?> RequestClientCredentialsTokenAsync(System.Threading.CancellationToken cancellationToken = default);
     }
     [System.Text.Json.Serialization.JsonConverter(typeof(Visus.AddressValidation.Serialization.Json.TokenResponseConverter?))]
     public sealed class TokenResponse
@@ -679,8 +679,8 @@ namespace Visus.AddressValidation.Services
         where TResponse :  class, Visus.AddressValidation.Http.IApiResponse
     {
         protected AbstractAddressValidationService(Visus.AddressValidation.Validation.IValidator<TRequest> requestValidator, Visus.AddressValidation.Validation.IValidator<TResponse> responseValidator) { }
-        protected abstract System.Threading.Tasks.ValueTask<TResponse?> SendAsync(TRequest request, System.Threading.CancellationToken cancellationToken);
-        public System.Threading.Tasks.ValueTask<Visus.AddressValidation.Model.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default) { }
+        protected abstract System.Threading.Tasks.Task<TResponse?> SendAsync(TRequest request, System.Threading.CancellationToken cancellationToken);
+        public System.Threading.Tasks.Task<Visus.AddressValidation.Model.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default) { }
     }
     public abstract class AbstractAuthenticationService<TClient>
         where TClient : Visus.AddressValidation.Http.IAuthenticationClient
@@ -688,12 +688,12 @@ namespace Visus.AddressValidation.Services
         protected AbstractAuthenticationService(TClient authenticationClient, Microsoft.Extensions.Caching.Distributed.IDistributedCache cache) { }
         public string? CacheKey { get; }
         protected abstract string? GenerateCacheKey();
-        public System.Threading.Tasks.ValueTask<string?> GetAccessTokenAsync(System.Threading.CancellationToken cancellationToken = default) { }
+        public System.Threading.Tasks.Task<string?> GetAccessTokenAsync(System.Threading.CancellationToken cancellationToken = default) { }
     }
     public interface IAddressValidationService<in TRequest>
         where in TRequest : Visus.AddressValidation.Http.AbstractAddressValidationRequest
     {
-        System.Threading.Tasks.ValueTask<Visus.AddressValidation.Model.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<Visus.AddressValidation.Model.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default);
     }
 }
 namespace Visus.AddressValidation.Validation

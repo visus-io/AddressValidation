@@ -55,7 +55,7 @@ public abstract class AbstractAddressValidationService<TRequest, TResponse> : IA
     }
 
     /// <inheritdoc />
-    public ValueTask<IAddressValidationResponse?> ValidateAsync(TRequest request, CancellationToken cancellationToken = default)
+    public Task<IAddressValidationResponse?> ValidateAsync(TRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         return ValidateInternalAsync(request, cancellationToken);
@@ -70,9 +70,9 @@ public abstract class AbstractAddressValidationService<TRequest, TResponse> : IA
     ///     The instance of <typeparamref name="TResponse" /> may be <see langword="null" /> if the request failed.
     /// </remarks>
     /// <returns>Response from the underlying service api represented by an instance of <typeparamref name="TResponse" />.</returns>
-    protected abstract ValueTask<TResponse?> SendAsync(TRequest request, CancellationToken cancellationToken);
+    protected abstract Task<TResponse?> SendAsync(TRequest request, CancellationToken cancellationToken);
 
-    private async ValueTask<IAddressValidationResponse?> ValidateInternalAsync(TRequest request, CancellationToken cancellationToken)
+    private async Task<IAddressValidationResponse?> ValidateInternalAsync(TRequest request, CancellationToken cancellationToken)
     {
         IValidationResult requestValidationResult = await _requestValidator.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
         if ( requestValidationResult.HasErrors )

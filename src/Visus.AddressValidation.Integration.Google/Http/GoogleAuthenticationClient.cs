@@ -25,7 +25,7 @@ internal sealed class GoogleAuthenticationClient : IAuthenticationClient
         _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
-    public async ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
+    public async Task<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
         DateTimeOffset currentDateTimeOffset = DateTimeOffset.UtcNow;
 

@@ -12,14 +12,14 @@ using NSubstitute;
 internal sealed class TestAuthenticationClient : IAuthenticationClient
 #pragma warning restore MA0048
 {
-    private readonly Func<CancellationToken, ValueTask<TokenResponse?>> _func;
+    private readonly Func<CancellationToken, Task<TokenResponse?>> _func;
 
-    public TestAuthenticationClient(Func<CancellationToken, ValueTask<TokenResponse?>> func)
+    public TestAuthenticationClient(Func<CancellationToken, Task<TokenResponse?>> func)
     {
         _func = func;
     }
 
-    public ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
+    public Task<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
         return _func(cancellationToken);
     }
@@ -52,7 +52,7 @@ internal sealed class AbstractAuthenticationServiceTests
     {
         string cacheKey = _fixture.Create<string>();
         IDistributedCache cache = Substitute.For<IDistributedCache>();
-        TestAuthenticationClient client = new(_ => ValueTask.FromResult<TokenResponse?>(null));
+        TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(null));
         TestAuthenticationService service = new(client, cache, cacheKey);
 
         service.CacheKey.Should().Be(cacheKey);
@@ -61,7 +61,7 @@ internal sealed class AbstractAuthenticationServiceTests
     [Test]
     public void Constructor_NullCache_ThrowsArgumentNullException()
     {
-        TestAuthenticationClient client = new(_ => ValueTask.FromResult<TokenResponse?>(null));
+        TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(null));
 
         Action act = () => _ = new TestAuthenticationService(client, null!);
 
@@ -87,7 +87,7 @@ internal sealed class AbstractAuthenticationServiceTests
         cache.GetAsync(cacheKey, Arg.Any<CancellationToken>())
              .Returns(Encoding.UTF8.GetBytes(cachedToken));
 
-        TestAuthenticationClient client = new(_ => ValueTask.FromResult<TokenResponse?>(null));
+        TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(null));
         TestAuthenticationService service = new(client, cache, cacheKey);
 
         string? result = await service.GetAccessTokenAsync().ConfigureAwait(false);
@@ -104,7 +104,7 @@ internal sealed class AbstractAuthenticationServiceTests
         cache.GetAsync(cacheKey, Arg.Any<CancellationToken>())
              .Returns((byte[]?)null);
 
-        TestAuthenticationClient client = new(_ => ValueTask.FromResult<TokenResponse?>(new TokenResponse
+        TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(new TokenResponse
         {
             AccessToken = accessToken,
             ExpiresIn = 3600,
@@ -128,7 +128,7 @@ internal sealed class AbstractAuthenticationServiceTests
         cache.GetAsync(cacheKey, Arg.Any<CancellationToken>())
              .Returns((byte[]?)null);
 
-        TestAuthenticationClient client = new(_ => ValueTask.FromResult<TokenResponse?>(null));
+        TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(null));
         TestAuthenticationService service = new(client, cache, cacheKey);
 
         string? result = await service.GetAccessTokenAsync().ConfigureAwait(false);
@@ -144,7 +144,7 @@ internal sealed class AbstractAuthenticationServiceTests
         cache.GetAsync(cacheKey, Arg.Any<CancellationToken>())
              .Returns((byte[]?)null);
 
-        TestAuthenticationClient client = new(_ => ValueTask.FromResult<TokenResponse?>(new TokenResponse
+        TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(new TokenResponse
         {
             AccessToken = "",
             ExpiresIn = 3600,
@@ -161,7 +161,7 @@ internal sealed class AbstractAuthenticationServiceTests
     public async Task GetAccessTokenAsync_NullCacheKey_ReturnsNull()
     {
         IDistributedCache cache = Substitute.For<IDistributedCache>();
-        TestAuthenticationClient client = new(_ => ValueTask.FromResult<TokenResponse?>(null));
+        TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(null));
         TestAuthenticationService service = new(client, cache, null);
 
         string? result = await service.GetAccessTokenAsync().ConfigureAwait(false);

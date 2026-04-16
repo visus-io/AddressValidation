@@ -26,7 +26,7 @@ internal sealed class BearerTokenDelegatingHandlerTests
         cache.GetAsync("test-key", Arg.Any<CancellationToken>())
              .Returns((byte[]?)null);
 
-        TestAuthenticationClient client = new(_ => ValueTask.FromResult<TokenResponse?>(null));
+        TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(null));
         TestAuthenticationService authService = new(client, cache);
 
         using BearerTokenDelegatingHandler<TestAuthenticationClient> handler = new(authService)
@@ -34,7 +34,7 @@ internal sealed class BearerTokenDelegatingHandlerTests
             InnerHandler = new TestMessageHandler(),
         };
 
-        using HttpClient httpClient = new(handler, disposeHandler: false);
+        using HttpClient httpClient = new(handler, false);
 
         Func<Task> act = () => httpClient.GetAsync(new Uri("https://example.com"));
 
@@ -48,7 +48,7 @@ internal sealed class BearerTokenDelegatingHandlerTests
         cache.GetAsync("test-key", Arg.Any<CancellationToken>())
              .Returns(Encoding.UTF8.GetBytes("my-token"));
 
-        TestAuthenticationClient client = new(_ => ValueTask.FromResult<TokenResponse?>(null));
+        TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(null));
         TestAuthenticationService authService = new(client, cache);
 
         using BearerTokenDelegatingHandler<TestAuthenticationClient> handler = new(authService)
@@ -56,7 +56,7 @@ internal sealed class BearerTokenDelegatingHandlerTests
             InnerHandler = new TestMessageHandler(),
         };
 
-        using HttpClient httpClient = new(handler, disposeHandler: false);
+        using HttpClient httpClient = new(handler, false);
         HttpResponseMessage response = await httpClient.GetAsync(new Uri("https://example.com")).ConfigureAwait(false);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);

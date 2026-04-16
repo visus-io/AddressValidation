@@ -12,5 +12,5 @@ public interface IAuthenticationClient
     /// <returns>
     ///     An instance of <see cref="TokenResponse" /> containing the token or <see langword="null" />.
     /// </returns>
-    ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default);
+    Task<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default);
 }

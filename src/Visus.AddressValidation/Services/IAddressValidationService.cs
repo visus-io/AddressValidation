@@ -20,5 +20,5 @@ public interface IAddressValidationService<in TRequest>
     ///     failed.
     /// </remarks>
     /// <returns>Result of the validation as represented by an instance of <see cref="IAddressValidationResponse" />.</returns>
-    ValueTask<IAddressValidationResponse?> ValidateAsync(TRequest request, CancellationToken cancellationToken = default);
+    Task<IAddressValidationResponse?> ValidateAsync(TRequest request, CancellationToken cancellationToken = default);
 }

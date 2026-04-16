@@ -37,23 +37,22 @@ internal sealed class TestRequestValidator : AbstractAddressValidationRequestVal
 #pragma warning disable MA0048
 internal sealed class TestResponseValidator : AbstractValidator<TestApiResponse>;
 #pragma warning restore MA0048
-
 #pragma warning disable MA0048
 internal sealed class TestAddressValidationService : AbstractAddressValidationService<TestAddressValidationRequest, TestApiResponse>
 #pragma warning restore MA0048
 {
-    private readonly Func<TestAddressValidationRequest, CancellationToken, ValueTask<TestApiResponse?>> _sendFunc;
+    private readonly Func<TestAddressValidationRequest, CancellationToken, Task<TestApiResponse?>> _sendFunc;
 
     public TestAddressValidationService(
         IValidator<TestAddressValidationRequest> requestValidator,
         IValidator<TestApiResponse> responseValidator,
-        Func<TestAddressValidationRequest, CancellationToken, ValueTask<TestApiResponse?>> sendFunc)
+        Func<TestAddressValidationRequest, CancellationToken, Task<TestApiResponse?>> sendFunc)
         : base(requestValidator, responseValidator)
     {
         _sendFunc = sendFunc;
     }
 
-    protected override ValueTask<TestApiResponse?> SendAsync(TestAddressValidationRequest request, CancellationToken cancellationToken)
+    protected override Task<TestApiResponse?> SendAsync(TestAddressValidationRequest request, CancellationToken cancellationToken)
     {
         return _sendFunc(request, cancellationToken);
     }
@@ -63,28 +62,15 @@ internal sealed class AbstractAddressValidationServiceTests
 {
     private readonly Fixture _fixture = new();
 
-    private TestAddressValidationRequest CreateValidRequest()
-    {
-        TestAddressValidationRequest request = new()
-        {
-            Country = CountryCode.US,
-            CityOrTown = _fixture.Create<string>(),
-            StateOrProvince = _fixture.Create<string>(),
-            PostalCode = _fixture.Create<string>(),
-        };
-        request.AddressLines.Add(_fixture.Create<string>());
-        return request;
-    }
-
     [Test]
     public void Constructor_InvalidRequestValidator_ThrowsInvalidImplementationException()
     {
         IValidator<TestAddressValidationRequest> badValidator = Substitute.For<IValidator<TestAddressValidationRequest>>();
 
         Action act = () => _ = new TestAddressValidationService(
-            badValidator,
-            new TestResponseValidator(),
-            (_, _) => ValueTask.FromResult<TestApiResponse?>(null));
+                               badValidator,
+                               new TestResponseValidator(),
+                               (_, _) => Task.FromResult<TestApiResponse?>(null));
 
         act.Should().Throw<InvalidImplementationException>();
     }
@@ -93,9 +79,9 @@ internal sealed class AbstractAddressValidationServiceTests
     public void Constructor_NullRequestValidator_ThrowsArgumentNullException()
     {
         Action act = () => _ = new TestAddressValidationService(
-            null!,
-            new TestResponseValidator(),
-            (_, _) => ValueTask.FromResult<TestApiResponse?>(null));
+                               null!,
+                               new TestResponseValidator(),
+                               (_, _) => Task.FromResult<TestApiResponse?>(null));
 
         act.Should().Throw<ArgumentNullException>();
     }
@@ -104,9 +90,9 @@ internal sealed class AbstractAddressValidationServiceTests
     public void Constructor_NullResponseValidator_ThrowsArgumentNullException()
     {
         Action act = () => _ = new TestAddressValidationService(
-            new TestRequestValidator(),
-            null!,
-            (_, _) => ValueTask.FromResult<TestApiResponse?>(null));
+                               new TestRequestValidator(),
+                               null!,
+                               (_, _) => Task.FromResult<TestApiResponse?>(null));
 
         act.Should().Throw<ArgumentNullException>();
     }
@@ -117,9 +103,9 @@ internal sealed class AbstractAddressValidationServiceTests
         TestAddressValidationService service = new(
             new TestRequestValidator(),
             new TestResponseValidator(),
-            (_, _) => ValueTask.FromResult<TestApiResponse?>(null));
+            (_, _) => Task.FromResult<TestApiResponse?>(null));
 
-        Func<Task> act = () => service.ValidateAsync(null!).AsTask();
+        Func<Task> act = () => service.ValidateAsync(null!);
 
         await act.Should().ThrowExactlyAsync<ArgumentNullException>().ConfigureAwait(false);
     }
@@ -130,14 +116,14 @@ internal sealed class AbstractAddressValidationServiceTests
         TestAddressValidationService service = new(
             new TestRequestValidator(),
             new TestResponseValidator(),
-            (_, _) => ValueTask.FromResult<TestApiResponse?>(new TestApiResponse()));
+            (_, _) => Task.FromResult<TestApiResponse?>(new TestApiResponse()));
 
         TestAddressValidationRequest request = new();
 
         IAddressValidationResponse? result = await service.ValidateAsync(request).ConfigureAwait(false);
 
         result.Should().NotBeNull();
-        result!.Errors.Should().NotBeEmpty();
+        result.Errors.Should().NotBeEmpty();
     }
 
     [Test]
@@ -146,7 +132,7 @@ internal sealed class AbstractAddressValidationServiceTests
         TestAddressValidationService service = new(
             new TestRequestValidator(),
             new TestResponseValidator(),
-            (_, _) => ValueTask.FromResult<TestApiResponse?>(null));
+            (_, _) => Task.FromResult<TestApiResponse?>(null));
 
         IAddressValidationResponse? result = await service.ValidateAsync(CreateValidRequest()).ConfigureAwait(false);
 
@@ -159,10 +145,23 @@ internal sealed class AbstractAddressValidationServiceTests
         TestAddressValidationService service = new(
             new TestRequestValidator(),
             new TestResponseValidator(),
-            (_, _) => ValueTask.FromResult<TestApiResponse?>(new TestApiResponse()));
+            (_, _) => Task.FromResult<TestApiResponse?>(new TestApiResponse()));
 
         IAddressValidationResponse? result = await service.ValidateAsync(CreateValidRequest()).ConfigureAwait(false);
 
         result.Should().NotBeNull();
+    }
+
+    private TestAddressValidationRequest CreateValidRequest()
+    {
+        TestAddressValidationRequest request = new()
+        {
+            Country = CountryCode.US,
+            CityOrTown = _fixture.Create<string>(),
+            StateOrProvince = _fixture.Create<string>(),
+            PostalCode = _fixture.Create<string>(),
+        };
+        request.AddressLines.Add(_fixture.Create<string>());
+        return request;
     }
 }

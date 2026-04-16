@@ -17,8 +17,6 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
 
     private readonly IDistributedCache _cache;
 
-    private string? _cacheKey;
-
     /// <summary>
     ///     Abstraction for implementing an authentication service that relies on an
     ///     <see cref="IAuthenticationClient" /> implementation.
@@ -38,12 +36,12 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     {
         get
         {
-            if ( string.IsNullOrWhiteSpace(_cacheKey) )
+            if ( string.IsNullOrWhiteSpace(field) )
             {
-                _cacheKey = GenerateCacheKey();
+                field = GenerateCacheKey();
             }
 
-            return _cacheKey;
+            return field;
         }
     }
 
@@ -55,7 +53,7 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     ///     Current access token returned by the service, an empty string, or <see langword="null" />.
     /// </returns>
     /// <remarks>An instance of <see cref="IDistributedCache" /> is utilized to cache the token by its defined lifetime.</remarks>
-    public async ValueTask<string?> GetAccessTokenAsync(CancellationToken cancellationToken = default)
+    public async Task<string?> GetAccessTokenAsync(CancellationToken cancellationToken = default)
     {
         if ( string.IsNullOrWhiteSpace(CacheKey) )
         {

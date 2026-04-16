@@ -16,7 +16,7 @@ internal sealed class AddressValidationService : AbstractAddressValidationServic
         _client = client ?? throw new ArgumentNullException(nameof(client));
     }
 
-    protected override async ValueTask<ApiResponse?> SendAsync(FedExAddressValidationRequest request, CancellationToken cancellationToken)
+    protected override async Task<ApiResponse?> SendAsync(FedExAddressValidationRequest request, CancellationToken cancellationToken)
     {
         return await _client.ValidateAddressAsync(request, cancellationToken).ConfigureAwait(false);
     }
