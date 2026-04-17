@@ -1,13 +1,12 @@
 namespace Visus.AddressValidation.Integration.FedEx.Http;
 
-using System.Text.Json.Serialization;
 using AddressValidation.Http;
-using Serialization.Json;
+using JetBrains.Annotations;
 
 /// <summary>
 ///     Representation of a uniformed address validation request to FedEx.
 /// </summary>
-[JsonConverter(typeof(AddressValidationRequestConverter))]
+[UsedImplicitly]
 public sealed class FedExAddressValidationRequest : AbstractAddressValidationRequest
 {
     /// <summary>

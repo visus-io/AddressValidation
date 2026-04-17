@@ -1,4 +1,4 @@
-namespace Visus.AddressValidation.Integration.FedEx.Serialization.Json;
+namespace Visus.AddressValidation.Integration.Google.Serialization.Json;
 
 using System.Text.Json.Serialization;
 using Http;
@@ -6,4 +6,4 @@ using Http;
 [JsonSerializable(typeof(ApiErrorResponse))]
 [JsonSerializable(typeof(ApiResponse))]
 [JsonSourceGenerationOptions(WriteIndented = false, PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-internal partial class ApiJsonSerializerContext : JsonSerializerContext;
+internal partial class ApiResponseJsonSerializerContext : JsonSerializerContext;

@@ -1,9 +1,10 @@
-namespace Visus.AddressValidation.Integration.Google.Serialization.Json;
+namespace Visus.AddressValidation.Integration.PitneyBowes.Serialization.Json;
 
 using System.Text.Json.Serialization;
 using Http;
 
 [JsonSerializable(typeof(ApiErrorResponse))]
 [JsonSerializable(typeof(ApiResponse))]
+[JsonSerializable(typeof(ApiResponse.AddressResult))]
 [JsonSourceGenerationOptions(WriteIndented = false, PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-internal partial class ApiJsonSerializerContext : JsonSerializerContext;
+internal sealed partial class ApiResponseJsonSerializerContext : JsonSerializerContext;

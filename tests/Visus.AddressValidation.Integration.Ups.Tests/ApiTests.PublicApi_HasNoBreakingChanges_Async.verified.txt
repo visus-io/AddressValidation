@@ -41,29 +41,8 @@ namespace Visus.AddressValidation.Integration.Ups.Extensions
 }
 namespace Visus.AddressValidation.Integration.Ups.Http
 {
-    [System.Text.Json.Serialization.JsonConverter(typeof(Visus.AddressValidation.Integration.Ups.Serialization.Json.AddressValidationRequestConverter))]
     public sealed class UpsAddressValidationRequest : Visus.AddressValidation.Http.AbstractAddressValidationRequest
     {
         public UpsAddressValidationRequest() { }
-    }
-}
-namespace Visus.AddressValidation.Integration.Ups.Serialization.Json
-{
-    public sealed class AddressValidationRequestConverter : System.Text.Json.Serialization.JsonConverter<Visus.AddressValidation.Integration.Ups.Http.UpsAddressValidationRequest?>
-    {
-        public AddressValidationRequestConverter() { }
-        public override Visus.AddressValidation.Integration.Ups.Http.UpsAddressValidationRequest Read(ref System.Text.Json.Utf8JsonReader reader, System.Type typeToConvert, System.Text.Json.JsonSerializerOptions options) { }
-        public override void Write(System.Text.Json.Utf8JsonWriter writer, Visus.AddressValidation.Integration.Ups.Http.UpsAddressValidationRequest? value, System.Text.Json.JsonSerializerOptions options) { }
-    }
-    [System.Text.Json.Serialization.JsonSerializable(typeof(Visus.AddressValidation.Integration.Ups.Http.UpsAddressValidationRequest))]
-    [System.Text.Json.Serialization.JsonSourceGenerationOptions(WriteIndented=false)]
-    public class UpsJsonSerializerContext : System.Text.Json.Serialization.JsonSerializerContext, System.Text.Json.Serialization.Metadata.IJsonTypeInfoResolver
-    {
-        public UpsJsonSerializerContext() { }
-        public UpsJsonSerializerContext(System.Text.Json.JsonSerializerOptions options) { }
-        protected override System.Text.Json.JsonSerializerOptions? GeneratedSerializerOptions { get; }
-        public System.Text.Json.Serialization.Metadata.JsonTypeInfo<Visus.AddressValidation.Integration.Ups.Http.UpsAddressValidationRequest> UpsAddressValidationRequest { get; }
-        public static Visus.AddressValidation.Integration.Ups.Serialization.Json.UpsJsonSerializerContext Default { get; }
-        public override System.Text.Json.Serialization.Metadata.JsonTypeInfo? GetTypeInfo(System.Type type) { }
     }
 }

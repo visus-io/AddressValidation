@@ -31,17 +31,36 @@ internal sealed class FedExAddressValidationClient
 
         using HttpRequestMessage httpRequest = new(HttpMethod.Post, requestUri);
 
-        httpRequest.Content = JsonContent.Create(request, FedExJsonSerializerContext.Default.FedExAddressValidationRequest);
+        ApiRequest apiRequest = new()
+        {
+            AddressesToValidate =
+            [
+                new ApiRequest.FedExAddressToValidate
+                {
+                    Address = new ApiRequest.FedExAddress
+                    {
+                        City = request.CityOrTown,
+                        CountryCode = request.Country!.Value.ToString(),
+                        PostalCode = request.PostalCode,
+                        StateOrProvince = request.StateOrProvince,
+                        StreetLines = [..request.AddressLines,],
+                    },
+                    ClientReferenceId = request.ClientReferenceId,
+                },
+            ],
+        };
+
+        httpRequest.Content = JsonContent.Create(apiRequest, ApiRequestJsonSerializerContext.Default.ApiRequest);
 
         using HttpResponseMessage response = await _httpClient.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
         if ( response.IsSuccessStatusCode )
         {
-            return await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiResponse,
+            return await response.Content.ReadFromJsonAsync(ApiResponseJsonSerializerContext.Default.ApiResponse,
                                       cancellationToken)
                                  .ConfigureAwait(false);
         }
 
-        ApiErrorResponse? errorResponse = await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiErrorResponse,
+        ApiErrorResponse? errorResponse = await response.Content.ReadFromJsonAsync(ApiResponseJsonSerializerContext.Default.ApiErrorResponse,
                                                              cancellationToken)
                                                         .ConfigureAwait(false);
 

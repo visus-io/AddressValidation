@@ -2,12 +2,13 @@ namespace Visus.AddressValidation.Integration.PitneyBowes.Http;
 
 using System.Text.Json.Serialization;
 using AddressValidation.Http;
+using JetBrains.Annotations;
 using Serialization.Json;
 
 /// <summary>
 ///     Representation of a uniformed address validation request to Pitney Bowes
 /// </summary>
-[JsonConverter(typeof(AddressValidationRequestConverter))]
+[UsedImplicitly]
 public sealed class PitneyBowesAddressValidationRequest : AbstractAddressValidationRequest
 {
     /// <summary>

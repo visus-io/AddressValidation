@@ -31,7 +31,15 @@ internal sealed class PitneyBowesAddressValidationClient
 
         using HttpRequestMessage httpRequest = new(HttpMethod.Post, requestUri);
 
-        httpRequest.Content = JsonContent.Create(request, PitneyBowesJsonSerializerContext.Default.PitneyBowesAddressValidationRequest);
+        ApiRequest apiRequest = new()
+        {
+            AddressLines = [..request.AddressLines,],
+            CityTown = request.CityOrTown,
+            CountryCode = request.Country!.Value.ToString(),
+            PostalCode = request.PostalCode!,
+        };
+        
+        httpRequest.Content = JsonContent.Create(apiRequest, ApiRequestJsonSerializerContext.Default.ApiRequest);
         httpRequest.Headers.Add("X-PB-UnifiedErrorStructure", "true");
 
         using HttpResponseMessage response = await _httpClient.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
@@ -39,12 +47,12 @@ internal sealed class PitneyBowesAddressValidationClient
         {
             if ( request.IncludeSuggestions )
             {
-                return await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiResponse,
+                return await response.Content.ReadFromJsonAsync(ApiResponseJsonSerializerContext.Default.ApiResponse,
                                           cancellationToken)
                                      .ConfigureAwait(false);
             }
 
-            ApiResponse.AddressResult? result = await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.AddressResult,
+            ApiResponse.AddressResult? result = await response.Content.ReadFromJsonAsync(ApiResponseJsonSerializerContext.Default.AddressResult,
                                                                    cancellationToken)
                                                               .ConfigureAwait(false);
             return new ApiResponse
@@ -53,7 +61,7 @@ internal sealed class PitneyBowesAddressValidationClient
             };
         }
 
-        ApiErrorResponse? errorResponse = await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiErrorResponse,
+        ApiErrorResponse? errorResponse = await response.Content.ReadFromJsonAsync(ApiResponseJsonSerializerContext.Default.ApiErrorResponse,
                                                              cancellationToken)
                                                         .ConfigureAwait(false);
         if ( errorResponse is not null )

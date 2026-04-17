@@ -6,4 +6,4 @@ using Http;
 [JsonSerializable(typeof(ApiErrorResponse))]
 [JsonSerializable(typeof(ApiResponse))]
 [JsonSourceGenerationOptions(WriteIndented = false)]
-internal partial class ApiJsonSerializerContext : JsonSerializerContext;
+internal sealed partial class ApiResponseJsonSerializerContext : JsonSerializerContext;

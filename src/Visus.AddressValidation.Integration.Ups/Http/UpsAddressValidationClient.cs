@@ -29,17 +29,35 @@ internal sealed class UpsAddressValidationClient
 
         using HttpRequestMessage httpRequest = new(HttpMethod.Post, requestUri);
 
-        httpRequest.Content = JsonContent.Create(request, UpsJsonSerializerContext.Default.UpsAddressValidationRequest);
+        string[] postalCodeParts = request.PostalCode!.Split('-', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        ApiRequest apiRequest = new()
+        {
+            XavRequest = new ApiRequest.UpsXavRequest
+            {
+                AddressKeyFormat = new ApiRequest.UpsAddressKeyFormat
+                {
+                    AddressLine = [..request.AddressLines,],
+                    PoliticalDivision2 = request.CityOrTown,
+                    PoliticalDivision1 = request.StateOrProvince,
+                    PostcodePrimaryLow = postalCodeParts[0],
+                    PostcodeExtendedLow = postalCodeParts.Length == 2 ? postalCodeParts[1] : null,
+                    CountryCode = request.Country!.Value.ToString(),
+                },
+            },
+        };
+
+        httpRequest.Content = JsonContent.Create(apiRequest, ApiRequestJsonSerializerContext.Default.ApiRequest);
 
         using HttpResponseMessage response = await _httpClient.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
         if ( response.IsSuccessStatusCode )
         {
-            return await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiResponse,
+            return await response.Content.ReadFromJsonAsync(ApiResponseJsonSerializerContext.Default.ApiResponse,
                                       cancellationToken)
                                  .ConfigureAwait(false);
         }
 
-        ApiErrorResponse? errorResponse = await response.Content.ReadFromJsonAsync(ApiJsonSerializerContext.Default.ApiErrorResponse,
+        ApiErrorResponse? errorResponse = await response.Content.ReadFromJsonAsync(ApiResponseJsonSerializerContext.Default.ApiErrorResponse,
                                                              cancellationToken)
                                                         .ConfigureAwait(false);
         if ( errorResponse is not null )

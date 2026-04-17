@@ -1,15 +1,14 @@
 namespace Visus.AddressValidation.Integration.Google.Http;
 
-using System.Text.Json.Serialization;
 using AddressValidation.Abstractions;
 using AddressValidation.Http;
 using AddressValidation.Model;
-using Serialization.Json;
+using JetBrains.Annotations;
 
 /// <summary>
 ///     Representation of a uniformed address validation request to Google.
 /// </summary>
-[JsonConverter(typeof(AddressValidationRequestConverter))]
+[UsedImplicitly]
 public sealed class GoogleAddressValidationRequest : AbstractAddressValidationRequest
 {
     /// <summary>
