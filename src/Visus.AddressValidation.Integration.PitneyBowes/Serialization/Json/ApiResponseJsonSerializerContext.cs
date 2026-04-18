@@ -1,8 +1,10 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Serialization.Json;
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using Http;
 
+[ExcludeFromCodeCoverage]
 [JsonSerializable(typeof(ApiErrorResponse))]
 [JsonSerializable(typeof(ApiResponse))]
 [JsonSerializable(typeof(ApiResponse.AddressResult))]
