@@ -29,6 +29,7 @@ public static class Constants
         CountryCode.AW,
         CountryCode.BB,
         CountryCode.BE,
+        CountryCode.BM,
         CountryCode.BR,
         CountryCode.BS,
         CountryCode.CA,

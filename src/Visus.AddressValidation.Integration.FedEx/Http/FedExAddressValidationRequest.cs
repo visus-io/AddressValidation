@@ -9,6 +9,10 @@ using JetBrains.Annotations;
 [UsedImplicitly]
 public sealed class FedExAddressValidationRequest : AbstractAddressValidationRequest
 {
+    /// <inheritdoc />
+    public override string? NoPostalCodeFallback => "00000";
+
+
     /// <summary>
     ///     Gets or sets the Client Reference ID
     /// </summary>

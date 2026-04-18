@@ -15,6 +15,15 @@ public abstract class AbstractAddressValidationRequest
     public ISet<string> AddressLines { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
+    ///     Gets an optional fallback value to use as the postal code for countries that have no concept of a postal code.
+    /// </summary>
+    /// <remarks>
+    ///     Returns <see langword="null" /> by default. Override this property to supply a custom fallback value.
+    ///     Refer to <see cref="Constants.NoPostalCode" /> for the list of countries where this fallback applies.
+    /// </remarks>
+    public virtual string? NoPostalCodeFallback => null;
+
+    /// <summary>
     ///     Gets or sets the city (town)
     /// </summary>
     public string? CityOrTown { get; set; }
@@ -74,7 +83,7 @@ public abstract class AbstractAddressValidationRequest
             }
 
             field = Constants.NoPostalCode.Contains(_country.Value)
-                        ? null
+                        ? NoPostalCodeFallback
                         : value;
         }
     }

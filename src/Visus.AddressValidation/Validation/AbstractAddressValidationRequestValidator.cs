@@ -22,7 +22,17 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
     /// </summary>
     protected abstract FrozenSet<CountryCode> SupportedCountries { get; }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Checks that <paramref name="instance" /> specifies a non-null country code supported by
+    ///     <see cref="ProviderName" />. Validation is skipped if the country is missing or unsupported.
+    /// </summary>
+    /// <param name="instance">The request instance to pre-validate.</param>
+    /// <param name="results">The set of <see cref="ValidationState" /> objects for the current instance.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
+    /// <returns>
+    ///     <see langword="true" /> when the country is present and supported; otherwise <see langword="false" />,
+    ///     and an error is added to <paramref name="results" />.
+    /// </returns>
     protected override ValueTask<bool> PreValidateAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
         Debug.Assert(instance != null);
@@ -44,7 +54,14 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
         return ValueTask.FromResult(false);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Validates the address fields of <paramref name="instance" />, checking that address lines, city/town,
+    ///     state/province, and postal code are present and within the expected constraints for the given country.
+    /// </summary>
+    /// <param name="instance">The request instance to validate.</param>
+    /// <param name="results">The set of <see cref="ValidationState" /> objects for the current instance.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
+    /// <returns>A task that represents the asynchronous validation operation.</returns>
     protected override ValueTask ValidateAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
         Debug.Assert(instance != null);
@@ -79,7 +96,7 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
             results.Add(ValidationState.CreateError(Resources.Validation_Field_CannotBeNullOrEmpty, nameof(instance.PostalCode)));
         }
 
-        if ( Constants.NoPostalCode.Contains(instance.Country!.Value) )
+        if ( Constants.NoPostalCode.Contains(instance.Country!.Value) && string.IsNullOrWhiteSpace(instance.NoPostalCodeFallback) )
         {
             results.Add(ValidationState.CreateError(Resources.Validation_Address_CountryNotSupported, nameof(instance.Country), instance.Country));
         }

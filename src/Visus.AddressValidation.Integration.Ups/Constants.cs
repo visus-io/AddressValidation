@@ -24,6 +24,5 @@ public static class Constants
     public static readonly FrozenSet<CountryCode> SupportedCountries = new HashSet<CountryCode>
     {
         CountryCode.US,
-        CountryCode.PR,
     }.ToFrozenSet();
 }

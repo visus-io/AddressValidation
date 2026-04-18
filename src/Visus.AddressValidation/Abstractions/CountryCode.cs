@@ -1376,7 +1376,7 @@ public enum CountryCode
     /// <summary>
     ///     Turkey
     /// </summary>
-    [Description("Turkey")]
+    [Description("Türkiye")]
     TR = 792,
 
     /// <summary>

@@ -467,7 +467,7 @@ namespace Visus.AddressValidation.Abstractions
         AE = 784,
         [System.ComponentModel.Description("Tunisia")]
         TN = 788,
-        [System.ComponentModel.Description("Turkey")]
+        [System.ComponentModel.Description("Türkiye")]
         TR = 792,
         [System.ComponentModel.Description("Turkmenistan")]
         TM = 795,
@@ -549,6 +549,7 @@ namespace Visus.AddressValidation.Http
         public System.Collections.Generic.ISet<string> AddressLines { get; }
         public string? CityOrTown { get; set; }
         public Visus.AddressValidation.Abstractions.CountryCode? Country { get; set; }
+        public virtual string? NoPostalCodeFallback { get; }
         public string? PostalCode { get; set; }
         public string? StateOrProvince { get; set; }
     }

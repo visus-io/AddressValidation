@@ -45,5 +45,6 @@ namespace Visus.AddressValidation.Integration.FedEx.Http
     {
         public FedExAddressValidationRequest() { }
         public string? ClientReferenceId { get; set; }
+        public override string? NoPostalCodeFallback { get; }
     }
 }
