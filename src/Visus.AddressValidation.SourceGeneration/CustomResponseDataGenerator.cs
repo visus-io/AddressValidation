@@ -133,8 +133,8 @@ public sealed class CustomResponseDataGenerator : IIncrementalGenerator
                    .AddMembers(typeDeclaration);
             }
 
-            FileScopedNamespaceDeclarationSyntax namespaceDeclaration =
-                FileScopedNamespaceDeclaration(IdentifierName(first.ContainingType.Namespace))
+            NamespaceDeclarationSyntax namespaceDeclaration =
+                NamespaceDeclaration(IdentifierName(first.ContainingType.Namespace))
                    .AddMembers(typeDeclaration);
 
             CompilationUnitSyntax compilationUnit =
