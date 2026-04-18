@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.FedEx.Model;
 
+using System.Collections.Frozen;
 using Abstractions;
 using AddressValidation.Extensions;
 using AddressValidation.Model;
@@ -19,8 +20,7 @@ internal sealed class AddressValidationResponse : AbstractAddressValidationRespo
         ApiResponse.ResolvedAddress primaryAddress = response.Result.ResolvedAddresses[0];
 
         AddressLines = primaryAddress.StreetLinesToken
-                                     .Select(s => s.ToUpperInvariant())
-                                     .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                                     .ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
         CityOrTown = primaryAddress.City;
         Country = primaryAddress.CountryCode;

@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.Ups.Model;
 
+using System.Collections.Frozen;
 using System.Collections.ObjectModel;
 using Abstractions;
 using AddressValidation.Abstractions;
@@ -12,13 +13,12 @@ internal sealed class AddressSuggestionValidationResponse : AbstractAddressValid
     public AddressSuggestionValidationResponse(ApiResponse.Candidate candidate)
     {
         AddressLines = candidate.AddressKeyFormat.AddressLine
-                                .Select(s => s.ToUpperInvariant())
-                                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                                .ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
         CityOrTown = candidate.AddressKeyFormat.PoliticalDivision2;
         Country = candidate.AddressKeyFormat.CountryCode;
         PostalCode = AddressValidationResponse.FormatPostalCode(candidate.AddressKeyFormat);
-        StateOrProvince = candidate.AddressKeyFormat.PoliticalDivision1?.ToUpperInvariant();
+        StateOrProvince = candidate.AddressKeyFormat.PoliticalDivision1;
         IsResidential = candidate.AddressClassification.Code == AddressClassificationCode.RESIDENTIAL;
     }
 }
@@ -36,13 +36,12 @@ internal sealed class AddressValidationResponse : AbstractAddressValidationRespo
         ApiResponse.Candidate primaryAddress = response.Result.Candidates[0];
 
         AddressLines = primaryAddress.AddressKeyFormat.AddressLine
-                                     .Select(s => s.ToUpperInvariant())
-                                     .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                                     .ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
-        CityOrTown = primaryAddress.AddressKeyFormat.PoliticalDivision2?.ToUpperInvariant();
+        CityOrTown = primaryAddress.AddressKeyFormat.PoliticalDivision2;
         Country = primaryAddress.AddressKeyFormat.CountryCode;
         PostalCode = FormatPostalCode(primaryAddress.AddressKeyFormat);
-        StateOrProvince = primaryAddress.AddressKeyFormat.PoliticalDivision1?.ToUpperInvariant();
+        StateOrProvince = primaryAddress.AddressKeyFormat.PoliticalDivision1;
         IsResidential = primaryAddress.AddressClassification.Code == AddressClassificationCode.RESIDENTIAL;
 
         if ( response.Result.Candidates.Length > 1 )
@@ -64,14 +63,13 @@ internal sealed class AddressValidationResponse : AbstractAddressValidationRespo
             addressKeyFormat.PostcodeExtendedLow,
         };
 
-        return string.Join("-", [.. codes,]).ToUpperInvariant();
+        return string.Join("-", [.. codes,]);
     }
 
     private static ReadOnlyCollection<IAddressValidationResponse> ListSuggestions(IEnumerable<ApiResponse.Candidate> candidates)
     {
-        HashSet<AddressSuggestionValidationResponse> results = candidates
-                                                              .Select(s => new AddressSuggestionValidationResponse(s))
-                                                              .ToHashSet();
+        HashSet<AddressSuggestionValidationResponse> results =
+            [.. candidates.Select(s => new AddressSuggestionValidationResponse(s)),];
 
         return new ReadOnlyCollection<IAddressValidationResponse>([.. results,]);
     }

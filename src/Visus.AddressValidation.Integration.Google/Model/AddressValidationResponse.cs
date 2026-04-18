@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.Google.Model;
 
+using System.Collections.Frozen;
 using System.Collections.ObjectModel;
 using AddressValidation.Extensions;
 using AddressValidation.Model;
@@ -17,13 +18,12 @@ internal sealed class AddressValidationResponse : AbstractAddressValidationRespo
         }
 
         AddressLines = response.Result.Address.PostalAddress.AddressLines
-                               .Select(s => s.ToUpperInvariant())
-                               .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                               .ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
-        CityOrTown = response.Result.Address.PostalAddress.Locality?.ToUpperInvariant();
+        CityOrTown = response.Result.Address.PostalAddress.Locality;
         Country = response.Result.Address.PostalAddress.RegionCode;
-        PostalCode = response.Result.Address.PostalAddress.PostalCode?.ToUpperInvariant();
-        StateOrProvince = response.Result.Address.PostalAddress.AdministrativeArea?.ToUpperInvariant();
+        PostalCode = response.Result.Address.PostalAddress.PostalCode;
+        StateOrProvince = response.Result.Address.PostalAddress.AdministrativeArea;
 
         if ( response.Result.Metadata is not null )
         {
