@@ -686,7 +686,7 @@ namespace Visus.AddressValidation.Services
     public abstract class AbstractAuthenticationService<TClient>
         where TClient : Visus.AddressValidation.Http.IAuthenticationClient
     {
-        protected AbstractAuthenticationService(TClient authenticationClient, Microsoft.Extensions.Caching.Distributed.IDistributedCache cache) { }
+        protected AbstractAuthenticationService(TClient authenticationClient, Microsoft.Extensions.Caching.Hybrid.HybridCache cache) { }
         public string? CacheKey { get; }
         protected abstract string? GenerateCacheKey();
         public System.Threading.Tasks.Task<string?> GetAccessTokenAsync(System.Threading.CancellationToken cancellationToken = default) { }

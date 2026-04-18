@@ -11,9 +11,10 @@
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.4" />
     <PackageVersion Include="Meziantou.Analyzer" Version="3.0.48" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="[4.14.0]" />
-    <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.6" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Hybrid" Version="10.5.0" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="10.0.6" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.6" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.6" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.6" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.5.0" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.6" />
@@ -46,6 +47,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Caching.Hybrid"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="PublicApiGenerator" />
     <PackageReference Include="Verify" />

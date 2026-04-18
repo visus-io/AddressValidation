@@ -3,14 +3,14 @@ namespace Visus.AddressValidation.Integration.Ups.Services;
 using AddressValidation.Services;
 using Configuration;
 using Http;
-using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Options;
 
 internal sealed class UpsAuthenticationService : AbstractAuthenticationService<UpsAuthenticationClient>
 {
     private readonly IOptions<UpsServiceOptions> _options;
 
-    public UpsAuthenticationService(IDistributedCache cache,
+    public UpsAuthenticationService(HybridCache cache,
                                     IOptions<UpsServiceOptions> options,
                                     UpsAuthenticationClient authenticationClient)
         : base(authenticationClient, cache)

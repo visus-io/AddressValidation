@@ -1,7 +1,7 @@
 namespace Visus.AddressValidation.Services;
 
 using Http;
-using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Hybrid;
 
 /// <summary>
 ///     Abstraction for implementing an authentication service that relies on an
@@ -15,15 +15,15 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
 {
     private readonly TClient _authenticationClient;
 
-    private readonly IDistributedCache _cache;
+    private readonly HybridCache _cache;
 
     /// <summary>
     ///     Abstraction for implementing an authentication service that relies on an
     ///     <see cref="IAuthenticationClient" /> implementation.
     /// </summary>
     /// <param name="authenticationClient">An <see cref="IAuthenticationClient" /> instance.</param>
-    /// <param name="cache">An <see cref="IDistributedCache" /> instance.</param>
-    protected AbstractAuthenticationService(TClient authenticationClient, IDistributedCache cache)
+    /// <param name="cache">A <see cref="HybridCache" /> instance.</param>
+    protected AbstractAuthenticationService(TClient authenticationClient, HybridCache cache)
     {
         _authenticationClient = authenticationClient ?? throw new ArgumentNullException(nameof(authenticationClient));
         _cache = cache ?? throw new ArgumentNullException(nameof(cache));
@@ -52,7 +52,7 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     /// <returns>
     ///     Current access token returned by the service, an empty string, or <see langword="null" />.
     /// </returns>
-    /// <remarks>An instance of <see cref="IDistributedCache" /> is utilized to cache the token by its defined lifetime.</remarks>
+    /// <remarks>An instance of <see cref="HybridCache" /> is utilized to cache the token by its defined lifetime.</remarks>
     public async Task<string?> GetAccessTokenAsync(CancellationToken cancellationToken = default)
     {
         if ( string.IsNullOrWhiteSpace(CacheKey) )
@@ -60,26 +60,42 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
             return null;
         }
 
-        string? accessToken = await _cache.GetStringAsync(CacheKey, cancellationToken).ConfigureAwait(false);
-        if ( !string.IsNullOrWhiteSpace(accessToken) )
+        bool factoryRan = false;
+        TokenResponse? fetched = null;
+
+        string? accessToken = await _cache.GetOrCreateAsync<string?>(CacheKey,
+                                               async ct =>
+                                               {
+                                                   factoryRan = true;
+                                                   fetched = await _authenticationClient.RequestClientCredentialsTokenAsync(ct).ConfigureAwait(false);
+                                                   return string.IsNullOrWhiteSpace(fetched?.AccessToken) ? null : fetched.AccessToken;
+                                               },
+                                               null,
+                                               null,
+                                               cancellationToken)
+                                          .ConfigureAwait(false);
+
+        if ( !factoryRan )
         {
-            return accessToken;
+            return string.IsNullOrWhiteSpace(accessToken) ? null : accessToken;
         }
 
-        TokenResponse? response = await _authenticationClient.RequestClientCredentialsTokenAsync(cancellationToken).ConfigureAwait(false);
-        if ( response is null || string.IsNullOrWhiteSpace(response.AccessToken) )
+        if ( fetched is null || string.IsNullOrWhiteSpace(fetched.AccessToken) )
         {
+            await _cache.RemoveAsync(CacheKey, cancellationToken).ConfigureAwait(false);
             return null;
         }
 
-        DateTimeOffset expires = DateTimeOffset.UtcNow.AddSeconds(response.ExpiresIn - 60);
+        await _cache.SetAsync(CacheKey,
+            fetched.AccessToken,
+            new HybridCacheEntryOptions
+            {
+                Expiration = TimeSpan.FromSeconds(fetched.ExpiresIn - 60),
+            },
+            null,
+            cancellationToken).ConfigureAwait(false);
 
-        await _cache.SetStringAsync(CacheKey, response.AccessToken, new DistributedCacheEntryOptions
-        {
-            AbsoluteExpiration = expires,
-        }, cancellationToken).ConfigureAwait(false);
-
-        return response.AccessToken;
+        return fetched.AccessToken;
     }
 
     /// <summary>

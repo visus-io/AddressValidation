@@ -3,14 +3,14 @@ namespace Visus.AddressValidation.Integration.FedEx.Services;
 using AddressValidation.Services;
 using Configuration;
 using Http;
-using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Options;
 
 internal sealed class FedExAuthenticationService : AbstractAuthenticationService<FedExAuthenticationClient>
 {
     private readonly IOptions<FedExServiceOptions> _options;
 
-    public FedExAuthenticationService(IDistributedCache cache,
+    public FedExAuthenticationService(HybridCache cache,
                                       IOptions<FedExServiceOptions> options,
                                       FedExAuthenticationClient authenticationClient)
         : base(authenticationClient, cache)

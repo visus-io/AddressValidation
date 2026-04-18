@@ -3,14 +3,14 @@ namespace Visus.AddressValidation.Integration.Google.Services;
 using AddressValidation.Services;
 using Configuration;
 using Http;
-using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Options;
 
 internal sealed class GoogleAuthenticationService : AbstractAuthenticationService<GoogleAuthenticationClient>
 {
     private readonly IOptions<GoogleServiceOptions> _options;
 
-    public GoogleAuthenticationService(IDistributedCache cache,
+    public GoogleAuthenticationService(HybridCache cache,
                                        IOptions<GoogleServiceOptions> options,
                                        GoogleAuthenticationClient authenticationClient)
         : base(authenticationClient, cache)

@@ -1,12 +1,11 @@
 namespace Visus.AddressValidation.Tests.Services;
 
-using System.Text;
 using AddressValidation.Http;
 using AddressValidation.Services;
 using AutoFixture;
 using AwesomeAssertions;
-using Microsoft.Extensions.Caching.Distributed;
-using NSubstitute;
+using Microsoft.Extensions.Caching.Hybrid;
+using Microsoft.Extensions.DependencyInjection;
 
 #pragma warning disable MA0048
 internal sealed class TestAuthenticationClient : IAuthenticationClient
@@ -31,7 +30,7 @@ internal sealed class TestAuthenticationService : AbstractAuthenticationService<
 {
     private readonly string? _cacheKey;
 
-    public TestAuthenticationService(TestAuthenticationClient client, IDistributedCache cache, string? cacheKey = "test-key")
+    public TestAuthenticationService(TestAuthenticationClient client, HybridCache cache, string? cacheKey = "test-key")
         : base(client, cache)
     {
         _cacheKey = cacheKey;
@@ -47,11 +46,18 @@ internal sealed class AbstractAuthenticationServiceTests
 {
     private readonly Fixture _fixture = new();
 
+    private static HybridCache CreateCache()
+    {
+        ServiceCollection services = new();
+        services.AddHybridCache();
+        return services.BuildServiceProvider().GetRequiredService<HybridCache>();
+    }
+
     [Test]
     public void CacheKey_LazyInitialized_ReturnsGeneratedKey()
     {
         string cacheKey = _fixture.Create<string>();
-        IDistributedCache cache = Substitute.For<IDistributedCache>();
+        HybridCache cache = CreateCache();
         TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(null));
         TestAuthenticationService service = new(client, cache, cacheKey);
 
@@ -71,7 +77,7 @@ internal sealed class AbstractAuthenticationServiceTests
     [Test]
     public void Constructor_NullClient_ThrowsArgumentNullException()
     {
-        IDistributedCache cache = Substitute.For<IDistributedCache>();
+        HybridCache cache = CreateCache();
 
         Action act = () => _ = new TestAuthenticationService(null!, cache);
 
@@ -83,16 +89,21 @@ internal sealed class AbstractAuthenticationServiceTests
     {
         string cacheKey = _fixture.Create<string>();
         string cachedToken = _fixture.Create<string>();
-        IDistributedCache cache = Substitute.For<IDistributedCache>();
-        cache.GetAsync(cacheKey, Arg.Any<CancellationToken>())
-             .Returns(Encoding.UTF8.GetBytes(cachedToken));
+        HybridCache cache = CreateCache();
+        await cache.SetAsync(cacheKey, cachedToken).ConfigureAwait(false);
 
-        TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(null));
+        int callCount = 0;
+        TestAuthenticationClient client = new(_ =>
+        {
+            Interlocked.Increment(ref callCount);
+            return Task.FromResult<TokenResponse?>(null);
+        });
         TestAuthenticationService service = new(client, cache, cacheKey);
 
         string? result = await service.GetAccessTokenAsync().ConfigureAwait(false);
 
         result.Should().Be(cachedToken);
+        callCount.Should().Be(0);
     }
 
     [Test]
@@ -100,67 +111,82 @@ internal sealed class AbstractAuthenticationServiceTests
     {
         string cacheKey = _fixture.Create<string>();
         string accessToken = _fixture.Create<string>();
-        IDistributedCache cache = Substitute.For<IDistributedCache>();
-        cache.GetAsync(cacheKey, Arg.Any<CancellationToken>())
-             .Returns((byte[]?)null);
+        HybridCache cache = CreateCache();
 
-        TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(new TokenResponse
+        int callCount = 0;
+        TestAuthenticationClient client = new(_ =>
         {
-            AccessToken = accessToken,
-            ExpiresIn = 3600,
-        }));
+            Interlocked.Increment(ref callCount);
+            return Task.FromResult<TokenResponse?>(new TokenResponse
+            {
+                AccessToken = accessToken,
+                ExpiresIn = 3600,
+            });
+        });
 
         TestAuthenticationService service = new(client, cache, cacheKey);
 
-        string? result = await service.GetAccessTokenAsync().ConfigureAwait(false);
+        string? first = await service.GetAccessTokenAsync().ConfigureAwait(false);
+        string? second = await service.GetAccessTokenAsync().ConfigureAwait(false);
 
-        result.Should().Be(accessToken);
-        await cache.Received(1)
-                   .SetAsync(cacheKey, Arg.Any<byte[]>(), Arg.Any<DistributedCacheEntryOptions>(), Arg.Any<CancellationToken>())
-                   .ConfigureAwait(false);
+        first.Should().Be(accessToken);
+        second.Should().Be(accessToken);
+        callCount.Should().Be(1);
     }
 
     [Test]
     public async Task GetAccessTokenAsync_ClientReturnsNull_ReturnsNull()
     {
         string cacheKey = _fixture.Create<string>();
-        IDistributedCache cache = Substitute.For<IDistributedCache>();
-        cache.GetAsync(cacheKey, Arg.Any<CancellationToken>())
-             .Returns((byte[]?)null);
+        HybridCache cache = CreateCache();
 
-        TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(null));
+        int callCount = 0;
+        TestAuthenticationClient client = new(_ =>
+        {
+            Interlocked.Increment(ref callCount);
+            return Task.FromResult<TokenResponse?>(null);
+        });
         TestAuthenticationService service = new(client, cache, cacheKey);
 
-        string? result = await service.GetAccessTokenAsync().ConfigureAwait(false);
+        string? first = await service.GetAccessTokenAsync().ConfigureAwait(false);
+        string? second = await service.GetAccessTokenAsync().ConfigureAwait(false);
 
-        result.Should().BeNull();
+        first.Should().BeNull();
+        second.Should().BeNull();
+        callCount.Should().Be(2);
     }
 
     [Test]
     public async Task GetAccessTokenAsync_EmptyAccessToken_ReturnsNull()
     {
         string cacheKey = _fixture.Create<string>();
-        IDistributedCache cache = Substitute.For<IDistributedCache>();
-        cache.GetAsync(cacheKey, Arg.Any<CancellationToken>())
-             .Returns((byte[]?)null);
+        HybridCache cache = CreateCache();
 
-        TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(new TokenResponse
+        int callCount = 0;
+        TestAuthenticationClient client = new(_ =>
         {
-            AccessToken = "",
-            ExpiresIn = 3600,
-        }));
+            Interlocked.Increment(ref callCount);
+            return Task.FromResult<TokenResponse?>(new TokenResponse
+            {
+                AccessToken = "",
+                ExpiresIn = 3600,
+            });
+        });
 
         TestAuthenticationService service = new(client, cache, cacheKey);
 
-        string? result = await service.GetAccessTokenAsync().ConfigureAwait(false);
+        string? first = await service.GetAccessTokenAsync().ConfigureAwait(false);
+        string? second = await service.GetAccessTokenAsync().ConfigureAwait(false);
 
-        result.Should().BeNull();
+        first.Should().BeNull();
+        second.Should().BeNull();
+        callCount.Should().Be(2);
     }
 
     [Test]
     public async Task GetAccessTokenAsync_NullCacheKey_ReturnsNull()
     {
-        IDistributedCache cache = Substitute.For<IDistributedCache>();
+        HybridCache cache = CreateCache();
         TestAuthenticationClient client = new(_ => Task.FromResult<TokenResponse?>(null));
         TestAuthenticationService service = new(client, cache, null);
 
