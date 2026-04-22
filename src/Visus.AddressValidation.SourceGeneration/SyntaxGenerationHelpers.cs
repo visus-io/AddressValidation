@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.SourceGeneration;
 
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -48,6 +49,31 @@ internal static class SyntaxGenerationHelpers
     }
 
     /// <summary>
+    ///     Builds a <see cref="ContainingTypeInfo" /> for the given <paramref name="type" />
+    ///     by recursively capturing its containing type hierarchy.
+    /// </summary>
+    /// <param name="type">The named type symbol to describe.</param>
+    /// <returns>
+    ///     A <see cref="ContainingTypeInfo" /> populated with the type's name, fully-qualified
+    ///     format, namespace, accessibility, and any parent containing types.
+    /// </returns>
+    internal static ContainingTypeInfo BuildContainingTypeInfo(INamedTypeSymbol type)
+    {
+        ImmutableArray<ContainingTypeInfo> parents = type.ContainingType is not null
+                                                         ? [BuildContainingTypeInfo(type.ContainingType),]
+                                                         : [];
+
+        return new ContainingTypeInfo(
+            type.Name,
+            type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat),
+            type.ContainingNamespace.ToDisplayString(),
+            type.DeclaredAccessibility,
+            type.IsRecord,
+            type.IsSealed,
+            parents);
+    }
+
+    /// <summary>
     ///     Returns the <see cref="SyntaxToken" /> sequence that corresponds to the
     ///     given <paramref name="accessibility" /> modifier.
     /// </summary>
@@ -69,5 +95,25 @@ internal static class SyntaxGenerationHelpers
             Accessibility.ProtectedOrInternal => [Token(SyntaxKind.ProtectedKeyword), Token(SyntaxKind.InternalKeyword),],
             _ => [],
         };
+    }
+
+    /// <summary>
+    ///     Returns the full chain of <see cref="ContainingTypeInfo" /> records from the
+    ///     outermost ancestor down to <paramref name="info" /> itself.
+    /// </summary>
+    /// <param name="info">The innermost <see cref="ContainingTypeInfo" /> to start from.</param>
+    /// <returns>
+    ///     A read-only list of <see cref="ContainingTypeInfo" /> ordered from the outermost
+    ///     containing type to <paramref name="info" />, suitable for generating nested type
+    ///     wrappers in source output.
+    /// </returns>
+    internal static IReadOnlyList<ContainingTypeInfo> GetTypeChain(ContainingTypeInfo info)
+    {
+        List<ContainingTypeInfo> chain = [];
+
+        chain.AddRange(info.ContainingTypes.SelectMany(GetTypeChain));
+        chain.Add(info);
+
+        return chain;
     }
 }

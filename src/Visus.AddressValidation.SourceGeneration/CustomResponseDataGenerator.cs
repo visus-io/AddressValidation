@@ -50,21 +50,6 @@ public sealed class CustomResponseDataGenerator : IIncrementalGenerator
             static (spc, properties) => GenerateSource(spc, properties));
     }
 
-    private static ContainingTypeInfo BuildContainingTypeInfo(INamedTypeSymbol type)
-    {
-        ImmutableArray<ContainingTypeInfo> parents = type.ContainingType is not null
-                                                         ? [BuildContainingTypeInfo(type.ContainingType),]
-                                                         : [];
-
-        return new ContainingTypeInfo(
-            type.Name,
-            type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat),
-            type.ContainingNamespace.ToDisplayString(),
-            type.DeclaredAccessibility,
-            type.IsRecord,
-            type.IsSealed,
-            parents);
-    }
 
     private static SyntaxNodeOrToken[] CreateStringObjectTypeArguments()
     {
@@ -114,7 +99,7 @@ public sealed class CustomResponseDataGenerator : IIncrementalGenerator
             string safeKey = StringHelpers.ToSafeFileName(group.Key);
 
             PropertyInfo first = group.First();
-            IReadOnlyList<ContainingTypeInfo> typeChain = GetTypeChain(first.ContainingType);
+            IReadOnlyList<ContainingTypeInfo> typeChain = SyntaxGenerationHelpers.GetTypeChain(first.ContainingType);
 
             MethodDeclarationSyntax methodDeclaration =
                 MethodDeclaration(GetDictionaryMethodSyntax(), GetCustomResponseDataMethodName)
@@ -166,12 +151,12 @@ public sealed class CustomResponseDataGenerator : IIncrementalGenerator
         {
             BracketedArgumentListSyntax key =
                 BracketedArgumentList(SingletonSeparatedList(Argument(LiteralExpression(SyntaxKind.StringLiteralExpression,
-                    Literal(property.PropertyKey)))));
+                    Literal(property.Key)))));
 
             AssignmentExpressionSyntax entity =
                 AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
                     ImplicitElementAccess().WithArgumentList(key),
-                    IdentifierName(property.PropertyName));
+                    IdentifierName(property.Name));
 
             entities.AddLast(entity);
         }
@@ -190,15 +175,6 @@ public sealed class CustomResponseDataGenerator : IIncrementalGenerator
             TypeArgumentList(SeparatedList<TypeSyntax>(CreateStringObjectTypeArguments())));
     }
 
-    private static IReadOnlyList<ContainingTypeInfo> GetTypeChain(ContainingTypeInfo info)
-    {
-        List<ContainingTypeInfo> chain = [];
-
-        chain.AddRange(info.ContainingTypes.SelectMany(GetTypeChain));
-        chain.Add(info);
-
-        return chain;
-    }
 
     private static PropertyInfo? Transform(GeneratorAttributeSyntaxContext context, CancellationToken cancellationToken)
     {
@@ -230,7 +206,7 @@ public sealed class CustomResponseDataGenerator : IIncrementalGenerator
         }
 
         return new PropertyInfo(
-            BuildContainingTypeInfo(containingType),
+            SyntaxGenerationHelpers.BuildContainingTypeInfo(containingType),
             propertyKey,
             property.Name,
             property.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
