@@ -1,6 +1,7 @@
 namespace Visus.AddressValidation.Integration.FedEx.Http;
 
 using System.Net.Http.Json;
+using AddressValidation.Abstractions;
 using Configuration;
 using Microsoft.Extensions.Options;
 using Serialization.Json;
@@ -40,7 +41,7 @@ internal sealed class FedExAddressValidationClient
                     Address = new ApiRequest.FedExAddress
                     {
                         City = request.CityOrTown,
-                        CountryCode = request.Country!.Value.ToString(),
+                        CountryCode = request.Country!.Value,
                         PostalCode = request.PostalCode,
                         StateOrProvince = request.StateOrProvince,
                         StreetLines = [..request.AddressLines,],

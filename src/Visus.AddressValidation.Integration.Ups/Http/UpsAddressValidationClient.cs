@@ -1,6 +1,7 @@
 namespace Visus.AddressValidation.Integration.Ups.Http;
 
 using System.Net.Http.Json;
+using AddressValidation.Abstractions;
 using Configuration;
 using Microsoft.Extensions.Options;
 using Serialization.Json;
@@ -42,7 +43,7 @@ internal sealed class UpsAddressValidationClient
                     PoliticalDivision1 = request.StateOrProvince,
                     PostcodePrimaryLow = postalCodeParts[0],
                     PostcodeExtendedLow = postalCodeParts.Length == 2 ? postalCodeParts[1] : null,
-                    CountryCode = request.Country!.Value.ToString(),
+                    CountryCode = request.Country!.Value,
                 },
             },
         };

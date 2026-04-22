@@ -1,6 +1,7 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Http;
 
 using System.Net.Http.Json;
+using AddressValidation.Abstractions;
 using Configuration;
 using Microsoft.Extensions.Options;
 using Serialization.Json;
@@ -35,7 +36,7 @@ internal sealed class PitneyBowesAddressValidationClient
         {
             AddressLines = [..request.AddressLines,],
             CityTown = request.CityOrTown,
-            CountryCode = request.Country!.Value.ToString(),
+            CountryCode = request.Country!.Value,
             PostalCode = request.PostalCode!,
         };
         

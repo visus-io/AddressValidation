@@ -1,5 +1,7 @@
 namespace Visus.AddressValidation.Integration.Google.Http;
 
+using AddressValidation.Abstractions;
+
 internal sealed class ApiRequest
 {
     public required GoogleAddress Address { get; init; }
@@ -18,6 +20,6 @@ internal sealed class ApiRequest
 
         public string? PostalCode { get; init; }
 
-        public required string RegionCode { get; init; }
+        public required CountryCode RegionCode { get; init; }
     }
 }

@@ -38,7 +38,7 @@ internal sealed class GoogleAddressValidationClient
                 AdministrativeArea = request.StateOrProvince,
                 Locality = request.CityOrTown,
                 PostalCode = request.PostalCode,
-                RegionCode = request.Country!.Value.ToString(),
+                RegionCode = request.Country!.Value,
             },
             EnableUspsCass = request.EnableUspsCass,
             PreviousResponseId = request.PreviousResponseId,
