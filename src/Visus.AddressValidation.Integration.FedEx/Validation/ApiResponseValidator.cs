@@ -2,7 +2,7 @@ namespace Visus.AddressValidation.Integration.FedEx.Validation;
 
 using System.Diagnostics;
 using AddressValidation.Abstractions;
-using AddressValidation.Http;
+using AddressValidation.Model;
 using AddressValidation.Validation;
 using Http;
 using Resources;

@@ -35,9 +35,9 @@ namespace Visus.AddressValidation.Integration.Google.Extensions
         public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddGoogleAddressValidation(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration) { }
     }
 }
-namespace Visus.AddressValidation.Integration.Google.Http
+namespace Visus.AddressValidation.Integration.Google.Model
 {
-    public sealed class GoogleAddressValidationRequest : Visus.AddressValidation.Http.AbstractAddressValidationRequest
+    public sealed class GoogleAddressValidationRequest : Visus.AddressValidation.Model.AbstractAddressValidationRequest
     {
         public GoogleAddressValidationRequest() { }
         public bool EnableUspsCass { get; }

@@ -2,6 +2,7 @@ namespace Visus.AddressValidation.Tests.Http;
 
 using Abstractions;
 using AddressValidation.Http;
+using AddressValidation.Model;
 using AwesomeAssertions;
 
 #pragma warning disable MA0048

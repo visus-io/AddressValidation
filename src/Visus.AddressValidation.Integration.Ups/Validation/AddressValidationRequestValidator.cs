@@ -4,8 +4,8 @@ using System.Collections.Frozen;
 using AddressValidation.Abstractions;
 using AddressValidation.Validation;
 using Configuration;
-using Http;
 using Microsoft.Extensions.Options;
+using Model;
 using Resources;
 
 internal sealed class AddressValidationRequestValidator : AbstractAddressValidationRequestValidator<UpsAddressValidationRequest>

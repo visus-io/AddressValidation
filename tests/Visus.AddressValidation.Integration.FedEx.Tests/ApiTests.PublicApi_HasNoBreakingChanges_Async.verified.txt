@@ -39,9 +39,9 @@ namespace Visus.AddressValidation.Integration.FedEx.Extensions
         public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddFedExAddressValidation(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration) { }
     }
 }
-namespace Visus.AddressValidation.Integration.FedEx.Http
+namespace Visus.AddressValidation.Integration.FedEx.Model
 {
-    public sealed class FedExAddressValidationRequest : Visus.AddressValidation.Http.AbstractAddressValidationRequest
+    public sealed class FedExAddressValidationRequest : Visus.AddressValidation.Model.AbstractAddressValidationRequest
     {
         public FedExAddressValidationRequest() { }
         public string? ClientReferenceId { get; set; }

@@ -3,6 +3,8 @@ namespace Visus.AddressValidation.Integration.FedEx.Services;
 using AddressValidation.Services;
 using AddressValidation.Validation;
 using Http;
+using Mappers;
+using Model;
 
 internal sealed class AddressValidationService : AbstractAddressValidationService<FedExAddressValidationRequest, ApiResponse>
 {
@@ -16,8 +18,13 @@ internal sealed class AddressValidationService : AbstractAddressValidationServic
         _client = client ?? throw new ArgumentNullException(nameof(client));
     }
 
-    protected override async Task<ApiResponse?> SendAsync(FedExAddressValidationRequest request, CancellationToken cancellationToken)
+    protected override Task<ApiResponse?> SendAsync(FedExAddressValidationRequest request,
+                                                    CancellationToken cancellationToken)
     {
-        return await _client.ValidateAddressAsync(request, cancellationToken).ConfigureAwait(false);
+        ArgumentNullException.ThrowIfNull(request);
+
+        ApiRequest apiRequest = request.ToApiRequest();
+
+        return _client.ValidateAddressAsync(apiRequest, cancellationToken);
     }
 }

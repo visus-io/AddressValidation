@@ -543,16 +543,6 @@ namespace Visus.AddressValidation.Extensions
 }
 namespace Visus.AddressValidation.Http
 {
-    public abstract class AbstractAddressValidationRequest
-    {
-        protected AbstractAddressValidationRequest() { }
-        public System.Collections.Generic.ISet<string> AddressLines { get; }
-        public string? CityOrTown { get; set; }
-        public Visus.AddressValidation.Abstractions.CountryCode? Country { get; set; }
-        public virtual string? NoPostalCodeFallback { get; }
-        public string? PostalCode { get; set; }
-        public string? StateOrProvince { get; set; }
-    }
     public sealed class BasicAuthenticationHeaderValue : System.Net.Http.Headers.AuthenticationHeaderValue
     {
         public BasicAuthenticationHeaderValue(string userName, string? password) { }
@@ -587,6 +577,16 @@ namespace Visus.AddressValidation.Http
 }
 namespace Visus.AddressValidation.Model
 {
+    public abstract class AbstractAddressValidationRequest
+    {
+        protected AbstractAddressValidationRequest() { }
+        public System.Collections.Generic.ISet<string> AddressLines { get; }
+        public string? CityOrTown { get; set; }
+        public Visus.AddressValidation.Abstractions.CountryCode? Country { get; set; }
+        public virtual string? NoPostalCodeFallback { get; }
+        public string? PostalCode { get; set; }
+        public string? StateOrProvince { get; set; }
+    }
     public abstract class AbstractAddressValidationResponse : System.IEquatable<Visus.AddressValidation.Model.AbstractAddressValidationResponse>, Visus.AddressValidation.Model.IAddressValidationResponse
     {
         protected AbstractAddressValidationResponse(Visus.AddressValidation.Validation.IValidationResult? validationResult = null) { }
@@ -676,7 +676,7 @@ namespace Visus.AddressValidation.Serialization.Json
 namespace Visus.AddressValidation.Services
 {
     public abstract class AbstractAddressValidationService<TRequest, TResponse> : Visus.AddressValidation.Services.IAddressValidationService<TRequest>
-        where TRequest : Visus.AddressValidation.Http.AbstractAddressValidationRequest
+        where TRequest : Visus.AddressValidation.Model.AbstractAddressValidationRequest
         where TResponse :  class, Visus.AddressValidation.Http.IApiResponse
     {
         protected AbstractAddressValidationService(Visus.AddressValidation.Validation.IValidator<TRequest> requestValidator, Visus.AddressValidation.Validation.IValidator<TResponse> responseValidator) { }
@@ -692,7 +692,7 @@ namespace Visus.AddressValidation.Services
         public System.Threading.Tasks.Task<string?> GetAccessTokenAsync(System.Threading.CancellationToken cancellationToken = default) { }
     }
     public interface IAddressValidationService<in TRequest>
-        where in TRequest : Visus.AddressValidation.Http.AbstractAddressValidationRequest
+        where in TRequest : Visus.AddressValidation.Model.AbstractAddressValidationRequest
     {
         System.Threading.Tasks.Task<Visus.AddressValidation.Model.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default);
     }
@@ -700,7 +700,7 @@ namespace Visus.AddressValidation.Services
 namespace Visus.AddressValidation.Validation
 {
     public abstract class AbstractAddressValidationRequestValidator<T> : Visus.AddressValidation.Validation.AbstractValidator<T>
-        where T : Visus.AddressValidation.Http.AbstractAddressValidationRequest
+        where T : Visus.AddressValidation.Model.AbstractAddressValidationRequest
     {
         protected AbstractAddressValidationRequestValidator() { }
         protected abstract string ProviderName { get; }

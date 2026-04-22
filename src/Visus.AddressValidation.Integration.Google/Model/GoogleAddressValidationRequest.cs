@@ -1,7 +1,6 @@
-namespace Visus.AddressValidation.Integration.Google.Http;
+namespace Visus.AddressValidation.Integration.Google.Model;
 
 using AddressValidation.Abstractions;
-using AddressValidation.Http;
 using AddressValidation.Model;
 using JetBrains.Annotations;
 

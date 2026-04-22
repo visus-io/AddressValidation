@@ -8,21 +8,6 @@ using AddressValidation.Model;
 using AddressValidation.Validation;
 using Http;
 
-internal sealed class AddressSuggestionValidationResponse : AbstractAddressValidationResponse
-{
-    public AddressSuggestionValidationResponse(ApiResponse.Candidate candidate)
-    {
-        AddressLines = candidate.AddressKeyFormat.AddressLine
-                                .ToFrozenSet(StringComparer.OrdinalIgnoreCase);
-
-        CityOrTown = candidate.AddressKeyFormat.PoliticalDivision2;
-        Country = candidate.AddressKeyFormat.CountryCode;
-        PostalCode = AddressValidationResponse.FormatPostalCode(candidate.AddressKeyFormat);
-        StateOrProvince = candidate.AddressKeyFormat.PoliticalDivision1;
-        IsResidential = candidate.AddressClassification.Code == AddressClassificationCode.RESIDENTIAL;
-    }
-}
-
 internal sealed class AddressValidationResponse : AbstractAddressValidationResponse<ApiResponse>
 {
     public AddressValidationResponse(ApiResponse response, IValidationResult? validationResult = null)

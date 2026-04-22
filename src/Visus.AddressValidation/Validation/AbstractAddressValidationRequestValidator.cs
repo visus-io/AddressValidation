@@ -3,7 +3,7 @@ namespace Visus.AddressValidation.Validation;
 using System.Collections.Frozen;
 using System.Diagnostics;
 using Abstractions;
-using Http;
+using Model;
 using Resources;
 
 /// <summary>

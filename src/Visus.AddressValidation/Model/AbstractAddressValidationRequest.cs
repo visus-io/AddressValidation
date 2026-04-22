@@ -1,4 +1,4 @@
-namespace Visus.AddressValidation.Http;
+namespace Visus.AddressValidation.Model;
 
 using Abstractions;
 

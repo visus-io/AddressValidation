@@ -1,7 +1,6 @@
 namespace Visus.AddressValidation.Integration.FedEx.Http;
 
 using System.Net.Http.Json;
-using AddressValidation.Abstractions;
 using Configuration;
 using Microsoft.Extensions.Options;
 using Serialization.Json;
@@ -18,42 +17,24 @@ internal sealed class FedExAddressValidationClient
         _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
-    public ValueTask<ApiResponse?> ValidateAddressAsync(FedExAddressValidationRequest request,
-                                                        CancellationToken cancellationToken = default)
+    public Task<ApiResponse?> ValidateAddressAsync(ApiRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         return ValidateAddressInternalAsync(request, cancellationToken);
     }
 
-    private async ValueTask<ApiResponse?> ValidateAddressInternalAsync(FedExAddressValidationRequest request,
-                                                                       CancellationToken cancellationToken = default)
+    private async Task<ApiResponse?> ValidateAddressInternalAsync(ApiRequest request,
+                                                                  CancellationToken cancellationToken)
     {
         Uri requestUri = new(_options.Value.EndpointBaseUri, "/address/v1/addresses/resolve");
 
         using HttpRequestMessage httpRequest = new(HttpMethod.Post, requestUri);
 
-        ApiRequest apiRequest = new()
-        {
-            AddressesToValidate =
-            [
-                new ApiRequest.FedExAddressToValidate
-                {
-                    Address = new ApiRequest.FedExAddress
-                    {
-                        City = request.CityOrTown,
-                        CountryCode = request.Country!.Value,
-                        PostalCode = request.PostalCode,
-                        StateOrProvince = request.StateOrProvince,
-                        StreetLines = [..request.AddressLines,],
-                    },
-                    ClientReferenceId = request.ClientReferenceId,
-                },
-            ],
-        };
+        httpRequest.Content = JsonContent.Create(request, ApiRequestJsonSerializerContext.Default.ApiRequest);
 
-        httpRequest.Content = JsonContent.Create(apiRequest, ApiRequestJsonSerializerContext.Default.ApiRequest);
+        using HttpResponseMessage response = await _httpClient.SendAsync(httpRequest, cancellationToken)
+                                                              .ConfigureAwait(false);
 
-        using HttpResponseMessage response = await _httpClient.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
         if ( response.IsSuccessStatusCode )
         {
             return await response.Content.ReadFromJsonAsync(ApiResponseJsonSerializerContext.Default.ApiResponse,
@@ -61,9 +42,10 @@ internal sealed class FedExAddressValidationClient
                                  .ConfigureAwait(false);
         }
 
-        ApiErrorResponse? errorResponse = await response.Content.ReadFromJsonAsync(ApiResponseJsonSerializerContext.Default.ApiErrorResponse,
-                                                             cancellationToken)
-                                                        .ConfigureAwait(false);
+        ApiErrorResponse? errorResponse =
+            await response.Content.ReadFromJsonAsync(ApiResponseJsonSerializerContext.Default.ApiErrorResponse,
+                               cancellationToken)
+                          .ConfigureAwait(false);
 
         if ( errorResponse is not null )
         {

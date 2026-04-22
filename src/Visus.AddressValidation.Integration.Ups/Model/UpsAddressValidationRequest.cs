@@ -1,8 +1,10 @@
-namespace Visus.AddressValidation.Integration.Ups.Http;
+namespace Visus.AddressValidation.Integration.Ups.Model;
 
-using AddressValidation.Http;
+using AddressValidation.Model;
+using JetBrains.Annotations;
 
 /// <summary>
 ///     Representation of a uniformed address validation request to UPS.
 /// </summary>
+[UsedImplicitly]
 public sealed class UpsAddressValidationRequest : AbstractAddressValidationRequest;

@@ -9,7 +9,7 @@
     <Project Path="src/Visus.AddressValidation.Integration.PitneyBowes/Visus.AddressValidation.Integration.PitneyBowes.csproj" />
     <Project Path="src/Visus.AddressValidation.Integration.Ups/Visus.AddressValidation.Integration.Ups.csproj" />
   </Folder>
-  <Folder Name="/03. Unit Tests/">
+  <Folder Name="/03. Tests/">
     <Project Path="tests/Visus.AddressValidation.Integration.FedEx.Tests/Visus.AddressValidation.Integration.FedEx.Tests.csproj" />
     <Project Path="tests/Visus.AddressValidation.Integration.Google.Tests/Visus.AddressValidation.Integration.Google.Tests.csproj" />
     <Project Path="tests/Visus.AddressValidation.Integration.PitneyBowes.Tests/Visus.AddressValidation.Integration.PitneyBowes.Tests.csproj" />

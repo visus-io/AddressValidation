@@ -3,7 +3,7 @@ namespace Visus.AddressValidation.Integration.PitneyBowes.Validation;
 using System.Collections.Frozen;
 using AddressValidation.Abstractions;
 using AddressValidation.Validation;
-using Http;
+using Model;
 
 internal sealed class AddressValidationRequestValidator : AbstractAddressValidationRequestValidator<PitneyBowesAddressValidationRequest>
 {

@@ -39,9 +39,9 @@ namespace Visus.AddressValidation.Integration.Ups.Extensions
         public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddUpsAddressValidation(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration) { }
     }
 }
-namespace Visus.AddressValidation.Integration.Ups.Http
+namespace Visus.AddressValidation.Integration.Ups.Model
 {
-    public sealed class UpsAddressValidationRequest : Visus.AddressValidation.Http.AbstractAddressValidationRequest
+    public sealed class UpsAddressValidationRequest : Visus.AddressValidation.Model.AbstractAddressValidationRequest
     {
         public UpsAddressValidationRequest() { }
     }

@@ -13,7 +13,7 @@ internal sealed class ValidationResult : IValidationResult
 
         foreach ( ValidationState state in states )
         {
-            switch (state.Severity)
+            switch ( state.Severity )
             {
                 case ValidationSeverity.Error:
                     errors.Add(state);

@@ -1,7 +1,6 @@
 namespace Visus.AddressValidation.Integration.Ups.Http;
 
 using System.Net.Http.Json;
-using AddressValidation.Abstractions;
 using Configuration;
 using Microsoft.Extensions.Options;
 using Serialization.Json;
@@ -18,37 +17,19 @@ internal sealed class UpsAddressValidationClient
         _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
-    public ValueTask<ApiResponse?> ValidateAddressAsync(UpsAddressValidationRequest request, CancellationToken cancellationToken = default)
+    public Task<ApiResponse?> ValidateAddressAsync(ApiRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         return ValidateAddressInternalAsync(request, cancellationToken);
     }
 
-    private async ValueTask<ApiResponse?> ValidateAddressInternalAsync(UpsAddressValidationRequest request, CancellationToken cancellationToken)
+    private async Task<ApiResponse?> ValidateAddressInternalAsync(ApiRequest request, CancellationToken cancellationToken)
     {
         Uri requestUri = new(_options.Value.EndpointBaseUri, "/api/addressvalidation/v2/3");
 
         using HttpRequestMessage httpRequest = new(HttpMethod.Post, requestUri);
 
-        string[] postalCodeParts = request.PostalCode!.Split('-', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-
-        ApiRequest apiRequest = new()
-        {
-            XavRequest = new ApiRequest.UpsXavRequest
-            {
-                AddressKeyFormat = new ApiRequest.UpsAddressKeyFormat
-                {
-                    AddressLine = [..request.AddressLines,],
-                    PoliticalDivision2 = request.CityOrTown,
-                    PoliticalDivision1 = request.StateOrProvince,
-                    PostcodePrimaryLow = postalCodeParts[0],
-                    PostcodeExtendedLow = postalCodeParts.Length == 2 ? postalCodeParts[1] : null,
-                    CountryCode = request.Country!.Value,
-                },
-            },
-        };
-
-        httpRequest.Content = JsonContent.Create(apiRequest, ApiRequestJsonSerializerContext.Default.ApiRequest);
+        httpRequest.Content = JsonContent.Create(request, ApiRequestJsonSerializerContext.Default.ApiRequest);
 
         using HttpResponseMessage response = await _httpClient.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
         if ( response.IsSuccessStatusCode )

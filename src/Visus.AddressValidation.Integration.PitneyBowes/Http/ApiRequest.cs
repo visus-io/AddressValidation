@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Http;
 
+using System.Text.Json.Serialization;
 using AddressValidation.Abstractions;
 
 internal sealed class ApiRequest
@@ -9,6 +10,9 @@ internal sealed class ApiRequest
     public string? CityTown { get; init; }
 
     public required CountryCode CountryCode { get; init; }
+
+    [JsonIgnore]
+    public required bool IncludeSuggestions { get; init; }
 
     public required string PostalCode { get; init; }
 

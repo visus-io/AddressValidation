@@ -98,17 +98,6 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
         return tokenResponse;
     }
 
-    // remark: some implementations may return expires_in as a string rather than an integer
-    private static int ParseExpiresIn(ref Utf8JsonReader reader)
-    {
-        if ( reader.TokenType == JsonTokenType.String )
-        {
-            return int.TryParse(reader.GetString(), CultureInfo.InvariantCulture, out int expiresIn) ? expiresIn : 0;
-        }
-
-        return reader.GetInt32();
-    }
-
     /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, TokenResponse? value, JsonSerializerOptions options)
     {
@@ -131,5 +120,16 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
         writer.WriteString(TokenTypePropertyName, value.TokenType);
 
         writer.WriteEndObject();
+    }
+
+    // remark: some implementations may return expires_in as a string rather than an integer
+    private static int ParseExpiresIn(ref Utf8JsonReader reader)
+    {
+        if ( reader.TokenType == JsonTokenType.String )
+        {
+            return int.TryParse(reader.GetString(), CultureInfo.InvariantCulture, out int expiresIn) ? expiresIn : 0;
+        }
+
+        return reader.GetInt32();
     }
 }

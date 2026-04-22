@@ -1,6 +1,6 @@
-namespace Visus.AddressValidation.Integration.FedEx.Http;
+namespace Visus.AddressValidation.Integration.FedEx.Model;
 
-using AddressValidation.Http;
+using AddressValidation.Model;
 using JetBrains.Annotations;
 
 /// <summary>

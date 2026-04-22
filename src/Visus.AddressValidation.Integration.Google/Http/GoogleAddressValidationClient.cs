@@ -20,32 +20,17 @@ internal sealed class GoogleAddressValidationClient
         _httpClient.DefaultRequestHeaders.Add("X-Goog-User-Project", options.Value.ProjectId);
     }
 
-    public ValueTask<ApiResponse?> ValidateAddressAsync(GoogleAddressValidationRequest request,
-                                                        CancellationToken cancellationToken = default)
+    public Task<ApiResponse?> ValidateAddressAsync(ApiRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
         return ValidateAddressInternalAsync(request, cancellationToken);
     }
 
-    private async ValueTask<ApiResponse?> ValidateAddressInternalAsync(GoogleAddressValidationRequest request,
-                                                                       CancellationToken cancellationToken)
+    private async Task<ApiResponse?> ValidateAddressInternalAsync(ApiRequest request,
+                                                                  CancellationToken cancellationToken)
     {
-        ApiRequest apiRequest = new()
-        {
-            Address = new ApiRequest.GoogleAddress
-            {
-                AddressLines = [..request.AddressLines,],
-                AdministrativeArea = request.StateOrProvince,
-                Locality = request.CityOrTown,
-                PostalCode = request.PostalCode,
-                RegionCode = request.Country!.Value,
-            },
-            EnableUspsCass = request.EnableUspsCass,
-            PreviousResponseId = request.PreviousResponseId,
-        };
-
         using HttpResponseMessage response = await _httpClient.PostAsJsonAsync("/v1:validateAddress",
-                                                                   apiRequest,
+                                                                   request,
                                                                    ApiRequestJsonSerializerContext.Default.ApiRequest,
                                                                    cancellationToken)
                                                               .ConfigureAwait(false);
@@ -56,9 +41,10 @@ internal sealed class GoogleAddressValidationClient
                                  .ConfigureAwait(false);
         }
 
-        ApiErrorResponse? errorResponse = await response.Content.ReadFromJsonAsync(ApiResponseJsonSerializerContext.Default.ApiErrorResponse,
-                                                             cancellationToken)
-                                                        .ConfigureAwait(false);
+        ApiErrorResponse? errorResponse =
+            await response.Content.ReadFromJsonAsync(ApiResponseJsonSerializerContext.Default.ApiErrorResponse,
+                               cancellationToken)
+                          .ConfigureAwait(false);
 
         if ( errorResponse is not null )
         {

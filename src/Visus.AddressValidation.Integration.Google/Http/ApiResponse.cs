@@ -1,8 +1,6 @@
 ﻿namespace Visus.AddressValidation.Integration.Google.Http;
 
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using Abstractions;
 using AddressValidation.Abstractions;
