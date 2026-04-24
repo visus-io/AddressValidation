@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.Google.Extensions;
 
+using AddressValidation.Extensions;
 using AddressValidation.Http;
 using AddressValidation.Services;
 using AddressValidation.Validation;
@@ -8,6 +9,7 @@ using Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
 using Model;
 using Services;
@@ -44,17 +46,20 @@ public static class ServiceCollectionExtensions
         services.TryAddScoped<IAddressValidationService<GoogleAddressValidationRequest>, AddressValidationService>();
 
         services.AddHttpClient<GoogleAuthenticationClient>()
-                .AddStandardResilienceHandler();
+                .AddStandardResilienceHandler(options =>
+                 {
+                     options.Retry.DisableForUnsafeHttpMethods();
+                     options.CircuitBreaker.MinimumThroughput = 5;
+                 });
 
         services.AddHttpClient<GoogleAddressValidationClient>()
-                .RedactLoggedHeaders(["Authorization", "X-Goog-User-Project",])
+                .RedactLoggedHeaders(["Authorization",])
                 .AddHttpMessageHandler(provider =>
                  {
                      GoogleAuthenticationService authenticationService = provider.GetRequiredService<GoogleAuthenticationService>();
                      return new BearerTokenDelegatingHandler<GoogleAuthenticationClient>(authenticationService);
                  })
-                .AddStandardResilienceHandler();
-
+                .AddAddressValidationResilienceHandler();
 
         return services;
     }

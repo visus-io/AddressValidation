@@ -540,6 +540,10 @@ namespace Visus.AddressValidation.Extensions
         public static void Merge<TKey, TValue>(this System.Collections.Generic.IDictionary<TKey, TValue> source, System.Collections.Generic.IReadOnlyDictionary<TKey, TValue> dictionary)
             where TKey :  notnull { }
     }
+    public static class HttpClientBuilderExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IHttpClientBuilder AddAddressValidationResilienceHandler(this Microsoft.Extensions.DependencyInjection.IHttpClientBuilder builder) { }
+    }
 }
 namespace Visus.AddressValidation.Http
 {

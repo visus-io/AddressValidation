@@ -67,8 +67,14 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
                                                async ct =>
                                                {
                                                    factoryRan = true;
-                                                   fetched = await _authenticationClient.RequestClientCredentialsTokenAsync(ct).ConfigureAwait(false);
-                                                   return string.IsNullOrWhiteSpace(fetched?.AccessToken) ? null : fetched.AccessToken;
+                                                   
+                                                   fetched = await _authenticationClient
+                                                                  .RequestClientCredentialsTokenAsync(ct)
+                                                                  .ConfigureAwait(false);
+                                                   
+                                                   return string.IsNullOrWhiteSpace(fetched?.AccessToken) 
+                                                              ? null
+                                                              : fetched.AccessToken;
                                                },
                                                null,
                                                null,

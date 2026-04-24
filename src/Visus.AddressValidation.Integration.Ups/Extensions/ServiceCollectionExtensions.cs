@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.Ups.Extensions;
 
+using AddressValidation.Extensions;
 using AddressValidation.Http;
 using AddressValidation.Services;
 using AddressValidation.Validation;
@@ -8,6 +9,7 @@ using Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
 using Model;
 using Services;
@@ -44,7 +46,11 @@ public static class ServiceCollectionExtensions
         services.TryAddScoped<IAddressValidationService<UpsAddressValidationRequest>, AddressValidationService>();
 
         services.AddHttpClient<UpsAuthenticationClient>()
-                .AddStandardResilienceHandler();
+                .AddStandardResilienceHandler(options =>
+                 {
+                     options.Retry.DisableForUnsafeHttpMethods();
+                     options.CircuitBreaker.MinimumThroughput = 5;
+                 });
 
         services.AddHttpClient<UpsAddressValidationClient>()
                 .RedactLoggedHeaders(["Authorization",])
@@ -53,7 +59,7 @@ public static class ServiceCollectionExtensions
                      UpsAuthenticationService authenticationService = provider.GetRequiredService<UpsAuthenticationService>();
                      return new BearerTokenDelegatingHandler<UpsAuthenticationClient>(authenticationService);
                  })
-                .AddStandardResilienceHandler();
+                .AddAddressValidationResilienceHandler();
 
         return services;
     }
