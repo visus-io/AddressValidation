@@ -36,7 +36,7 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     }
 
     /// <summary>
-    ///     Key used by the underlying cache service to retrieve the cached access token.
+    ///     Key used by the underlying cache service to retrieve the cached token response.
     /// </summary>
     public string? CacheKey
     {
@@ -62,15 +62,15 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     /// </returns>
     /// <remarks>
     ///     <para>
-    ///         The access token is cached using <see cref="HybridCache" />. On first call, the token is
-    ///         fetched via <see cref="IAuthenticationClient.RequestClientCredentialsTokenAsync" /> and stored
-    ///         in the cache with an expiration derived from the token's lifetime, reduced by 60 seconds to
-    ///         account for clock skew.
+    ///         The access token is cached using <see cref="HybridCache" />. When no cached entry exists,
+    ///         a new token is fetched via <see cref="IAuthenticationClient.RequestClientCredentialsTokenAsync" />
+    ///         and stored in the cache with an expiration of <c>ExpiresIn - 60</c> seconds to provide a
+    ///         safety buffer before the token actually expires.
     ///     </para>
     ///     <para>
     ///         Subsequent calls return the cached token until it expires, at which point a new token is
-    ///         fetched. If the authentication service returns an invalid or empty token, the cache entry
-    ///         is removed and <see langword="null" /> is returned.
+    ///         fetched and cached. If the authentication service returns an invalid or empty token, the
+    ///         cache entry is removed and <see langword="null" /> is returned.
     ///     </para>
     /// </remarks>
     public async Task<string?> GetAccessTokenAsync(CancellationToken cancellationToken = default)
@@ -83,27 +83,25 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
         bool factoryRan = false;
         TokenResponse? fetched = null;
 
-        string? accessToken = await _cache.GetOrCreateAsync<string?>(CacheKey,
-                                               async ct =>
-                                               {
-                                                   factoryRan = true;
+        TokenResponse? tokenResponse = await _cache.GetOrCreateAsync<TokenResponse?>(CacheKey,
+                                                        async ct =>
+                                                        {
+                                                            factoryRan = true;
 
-                                                   fetched = await _authenticationClient
-                                                                  .RequestClientCredentialsTokenAsync(ct)
-                                                                  .ConfigureAwait(false);
+                                                            fetched = await _authenticationClient
+                                                                           .RequestClientCredentialsTokenAsync(ct)
+                                                                           .ConfigureAwait(false);
 
-                                                   return string.IsNullOrWhiteSpace(fetched?.AccessToken)
-                                                              ? null
-                                                              : fetched.AccessToken;
-                                               },
-                                               null,
-                                               null,
-                                               cancellationToken)
-                                          .ConfigureAwait(false);
+                                                            return fetched;
+                                                        },
+                                                        null,
+                                                        null,
+                                                        cancellationToken)
+                                                   .ConfigureAwait(false);
 
         if ( !factoryRan )
         {
-            return string.IsNullOrWhiteSpace(accessToken) ? null : accessToken;
+            return string.IsNullOrWhiteSpace(tokenResponse?.AccessToken) ? null : tokenResponse.AccessToken;
         }
 
         if ( fetched is null || string.IsNullOrWhiteSpace(fetched.AccessToken) )
@@ -113,7 +111,7 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
         }
 
         await _cache.SetAsync(CacheKey,
-            fetched.AccessToken,
+            fetched,
             new HybridCacheEntryOptions
             {
                 Expiration = TimeSpan.FromSeconds(fetched.ExpiresIn - 60),
