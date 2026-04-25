@@ -1,14 +1,20 @@
 namespace Visus.AddressValidation.Serialization.Json;
 
 using System.Collections.Frozen;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Http;
 
 /// <summary>
-///     Converts a <see cref="TokenResponse" /> object to and from json
+///     Converts a <see cref="TokenResponse" /> object to and from JSON.
 /// </summary>
+/// <remarks>
+///     This converter handles both snake_case JSON property names (e.g. <c>access_token</c>) and
+///     PascalCase property names (e.g. <c>AccessToken</c>). The <see cref="TokenResponse.ExpiresIn" />
+///     field is handled as either a JSON number or a string representation of an integer.
+/// </remarks>
 public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
 {
     private const string AccessTokenPropertyName = "access_token";
@@ -21,11 +27,7 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
 
     private const string IssuedTokenTypePropertyName = "issued_token_type";
 
-    private const string RefreshTokenPropertyName = "refresh_token";
-
-    private const string TokenTypePropertyName = "token_type";
-
-    private readonly FrozenDictionary<string, string> _propertyMappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    private static readonly FrozenDictionary<string, string> PropertyMappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
     {
         { AccessTokenPropertyName, nameof(TokenResponse.AccessToken) },
         { ErrorDescriptionPropertyName, nameof(TokenResponse.ErrorDescription) },
@@ -43,10 +45,30 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
         { nameof(TokenResponse.TokenType), nameof(TokenResponse.TokenType) },
     }.ToFrozenDictionary();
 
+    private const string RefreshTokenPropertyName = "refresh_token";
+
+    private const string TokenTypePropertyName = "token_type";
+
     /// <inheritdoc />
+    /// <summary>
+    ///     Reads and converts JSON into a <see cref="TokenResponse" /> object.
+    /// </summary>
+    /// <param name="reader">The reader to read JSON from.</param>
+    /// <param name="typeToConvert">The type to convert. Must be <see cref="TokenResponse" />.</param>
+    /// <param name="options">The serializer options to use during deserialization.</param>
+    /// <returns>A <see cref="TokenResponse" /> populated from the JSON data.</returns>
+    [SuppressMessage("Design", "MA0051:Method is too long",
+        Justification = "Necessary to properly handle all properties in a single pass through the JSON data.")]
     public override TokenResponse Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        TokenResponse tokenResponse = new();
+        string? accessToken = null;
+        string? errorDescription = null;
+        int expiresIn = 0;
+        string? identityToken = null;
+        string? issuedTokenType = null;
+        string? refreshToken = null;
+        string? scope = null;
+        string? tokenType = null;
 
         while ( reader.Read() )
         {
@@ -61,7 +83,7 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
                 continue;
             }
 
-            string destinationPropertyName = _propertyMappings.GetValueOrDefault(sourcePropertyName, sourcePropertyName);
+            string destinationPropertyName = PropertyMappings.GetValueOrDefault(sourcePropertyName, sourcePropertyName);
             if ( string.IsNullOrWhiteSpace(destinationPropertyName) )
             {
                 continue;
@@ -72,33 +94,51 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
             switch ( destinationPropertyName )
             {
                 case nameof(TokenResponse.AccessToken):
-                    tokenResponse.AccessToken = reader.GetString();
+                    accessToken = reader.GetString();
                     break;
                 case nameof(TokenResponse.ErrorDescription):
-                    tokenResponse.ErrorDescription = reader.GetString();
+                    errorDescription = reader.GetString();
                     break;
                 case nameof(TokenResponse.ExpiresIn):
-                    tokenResponse.ExpiresIn = ParseExpiresIn(ref reader);
+                    expiresIn = ParseExpiresIn(ref reader);
                     break;
                 case nameof(TokenResponse.IdentityToken):
-                    tokenResponse.IdentityToken = reader.GetString();
+                    identityToken = reader.GetString();
                     break;
                 case nameof(TokenResponse.IssuedTokenType):
-                    tokenResponse.IssuedTokenType = reader.GetString();
+                    issuedTokenType = reader.GetString();
                     break;
                 case nameof(TokenResponse.RefreshToken):
-                    tokenResponse.RefreshToken = reader.GetString();
+                    refreshToken = reader.GetString();
+                    break;
+                case nameof(TokenResponse.Scope):
+                    scope = reader.GetString();
                     break;
                 case nameof(TokenResponse.TokenType):
-                    tokenResponse.TokenType = reader.GetString();
+                    tokenType = reader.GetString();
                     break;
             }
         }
 
-        return tokenResponse;
+        return new TokenResponse(
+            accessToken,
+            refreshToken,
+            identityToken,
+            issuedTokenType,
+            expiresIn,
+            scope,
+            tokenType,
+            errorDescription);
     }
 
     /// <inheritdoc />
+    /// <summary>
+    ///     Writes a <see cref="TokenResponse" /> object as JSON.
+    /// </summary>
+    /// <param name="writer">The writer to write JSON to.</param>
+    /// <param name="value">The <see cref="TokenResponse" /> value to serialize. May be <see langword="null" />.</param>
+    /// <param name="options">The serializer options to use during serialization.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="writer" /> is <see langword="null" />.</exception>
     public override void Write(Utf8JsonWriter writer, TokenResponse? value, JsonSerializerOptions options)
     {
         ArgumentNullException.ThrowIfNull(writer);
@@ -122,7 +162,15 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
         writer.WriteEndObject();
     }
 
-    // remark: some implementations may return expires_in as a string rather than an integer
+    /// <summary>
+    ///     Parses the <c>expires_in</c> value from the current JSON token, supporting both
+    ///     numeric and string representations.
+    /// </summary>
+    /// <param name="reader">The reader positioned at the value token to parse.</param>
+    /// <returns>
+    ///     The parsed integer value, or <c>0</c> if the token is a string that cannot be parsed
+    ///     as an integer.
+    /// </returns>
     private static int ParseExpiresIn(ref Utf8JsonReader reader)
     {
         if ( reader.TokenType == JsonTokenType.String )

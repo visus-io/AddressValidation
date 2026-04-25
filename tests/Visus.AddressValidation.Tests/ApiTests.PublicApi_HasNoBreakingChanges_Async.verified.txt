@@ -566,17 +566,17 @@ namespace Visus.AddressValidation.Http
         System.Threading.Tasks.Task<Visus.AddressValidation.Http.TokenResponse?> RequestClientCredentialsTokenAsync(System.Threading.CancellationToken cancellationToken = default);
     }
     [System.Text.Json.Serialization.JsonConverter(typeof(Visus.AddressValidation.Serialization.Json.TokenResponseConverter?))]
-    public sealed class TokenResponse
+    public sealed class TokenResponse : System.IEquatable<Visus.AddressValidation.Http.TokenResponse>
     {
-        public TokenResponse() { }
-        public string? AccessToken { get; set; }
-        public string? ErrorDescription { get; set; }
-        public int ExpiresIn { get; set; }
-        public string? IdentityToken { get; set; }
-        public string? IssuedTokenType { get; set; }
-        public string? RefreshToken { get; set; }
-        public string? Scope { get; set; }
-        public string? TokenType { get; set; }
+        public TokenResponse(string? AccessToken, string? RefreshToken, string? IdentityToken, string? IssuedTokenType, int ExpiresIn, string? Scope, string? TokenType, string? ErrorDescription) { }
+        public string? AccessToken { get; init; }
+        public string? ErrorDescription { get; init; }
+        public int ExpiresIn { get; init; }
+        public string? IdentityToken { get; init; }
+        public string? IssuedTokenType { get; init; }
+        public string? RefreshToken { get; init; }
+        public string? Scope { get; init; }
+        public string? TokenType { get; init; }
     }
 }
 namespace Visus.AddressValidation.Model
