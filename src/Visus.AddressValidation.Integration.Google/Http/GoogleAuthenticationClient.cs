@@ -61,7 +61,7 @@ internal sealed class GoogleAuthenticationClient : IAuthenticationClient
         string? jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
         if ( string.IsNullOrWhiteSpace(jwtToken) )
         {
-            return null;
+            throw new InvalidOperationException("JWT token generation returned an empty or null value.");
         }
 
         List<KeyValuePair<string, string>> payload =
@@ -77,10 +77,7 @@ internal sealed class GoogleAuthenticationClient : IAuthenticationClient
         using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken)
                                                               .ConfigureAwait(false);
 
-        if ( !response.IsSuccessStatusCode )
-        {
-            return null;
-        }
+        response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadFromJsonAsync(DefaultJsonSerializerContext.Default.TokenResponse,
                                   cancellationToken)

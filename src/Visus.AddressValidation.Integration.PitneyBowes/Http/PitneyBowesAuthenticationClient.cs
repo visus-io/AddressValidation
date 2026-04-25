@@ -32,10 +32,8 @@ internal sealed class PitneyBowesAuthenticationClient : IAuthenticationClient
         request.Headers.Authorization = new BasicAuthenticationHeaderValue(_options.Value.ApiKey, _options.Value.ApiSecret);
 
         using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        if ( !response.IsSuccessStatusCode )
-        {
-            return null;
-        }
+        
+        response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadFromJsonAsync(DefaultJsonSerializerContext.Default.TokenResponse,
                                   cancellationToken)
