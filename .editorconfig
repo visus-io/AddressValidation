@@ -257,3 +257,6 @@ dotnet_diagnostic.S1144.severity = suggestion
 dotnet_diagnostic.CA1031.severity = none
 dotnet_diagnostic.CA1308.severity = none
 dotnet_diagnostic.CA1707.severity = none
+
+[*.Designer.cs]
+dotnet_diagnostic.CS1591.severity = none
