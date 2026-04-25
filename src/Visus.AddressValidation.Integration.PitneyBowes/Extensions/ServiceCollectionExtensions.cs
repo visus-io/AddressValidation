@@ -9,7 +9,6 @@ using Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
 using Model;
 using Services;
@@ -46,12 +45,8 @@ public static class ServiceCollectionExtensions
         services.TryAddScoped<IAddressValidationService<PitneyBowesAddressValidationRequest>, AddressValidationService>();
 
         services.AddHttpClient<PitneyBowesAuthenticationClient>()
-                .AddStandardResilienceHandler(options =>
-                 {
-                     options.Retry.DisableForUnsafeHttpMethods();
-                     options.CircuitBreaker.MinimumThroughput = 5;
-                 });
-        
+                .AddAuthenticationClientResilienceHandler();
+
         services.AddHttpClient<PitneyBowesAddressValidationClient>()
                 .RedactLoggedHeaders(["Authorization",])
                 .AddHttpMessageHandler(provider =>
@@ -59,7 +54,7 @@ public static class ServiceCollectionExtensions
                      PitneyBowesAuthenticationService authenticationService = provider.GetRequiredService<PitneyBowesAuthenticationService>();
                      return new BearerTokenDelegatingHandler<PitneyBowesAuthenticationClient>(authenticationService);
                  })
-                .AddAddressValidationResilienceHandler();
+                .AddAddressValidationClientResilienceHandler();
 
         return services;
     }

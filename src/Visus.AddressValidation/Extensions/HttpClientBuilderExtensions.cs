@@ -11,12 +11,15 @@ using Microsoft.Extensions.Http.Resilience;
 public static class HttpClientBuilderExtensions
 {
     /// <summary>
-    ///     Adds a standard resilience handler that respects the <c>Retry-After</c> response header on
-    ///     429 (Too Many Requests) responses, falling back to a 10-second delay when no header is present.
+    ///     Adds a standard resilience handler for the address validation HTTP client.
+    ///     On 429 (Too Many Requests) responses, the retry delay honors the <c>Retry-After</c>
+    ///     header. The <c>delta-seconds</c> form is preferred; the absolute date/time form is used
+    ///     as a fallback. When no header is present, a 10-second delay is applied.
+    ///     All other status codes use the default retry delay strategy.
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientBuilder" /> to configure.</param>
     /// <returns>The same builder so that multiple calls can be chained.</returns>
-    public static IHttpClientBuilder AddAddressValidationResilienceHandler(this IHttpClientBuilder builder)
+    public static IHttpClientBuilder AddAddressValidationClientResilienceHandler(this IHttpClientBuilder builder)
     {
         builder.AddStandardResilienceHandler(options =>
         {
@@ -42,6 +45,23 @@ public static class HttpClientBuilderExtensions
                 TimeSpan remaining = date - DateTimeOffset.UtcNow;
                 return new ValueTask<TimeSpan?>(remaining > TimeSpan.Zero ? remaining : TimeSpan.FromSeconds(10));
             };
+        });
+
+        return builder;
+    }
+
+    /// <summary>
+    ///     Adds a standard resilience handler configured for authentication clients, enabling retries only for safe
+    ///     HTTP methods and lowering the circuit-breaker minimum throughput threshold to 5 requests.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHttpClientBuilder" /> to configure.</param>
+    /// <returns>The same builder so that multiple calls can be chained.</returns>
+    public static IHttpClientBuilder AddAuthenticationClientResilienceHandler(this IHttpClientBuilder builder)
+    {
+        builder.AddStandardResilienceHandler(options =>
+        {
+            options.Retry.DisableForUnsafeHttpMethods();
+            options.CircuitBreaker.MinimumThroughput = 5;
         });
 
         return builder;

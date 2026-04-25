@@ -9,7 +9,6 @@ using Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
 using Model;
 using Services;
@@ -46,11 +45,7 @@ public static class ServiceCollectionExtensions
         services.TryAddScoped<IAddressValidationService<FedExAddressValidationRequest>, AddressValidationService>();
 
         services.AddHttpClient<FedExAuthenticationClient>()
-                .AddStandardResilienceHandler(options =>
-                 {
-                     options.Retry.DisableForUnsafeHttpMethods();
-                     options.CircuitBreaker.MinimumThroughput = 5;
-                 });
+                .AddAuthenticationClientResilienceHandler();
 
         services.AddHttpClient<FedExAddressValidationClient>()
                 .RedactLoggedHeaders(["Authorization",])
@@ -61,7 +56,7 @@ public static class ServiceCollectionExtensions
 
                      return new BearerTokenDelegatingHandler<FedExAuthenticationClient>(authenticationService);
                  })
-                .AddAddressValidationResilienceHandler();
+                .AddAddressValidationClientResilienceHandler();
 
         return services;
     }

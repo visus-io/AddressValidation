@@ -9,7 +9,6 @@ using Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
 using Model;
 using Services;
@@ -46,11 +45,7 @@ public static class ServiceCollectionExtensions
         services.TryAddScoped<IAddressValidationService<GoogleAddressValidationRequest>, AddressValidationService>();
 
         services.AddHttpClient<GoogleAuthenticationClient>()
-                .AddStandardResilienceHandler(options =>
-                 {
-                     options.Retry.DisableForUnsafeHttpMethods();
-                     options.CircuitBreaker.MinimumThroughput = 5;
-                 });
+                .AddAuthenticationClientResilienceHandler();
 
         services.AddHttpClient<GoogleAddressValidationClient>()
                 .RedactLoggedHeaders(["Authorization",])
@@ -59,7 +54,7 @@ public static class ServiceCollectionExtensions
                      GoogleAuthenticationService authenticationService = provider.GetRequiredService<GoogleAuthenticationService>();
                      return new BearerTokenDelegatingHandler<GoogleAuthenticationClient>(authenticationService);
                  })
-                .AddAddressValidationResilienceHandler();
+                .AddAddressValidationClientResilienceHandler();
 
         return services;
     }
