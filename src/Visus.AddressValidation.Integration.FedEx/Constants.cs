@@ -21,8 +21,8 @@ public static class Constants
     /// <summary>
     ///     Countries that are supported by the FedEx Address Validation API.
     /// </summary>
-    public static readonly FrozenSet<CountryCode> SupportedCountries = new HashSet<CountryCode>
-    {
+    public static readonly FrozenSet<CountryCode> SupportedCountries =
+    [
         CountryCode.AR,
         CountryCode.AT,
         CountryCode.AU,
@@ -68,5 +68,5 @@ public static class Constants
         CountryCode.VE,
         CountryCode.VI,
         CountryCode.ZA,
-    }.ToFrozenSet();
+    ];
 }

@@ -9,24 +9,26 @@ using System.Text.Json.Serialization;
 /// </summary>
 public sealed class JsonStringBooleanConverter : JsonConverter<bool>
 {
-    private static readonly FrozenSet<string> PossibleBooleanFalseStrings = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-    {
-        "0",
-        "F",
-        "False",
-        "N",
-        "NO",
-    }.ToFrozenSet();
+    private static readonly FrozenSet<string> PossibleBooleanFalseStrings =
+        new[]
+        {
+            "0",
+            "F",
+            "False",
+            "N",
+            "NO",
+        }.ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
-    private static readonly FrozenSet<string> PossibleBooleanTrueStrings = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-    {
-        "-1",
-        "1",
-        "T",
-        "True",
-        "Y",
-        "YES",
-    }.ToFrozenSet();
+    private static readonly FrozenSet<string> PossibleBooleanTrueStrings =
+        new[]
+        {
+            "-1",
+            "1",
+            "T",
+            "True",
+            "Y",
+            "YES",
+        }.ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
     /// <inheritdoc />
     public override bool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

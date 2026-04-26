@@ -5,15 +5,15 @@ using Abstractions;
 
 internal static class Constants
 {
-    public static FrozenSet<CountryCode> CityStates => new HashSet<CountryCode>
-    {
+    public static FrozenSet<CountryCode> CityStates =>
+    [
         CountryCode.MC,
         CountryCode.SG,
         CountryCode.VA,
-    }.ToFrozenSet();
+    ];
 
-    public static FrozenSet<CountryCode> NoPostalCode => new HashSet<CountryCode>
-    {
+    public static FrozenSet<CountryCode> NoPostalCode =>
+    [
         CountryCode.AE,
         CountryCode.AG,
         CountryCode.AO,
@@ -74,5 +74,5 @@ internal static class Constants
         CountryCode.YE,
         CountryCode.ZW,
         CountryCode.ZZ,
-    }.ToFrozenSet();
+    ];
 }

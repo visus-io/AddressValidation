@@ -542,7 +542,8 @@ namespace Visus.AddressValidation.Extensions
     }
     public static class HttpClientBuilderExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IHttpClientBuilder AddAddressValidationResilienceHandler(this Microsoft.Extensions.DependencyInjection.IHttpClientBuilder builder) { }
+        public static Microsoft.Extensions.DependencyInjection.IHttpClientBuilder AddAddressValidationClientResilienceHandler(this Microsoft.Extensions.DependencyInjection.IHttpClientBuilder builder) { }
+        public static Microsoft.Extensions.DependencyInjection.IHttpClientBuilder AddAuthenticationClientResilienceHandler(this Microsoft.Extensions.DependencyInjection.IHttpClientBuilder builder) { }
     }
 }
 namespace Visus.AddressValidation.Http
@@ -556,10 +557,6 @@ namespace Visus.AddressValidation.Http
     {
         public BearerTokenDelegatingHandler(Visus.AddressValidation.Services.AbstractAuthenticationService<TClient> authenticationService) { }
         protected override System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage> SendAsync(System.Net.Http.HttpRequestMessage request, System.Threading.CancellationToken cancellationToken) { }
-    }
-    public interface IApiResponse
-    {
-        Visus.AddressValidation.Model.IAddressValidationResponse ToAddressValidationResponse(Visus.AddressValidation.Validation.IValidationResult? validationResult = null);
     }
     public interface IAuthenticationClient
     {
@@ -579,6 +576,20 @@ namespace Visus.AddressValidation.Http
         public string? TokenType { get; init; }
     }
 }
+namespace Visus.AddressValidation.Mappers
+{
+    public interface IApiRequestMapper<in TRequest, out TApiRequest>
+        where in TRequest : Visus.AddressValidation.Model.AbstractAddressValidationRequest
+        where out TApiRequest :  class
+    {
+        TApiRequest Map(TRequest request);
+    }
+    public interface IApiResponseMapper<in TResponse>
+        where in TResponse :  class
+    {
+        Visus.AddressValidation.Model.IAddressValidationResponse Map(TResponse response, Visus.AddressValidation.Validation.IValidationResult? validationResult = null);
+    }
+}
 namespace Visus.AddressValidation.Model
 {
     public abstract class AbstractAddressValidationRequest
@@ -591,7 +602,7 @@ namespace Visus.AddressValidation.Model
         public string? PostalCode { get; set; }
         public string? StateOrProvince { get; set; }
     }
-    public abstract class AbstractAddressValidationResponse : System.IEquatable<Visus.AddressValidation.Model.AbstractAddressValidationResponse>, Visus.AddressValidation.Model.IAddressValidationResponse
+    public abstract class AbstractAddressValidationResponse : Visus.AddressValidation.Model.IAddressValidationResponse
     {
         protected AbstractAddressValidationResponse(Visus.AddressValidation.Validation.IValidationResult? validationResult = null) { }
         public System.Collections.Generic.IReadOnlySet<string> AddressLines { get; init; }
@@ -602,18 +613,21 @@ namespace Visus.AddressValidation.Model
         public bool? IsResidential { get; init; }
         public string? PostalCode { get; init; }
         public string? StateOrProvince { get; init; }
-        public System.Collections.Generic.IReadOnlyList<Visus.AddressValidation.Model.IAddressValidationResponse> Suggestions { get; protected init; }
+        public System.Collections.Generic.IReadOnlyList<Visus.AddressValidation.Model.IAddressValidationResponse> Suggestions { get; init; }
         public System.Collections.Generic.IReadOnlySet<string> Warnings { get; }
-        public bool Equals(Visus.AddressValidation.Model.AbstractAddressValidationResponse? other) { }
         public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
-        public static bool operator !=(Visus.AddressValidation.Model.AbstractAddressValidationResponse? left, Visus.AddressValidation.Model.AbstractAddressValidationResponse? right) { }
-        public static bool operator ==(Visus.AddressValidation.Model.AbstractAddressValidationResponse? left, Visus.AddressValidation.Model.AbstractAddressValidationResponse? right) { }
     }
     public abstract class AbstractAddressValidationResponse<TResponse> : Visus.AddressValidation.Model.AbstractAddressValidationResponse
-        where TResponse : Visus.AddressValidation.Http.IApiResponse
+        where TResponse :  class
     {
         protected AbstractAddressValidationResponse(TResponse response, Visus.AddressValidation.Validation.IValidationResult? validationResult = null) { }
+    }
+    public sealed class AddressValidationResponseEqualityComparer : System.Collections.Generic.IEqualityComparer<Visus.AddressValidation.Model.AbstractAddressValidationResponse>
+    {
+        public static Visus.AddressValidation.Model.AddressValidationResponseEqualityComparer Default { get; }
+        public bool Equals(Visus.AddressValidation.Model.AbstractAddressValidationResponse? x, Visus.AddressValidation.Model.AbstractAddressValidationResponse? y) { }
+        public int GetHashCode(Visus.AddressValidation.Model.AbstractAddressValidationResponse obj) { }
     }
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class EmptyAddressValidationResponse : Visus.AddressValidation.Model.AbstractAddressValidationResponse
@@ -622,25 +636,15 @@ namespace Visus.AddressValidation.Model
     }
     public interface IAddressValidationResponse
     {
-        [System.Text.Json.Serialization.JsonPropertyName("addressLines")]
         System.Collections.Generic.IReadOnlySet<string> AddressLines { get; }
-        [System.Text.Json.Serialization.JsonPropertyName("cityOrTown")]
         string? CityOrTown { get; }
-        [System.Text.Json.Serialization.JsonPropertyName("country")]
         Visus.AddressValidation.Abstractions.CountryCode Country { get; }
-        [System.Text.Json.Serialization.JsonPropertyName("customResponseData")]
         System.Collections.Generic.IReadOnlyDictionary<string, object?> CustomResponseData { get; }
-        [System.Text.Json.Serialization.JsonPropertyName("errors")]
         System.Collections.Generic.IReadOnlySet<string> Errors { get; }
-        [System.Text.Json.Serialization.JsonPropertyName("isResidential")]
         bool? IsResidential { get; }
-        [System.Text.Json.Serialization.JsonPropertyName("postalCode")]
         string? PostalCode { get; }
-        [System.Text.Json.Serialization.JsonPropertyName("stateOrProvince")]
         string? StateOrProvince { get; }
-        [System.Text.Json.Serialization.JsonPropertyName("suggestions")]
         System.Collections.Generic.IReadOnlyList<Visus.AddressValidation.Model.IAddressValidationResponse> Suggestions { get; }
-        [System.Text.Json.Serialization.JsonPropertyName("warnings")]
         System.Collections.Generic.IReadOnlySet<string> Warnings { get; }
     }
 }
@@ -679,12 +683,13 @@ namespace Visus.AddressValidation.Serialization.Json
 }
 namespace Visus.AddressValidation.Services
 {
-    public abstract class AbstractAddressValidationService<TRequest, TResponse> : Visus.AddressValidation.Services.IAddressValidationService<TRequest>
+    public abstract class AbstractAddressValidationService<TRequest, TApiRequest, TApiResponse> : Visus.AddressValidation.Services.IAddressValidationService<TRequest>
         where TRequest : Visus.AddressValidation.Model.AbstractAddressValidationRequest
-        where TResponse :  class, Visus.AddressValidation.Http.IApiResponse
+        where TApiRequest :  class
+        where TApiResponse :  class
     {
-        protected AbstractAddressValidationService(Visus.AddressValidation.Validation.IValidator<TRequest> requestValidator, Visus.AddressValidation.Validation.IValidator<TResponse> responseValidator) { }
-        protected abstract System.Threading.Tasks.Task<TResponse?> SendAsync(TRequest request, System.Threading.CancellationToken cancellationToken);
+        protected AbstractAddressValidationService(Visus.AddressValidation.Validation.IValidator<TRequest> requestValidator, Visus.AddressValidation.Validation.IValidator<TApiResponse> responseValidator, Visus.AddressValidation.Mappers.IApiResponseMapper<TApiResponse> responseMapper, Visus.AddressValidation.Mappers.IApiRequestMapper<TRequest, TApiRequest> requestMapper) { }
+        protected abstract System.Threading.Tasks.Task<TApiResponse?> SendAsync(TApiRequest request, System.Threading.CancellationToken cancellationToken);
         public System.Threading.Tasks.Task<Visus.AddressValidation.Model.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default) { }
     }
     public abstract class AbstractAuthenticationService<TClient>

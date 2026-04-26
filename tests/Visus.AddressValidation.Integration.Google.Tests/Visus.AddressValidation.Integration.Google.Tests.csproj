@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Visus.AddressValidation.Integration.Google\Visus.AddressValidation.Integration.Google.csproj" />
+    <ProjectReference Include="..\..\src\Visus.AddressValidation.Integration.Google\Visus.AddressValidation.Integration.Google.csproj"/>
   </ItemGroup>
 
 </Project>

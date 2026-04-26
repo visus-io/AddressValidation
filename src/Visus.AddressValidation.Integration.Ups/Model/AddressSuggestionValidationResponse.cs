@@ -4,6 +4,7 @@ using System.Collections.Frozen;
 using Abstractions;
 using AddressValidation.Model;
 using Http;
+using Mappers;
 
 internal sealed class AddressSuggestionValidationResponse : AbstractAddressValidationResponse
 {
@@ -14,7 +15,7 @@ internal sealed class AddressSuggestionValidationResponse : AbstractAddressValid
 
         CityOrTown = candidate.AddressKeyFormat.PoliticalDivision2;
         Country = candidate.AddressKeyFormat.CountryCode;
-        PostalCode = AddressValidationResponse.FormatPostalCode(candidate.AddressKeyFormat);
+        PostalCode = AddressValidationResponseMapper.FormatPostalCode(candidate.AddressKeyFormat);
         StateOrProvince = candidate.AddressKeyFormat.PoliticalDivision1;
         IsResidential = candidate.AddressClassification.Code == AddressClassificationCode.RESIDENTIAL;
     }

@@ -3,30 +3,21 @@ namespace Visus.AddressValidation.Integration.FedEx.Http;
 using System.Text.Json.Serialization;
 using Abstractions;
 using AddressValidation.Abstractions;
-using AddressValidation.Http;
-using AddressValidation.Model;
 using AddressValidation.Serialization.Json;
-using AddressValidation.Validation;
-using Model;
 
-internal sealed partial class ApiResponse : IApiResponse
+internal sealed partial class ApiResponse
 {
     [CustomResponseDataProperty]
     public string? CustomerTransactionId { get; set; }
 
     [JsonIgnore]
-    public ApiErrorResponse? ErrorResponse { get; set; }
+    public ApiErrorResponse? ErrorResponse { get; init; }
 
     [JsonPropertyName("output")]
     public Response? Result { get; set; }
 
     [CustomResponseDataProperty]
     public Guid TransactionId { get; set; }
-
-    public IAddressValidationResponse ToAddressValidationResponse(IValidationResult? validationResult = null)
-    {
-        return new AddressValidationResponse(this, validationResult);
-    }
 
     internal sealed partial class Attribute
     {

@@ -4,7 +4,7 @@ using System.Net;
 
 internal sealed class ApiErrorResponse
 {
-    public ErrorResponse Error { get; set; } = null!;
+    public ErrorResponse? Error { get; set; }
 
     internal sealed class ErrorResponse
     {

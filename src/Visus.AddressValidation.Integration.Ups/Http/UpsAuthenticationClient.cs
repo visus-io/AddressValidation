@@ -34,7 +34,7 @@ internal sealed class UpsAuthenticationClient : IAuthenticationClient
         request.Headers.Add("x-merchant-id", _options.Value.AccountNumber);
 
         using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        
+
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadFromJsonAsync(DefaultJsonSerializerContext.Default.TokenResponse,

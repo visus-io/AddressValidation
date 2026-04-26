@@ -1,30 +1,28 @@
 namespace Visus.AddressValidation.Integration.FedEx.Services;
 
+using AddressValidation.Mappers;
 using AddressValidation.Services;
 using AddressValidation.Validation;
 using Http;
-using Mappers;
 using Model;
 
-internal sealed class AddressValidationService : AbstractAddressValidationService<FedExAddressValidationRequest, ApiResponse>
+internal sealed class AddressValidationService
+    : AbstractAddressValidationService<FedExAddressValidationRequest, ApiRequest, ApiResponse>
 {
     private readonly FedExAddressValidationClient _client;
 
     public AddressValidationService(FedExAddressValidationClient client,
                                     IValidator<FedExAddressValidationRequest> requestValidator,
-                                    IValidator<ApiResponse> responseValidator)
-        : base(requestValidator, responseValidator)
+                                    IValidator<ApiResponse> responseValidator,
+                                    IApiResponseMapper<ApiResponse> responseMapper,
+                                    IApiRequestMapper<FedExAddressValidationRequest, ApiRequest> requestMapper)
+        : base(requestValidator, responseValidator, responseMapper, requestMapper)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
     }
 
-    protected override Task<ApiResponse?> SendAsync(FedExAddressValidationRequest request,
-                                                    CancellationToken cancellationToken)
+    protected override Task<ApiResponse?> SendAsync(ApiRequest request, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(request);
-
-        ApiRequest apiRequest = request.ToApiRequest();
-
-        return _client.ValidateAddressAsync(apiRequest, cancellationToken);
+        return _client.ValidateAddressAsync(request, cancellationToken);
     }
 }

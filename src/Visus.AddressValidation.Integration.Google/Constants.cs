@@ -11,8 +11,8 @@ public static class Constants
     /// <summary>
     ///     Countries that are supported by the Google Address Validation API.
     /// </summary>
-    public static readonly FrozenSet<CountryCode> SupportedCountries = new HashSet<CountryCode>
-    {
+    public static readonly FrozenSet<CountryCode> SupportedCountries =
+    [
         CountryCode.AR,
         CountryCode.AT,
         CountryCode.AU,
@@ -53,5 +53,5 @@ public static class Constants
         CountryCode.SI,
         CountryCode.SK,
         CountryCode.US,
-    }.ToFrozenSet();
+    ];
 }

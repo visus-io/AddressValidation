@@ -28,7 +28,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 
     protected override ValueTask ValidateAsync(ApiResponse instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
-        Debug.Assert(instance.Result != null);
+        Debug.Assert(instance.Result is not null);
 
         for ( int i = 0; i < instance.Result.ResolvedAddresses.Length; i++ )
         {

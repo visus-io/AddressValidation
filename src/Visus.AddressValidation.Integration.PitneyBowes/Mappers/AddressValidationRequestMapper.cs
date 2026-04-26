@@ -1,11 +1,12 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Mappers;
 
+using AddressValidation.Mappers;
 using Http;
 using Model;
 
-internal static class AddressValidationRequestMapper
+internal sealed class AddressValidationRequestMapper : IApiRequestMapper<PitneyBowesAddressValidationRequest, ApiRequest>
 {
-    internal static ApiRequest ToApiRequest(this PitneyBowesAddressValidationRequest request)
+    public ApiRequest Map(PitneyBowesAddressValidationRequest request)
     {
         return new ApiRequest
         {

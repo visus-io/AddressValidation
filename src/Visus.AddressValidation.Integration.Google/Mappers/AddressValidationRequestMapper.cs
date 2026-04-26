@@ -1,11 +1,12 @@
 namespace Visus.AddressValidation.Integration.Google.Mappers;
 
+using AddressValidation.Mappers;
 using Http;
 using Model;
 
-internal static class AddressValidationRequestMapper
+internal sealed class AddressValidationRequestMapper : IApiRequestMapper<GoogleAddressValidationRequest, ApiRequest>
 {
-    internal static ApiRequest ToApiRequest(this GoogleAddressValidationRequest request)
+    public ApiRequest Map(GoogleAddressValidationRequest request)
     {
         return new ApiRequest
         {

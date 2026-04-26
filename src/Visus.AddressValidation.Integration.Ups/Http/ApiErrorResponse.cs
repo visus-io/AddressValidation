@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 internal sealed class ApiErrorResponse
 {
     [JsonPropertyName("response")]
-    public ErrorResponse Response { get; set; } = null!;
+    public required ErrorResponse Response { get; set; }
 
     internal sealed class Error
     {

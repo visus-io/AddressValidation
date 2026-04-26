@@ -1,12 +1,15 @@
 namespace Visus.AddressValidation.Integration.FedEx.Mappers;
 
+using AddressValidation.Mappers;
 using Http;
 using Model;
 
-internal static class AddressValidationRequestMapper
+internal sealed class AddressValidationRequestMapper : IApiRequestMapper<FedExAddressValidationRequest, ApiRequest>
 {
-    internal static ApiRequest ToApiRequest(this FedExAddressValidationRequest request)
+    public ApiRequest Map(FedExAddressValidationRequest request)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         return new ApiRequest
         {
             AddressesToValidate =

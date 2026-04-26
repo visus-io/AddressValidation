@@ -21,8 +21,8 @@ public static class Constants
     /// <summary>
     ///     Countries that are supported by the Pitney Bowes Address Validation API.
     /// </summary>
-    public static readonly FrozenSet<CountryCode> SupportedCountries = new HashSet<CountryCode>
-    {
+    public static readonly FrozenSet<CountryCode> SupportedCountries =
+    [
         CountryCode.US,
-    }.ToFrozenSet();
+    ];
 }

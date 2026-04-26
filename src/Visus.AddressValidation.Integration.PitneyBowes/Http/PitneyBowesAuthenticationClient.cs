@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 internal sealed class PitneyBowesAuthenticationClient : IAuthenticationClient
 {
     private readonly HttpClient _httpClient;
+
     private readonly IOptions<PitneyBowesServiceOptions> _options;
 
     public PitneyBowesAuthenticationClient(HttpClient httpClient, IOptions<PitneyBowesServiceOptions> options)
@@ -32,7 +33,7 @@ internal sealed class PitneyBowesAuthenticationClient : IAuthenticationClient
         request.Headers.Authorization = new BasicAuthenticationHeaderValue(_options.Value.ApiKey, _options.Value.ApiSecret);
 
         using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        
+
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadFromJsonAsync(DefaultJsonSerializerContext.Default.TokenResponse,

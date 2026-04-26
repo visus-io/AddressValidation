@@ -34,9 +34,9 @@ internal sealed class FedExAuthenticationClient : IAuthenticationClient
         request.Content = new FormUrlEncodedContent(payload);
 
         using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        
+
         response.EnsureSuccessStatusCode();
-        
+
         return await response.Content.ReadFromJsonAsync(DefaultJsonSerializerContext.Default.TokenResponse,
                                   cancellationToken)
                              .ConfigureAwait(false);

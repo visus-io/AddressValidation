@@ -4,24 +4,15 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using Abstractions;
 using AddressValidation.Abstractions;
-using AddressValidation.Http;
-using AddressValidation.Model;
-using AddressValidation.Validation;
-using Model;
 
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
-internal sealed class ApiResponse : IApiResponse
+internal sealed class ApiResponse
 {
     [JsonIgnore]
     public ApiErrorResponse? ErrorResponse { get; init; }
 
     [JsonPropertyName("XAVResponse")]
     public XavResponse? Result { get; init; }
-
-    public IAddressValidationResponse ToAddressValidationResponse(IValidationResult? validationResult = null)
-    {
-        return new AddressValidationResponse(this, validationResult);
-    }
 
     internal sealed class AddressClassification
     {

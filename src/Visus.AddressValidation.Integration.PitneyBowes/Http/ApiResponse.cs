@@ -3,12 +3,8 @@ namespace Visus.AddressValidation.Integration.PitneyBowes.Http;
 using System.Text.Json.Serialization;
 using Abstractions;
 using AddressValidation.Abstractions;
-using AddressValidation.Http;
-using AddressValidation.Model;
-using AddressValidation.Validation;
-using Model;
 
-internal sealed partial class ApiResponse : IApiResponse
+internal sealed partial class ApiResponse
 {
     [JsonIgnore]
     public ApiErrorResponse? ErrorResponse { get; set; }
@@ -17,11 +13,6 @@ internal sealed partial class ApiResponse : IApiResponse
     public AddressResult? Result { get; set; }
 
     public AddressSuggestion? Suggestions { get; set; }
-
-    public IAddressValidationResponse ToAddressValidationResponse(IValidationResult? validationResult = null)
-    {
-        return new AddressValidationResponse(this, validationResult);
-    }
 
     internal sealed partial class AddressResult
     {

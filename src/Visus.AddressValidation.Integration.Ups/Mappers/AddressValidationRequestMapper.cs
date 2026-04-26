@@ -1,11 +1,12 @@
 namespace Visus.AddressValidation.Integration.Ups.Mappers;
 
+using AddressValidation.Mappers;
 using Http;
 using Model;
 
-internal static class AddressValidationRequestMapper
+internal sealed class AddressValidationRequestMapper : IApiRequestMapper<UpsAddressValidationRequest, ApiRequest>
 {
-    internal static ApiRequest ToApiRequest(this UpsAddressValidationRequest request)
+    public ApiRequest Map(UpsAddressValidationRequest request)
     {
         string[] postalCodeParts =
             request.PostalCode!.Split('-', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);

@@ -2,10 +2,12 @@ namespace Visus.AddressValidation.Integration.PitneyBowes.Extensions;
 
 using AddressValidation.Extensions;
 using AddressValidation.Http;
+using AddressValidation.Mappers;
 using AddressValidation.Services;
 using AddressValidation.Validation;
 using Configuration;
 using Http;
+using Mappers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -38,6 +40,9 @@ public static class ServiceCollectionExtensions
         services.TryAddSingleton<IValidateOptions<PitneyBowesServiceOptions>, PitneyBowesServiceOptionsValidator>();
 
         services.TryAddSingleton<PitneyBowesAuthenticationService>();
+
+        services.TryAddScoped<IApiResponseMapper<ApiResponse>, AddressValidationResponseMapper>();
+        services.TryAddScoped<IApiRequestMapper<PitneyBowesAddressValidationRequest, ApiRequest>, AddressValidationRequestMapper>();
 
         services.TryAddScoped<IValidator<PitneyBowesAddressValidationRequest>, AddressValidationRequestValidator>();
         services.TryAddScoped<IValidator<ApiResponse>, ApiResponseValidator>();

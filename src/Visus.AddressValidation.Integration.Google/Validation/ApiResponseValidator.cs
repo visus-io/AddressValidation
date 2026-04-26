@@ -8,24 +8,16 @@ using Http;
 
 internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 {
-    private readonly FrozenSet<Granularity> _confirmedGranularity =
+    private static readonly FrozenSet<Granularity> ConfirmedGranularity =
     [
         Granularity.PREMISE,
         Granularity.SUB_PREMISE,
     ];
 
-    private readonly FrozenSet<ConfirmationLevel> _tenuousConfirmations =
+    private static readonly FrozenSet<ConfirmationLevel> TenuousConfirmations =
     [
         ConfirmationLevel.UNCONFIRMED_BUT_PLAUSIBLE,
         ConfirmationLevel.UNCONFIRMED_AND_SUSPICIOUS,
-    ];
-
-    private readonly FrozenSet<Granularity> _tenuousGranularity =
-    [
-        Granularity.BLOCK,
-        Granularity.GRANULARITY_UNSPECIFIED,
-        Granularity.PREMISE_PROXIMITY,
-        Granularity.ROUTE,
     ];
 
     protected override ValueTask<bool> PreValidateAsync(ApiResponse instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
@@ -33,9 +25,12 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
         // terminate validation early if there is an error response object
         if ( instance.ErrorResponse is not null )
         {
-            results.Add(string.IsNullOrWhiteSpace(instance.ErrorResponse.Error.Message)
-                            ? ValidationState.CreateError(instance.ErrorResponse.Error.Code.ToString())
-                            : ValidationState.CreateError($"{instance.ErrorResponse.Error.Code}: {instance.ErrorResponse.Error.Message}"));
+            if ( instance.ErrorResponse.Error is not null )
+            {
+                results.Add(string.IsNullOrWhiteSpace(instance.ErrorResponse.Error.Message)
+                                ? ValidationState.CreateError(instance.ErrorResponse.Error.Code.ToString())
+                                : ValidationState.CreateError($"{instance.ErrorResponse.Error.Code}: {instance.ErrorResponse.Error.Message}"));
+            }
 
             return ValueTask.FromResult(false);
         }
@@ -46,14 +41,24 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
             return ValueTask.FromResult(false);
         }
 
-        // if the response coming back has a validationGranularity of PREMISE or SUB_PREMISE and addressComplete = true
-        // terminate validation early.
-        if ( _confirmedGranularity.Contains(instance.Result.Verdict.ValidationGranularity) && instance.Result.Verdict.AddressComplete )
+        ApiResponse.Verdict verdict = instance.Result.Verdict;
+
+        // only exit early as cleanly confirmed when granularity is strong, address is complete,
+        // and the API made no modifications (inferred, replaced, or spell-corrected components
+        // are independent CONFIRM signals regardless of granularity)
+        if ( ConfirmedGranularity.Contains(verdict.ValidationGranularity)
+          && verdict is
+             {
+                 AddressComplete: true,
+                 HasInferredComponents: false,
+                 HasReplacedComponents: false,
+                 HasSpellCorrectedComponents: false,
+             } )
         {
             return ValueTask.FromResult(false);
         }
 
-        if ( instance.Result.Verdict is not { ValidationGranularity: Granularity.OTHER, AddressComplete: false, } )
+        if ( verdict is not { ValidationGranularity: Granularity.OTHER, AddressComplete: false, } )
         {
             return ValueTask.FromResult(true);
         }
@@ -66,24 +71,40 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 
     protected override ValueTask ValidateAsync(ApiResponse instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
-        Debug.Assert(instance.Result != null);
+        Debug.Assert(instance.Result is not null);
 
-        // provide a validation warning if the validationGranularity is BLOCK or GRANULARITY_UNSPECIFIED or PREMISE_PROXIMITY
-        // or ROUTE along with having either hasInferredComponents = true or hasReplacedComponents = true
-        if ( _tenuousGranularity.Contains(instance.Result.Verdict.ValidationGranularity)
-          && ( instance.Result.Verdict.HasInferredComponents || instance.Result.Verdict.HasReplacedComponents ) )
+        ApiResponse.Verdict verdict = instance.Result.Verdict;
+
+        // any API modification (inferred, replaced, or spell-corrected components) is a CONFIRM signal
+        // per Google's documentation, regardless of granularity
+        if ( verdict.HasInferredComponents || verdict.HasReplacedComponents || verdict.HasSpellCorrectedComponents )
         {
             results.Add(ValidationState.CreateWarning(nameof(VerificationResult.PARTIALLY_VERIFIED)));
         }
 
-        foreach ( ApiResponse.AddressComponent component in instance.Result.Address.AddressComponents.Where(w => w.ComponentName is not null) )
+        // for US addresses, USPS DPV confirmation is authoritative:
+        // "S" means primary matched but secondary number is missing (CONFIRM)
+        // "N" or absent means the address could not be confirmed for delivery (FIX)
+        if ( instance.Result.UspsData is { DpvConfirmation: { } dpv, } )
         {
-            if ( !_tenuousConfirmations.Contains(component.ConfirmationLevel) )
+            switch ( dpv )
+            {
+                case "S":
+                    results.Add(ValidationState.CreateWarning(nameof(VerificationResult.PARTIALLY_VERIFIED)));
+                    break;
+                case not "Y":
+                    results.Add(ValidationState.CreateError(nameof(VerificationResult.UNVERIFIED)));
+                    break;
+            }
+        }
+
+        foreach ( ApiResponse.AddressComponent component in instance.Result.Address.AddressComponents )
+        {
+            if ( component.ComponentName is null || !TenuousConfirmations.Contains(component.ConfirmationLevel) )
             {
                 continue;
             }
 
-            Debug.Assert(component.ComponentName != null);
             results.Add(ValidationState.CreateWarning($"{component.ComponentName.Text!}: {component.ConfirmationLevel}"));
         }
 

@@ -4,13 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using Abstractions;
 using AddressValidation.Abstractions;
-using AddressValidation.Http;
-using AddressValidation.Model;
-using AddressValidation.Validation;
-using Model;
 
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
-internal sealed partial class ApiResponse : IApiResponse
+internal sealed partial class ApiResponse
 {
     [JsonIgnore]
     public ApiErrorResponse? ErrorResponse { get; init; }
@@ -19,11 +15,6 @@ internal sealed partial class ApiResponse : IApiResponse
     public Guid ResponseId { get; init; }
 
     public Response? Result { get; init; }
-
-    public IAddressValidationResponse ToAddressValidationResponse(IValidationResult? validationResult = null)
-    {
-        return new AddressValidationResponse(this, validationResult);
-    }
 
     internal sealed class Address
     {
@@ -191,6 +182,10 @@ internal sealed partial class ApiResponse : IApiResponse
         public bool HasInferredComponents { get; set; }
 
         public bool HasReplacedComponents { get; set; }
+
+        public bool HasSpellCorrectedComponents { get; set; }
+
+        public bool HasUnconfirmedComponents { get; set; }
 
         public Granularity InputGranularity { get; set; }
 

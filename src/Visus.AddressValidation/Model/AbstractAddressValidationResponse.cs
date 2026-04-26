@@ -1,24 +1,19 @@
 namespace Visus.AddressValidation.Model;
 
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Frozen;
 using Abstractions;
-using Http;
 using Validation;
 
 /// <summary>
 ///     Base class for implementing an <see cref="IAddressValidationResponse" />.
 /// </summary>
-[SuppressMessage("SonarLint", "S4035", Justification = "IEqualityComparer<T> cannot be properly implemented.")]
-public abstract class AbstractAddressValidationResponse :
-    IAddressValidationResponse,
-    IEquatable<AbstractAddressValidationResponse>
+public abstract class AbstractAddressValidationResponse : IAddressValidationResponse
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="AbstractAddressValidationResponse" />.
+    ///     Initializes a new instance of <see cref="AbstractAddressValidationResponse" />.
     /// </summary>
     /// <param name="validationResult">
-    ///     Current validation state of the response represented as an instance of
-    ///     <see cref="IValidationResult" />.
+    ///     The current validation state of the response, or <see langword="null" /> if no validation was performed.
     /// </param>
     protected AbstractAddressValidationResponse(IValidationResult? validationResult = null)
     {
@@ -29,21 +24,24 @@ public abstract class AbstractAddressValidationResponse :
 
         Errors = validationResult.Errors
                                  .Select(s => s.Message)
-                                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                                 .ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
         Warnings = validationResult.Warnings
                                    .Select(s => s.Message)
-                                   .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                                   .ToFrozenSet(StringComparer.OrdinalIgnoreCase);
     }
 
     /// <inheritdoc />
-    public IReadOnlySet<string> Errors { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    public IReadOnlySet<string> Errors { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+       .ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
     /// <inheritdoc />
-    public IReadOnlySet<string> Warnings { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    public IReadOnlySet<string> Warnings { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+       .ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
     /// <inheritdoc />
-    public IReadOnlySet<string> AddressLines { get; init; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    public IReadOnlySet<string> AddressLines { get; init; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+       .ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
     /// <inheritdoc />
     public string? CityOrTown { get; init; }
@@ -52,7 +50,9 @@ public abstract class AbstractAddressValidationResponse :
     public CountryCode Country { get; init; }
 
     /// <inheritdoc />
-    public IReadOnlyDictionary<string, object?> CustomResponseData { get; init; } = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
+    public IReadOnlyDictionary<string, object?> CustomResponseData { get; init; } =
+        new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+           .AsReadOnly();
 
     /// <inheritdoc />
     public bool? IsResidential { get; init; }
@@ -64,80 +64,25 @@ public abstract class AbstractAddressValidationResponse :
     public string? StateOrProvince { get; init; }
 
     /// <inheritdoc />
-    public IReadOnlyList<IAddressValidationResponse> Suggestions { get; protected init; } = [];
-
-    /// <summary>
-    ///     Indicates whether the values of the two specified <see cref="AbstractAddressValidationResponse" /> objects are
-    ///     equal.
-    /// </summary>
-    /// <param name="left">The first object to compare.</param>
-    /// <param name="right">The second object to compare.</param>
-    /// <returns>
-    ///     <see langword="true" /> if <paramref name="left" /> and <paramref name="right" /> are equal; otherwise,
-    ///     <see langword="false" />.
-    /// </returns>
-    public static bool operator ==(AbstractAddressValidationResponse? left, AbstractAddressValidationResponse? right)
-    {
-        if ( ReferenceEquals(left, right) )
-        {
-            return true;
-        }
-
-        if ( left is null || right is null )
-        {
-            return false;
-        }
-
-        return left.Equals(right);
-    }
-
-    /// <summary>
-    ///     Indicates whether the values of the two specified <see cref="AbstractAddressValidationResponse" /> objects are not
-    ///     equal.
-    /// </summary>
-    /// <param name="left">The first object to compare.</param>
-    /// <param name="right">The second object to compare.</param>
-    /// <returns>
-    ///     <see langword="true" /> if <paramref name="left" /> and <paramref name="right" /> are not equal; otherwise,
-    ///     <see langword="false" />.
-    /// </returns>
-    public static bool operator !=(AbstractAddressValidationResponse? left, AbstractAddressValidationResponse? right)
-    {
-        return !( left == right );
-    }
+    public IReadOnlyList<IAddressValidationResponse> Suggestions { get; init; } = [];
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-        return obj is AbstractAddressValidationResponse other && Equals(other);
-    }
-
-    /// <inheritdoc />
-    public bool Equals(AbstractAddressValidationResponse? other)
-    {
-        if ( other is null )
-        {
-            return false;
-        }
-
-        return AddressLines.SequenceEqual(other.AddressLines, StringComparer.OrdinalIgnoreCase)
-            && string.Equals(CityOrTown, other.CityOrTown, StringComparison.OrdinalIgnoreCase)
-            && Country == other.Country
-            && IsResidential == other.IsResidential
-            && string.Equals(PostalCode, other.PostalCode, StringComparison.OrdinalIgnoreCase)
-            && string.Equals(StateOrProvince, other.StateOrProvince, StringComparison.OrdinalIgnoreCase);
+        return obj is AbstractAddressValidationResponse other
+            && AddressValidationResponseEqualityComparer.Default.Equals(this, other);
     }
 
     /// <inheritdoc />
     public override int GetHashCode()
     {
+        int addressLinesHash = AddressLines.Aggregate(
+            0,
+            (current, addressLine) => current ^ StringComparer.OrdinalIgnoreCase.GetHashCode(addressLine)
+        );
+
         HashCode hashCode = new();
-
-        foreach ( string addressLine in AddressLines )
-        {
-            hashCode.Add(addressLine, StringComparer.OrdinalIgnoreCase);
-        }
-
+        hashCode.Add(addressLinesHash);
         hashCode.Add(CityOrTown, StringComparer.OrdinalIgnoreCase);
         hashCode.Add((int)Country);
         hashCode.Add(IsResidential);
@@ -149,21 +94,26 @@ public abstract class AbstractAddressValidationResponse :
 }
 
 /// <summary>
-///     Base record for implementing an <see cref="IAddressValidationResponse" />.
+///     Base class for implementing an <see cref="IAddressValidationResponse" /> backed by a specific API response type.
 /// </summary>
 /// <typeparam name="TResponse">
-///     An instance that implements <see cref="IApiResponse" /> which will be
-///     returned from the underlying service api.
+///     The type of the underlying API response.
 /// </typeparam>
-/// <remarks>
-///     Initializes a new instance of <see cref="AbstractAddressValidationResponse{T}" />.
-/// </remarks>
-/// <param name="response">An instance of <typeparamref name="TResponse" /> returned by the underlying api service.</param>
-/// <param name="validationResult">
-///     Current validation state (if any) of the response represented as an instance of
-///     <see cref="IValidationResult" />.
-/// </param>
-#pragma warning disable CS9113 // Parameter is unread.
-public abstract class AbstractAddressValidationResponse<TResponse>(TResponse response, IValidationResult? validationResult = null)
-    : AbstractAddressValidationResponse(validationResult) where TResponse : IApiResponse;
-#pragma warning restore CS9113 // Parameter is unread.
+public abstract class AbstractAddressValidationResponse<TResponse>
+    : AbstractAddressValidationResponse where TResponse : class
+{
+    /// <summary>
+    ///     Initializes a new instance of <see cref="AbstractAddressValidationResponse{TResponse}" />.
+    /// </summary>
+    /// <param name="response">The underlying API response returned by the address validation service.</param>
+    /// <param name="validationResult">
+    ///     The current validation state of the response, or <see langword="null" /> if no validation was performed.
+    /// </param>
+    /// <exception cref="ArgumentNullException">
+    ///     Thrown when <paramref name="response" /> is <see langword="null" />.
+    /// </exception>
+    protected AbstractAddressValidationResponse(TResponse response, IValidationResult? validationResult = null) : base(validationResult)
+    {
+        ArgumentNullException.ThrowIfNull(response);
+    }
+}
