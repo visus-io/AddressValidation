@@ -636,15 +636,25 @@ namespace Visus.AddressValidation.Model
     }
     public interface IAddressValidationResponse
     {
+        [System.Text.Json.Serialization.JsonPropertyName("addressLines")]
         System.Collections.Generic.IReadOnlySet<string> AddressLines { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("cityOrTown")]
         string? CityOrTown { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("country")]
         Visus.AddressValidation.Abstractions.CountryCode Country { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("customResponseData")]
         System.Collections.Generic.IReadOnlyDictionary<string, object?> CustomResponseData { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("errors")]
         System.Collections.Generic.IReadOnlySet<string> Errors { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("isResidential")]
         bool? IsResidential { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("postalCode")]
         string? PostalCode { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("stateOrProvince")]
         string? StateOrProvince { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("suggestions")]
         System.Collections.Generic.IReadOnlyList<Visus.AddressValidation.Model.IAddressValidationResponse> Suggestions { get; }
+        [System.Text.Json.Serialization.JsonPropertyName("warnings")]
         System.Collections.Generic.IReadOnlySet<string> Warnings { get; }
     }
 }
