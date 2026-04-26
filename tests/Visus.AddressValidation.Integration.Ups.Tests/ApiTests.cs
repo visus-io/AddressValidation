@@ -13,7 +13,6 @@ internal sealed class ApiTests
         {
             ExcludeAttributes =
             [
-                "System.ObsoleteAttribute",
                 "System.Reflection.AssemblyMetadataAttribute",
                 "System.Runtime.Versioning.TargetFrameworkAttribute",
             ],
