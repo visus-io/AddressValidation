@@ -1,5 +1,7 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Extensions;
 
+using Adapters;
+using AddressValidation.Adapters;
 using AddressValidation.Extensions;
 using AddressValidation.Http;
 using AddressValidation.Mappers;
@@ -46,6 +48,7 @@ public static class ServiceCollectionExtensions
 
         services.TryAddScoped<IValidator<PitneyBowesAddressValidationRequest>, AddressValidationRequestValidator>();
         services.TryAddScoped<IValidator<ApiResponse>, ApiResponseValidator>();
+        services.TryAddScoped<IApiRequestAdapter<PitneyBowesAddressValidationRequest, ApiResponse>, ApiRequestAdapter>();
 
         services.TryAddScoped<IAddressValidationService<PitneyBowesAddressValidationRequest>, AddressValidationService>();
 

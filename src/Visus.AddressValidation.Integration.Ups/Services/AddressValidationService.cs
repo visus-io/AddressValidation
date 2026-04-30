@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.Ups.Services;
 
+using AddressValidation.Adapters;
 using AddressValidation.Mappers;
 using AddressValidation.Services;
 using AddressValidation.Validation;
@@ -7,22 +8,13 @@ using Http;
 using Model;
 
 internal sealed class AddressValidationService :
-    AbstractAddressValidationService<UpsAddressValidationRequest, ApiRequest, ApiResponse>
+    AbstractAddressValidationService<UpsAddressValidationRequest, ApiResponse>
 {
-    private readonly UpsAddressValidationClient _client;
-
-    public AddressValidationService(UpsAddressValidationClient client,
-                                    IValidator<UpsAddressValidationRequest> requestValidator,
-                                    IValidator<ApiResponse> responseValidator,
+    public AddressValidationService(IApiRequestAdapter<UpsAddressValidationRequest, ApiResponse> requestAdapter,
                                     IApiResponseMapper<ApiResponse> responseMapper,
-                                    IApiRequestMapper<UpsAddressValidationRequest, ApiRequest> requestMapper)
-        : base(requestValidator, responseValidator, responseMapper, requestMapper)
+                                    IValidator<UpsAddressValidationRequest> requestValidator,
+                                    IValidator<ApiResponse> responseValidator)
+        : base(requestAdapter, responseMapper, requestValidator, responseValidator)
     {
-        _client = client ?? throw new ArgumentNullException(nameof(client));
-    }
-
-    protected override Task<ApiResponse?> SendAsync(ApiRequest request, CancellationToken cancellationToken)
-    {
-        return _client.ValidateAddressAsync(request, cancellationToken);
     }
 }

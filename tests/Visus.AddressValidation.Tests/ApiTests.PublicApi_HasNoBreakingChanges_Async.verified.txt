@@ -515,6 +515,15 @@ namespace Visus.AddressValidation.Abstractions
         ZM = 894,
     }
 }
+namespace Visus.AddressValidation.Adapters
+{
+    public interface IApiRequestAdapter<in TRequest, TApiResponse>
+        where in TRequest : Visus.AddressValidation.Model.AbstractAddressValidationRequest
+        where TApiResponse :  class
+    {
+        System.Threading.Tasks.Task<TApiResponse?> ExecuteAsync(TRequest request, System.Threading.CancellationToken cancellationToken);
+    }
+}
 namespace Visus.AddressValidation
 {
     [System.AttributeUsage(System.AttributeTargets.Property)]
@@ -693,13 +702,11 @@ namespace Visus.AddressValidation.Serialization.Json
 }
 namespace Visus.AddressValidation.Services
 {
-    public abstract class AbstractAddressValidationService<TRequest, TApiRequest, TApiResponse> : Visus.AddressValidation.Services.IAddressValidationService<TRequest>
+    public abstract class AbstractAddressValidationService<TRequest, TApiResponse> : Visus.AddressValidation.Services.IAddressValidationService<TRequest>
         where TRequest : Visus.AddressValidation.Model.AbstractAddressValidationRequest
-        where TApiRequest :  class
         where TApiResponse :  class
     {
-        protected AbstractAddressValidationService(Visus.AddressValidation.Validation.IValidator<TRequest> requestValidator, Visus.AddressValidation.Validation.IValidator<TApiResponse> responseValidator, Visus.AddressValidation.Mappers.IApiResponseMapper<TApiResponse> responseMapper, Visus.AddressValidation.Mappers.IApiRequestMapper<TRequest, TApiRequest> requestMapper) { }
-        protected abstract System.Threading.Tasks.Task<TApiResponse?> SendAsync(TApiRequest request, System.Threading.CancellationToken cancellationToken);
+        protected AbstractAddressValidationService(Visus.AddressValidation.Adapters.IApiRequestAdapter<TRequest, TApiResponse> requestAdapter, Visus.AddressValidation.Mappers.IApiResponseMapper<TApiResponse> responseMapper, Visus.AddressValidation.Validation.IValidator<TRequest> requestValidator, Visus.AddressValidation.Validation.IValidator<TApiResponse> responseValidator) { }
         public System.Threading.Tasks.Task<Visus.AddressValidation.Model.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default) { }
     }
     public abstract class AbstractAuthenticationService<TClient>

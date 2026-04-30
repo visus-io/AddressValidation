@@ -1,5 +1,7 @@
 namespace Visus.AddressValidation.Integration.Ups.Extensions;
 
+using Adapters;
+using AddressValidation.Adapters;
 using AddressValidation.Extensions;
 using AddressValidation.Http;
 using AddressValidation.Mappers;
@@ -46,6 +48,7 @@ public static class ServiceCollectionExtensions
 
         services.TryAddScoped<IValidator<UpsAddressValidationRequest>, AddressValidationRequestValidator>();
         services.TryAddScoped<IValidator<ApiResponse>, ApiResponseValidator>();
+        services.TryAddScoped<IApiRequestAdapter<UpsAddressValidationRequest, ApiResponse>, ApiRequestAdapter>();
 
         services.TryAddScoped<IAddressValidationService<UpsAddressValidationRequest>, AddressValidationService>();
 

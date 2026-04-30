@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Services;
 
+using AddressValidation.Adapters;
 using AddressValidation.Mappers;
 using AddressValidation.Services;
 using AddressValidation.Validation;
@@ -7,22 +8,13 @@ using Http;
 using Model;
 
 internal sealed class AddressValidationService :
-    AbstractAddressValidationService<PitneyBowesAddressValidationRequest, ApiRequest, ApiResponse>
+    AbstractAddressValidationService<PitneyBowesAddressValidationRequest, ApiResponse>
 {
-    private readonly PitneyBowesAddressValidationClient _client;
-
-    public AddressValidationService(PitneyBowesAddressValidationClient client,
-                                    IValidator<PitneyBowesAddressValidationRequest> requestValidator,
-                                    IValidator<ApiResponse> responseValidator,
+    public AddressValidationService(IApiRequestAdapter<PitneyBowesAddressValidationRequest, ApiResponse> requestAdapter,
                                     IApiResponseMapper<ApiResponse> responseMapper,
-                                    IApiRequestMapper<PitneyBowesAddressValidationRequest, ApiRequest> requestMapper)
-        : base(requestValidator, responseValidator, responseMapper, requestMapper)
+                                    IValidator<PitneyBowesAddressValidationRequest> requestValidator,
+                                    IValidator<ApiResponse> responseValidator)
+        : base(requestAdapter, responseMapper, requestValidator, responseValidator)
     {
-        _client = client ?? throw new ArgumentNullException(nameof(client));
-    }
-
-    protected override Task<ApiResponse?> SendAsync(ApiRequest request, CancellationToken cancellationToken)
-    {
-        return _client.ValidateAddressAsync(request, cancellationToken);
     }
 }

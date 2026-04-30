@@ -1,5 +1,7 @@
 namespace Visus.AddressValidation.Integration.FedEx.Extensions;
 
+using Adapters;
+using AddressValidation.Adapters;
 using AddressValidation.Extensions;
 using AddressValidation.Http;
 using AddressValidation.Mappers;
@@ -43,6 +45,7 @@ public static class ServiceCollectionExtensions
 
         services.TryAddScoped<IApiResponseMapper<ApiResponse>, AddressValidationResponseMapper>();
         services.TryAddScoped<IApiRequestMapper<FedExAddressValidationRequest, ApiRequest>, AddressValidationRequestMapper>();
+        services.TryAddScoped<IApiRequestAdapter<FedExAddressValidationRequest, ApiResponse>, ApiRequestAdapter>();
 
         services.TryAddScoped<IValidator<FedExAddressValidationRequest>, AddressValidationRequestValidator>();
         services.TryAddScoped<IValidator<ApiResponse>, ApiResponseValidator>();
