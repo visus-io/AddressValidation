@@ -3,7 +3,7 @@ namespace Visus.AddressValidation.Integration.FedEx.Validation;
 using System.Collections.Frozen;
 using AddressValidation.Abstractions;
 using AddressValidation.Validation;
-using Model;
+using Models;
 
 internal sealed class AddressValidationRequestValidator : AbstractAddressValidationRequestValidator<FedExAddressValidationRequest>
 {

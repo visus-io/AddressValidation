@@ -4,7 +4,7 @@ using AddressValidation.Adapters;
 using AddressValidation.Mappers;
 using AddressValidation.Services;
 using AddressValidation.Validation;
-using Http;
+using Contracts;
 using Model;
 
 internal sealed class AddressValidationService :

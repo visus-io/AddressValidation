@@ -2,7 +2,7 @@ namespace Visus.AddressValidation.Integration.PitneyBowes.Validation;
 
 using System.Diagnostics;
 using AddressValidation.Validation;
-using Http;
+using Contracts;
 using Resources;
 
 internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>

@@ -5,7 +5,7 @@ using AddressValidation.Abstractions;
 using AddressValidation.Validation;
 using Configuration;
 using Microsoft.Extensions.Options;
-using Model;
+using Models;
 using Resources;
 
 internal sealed class AddressValidationRequestValidator : AbstractAddressValidationRequestValidator<UpsAddressValidationRequest>

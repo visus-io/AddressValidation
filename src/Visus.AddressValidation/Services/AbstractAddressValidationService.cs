@@ -2,7 +2,7 @@ namespace Visus.AddressValidation.Services;
 
 using Adapters;
 using Mappers;
-using Model;
+using Models;
 using Validation;
 
 /// <summary>

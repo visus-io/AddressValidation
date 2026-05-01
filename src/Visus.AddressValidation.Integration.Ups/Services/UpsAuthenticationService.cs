@@ -1,8 +1,8 @@
 namespace Visus.AddressValidation.Integration.Ups.Services;
 
 using AddressValidation.Services;
+using Clients;
 using Configuration;
-using Http;
 using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Options;
 

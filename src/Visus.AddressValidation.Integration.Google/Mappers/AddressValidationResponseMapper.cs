@@ -4,10 +4,10 @@ using System.Collections.Frozen;
 using System.Collections.ObjectModel;
 using AddressValidation.Extensions;
 using AddressValidation.Mappers;
-using AddressValidation.Model;
+using AddressValidation.Models;
 using AddressValidation.Validation;
-using Http;
-using Model;
+using Contracts;
+using Models;
 
 internal sealed class AddressValidationResponseMapper : IApiResponseMapper<ApiResponse>
 {

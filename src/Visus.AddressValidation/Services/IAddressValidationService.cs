@@ -1,6 +1,6 @@
 namespace Visus.AddressValidation.Services;
 
-using Model;
+using Models;
 
 /// <summary>
 ///     Abstraction for implementing an address validation service.

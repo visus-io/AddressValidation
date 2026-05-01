@@ -1,8 +1,8 @@
 namespace Visus.AddressValidation.Integration.Ups.Mappers;
 
 using AddressValidation.Mappers;
-using Http;
-using Model;
+using Contracts;
+using Models;
 
 internal sealed class AddressValidationRequestMapper : IApiRequestMapper<UpsAddressValidationRequest, ApiRequest>
 {

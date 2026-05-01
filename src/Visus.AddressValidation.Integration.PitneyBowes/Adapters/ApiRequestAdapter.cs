@@ -2,7 +2,8 @@ namespace Visus.AddressValidation.Integration.PitneyBowes.Adapters;
 
 using AddressValidation.Adapters;
 using AddressValidation.Mappers;
-using Http;
+using Clients;
+using Contracts;
 using Model;
 
 internal sealed class ApiRequestAdapter : IApiRequestAdapter<PitneyBowesAddressValidationRequest, ApiResponse>

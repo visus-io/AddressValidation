@@ -1,7 +1,7 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Mappers;
 
 using AddressValidation.Mappers;
-using Http;
+using Contracts;
 using Model;
 
 internal sealed class AddressValidationRequestMapper : IApiRequestMapper<PitneyBowesAddressValidationRequest, ApiRequest>

@@ -2,8 +2,9 @@ namespace Visus.AddressValidation.Integration.Ups.Adapters;
 
 using AddressValidation.Adapters;
 using AddressValidation.Mappers;
-using Http;
-using Model;
+using Clients;
+using Contracts;
+using Models;
 
 internal sealed class ApiRequestAdapter : IApiRequestAdapter<UpsAddressValidationRequest, ApiResponse>
 {

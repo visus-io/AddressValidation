@@ -1,6 +1,6 @@
 namespace Visus.AddressValidation.Mappers;
 
-using Model;
+using Models;
 
 /// <summary>
 ///     Defines a mapper that converts an address validation request into a

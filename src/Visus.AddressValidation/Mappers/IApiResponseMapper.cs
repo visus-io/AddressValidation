@@ -1,6 +1,6 @@
 namespace Visus.AddressValidation.Mappers;
 
-using Model;
+using Models;
 using Validation;
 
 /// <summary>

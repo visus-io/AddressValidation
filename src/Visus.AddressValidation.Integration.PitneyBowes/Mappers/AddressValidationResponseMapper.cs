@@ -3,10 +3,10 @@ namespace Visus.AddressValidation.Integration.PitneyBowes.Mappers;
 using System.Collections.Frozen;
 using System.Collections.ObjectModel;
 using AddressValidation.Mappers;
-using AddressValidation.Model;
 using AddressValidation.Validation;
-using Http;
+using Contracts;
 using Model;
+using Models;
 
 internal sealed class AddressValidationResponseMapper : IApiResponseMapper<ApiResponse>
 {

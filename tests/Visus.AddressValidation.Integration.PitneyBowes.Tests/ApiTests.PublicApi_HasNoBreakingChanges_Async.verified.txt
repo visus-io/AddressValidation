@@ -41,7 +41,7 @@ namespace Visus.AddressValidation.Integration.PitneyBowes.Extensions
 }
 namespace Visus.AddressValidation.Integration.PitneyBowes.Model
 {
-    public sealed class PitneyBowesAddressValidationRequest : Visus.AddressValidation.Model.AbstractAddressValidationRequest
+    public sealed class PitneyBowesAddressValidationRequest : Visus.AddressValidation.Models.AbstractAddressValidationRequest
     {
         public PitneyBowesAddressValidationRequest() { }
         public bool IncludeSuggestions { get; set; }

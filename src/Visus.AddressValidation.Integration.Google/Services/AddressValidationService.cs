@@ -4,8 +4,8 @@ using AddressValidation.Adapters;
 using AddressValidation.Mappers;
 using AddressValidation.Services;
 using AddressValidation.Validation;
-using Http;
-using Model;
+using Contracts;
+using Models;
 
 internal sealed class AddressValidationService :
     AbstractAddressValidationService<GoogleAddressValidationRequest, ApiResponse>

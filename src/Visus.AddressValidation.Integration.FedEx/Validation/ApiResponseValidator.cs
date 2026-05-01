@@ -2,9 +2,9 @@ namespace Visus.AddressValidation.Integration.FedEx.Validation;
 
 using System.Diagnostics;
 using AddressValidation.Abstractions;
-using AddressValidation.Model;
+using AddressValidation.Models;
 using AddressValidation.Validation;
-using Http;
+using Contracts;
 using Resources;
 
 internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>

@@ -1,7 +1,7 @@
 namespace Visus.AddressValidation.Integration.Ups.Validation;
 
 using AddressValidation.Validation;
-using Http;
+using Contracts;
 
 internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 {

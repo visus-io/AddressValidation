@@ -4,7 +4,7 @@ using System.Collections.Frozen;
 using System.Diagnostics;
 using Abstractions;
 using AddressValidation.Validation;
-using Http;
+using Contracts;
 
 internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 {

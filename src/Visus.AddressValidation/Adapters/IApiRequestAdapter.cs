@@ -1,6 +1,6 @@
 namespace Visus.AddressValidation.Adapters;
 
-using Model;
+using Models;
 
 /// <summary>
 ///     Defines an adapter that translates an address validation request into an
