@@ -11,7 +11,6 @@ using Configuration;
 using Contracts;
 using Http;
 using Mappers;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
@@ -29,15 +28,13 @@ public static class ServiceCollectionExtensions
     ///     <see cref="IServiceCollection" />.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
-    /// <param name="configuration">The <see cref="IConfiguration" /> used to bind <see cref="PitneyBowesServiceOptions" />.</param>
     /// <returns>The same service collection so that multiple calls can be chained.</returns>
-    public static IServiceCollection AddPitneyBowesAddressValidation(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddPitneyBowesAddressValidation(this IServiceCollection services)
     {
         ArgumentNullException.ThrowIfNull(services);
-        ArgumentNullException.ThrowIfNull(configuration);
 
         services.AddOptions<PitneyBowesServiceOptions>()
-                .Bind(configuration.GetSection(nameof(PitneyBowesServiceOptions)))
+                .BindConfiguration(PitneyBowesServiceOptions.SectionName)
                 .ValidateOnStart();
 
         services.TryAddSingleton<IValidateOptions<PitneyBowesServiceOptions>, PitneyBowesServiceOptionsValidator>();

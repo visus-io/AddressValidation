@@ -36,7 +36,7 @@ namespace Visus.AddressValidation.Integration.PitneyBowes.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddPitneyBowesAddressValidation(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration) { }
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddPitneyBowesAddressValidation(this Microsoft.Extensions.DependencyInjection.IServiceCollection services) { }
     }
 }
 namespace Visus.AddressValidation.Integration.PitneyBowes.Model

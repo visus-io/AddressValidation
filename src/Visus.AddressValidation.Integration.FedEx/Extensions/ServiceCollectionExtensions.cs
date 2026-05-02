@@ -11,7 +11,6 @@ using Configuration;
 using Contracts;
 using Http;
 using Mappers;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
@@ -29,12 +28,10 @@ public static class ServiceCollectionExtensions
     ///     <see cref="IServiceCollection" />.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
-    /// <param name="configuration">The <see cref="IConfiguration" /> used to bind <see cref="FedExServiceOptions" />.</param>
     /// <returns>The same service collection so that multiple calls can be chained.</returns>
-    public static IServiceCollection AddFedExAddressValidation(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddFedExAddressValidation(this IServiceCollection services)
     {
         ArgumentNullException.ThrowIfNull(services);
-        ArgumentNullException.ThrowIfNull(configuration);
 
         services.AddOptions<FedExServiceOptions>()
                 .BindConfiguration(FedExServiceOptions.SectionName)
