@@ -19,7 +19,7 @@ public sealed class FedExServiceOptions
     ///     current <see cref="ClientEnvironment" /> value.
     /// </summary>
     public Uri EndpointBaseUri =>
-        ClientEnvironment switch
+        EndpointOverrideUri ?? ClientEnvironment switch
         {
             ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
             ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
@@ -54,4 +54,12 @@ public sealed class FedExServiceOptions
     /// </summary>
     [Required(AllowEmptyStrings = false)]
     public required string ClientSecret { get; set; }
+
+    /// <summary>
+    ///     Gets or sets an optional URI that overrides the default endpoint
+    ///     derived from <see cref="ClientEnvironment" />. When set, this value
+    ///     takes precedence over the environment-based endpoint resolution.
+    ///     This is primarily useful for testing against a local mock server.
+    /// </summary>
+    public Uri? EndpointOverrideUri { get; set; }
 }

@@ -17,7 +17,16 @@ internal sealed partial class ApiResponse
     public Response? Result { get; set; }
 
     [CustomResponseDataProperty]
-    public Guid TransactionId { get; set; }
+    public string? TransactionId { get; set; }
+
+    internal sealed class Alert
+    {
+        public AlertType AlertType { get; set; }
+
+        public string Code { get; set; } = null!;
+
+        public string Message { get; set; } = null!;
+    }
 
     internal sealed partial class Attribute
     {
@@ -55,7 +64,7 @@ internal sealed partial class ApiResponse
 
         [CustomResponseDataProperty]
         [JsonConverter(typeof(JsonStringBooleanConverter))]
-        [JsonPropertyName(nameof(IsBaseAddressForMultiUnit))]
+        [JsonPropertyName("MultiUnitBase")]
         public bool IsBaseAddressForMultiUnit { get; set; }
 
         [CustomResponseDataProperty]
@@ -99,9 +108,18 @@ internal sealed partial class ApiResponse
         [JsonPropertyName(nameof(MatchSource))]
         public string MatchSource { get; set; } = null!;
 
+        [CustomResponseDataProperty]
+        [JsonConverter(typeof(JsonStringBooleanConverter))]
+        [JsonPropertyName(nameof(Matched))]
+        public bool Matched { get; set; }
+
         [JsonConverter(typeof(JsonStringBooleanConverter))]
         [JsonPropertyName(nameof(MultipleMatches))]
         public bool MultipleMatches { get; set; }
+
+        [CustomResponseDataProperty]
+        [JsonPropertyName(nameof(ResolutionInput))]
+        public string? ResolutionInput { get; set; }
 
         [CustomResponseDataProperty]
         [JsonPropertyName(nameof(ResolutionMethod))]
@@ -155,6 +173,10 @@ internal sealed partial class ApiResponse
 
         public string PostalCode { get; set; } = null!;
 
+        [CustomResponseDataProperty]
+        [JsonPropertyName("postOfficeBox")]
+        public bool PostOfficeBox { get; set; }
+
         [JsonPropertyName("resolutionMethodName")]
         public ResolutionMethod ResolutionMethod { get; set; }
 
@@ -172,6 +194,8 @@ internal sealed partial class ApiResponse
 
     internal sealed class Response
     {
+        public Alert[] Alerts { get; set; } = [];
+
         public ResolvedAddress[] ResolvedAddresses { get; set; } = [];
     }
 }

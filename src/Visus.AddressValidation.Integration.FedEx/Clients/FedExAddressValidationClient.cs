@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.FedEx.Clients;
 
+using System.Globalization;
 using System.Net.Http.Json;
 using Configuration;
 using Contracts;
@@ -30,6 +31,13 @@ internal sealed class FedExAddressValidationClient
         Uri requestUri = new(_options.Value.EndpointBaseUri, "/address/v1/addresses/resolve");
 
         using HttpRequestMessage httpRequest = new(HttpMethod.Post, requestUri);
+
+        if ( !string.IsNullOrWhiteSpace(request.CustomerTransactionId) )
+        {
+            httpRequest.Headers.Add("x-customer-transaction-id", request.CustomerTransactionId);
+        }
+
+        httpRequest.Headers.Add("x-locale", CultureInfo.CurrentUICulture.Name);
 
         httpRequest.Content = JsonContent.Create(request, ApiRequestJsonSerializerContext.Default.ApiRequest);
 

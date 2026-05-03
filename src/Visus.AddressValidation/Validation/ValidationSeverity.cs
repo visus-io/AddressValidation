@@ -8,10 +8,10 @@ public enum ValidationSeverity
     /// <summary>
     ///     Warning
     /// </summary>
-    Warning,
+    WARNING,
 
     /// <summary>
     ///     Error
     /// </summary>
-    Error,
+    ERROR,
 }
