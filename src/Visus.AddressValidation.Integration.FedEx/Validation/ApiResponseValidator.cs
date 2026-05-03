@@ -45,11 +45,6 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
                                     ? ValidationState.CreateWarning(alert.Code)
                                     : ValidationState.CreateWarning($"{alert.Code}: {alert.Message}"));
                     break;
-                case AlertType.ERROR:
-                    results.Add(string.IsNullOrWhiteSpace(alert.Message)
-                                    ? ValidationState.CreateError(alert.Code)
-                                    : ValidationState.CreateError($"{alert.Code}: {alert.Message}"));
-                    break;
                 case AlertType.NOTE:
                 default:
                     break;
