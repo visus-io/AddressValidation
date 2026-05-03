@@ -9,6 +9,8 @@ namespace Visus.AddressValidation.Abstractions
         DEVELOPMENT = 0,
         [System.ComponentModel.Description("Production")]
         PRODUCTION = 1,
+        [System.ComponentModel.Description("Sandbox")]
+        SANDBOX = 2,
     }
     [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<Visus.AddressValidation.Abstractions.CountryCode>))]
     public enum CountryCode

@@ -3,7 +3,7 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Integration.FedEx.Tests")]
 namespace Visus.AddressValidation.Integration.FedEx.Configuration
 {
-    public sealed class FedExServiceOptions
+    public sealed class FedExServiceOptions : System.ComponentModel.DataAnnotations.IValidatableObject
     {
         public const string SectionName = "AddressValidationSettings:FedEx";
         public FedExServiceOptions() { }
@@ -16,6 +16,7 @@ namespace Visus.AddressValidation.Integration.FedEx.Configuration
         public required string ClientSecret { get; set; }
         public System.Uri EndpointBaseUri { get; }
         public System.Uri? EndpointOverrideUri { get; set; }
+        public System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext) { }
     }
     [Microsoft.Extensions.Options.OptionsValidator]
     public sealed class FedExServiceOptionsValidator : Microsoft.Extensions.Options.IValidateOptions<Visus.AddressValidation.Integration.FedEx.Configuration.FedExServiceOptions>
