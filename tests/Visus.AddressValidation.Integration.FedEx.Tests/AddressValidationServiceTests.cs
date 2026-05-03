@@ -37,6 +37,7 @@ internal sealed class AddressValidationServiceTests : IAsyncDisposable
                                                   [$"{FedExServiceOptions.SectionName}:ClientId"] = "test-client-id",
                                                   [$"{FedExServiceOptions.SectionName}:ClientSecret"] = "test-client-secret",
                                                   [$"{FedExServiceOptions.SectionName}:AccountNumber"] = "test-account",
+                                                  [$"{FedExServiceOptions.SectionName}:ClientEnvironment"] = nameof(ClientEnvironment.SANDBOX),
                                               })
                                              .Build());
 
