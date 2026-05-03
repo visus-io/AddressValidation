@@ -15,6 +15,7 @@ namespace Visus.AddressValidation.Integration.FedEx.Configuration
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ClientSecret { get; set; }
         public System.Uri EndpointBaseUri { get; }
+        public System.Uri? EndpointOverrideUri { get; set; }
     }
     [Microsoft.Extensions.Options.OptionsValidator]
     public sealed class FedExServiceOptionsValidator : Microsoft.Extensions.Options.IValidateOptions<Visus.AddressValidation.Integration.FedEx.Configuration.FedExServiceOptions>
@@ -45,6 +46,7 @@ namespace Visus.AddressValidation.Integration.FedEx.Models
     {
         public FedExAddressValidationRequest() { }
         public string? ClientReferenceId { get; set; }
+        public string? CustomerTransactionId { get; set; }
         public override string? NoPostalCodeFallback { get; }
     }
 }

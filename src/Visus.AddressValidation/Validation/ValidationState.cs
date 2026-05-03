@@ -35,8 +35,8 @@ public readonly struct ValidationState : IEquatable<ValidationState>
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(message);
         return !string.IsNullOrWhiteSpace(propertyName)
-                   ? new ValidationState(ValidationSeverity.Error, $"{propertyName}: {message}")
-                   : new ValidationState(ValidationSeverity.Error, message);
+                   ? new ValidationState(ValidationSeverity.ERROR, $"{propertyName}: {message}")
+                   : new ValidationState(ValidationSeverity.ERROR, message);
     }
 
     /// <summary>
@@ -68,8 +68,8 @@ public readonly struct ValidationState : IEquatable<ValidationState>
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(message);
         return !string.IsNullOrWhiteSpace(propertyName)
-                   ? new ValidationState(ValidationSeverity.Warning, $"{propertyName}: {message}")
-                   : new ValidationState(ValidationSeverity.Warning, message);
+                   ? new ValidationState(ValidationSeverity.WARNING, $"{propertyName}: {message}")
+                   : new ValidationState(ValidationSeverity.WARNING, message);
     }
 
     /// <summary>

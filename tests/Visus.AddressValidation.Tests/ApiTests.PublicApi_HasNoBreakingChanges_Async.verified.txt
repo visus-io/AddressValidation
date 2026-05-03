@@ -756,8 +756,8 @@ namespace Visus.AddressValidation.Validation
     }
     public enum ValidationSeverity
     {
-        Warning = 0,
-        Error = 1,
+        WARNING = 0,
+        ERROR = 1,
     }
     public readonly struct ValidationState : System.IEquatable<Visus.AddressValidation.Validation.ValidationState>
     {
