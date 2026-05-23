@@ -1,7 +1,6 @@
 namespace Visus.AddressValidation.Integration.FedEx.Configuration;
 
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using AddressValidation.Abstractions;
 
 /// <summary>
@@ -81,12 +80,12 @@ public sealed class FedExServiceOptions : IValidatableObject
     ///     used for address validation responses returned by the FedEx API.
     /// </summary>
     /// <remarks>
-    ///     Defaults to <see cref="CultureInfo.CurrentCulture" />.<see cref="CultureInfo.Name" />
-    ///     of the executing thread at the time the options object is
-    ///     constructed. Use a value such as <c>en-US</c> or <c>fr-FR</c> to
+    ///     When <see langword="null" /> (the default), the <c>x-locale</c>
+    ///     request header is omitted and FedEx will use its own default locale.
+    ///     Set to an IETF BCP 47 tag such as <c>en-US</c> or <c>fr-FR</c> to
     ///     request responses in a specific language and region.
     /// </remarks>
-    public string Locale { get; set; } = CultureInfo.CurrentCulture.Name;
+    public string? Locale { get; set; }
 
     /// <summary>
     ///     Performs cross-property validation on the options object.
@@ -115,7 +114,7 @@ public sealed class FedExServiceOptions : IValidatableObject
                 [nameof(EndpointOverrideUri),]);
         }
 
-        if ( !Constants.SupportedLocales.Contains(Locale) )
+        if ( Locale is not null && !Constants.SupportedLocales.Contains(Locale) )
         {
             yield return new ValidationResult(
                 $"'{Locale}' is not a supported IETF BCP 47 language tag.",
