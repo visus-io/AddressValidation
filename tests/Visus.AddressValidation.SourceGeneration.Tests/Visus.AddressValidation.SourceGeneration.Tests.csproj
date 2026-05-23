@@ -17,4 +17,10 @@
     <ProjectReference Include="..\..\src\Visus.AddressValidation\Visus.AddressValidation.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="testconfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

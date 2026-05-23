@@ -56,10 +56,6 @@ jobs:
               if: github.actor != 'dependabot[bot]' && github.actor != 'renovate[bot]'
               run: dotnet tool update dotnet-sonarscanner --tool-path .sonar/scanner
 
-            - name: Install dotnet-coverage tool
-              if: github.actor != 'dependabot[bot]' && github.actor != 'renovate[bot]'
-              run: dotnet tool update dotnet-coverage --global
-
             - name: Begin SonarCloud analysis
               if: github.actor != 'dependabot[bot]' && github.actor != 'renovate[bot]'
               run: |
@@ -68,7 +64,7 @@ jobs:
                     /o:"visus" \
                     /d:sonar.token="$SONAR_TOKEN" \
                     /d:sonar.host.url="https://sonarcloud.io" \
-                    /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml" \
+                    /d:sonar.cs.opencover.reportsPaths="coverage.opencover.xml" \
                     /d:sonar.cs.vstest.reportsPaths="**/TestResults/**/*.trx"
 
             - name: Build
@@ -77,16 +73,14 @@ jobs:
             - name: Run tests
               run: |
                   dotnet test -c Release --no-build --no-restore -- \
-                    --coverage \
-                    --coverage-output-format xml \
+                    --coverlet \
                     --report-trx
 
-            - name: Merge coverage reports
+            - name: Copy final coverage report
               if: github.actor != 'dependabot[bot]' && github.actor != 'renovate[bot]'
               run: |
-                  dotnet-coverage merge "tests/**/TestResults/*.xml" \
-                    --output coverage.xml \
-                    --output-format xml
+                  # Find the latest coverage file and copy to solution root
+                  find tests -name "coverage.opencover.*.xml" -type f -print0 | xargs -0 ls -t | head -1 | xargs -I {} cp {} coverage.opencover.xml
 
             - name: Upload test results
               if: always()

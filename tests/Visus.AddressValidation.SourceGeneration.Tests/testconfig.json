@@ -1,0 +1,11 @@
+{
+  "platformOptions": {
+    "Coverlet": {
+      "format": "opencover",
+      "exclude": "[*.Tests]*,[coverlet.*]*,[xunit.*]*,[TUnit.*]*,[Verify.*]*",
+      "excludeByAttribute": "GeneratedCode,ExcludeFromCodeCoverage,ExcludeFromCodeCoverageAttribute,CompilerGeneratedAttribute",
+      "skipAutoProps": true,
+      "mergeWith": "../../../../../coverage.opencover.xml"
+    }
+  }
+}
