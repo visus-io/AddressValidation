@@ -16,6 +16,7 @@ namespace Visus.AddressValidation.Integration.FedEx.Configuration
         public required string ClientSecret { get; set; }
         public System.Uri EndpointBaseUri { get; }
         public System.Uri? EndpointOverrideUri { get; set; }
+        public string Locale { get; set; }
         public System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext) { }
     }
     [Microsoft.Extensions.Options.OptionsValidator]
@@ -32,6 +33,7 @@ namespace Visus.AddressValidation.Integration.FedEx
         public static readonly System.Uri DevelopmentEndpointBaseUri;
         public static readonly System.Uri ProductionEndpointBaseUri;
         public static readonly System.Collections.Frozen.FrozenSet<Visus.AddressValidation.Abstractions.CountryCode> SupportedCountries;
+        public static readonly System.Collections.Frozen.FrozenSet<string> SupportedLocales;
     }
 }
 namespace Visus.AddressValidation.Integration.FedEx.Extensions
