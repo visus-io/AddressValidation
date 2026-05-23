@@ -36,7 +36,10 @@ internal sealed class FedExAddressValidationClient
             httpRequest.Headers.Add("x-customer-transaction-id", request.CustomerTransactionId);
         }
 
-        httpRequest.Headers.Add("x-locale", _options.Value.Locale);
+        if ( !string.IsNullOrWhiteSpace(_options.Value.Locale) )
+        {
+            httpRequest.Headers.Add("x-locale", _options.Value.Locale);
+        }
 
         httpRequest.Content = JsonContent.Create(request, ApiRequestJsonSerializerContext.Default.ApiRequest);
 

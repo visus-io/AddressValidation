@@ -16,7 +16,7 @@ namespace Visus.AddressValidation.Integration.FedEx.Configuration
         public required string ClientSecret { get; set; }
         public System.Uri EndpointBaseUri { get; }
         public System.Uri? EndpointOverrideUri { get; set; }
-        public string Locale { get; set; }
+        public string? Locale { get; set; }
         public System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext) { }
     }
     [Microsoft.Extensions.Options.OptionsValidator]
