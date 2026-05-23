@@ -64,7 +64,7 @@ jobs:
                     /o:"visus" \
                     /d:sonar.token="$SONAR_TOKEN" \
                     /d:sonar.host.url="https://sonarcloud.io" \
-                    /d:sonar.cs.vscoveragexml.reportsPaths="**/TestResults/**/*.xml" \
+                    /d:sonar.cs.vscoveragexml.reportsPaths="**/TestResults/**/coverage.xml" \
                     /d:sonar.cs.vstest.reportsPaths="**/TestResults/**/*.trx"
 
             - name: Build
@@ -72,10 +72,11 @@ jobs:
 
             - name: Run tests
               run: |
-                  dotnet test -c Release --no-build --no-restore -- \
+                  dotnet test -c Release --no-build --no-restore \
                     --coverage \
+                    --coverage-output coverage.xml \
                     --coverage-output-format xml \
-                    --report-trx
+                    -- --report-trx
 
             - name: Upload test results
               if: always()
