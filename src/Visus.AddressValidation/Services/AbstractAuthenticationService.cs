@@ -99,7 +99,7 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
                                                         cancellationToken)
                                                    .ConfigureAwait(false);
 
-        if ( !factoryRan )
+        if ( !factoryRan ) // NOSONAR S2583 - false positive: factoryRan is mutated inside the async lambda above
         {
             return string.IsNullOrWhiteSpace(tokenResponse?.AccessToken) ? null : tokenResponse.AccessToken;
         }

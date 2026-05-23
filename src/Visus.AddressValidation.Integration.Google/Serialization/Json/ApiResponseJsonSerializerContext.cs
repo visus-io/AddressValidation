@@ -8,4 +8,4 @@ using Contracts;
 [JsonSerializable(typeof(ApiErrorResponse))]
 [JsonSerializable(typeof(ApiResponse))]
 [JsonSourceGenerationOptions(WriteIndented = false, PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-internal partial class ApiResponseJsonSerializerContext : JsonSerializerContext;
+internal sealed partial class ApiResponseJsonSerializerContext : JsonSerializerContext;

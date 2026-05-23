@@ -237,6 +237,7 @@ resharper_convert_to_primary_constructor_highlighting = none
 
 # Meziantou Rules
 dotnet_diagnostic.MA0003.severity = none
+dotnet_diagnostic.MA0038.severity = none
 
 #### Razor Files ####
 
