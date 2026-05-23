@@ -5,6 +5,7 @@ using AddressValidation.Abstractions;
 using AddressValidation.Models;
 using AddressValidation.Services;
 using AwesomeAssertions;
+using AwesomeAssertions.Execution;
 using Configuration;
 using Extensions;
 using Microsoft.Extensions.Configuration;
@@ -59,44 +60,6 @@ internal sealed class AddressValidationServiceTests : IAsyncDisposable
     }
 
     [Test]
-    public async Task ValidateAsync_WhenAddressIsResolved_ReturnsExpectedResponse(CancellationToken cancellationToken)
-    {
-        StubOAuthToken();
-        StubAddressResolve();
-
-        FedExAddressValidationRequest request = new()
-        {
-            AddressLines =
-            {
-                "7372 PARKRIDGE BLVD",
-                "APT 286",
-            },
-            CityOrTown = "IRVING",
-            StateOrProvince = "TX",
-            PostalCode = "75063-8659",
-            Country = CountryCode.US,
-        };
-
-        IAddressValidationResponse? response = await _sut.ValidateAsync(request, cancellationToken)
-                                                         .ConfigureAwait(false);
-
-        response.Should().NotBeNull();
-        response.Errors.Should().BeEmpty();
-        response.Warnings.Should().BeEmpty();
-        response.Suggestions.Should().BeEmpty();
-        response.AddressLines.Should().BeEquivalentTo("7372 PARKRIDGE BLVD", "APT 286");
-        response.CityOrTown.Should().Be("IRVING");
-        response.StateOrProvince.Should().Be("TX");
-        response.PostalCode.Should().Be("75063-8365");
-        response.Country.Should().Be(CountryCode.US);
-        response.IsResidential.Should().BeFalse();
-        response.CustomResponseData.Should().ContainKey("customerTransactionId")
-                .WhoseValue.Should().Be("APIF_SV_ADVC_TxIDcustomer_test");
-        response.CustomResponseData.Should().ContainKey("matchSource")
-                .WhoseValue.Should().Be("Postal");
-    }
-
-    [Test]
     public async Task ValidateAsync_WhenAddressIsInterpolated_ReturnsWarning(CancellationToken cancellationToken)
     {
         StubOAuthToken();
@@ -118,10 +81,115 @@ internal sealed class AddressValidationServiceTests : IAsyncDisposable
         IAddressValidationResponse? response = await _sut.ValidateAsync(request, cancellationToken)
                                                          .ConfigureAwait(false);
 
-        response.Should().NotBeNull();
-        response.Errors.Should().BeEmpty();
-        response.Warnings.Should().ContainSingle()
-                .Which.Should().Be("INTERPOLATED.STREET.ADDRESS: There is a chance that the address is not valid.");
+        using ( new AssertionScope() )
+        {
+            response.Should().NotBeNull();
+            response.Errors.Should().BeEmpty();
+            response.Warnings.Should().ContainSingle()
+                    .Which.Should().Be("INTERPOLATED.STREET.ADDRESS: There is a chance that the address is not valid.");
+        }
+    }
+
+    [Test]
+    public async Task ValidateAsync_WhenAddressIsResolved_ReturnsExpectedResponse(CancellationToken cancellationToken)
+    {
+        StubOAuthToken();
+        StubAddressResolve();
+
+        FedExAddressValidationRequest request = new()
+        {
+            AddressLines =
+            {
+                "7372 PARKRIDGE BLVD",
+                "APT 286",
+            },
+            CityOrTown = "IRVING",
+            StateOrProvince = "TX",
+            PostalCode = "75063-8659",
+            Country = CountryCode.US,
+        };
+
+        IAddressValidationResponse? response = await _sut.ValidateAsync(request, cancellationToken)
+                                                         .ConfigureAwait(false);
+
+        using ( new AssertionScope() )
+        {
+            response.Should().NotBeNull();
+            response.Errors.Should().BeEmpty();
+            response.Warnings.Should().BeEmpty();
+            response.Suggestions.Should().BeEmpty();
+            response.AddressLines.Should().BeEquivalentTo("7372 PARKRIDGE BLVD", "APT 286");
+            response.CityOrTown.Should().Be("IRVING");
+            response.StateOrProvince.Should().Be("TX");
+            response.PostalCode.Should().Be("75063-8365");
+            response.Country.Should().Be(CountryCode.US);
+            response.IsResidential.Should().BeFalse();
+            response.CustomResponseData.Should().ContainKey("customerTransactionId")
+                    .WhoseValue.Should().Be("APIF_SV_ADVC_TxIDcustomer_test");
+            response.CustomResponseData.Should().ContainKey("matchSource")
+                    .WhoseValue.Should().Be("Postal");
+        }
+    }
+
+    [Test]
+    public async Task ValidateAsync_WhenApiReturnsErrorResponse_ReturnsResponseWithErrors(CancellationToken cancellationToken)
+    {
+        StubOAuthToken();
+        StubApiErrorResponse();
+
+        FedExAddressValidationRequest request = new()
+        {
+            AddressLines =
+            {
+                "7372 PARKRIDGE BLVD",
+            },
+            CityOrTown = "IRVING",
+            StateOrProvince = "TX",
+            PostalCode = "75063",
+            Country = CountryCode.US,
+        };
+
+        IAddressValidationResponse? response = await _sut.ValidateAsync(request, cancellationToken)
+                                                         .ConfigureAwait(false);
+
+        using ( new AssertionScope() )
+        {
+            response.Should().NotBeNull();
+            response.Errors.Should().ContainSingle()
+                    .Which.Should().Be("STANDARDIZED.ADDRESS.NOTFOUND: Standardized address is not found.");
+        }
+    }
+
+    [Test]
+    public async Task ValidateAsync_WhenCustomerTransactionIdIsProvided_ResponseContainsMatchingTransactionId(
+        CancellationToken cancellationToken)
+    {
+        StubOAuthToken();
+        StubAddressResolve();
+
+        FedExAddressValidationRequest request = new()
+        {
+            AddressLines =
+            {
+                "7372 PARKRIDGE BLVD",
+                "APT 286",
+            },
+            CityOrTown = "IRVING",
+            StateOrProvince = "TX",
+            PostalCode = "75063-8659",
+            Country = CountryCode.US,
+            CustomerTransactionId = "APIF_SV_ADVC_TxIDcustomer_test",
+        };
+
+        IAddressValidationResponse? response = await _sut.ValidateAsync(request, cancellationToken)
+                                                         .ConfigureAwait(false);
+
+        using ( new AssertionScope() )
+        {
+            response.Should().NotBeNull();
+            response.CustomResponseData.Should().ContainKey("customerTransactionId")
+                    .WhoseValue.Should().Be("APIF_SV_ADVC_TxIDcustomer_test");
+        }
     }
 
     [Test]
@@ -183,6 +251,17 @@ internal sealed class AddressValidationServiceTests : IAsyncDisposable
         _wireMockServer.Given(Request.Create().WithPath("/address/v1/addresses/resolve").UsingPost())
                        .RespondWith(Response.Create()
                                             .WithStatusCode(200)
+                                            .WithHeader("Content-Type", "application/json")
+                                            .WithBody(body));
+    }
+
+    private void StubApiErrorResponse()
+    {
+        string body = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "ApiErrorResponse.json"));
+
+        _wireMockServer.Given(Request.Create().WithPath("/address/v1/addresses/resolve").UsingPost())
+                       .RespondWith(Response.Create()
+                                            .WithStatusCode(400)
                                             .WithHeader("Content-Type", "application/json")
                                             .WithBody(body));
     }

@@ -69,4 +69,50 @@ public static class Constants
         CountryCode.VI,
         CountryCode.ZA,
     ];
+
+    /// <summary>
+    ///     IETF BCP 47 locale tags that are supported by the FedEx Address Validation API.
+    /// </summary>
+    public static readonly FrozenSet<string> SupportedLocales =
+    [
+        "ar-SA",
+        "bg-BG",
+        "zh-CN",
+        "zh-TW",
+        "hr-HR",
+        "cs-CZ",
+        "da-DK",
+        "nl-NL",
+        "en-US",
+        "et-EE",
+        "fi-FI",
+        "fr-FR",
+        "de-DE",
+        "el-GR",
+        "he-IL",
+        "hu-HU",
+        "is-IS",
+        "it-IT",
+        "ja-JP",
+        "ko-KR",
+        "lv-LV",
+        "lt-LT",
+        "ms-MY",
+        "nb-NO",
+        "pl-PL",
+        "pt-BR",
+        "pt-PT",
+        "ro-RO",
+        "ru-RU",
+        "sr-RS",
+        "sk-SK",
+        "sl-SI",
+        "es-419",
+        "es-ES",
+        "sv-SE",
+        "th-TH",
+        "tr-TR",
+        "uk-UA",
+        "vi-VN",
+    ];
 }
