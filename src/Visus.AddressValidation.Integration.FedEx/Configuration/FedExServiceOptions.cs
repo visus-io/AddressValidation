@@ -1,12 +1,13 @@
 namespace Visus.AddressValidation.Integration.FedEx.Configuration;
 
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using AddressValidation.Abstractions;
 
 /// <summary>
 ///     Configuration options for the FedEx address validation service.
 /// </summary>
-public sealed class FedExServiceOptions
+public sealed class FedExServiceOptions : IValidatableObject
 {
     /// <summary>
     ///     The configuration section path used to bind these options from
@@ -23,6 +24,7 @@ public sealed class FedExServiceOptions
         {
             ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
             ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
+            ClientEnvironment.SANDBOX => EndpointOverrideUri!,
             _ => Constants.DevelopmentEndpointBaseUri,
         };
 
@@ -54,4 +56,70 @@ public sealed class FedExServiceOptions
     /// </summary>
     [Required(AllowEmptyStrings = false)]
     public required string ClientSecret { get; set; }
+
+    /// <summary>
+    ///     Gets or sets a URI that overrides the default endpoint derived from
+    ///     <see cref="ClientEnvironment" />.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         This property is <b>required</b> when
+    ///         <see cref="ClientEnvironment" /> is
+    ///         <see cref="ClientEnvironment.SANDBOX" />; validation will fail
+    ///         if it is <see langword="null" /> in that case.
+    ///     </para>
+    ///     <para>
+    ///         For all other environments this property is optional and, when
+    ///         set, has no effect — the endpoint is always resolved from
+    ///         <see cref="ClientEnvironment" />.
+    ///     </para>
+    /// </remarks>
+    public Uri? EndpointOverrideUri { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the IETF BCP 47 language tag that identifies the locale
+    ///     used for address validation responses returned by the FedEx API.
+    /// </summary>
+    /// <remarks>
+    ///     Defaults to <see cref="CultureInfo.CurrentCulture" />.<see cref="CultureInfo.Name" />
+    ///     of the executing thread at the time the options object is
+    ///     constructed. Use a value such as <c>en-US</c> or <c>fr-FR</c> to
+    ///     request responses in a specific language and region.
+    /// </remarks>
+    public string Locale { get; set; } = CultureInfo.CurrentCulture.Name;
+
+    /// <summary>
+    ///     Performs cross-property validation on the options object.
+    /// </summary>
+    /// <param name="validationContext">
+    ///     The context in which validation is performed.
+    /// </param>
+    /// <returns>
+    ///     A collection of <see cref="ValidationResult" /> instances describing
+    ///     any validation failures, or an empty collection if the options are
+    ///     valid.
+    /// </returns>
+    /// <remarks>
+    ///     Validates that <see cref="EndpointOverrideUri" /> is not
+    ///     <see langword="null" /> when <see cref="ClientEnvironment" /> is
+    ///     <see cref="ClientEnvironment.SANDBOX" />, since the
+    ///     sandbox environment requires an explicit endpoint to target a local
+    ///     mock server.
+    /// </remarks>
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if ( ClientEnvironment == ClientEnvironment.SANDBOX && EndpointOverrideUri is null )
+        {
+            yield return new ValidationResult(
+                $"{nameof(EndpointOverrideUri)} must be set when {nameof(ClientEnvironment)} is {nameof(ClientEnvironment.SANDBOX)}.",
+                [nameof(EndpointOverrideUri),]);
+        }
+
+        if ( !Constants.SupportedLocales.Contains(Locale) )
+        {
+            yield return new ValidationResult(
+                $"'{Locale}' is not a supported IETF BCP 47 language tag.",
+                [nameof(Locale),]);
+        }
+    }
 }

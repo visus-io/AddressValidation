@@ -3,7 +3,7 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Integration.FedEx.Tests")]
 namespace Visus.AddressValidation.Integration.FedEx.Configuration
 {
-    public sealed class FedExServiceOptions
+    public sealed class FedExServiceOptions : System.ComponentModel.DataAnnotations.IValidatableObject
     {
         public const string SectionName = "AddressValidationSettings:FedEx";
         public FedExServiceOptions() { }
@@ -15,6 +15,9 @@ namespace Visus.AddressValidation.Integration.FedEx.Configuration
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ClientSecret { get; set; }
         public System.Uri EndpointBaseUri { get; }
+        public System.Uri? EndpointOverrideUri { get; set; }
+        public string Locale { get; set; }
+        public System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext) { }
     }
     [Microsoft.Extensions.Options.OptionsValidator]
     public sealed class FedExServiceOptionsValidator : Microsoft.Extensions.Options.IValidateOptions<Visus.AddressValidation.Integration.FedEx.Configuration.FedExServiceOptions>
@@ -30,6 +33,7 @@ namespace Visus.AddressValidation.Integration.FedEx
         public static readonly System.Uri DevelopmentEndpointBaseUri;
         public static readonly System.Uri ProductionEndpointBaseUri;
         public static readonly System.Collections.Frozen.FrozenSet<Visus.AddressValidation.Abstractions.CountryCode> SupportedCountries;
+        public static readonly System.Collections.Frozen.FrozenSet<string> SupportedLocales;
     }
 }
 namespace Visus.AddressValidation.Integration.FedEx.Extensions
@@ -45,6 +49,7 @@ namespace Visus.AddressValidation.Integration.FedEx.Models
     {
         public FedExAddressValidationRequest() { }
         public string? ClientReferenceId { get; set; }
+        public string? CustomerTransactionId { get; set; }
         public override string? NoPostalCodeFallback { get; }
     }
 }

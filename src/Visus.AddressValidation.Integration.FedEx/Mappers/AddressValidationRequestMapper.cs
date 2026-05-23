@@ -27,6 +27,7 @@ internal sealed class AddressValidationRequestMapper : IApiRequestMapper<FedExAd
                     ClientReferenceId = request.ClientReferenceId,
                 },
             ],
+            CustomerTransactionId = request.CustomerTransactionId,
         };
     }
 }

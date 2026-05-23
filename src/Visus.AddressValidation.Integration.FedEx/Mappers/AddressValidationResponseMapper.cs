@@ -40,9 +40,11 @@ internal sealed class AddressValidationResponseMapper : IApiResponseMapper<ApiRe
         ApiResponse response, ApiResponse.ResolvedAddress address)
     {
         Dictionary<string, object?> data = new(StringComparer.OrdinalIgnoreCase);
+
         data.Merge(response.GetCustomResponseData());
         data.Merge(address.GetCustomResponseData());
         data.Merge(address.Attributes.GetCustomResponseData());
+
         return data.AsReadOnly();
     }
 }

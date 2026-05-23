@@ -16,4 +16,9 @@ public sealed class FedExAddressValidationRequest : AbstractAddressValidationReq
     ///     Gets or sets the Client Reference ID
     /// </summary>
     public string? ClientReferenceId { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the Customer Transaction ID used to identify the transaction.
+    /// </summary>
+    public string? CustomerTransactionId { get; set; }
 }

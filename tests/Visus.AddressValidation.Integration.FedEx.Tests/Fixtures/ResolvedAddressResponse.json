@@ -1,0 +1,64 @@
+{
+    "transactionId": "APIF_SV_ADVC_TxID9e0329e5-fcb0-40c7-bb92-5adc0c3825b2",
+    "customerTransactionId": "APIF_SV_ADVC_TxIDcustomer_test",
+    "output": {
+        "alerts": [
+            {
+                "code": "VIRTUAL.RESPONSE",
+                "message": "This is a Virtual Response.",
+                "alertType": "NOTE"
+            }
+        ],
+        "resolvedAddresses": [
+            {
+                "streetLinesToken": [
+                    "7372 PARKRIDGE BLVD",
+                    "APT 286"
+                ],
+                "city": "IRVING",
+                "stateOrProvinceCode": "TX",
+                "postalCode": "75063-8365",
+                "parsedPostalCode": {
+                    "base": "75063",
+                    "addOn": "8365",
+                    "deliveryPoint": "61"
+                },
+                "countryCode": "US",
+                "classification": "UNKNOWN",
+                "ruralRouteHighwayContract": false,
+                "generalDelivery": false,
+                "customerMessages": [],
+                "normalizedStatusNameDPV": true,
+                "standardizedStatusNameMatchSource": "Postal",
+                "resolutionMethodName": "USPS_VALIDATE",
+                "attributes": {
+                    "POBox": false,
+                    "POBoxOnlyZIP": false,
+                    "SplitZIP": false,
+                    "SuiteRequiredButMissing": false,
+                    "InvalidSuiteNumber": false,
+                    "ResolutionInput": "RAW_ADDRESS",
+                    "DPV": true,
+                    "ResolutionMethod": "USPS_VALIDATE",
+                    "DataVintage": "February 2023",
+                    "MatchSource": "Postal",
+                    "CountrySupported": true,
+                    "ValidlyFormed": true,
+                    "Matched": true,
+                    "Resolved": true,
+                    "Inserted": false,
+                    "MultiUnitBase": false,
+                    "ZIP11Match": true,
+                    "ZIP4Match": true,
+                    "UniqueZIP": false,
+                    "StreetAddress": true,
+                    "RRConversion": false,
+                    "ValidMultiUnit": true,
+                    "AddressType": "STANDARDIZED",
+                    "AddressPrecision": "MULTI_TENANT_UNIT",
+                    "MultipleMatches": false
+                }
+            }
+        ]
+    }
+}

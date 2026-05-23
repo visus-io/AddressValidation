@@ -7,10 +7,17 @@
 
   <ItemGroup>
     <PackageReference Include="TUnit"/>
+    <PackageReference Include="WireMock.Net" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Visus.AddressValidation.Integration.FedEx\Visus.AddressValidation.Integration.FedEx.csproj"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Fixtures\**\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

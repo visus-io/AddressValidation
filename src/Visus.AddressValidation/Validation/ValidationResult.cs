@@ -15,10 +15,10 @@ internal sealed class ValidationResult : IValidationResult
         {
             switch ( state.Severity )
             {
-                case ValidationSeverity.Error:
+                case ValidationSeverity.ERROR:
                     errors.Add(state);
                     break;
-                case ValidationSeverity.Warning:
+                case ValidationSeverity.WARNING:
                     warnings.Add(state);
                     break;
             }

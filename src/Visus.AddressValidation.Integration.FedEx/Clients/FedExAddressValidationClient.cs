@@ -31,6 +31,13 @@ internal sealed class FedExAddressValidationClient
 
         using HttpRequestMessage httpRequest = new(HttpMethod.Post, requestUri);
 
+        if ( !string.IsNullOrWhiteSpace(request.CustomerTransactionId) )
+        {
+            httpRequest.Headers.Add("x-customer-transaction-id", request.CustomerTransactionId);
+        }
+
+        httpRequest.Headers.Add("x-locale", _options.Value.Locale);
+
         httpRequest.Content = JsonContent.Create(request, ApiRequestJsonSerializerContext.Default.ApiRequest);
 
         using HttpResponseMessage response = await _httpClient.SendAsync(httpRequest, cancellationToken)
