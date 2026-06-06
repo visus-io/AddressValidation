@@ -46,7 +46,7 @@ internal sealed class AddressValidationServiceTests : IAsyncDisposable
 
         services.PostConfigure<FedExServiceOptions>(o =>
         {
-            o.EndpointOverrideUri = new Uri(_wireMockServer.Url!);
+            o.EndpointUriOverride = new Uri(_wireMockServer.Url!);
         });
 
         _serviceProvider = services.BuildServiceProvider();

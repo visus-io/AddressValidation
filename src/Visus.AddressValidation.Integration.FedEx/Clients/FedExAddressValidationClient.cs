@@ -27,7 +27,7 @@ internal sealed class FedExAddressValidationClient
     private async Task<ApiResponse?> ValidateAddressInternalAsync(ApiRequest request,
                                                                   CancellationToken cancellationToken)
     {
-        Uri requestUri = new(_options.Value.EndpointBaseUri, "/address/v1/addresses/resolve");
+        Uri requestUri = new(_options.Value.EndpointUri, "/address/v1/addresses/resolve");
 
         using HttpRequestMessage httpRequest = new(HttpMethod.Post, requestUri);
 

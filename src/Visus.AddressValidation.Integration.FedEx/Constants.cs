@@ -11,12 +11,12 @@ public static class Constants
     /// <summary>
     ///     FedEx API Development Endpoint
     /// </summary>
-    public static readonly Uri DevelopmentEndpointBaseUri = new("https://apis-sandbox.fedex.com");
+    public static readonly Uri DevelopmentEndpointUri = new("https://apis-sandbox.fedex.com");
 
     /// <summary>
     ///     FedEx API Production Endpoint
     /// </summary>
-    public static readonly Uri ProductionEndpointBaseUri = new("https://apis.fedex.com");
+    public static readonly Uri ProductionEndpointUri = new("https://apis.fedex.com");
 
     /// <summary>
     ///     Countries that are supported by the FedEx Address Validation API.

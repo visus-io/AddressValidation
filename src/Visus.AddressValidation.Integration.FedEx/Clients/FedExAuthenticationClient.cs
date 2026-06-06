@@ -20,7 +20,7 @@ internal sealed class FedExAuthenticationClient : IAuthenticationClient
 
     public async Task<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
-        Uri requestUri = new(_options.Value.EndpointBaseUri, "/oauth/token");
+        Uri requestUri = new(_options.Value.EndpointUri, "/oauth/token");
 
         List<KeyValuePair<string, string>> payload =
         [

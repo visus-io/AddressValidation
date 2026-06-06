@@ -18,13 +18,13 @@ public sealed class FedExServiceOptions : IValidatableObject
     ///     Gets the base URI of the FedEx API endpoint, derived from the
     ///     current <see cref="ClientEnvironment" /> value.
     /// </summary>
-    public Uri EndpointBaseUri =>
+    public Uri EndpointUri =>
         ClientEnvironment switch
         {
-            ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointBaseUri,
-            ClientEnvironment.PRODUCTION => Constants.ProductionEndpointBaseUri,
-            ClientEnvironment.SANDBOX => EndpointOverrideUri!,
-            _ => Constants.DevelopmentEndpointBaseUri,
+            ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointUri,
+            ClientEnvironment.PRODUCTION => Constants.ProductionEndpointUri,
+            ClientEnvironment.SANDBOX => EndpointUriOverride!,
+            _ => Constants.DevelopmentEndpointUri,
         };
 
     /// <summary>
@@ -73,7 +73,7 @@ public sealed class FedExServiceOptions : IValidatableObject
     ///         <see cref="ClientEnvironment" />.
     ///     </para>
     /// </remarks>
-    public Uri? EndpointOverrideUri { get; set; }
+    public Uri? EndpointUriOverride { get; set; }
 
     /// <summary>
     ///     Gets or sets the IETF BCP 47 language tag that identifies the locale
@@ -99,7 +99,7 @@ public sealed class FedExServiceOptions : IValidatableObject
     ///     valid.
     /// </returns>
     /// <remarks>
-    ///     Validates that <see cref="EndpointOverrideUri" /> is not
+    ///     Validates that <see cref="EndpointUriOverride" /> is not
     ///     <see langword="null" /> when <see cref="ClientEnvironment" /> is
     ///     <see cref="ClientEnvironment.SANDBOX" />, since the
     ///     sandbox environment requires an explicit endpoint to target a local
@@ -107,11 +107,11 @@ public sealed class FedExServiceOptions : IValidatableObject
     /// </remarks>
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if ( ClientEnvironment == ClientEnvironment.SANDBOX && EndpointOverrideUri is null )
+        if ( ClientEnvironment == ClientEnvironment.SANDBOX && EndpointUriOverride is null )
         {
             yield return new ValidationResult(
-                $"{nameof(EndpointOverrideUri)} must be set when {nameof(ClientEnvironment)} is {nameof(ClientEnvironment.SANDBOX)}.",
-                [nameof(EndpointOverrideUri),]);
+                $"{nameof(EndpointUriOverride)} must be set when {nameof(ClientEnvironment)} is {nameof(ClientEnvironment.SANDBOX)}.",
+                [nameof(EndpointUriOverride),]);
         }
 
         if ( Locale is not null && !Constants.SupportedLocales.Contains(Locale) )

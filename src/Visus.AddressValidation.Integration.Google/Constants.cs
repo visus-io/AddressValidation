@@ -9,6 +9,16 @@ using AddressValidation.Abstractions;
 public static class Constants
 {
     /// <summary>
+    ///     Google Authentication API Endpoint (used for both production and development environments)
+    /// </summary>
+    public static readonly Uri ProductionAuthenticationUri = new("https://oauth2.googleapis.com/token");
+
+    /// <summary>
+    ///     Google Address Validation API Production Endpoint (used for both production and development environments)
+    /// </summary>
+    public static readonly Uri ProductionEndpointUri = new("https://addressvalidation.googleapis.com");
+
+    /// <summary>
     ///     Countries that are supported by the Google Address Validation API.
     /// </summary>
     public static readonly FrozenSet<CountryCode> SupportedCountries =

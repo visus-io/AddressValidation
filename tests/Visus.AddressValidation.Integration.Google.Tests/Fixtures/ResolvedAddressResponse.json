@@ -1,0 +1,144 @@
+{
+  "result": {
+    "verdict": {
+      "inputGranularity": "PREMISE",
+      "validationGranularity": "PREMISE",
+      "geocodeGranularity": "PREMISE",
+      "addressComplete": true,
+      "hasInferredComponents": true,
+      "possibleNextAction": "ACCEPT"
+    },
+    "address": {
+      "formattedAddress": "1600 Amphitheatre Parkway, Mountain View, CA 94043-1351, USA",
+      "postalAddress": {
+        "regionCode": "US",
+        "languageCode": "en",
+        "postalCode": "94043-1351",
+        "administrativeArea": "CA",
+        "locality": "Mountain View",
+        "addressLines": [
+          "1600 Amphitheatre Pkwy"
+        ]
+      },
+      "addressComponents": [
+        {
+          "componentName": {
+            "text": "1600"
+          },
+          "componentType": "street_number",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "Amphitheatre Parkway",
+            "languageCode": "en"
+          },
+          "componentType": "route",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "Mountain View",
+            "languageCode": "en"
+          },
+          "componentType": "locality",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "CA",
+            "languageCode": "en"
+          },
+          "componentType": "administrative_area_level_1",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "94043"
+          },
+          "componentType": "postal_code",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "USA",
+            "languageCode": "en"
+          },
+          "componentType": "country",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "1351"
+          },
+          "componentType": "postal_code_suffix",
+          "confirmationLevel": "CONFIRMED",
+          "inferred": true
+        }
+      ]
+    },
+    "geocode": {
+      "location": {
+        "latitude": 37.4224864,
+        "longitude": -122.0855962
+      },
+      "plusCode": {
+        "globalCode": "849VCWC7+XQ"
+      },
+      "bounds": {
+        "low": {
+          "latitude": 37.4221145,
+          "longitude": -122.0860002
+        },
+        "high": {
+          "latitude": 37.4228775,
+          "longitude": -122.085133
+        }
+      },
+      "featureSizeMeters": 59.702682,
+      "placeId": "ChIJiSSC8QK6j4AR98Thup8mqTc",
+      "placeTypes": [
+        "premise"
+      ]
+    },
+    "metadata": {
+      "business": true,
+      "residential": false
+    },
+    "uspsData": {
+      "standardizedAddress": {
+        "firstAddressLine": "1600 AMPHITHEATRE PKWY",
+        "cityStateZipAddressLine": "MOUNTAIN VIEW CA 94043-1351",
+        "city": "MOUNTAIN VIEW",
+        "state": "CA",
+        "zipCode": "94043",
+        "zipCodeExtension": "1351"
+      },
+      "deliveryPointCode": "00",
+      "deliveryPointCheckDigit": "0",
+      "dpvConfirmation": "Y",
+      "dpvFootnote": "AABB",
+      "dpvCmra": "N",
+      "dpvVacant": "N",
+      "dpvNoStat": "Y",
+      "carrierRoute": "C909",
+      "carrierRouteIndicator": "D",
+      "postOfficeCity": "MOUNTAIN VIEW",
+      "postOfficeState": "CA",
+      "fipsCountyCode": "085",
+      "county": "SANTA CLARA",
+      "elotNumber": "0103",
+      "elotFlag": "A",
+      "addressRecordType": "S",
+      "dpvNoStatReasonCode": 5,
+      "dpvDrop": "N",
+      "dpvThrowback": "N",
+      "dpvNonDeliveryDays": "N",
+      "dpvNoSecureLocation": "N",
+      "dpvPbsa": "N",
+      "dpvDoorNotAccessible": "N",
+      "dpvEnhancedDeliveryCode": "Y"
+    }
+  },
+  "responseId": "19b1f620-697e-4a4d-b994-a38eaf453e9f"
+}
