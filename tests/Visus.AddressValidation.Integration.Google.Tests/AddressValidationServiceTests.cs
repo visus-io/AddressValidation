@@ -164,7 +164,7 @@ internal sealed class AddressValidationServiceTests : IAsyncDisposable
         {
             response.Should().NotBeNull();
             response.Errors.Should().ContainSingle()
-                    .Which.Should().Be("400: Address is missing from request.");
+                    .Which.Should().Be("BadRequest: Address is missing from request.");
         }
     }
 
