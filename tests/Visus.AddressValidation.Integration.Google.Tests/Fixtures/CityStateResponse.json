@@ -1,0 +1,78 @@
+{
+  "result": {
+    "verdict": {
+      "inputGranularity": "PREMISE",
+      "validationGranularity": "PREMISE",
+      "geocodeGranularity": "PREMISE",
+      "addressComplete": true
+    },
+    "address": {
+      "formattedAddress": "1 Lim Ah Pin Road, Singapore 547809",
+      "postalAddress": {
+        "regionCode": "SG",
+        "languageCode": "en",
+        "postalCode": "547809",
+        "addressLines": [
+          "1 Lim Ah Pin Rd"
+        ]
+      },
+      "addressComponents": [
+        {
+          "componentName": {
+            "text": "1"
+          },
+          "componentType": "street_number",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "Lim Ah Pin Road",
+            "languageCode": "en"
+          },
+          "componentType": "route",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "547809"
+          },
+          "componentType": "postal_code",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "Singapore",
+            "languageCode": "en"
+          },
+          "componentType": "country",
+          "confirmationLevel": "CONFIRMED"
+        }
+      ]
+    },
+    "geocode": {
+      "location": {
+        "latitude": 1.3633167,
+        "longitude": 103.8877793
+      },
+      "plusCode": {
+        "globalCode": "6PH59V7Q+84"
+      },
+      "bounds": {
+        "low": {
+          "latitude": 1.3632281,
+          "longitude": 103.8876643
+        },
+        "high": {
+          "latitude": 1.3633998,
+          "longitude": 103.8878362
+        }
+      },
+      "featureSizeMeters": 16.139568,
+      "placeId": "ChIJjyf60LQX2jERd2anUbtKry4",
+      "placeTypes": [
+        "premise"
+      ]
+    }
+  },
+  "responseId": "5f083015-6c4f-44ba-8d32-c28bc47ac9bf"
+}

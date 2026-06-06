@@ -1,0 +1,100 @@
+{
+  "result": {
+    "verdict": {
+      "inputGranularity": "PREMISE",
+      "validationGranularity": "PREMISE",
+      "geocodeGranularity": "PREMISE",
+      "addressComplete": true
+    },
+    "address": {
+      "formattedAddress": "111 Richmond Street West, Toronto, ON M5H 2G4, Canada",
+      "postalAddress": {
+        "regionCode": "CA",
+        "languageCode": "en",
+        "postalCode": "M5H 2G4",
+        "administrativeArea": "ON",
+        "locality": "Toronto",
+        "addressLines": [
+          "111 Richmond St W"
+        ]
+      },
+      "addressComponents": [
+        {
+          "componentName": {
+            "text": "111"
+          },
+          "componentType": "street_number",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "Richmond Street West",
+            "languageCode": "en"
+          },
+          "componentType": "route",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "Toronto",
+            "languageCode": "en"
+          },
+          "componentType": "locality",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "ON",
+            "languageCode": "en"
+          },
+          "componentType": "administrative_area_level_1",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "M5H 2G4"
+          },
+          "componentType": "postal_code",
+          "confirmationLevel": "CONFIRMED"
+        },
+        {
+          "componentName": {
+            "text": "Canada",
+            "languageCode": "en"
+          },
+          "componentType": "country",
+          "confirmationLevel": "CONFIRMED"
+        }
+      ]
+    },
+    "geocode": {
+      "location": {
+        "latitude": 43.6502911,
+        "longitude": -79.3839517
+      },
+      "plusCode": {
+        "globalCode": "87M2MJ28+4C"
+      },
+      "bounds": {
+        "low": {
+          "latitude": 43.6500586,
+          "longitude": -79.384432
+        },
+        "high": {
+          "latitude": 43.6505814,
+          "longitude": -79.3834231
+        }
+      },
+      "featureSizeMeters": 53.392426,
+      "placeId": "ChIJv6vnls00K4gRqb4bbZ2XqfE",
+      "placeTypes": [
+        "premise"
+      ]
+    },
+    "metadata": {
+      "business": true,
+      "residential": false
+    }
+  },
+  "responseId": "947adeee-e51e-40dc-85b0-967144d2c346"
+}

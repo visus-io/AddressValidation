@@ -14,8 +14,8 @@ namespace Visus.AddressValidation.Integration.FedEx.Configuration
         public required string ClientId { get; set; }
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ClientSecret { get; set; }
-        public System.Uri EndpointBaseUri { get; }
-        public System.Uri? EndpointOverrideUri { get; set; }
+        public System.Uri EndpointUri { get; }
+        public System.Uri? EndpointUriOverride { get; set; }
         public string? Locale { get; set; }
         public System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext) { }
     }
@@ -30,8 +30,8 @@ namespace Visus.AddressValidation.Integration.FedEx
 {
     public static class Constants
     {
-        public static readonly System.Uri DevelopmentEndpointBaseUri;
-        public static readonly System.Uri ProductionEndpointBaseUri;
+        public static readonly System.Uri DevelopmentEndpointUri;
+        public static readonly System.Uri ProductionEndpointUri;
         public static readonly System.Collections.Frozen.FrozenSet<Visus.AddressValidation.Abstractions.CountryCode> SupportedCountries;
         public static readonly System.Collections.Frozen.FrozenSet<string> SupportedLocales;
     }

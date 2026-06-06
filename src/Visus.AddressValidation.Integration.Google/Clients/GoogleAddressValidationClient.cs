@@ -8,8 +8,6 @@ using Serialization.Json;
 
 internal sealed class GoogleAddressValidationClient
 {
-    private static readonly Uri ProductionEndpointBaseUri = new("https://addressvalidation.googleapis.com");
-
     private readonly HttpClient _httpClient;
 
     public GoogleAddressValidationClient(HttpClient httpClient, IOptions<GoogleServiceOptions> options)
@@ -17,7 +15,7 @@ internal sealed class GoogleAddressValidationClient
         ArgumentNullException.ThrowIfNull(options);
 
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        _httpClient.BaseAddress = ProductionEndpointBaseUri;
+        _httpClient.BaseAddress = options.Value.EndpointUri;
         _httpClient.DefaultRequestHeaders.Add("X-Goog-User-Project", options.Value.ProjectId);
     }
 

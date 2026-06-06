@@ -13,5 +13,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Visus.AddressValidation.Integration.Google\Visus.AddressValidation.Integration.Google.csproj"/>
   </ItemGroup>
-
+  
+  <ItemGroup>
+    <Content Include="Fixtures\**\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
 </Project>

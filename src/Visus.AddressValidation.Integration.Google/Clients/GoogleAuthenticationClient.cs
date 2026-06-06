@@ -13,8 +13,6 @@ using Microsoft.IdentityModel.Tokens;
 
 internal sealed class GoogleAuthenticationClient : IAuthenticationClient
 {
-    private static readonly Uri AuthenticationUrl = new("https://oauth2.googleapis.com/token");
-
     private readonly HttpClient _httpClient;
 
     private readonly IOptions<GoogleServiceOptions> _options;
@@ -54,7 +52,7 @@ internal sealed class GoogleAuthenticationClient : IAuthenticationClient
         };
 
         JwtSecurityToken token = new(_options.Value.ServiceAccountEmail,
-            AuthenticationUrl.ToString(),
+            _options.Value.AuthenticationUri.ToString(),
             claims,
             signingCredentials: credentials);
 
@@ -70,7 +68,7 @@ internal sealed class GoogleAuthenticationClient : IAuthenticationClient
             new("assertion", jwtToken),
         ];
 
-        using HttpRequestMessage request = new(HttpMethod.Post, AuthenticationUrl);
+        using HttpRequestMessage request = new(HttpMethod.Post, _options.Value.AuthenticationUri);
 
         request.Content = new FormUrlEncodedContent(payload);
 
