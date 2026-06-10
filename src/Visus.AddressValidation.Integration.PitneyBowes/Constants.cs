@@ -11,12 +11,12 @@ public static class Constants
     /// <summary>
     ///     Pitney Bowes Development Endpoint
     /// </summary>
-    public static readonly Uri DevelopmentEndpointBaseUri = new("https://shipping-api-sandbox.pitneybowes.com/");
+    public static readonly Uri DevelopmentEndpointUri = new("https://shipping-api-sandbox.pitneybowes.com/");
 
     /// <summary>
     ///     Pitney Bowes Production Endpoint
     /// </summary>
-    public static readonly Uri ProductionEndpointBaseUri = new("https://shipping-api.pitneybowes.com/");
+    public static readonly Uri ProductionEndpointUri = new("https://shipping-api.pitneybowes.com/");
 
     /// <summary>
     ///     Countries that are supported by the Pitney Bowes Address Validation API.

@@ -14,4 +14,10 @@
     <ProjectReference Include="..\..\src\Visus.AddressValidation.Integration.PitneyBowes\Visus.AddressValidation.Integration.PitneyBowes.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Fixtures\**\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

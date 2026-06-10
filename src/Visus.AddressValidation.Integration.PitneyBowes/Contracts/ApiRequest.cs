@@ -12,7 +12,7 @@ internal sealed class ApiRequest
     public required CountryCode CountryCode { get; init; }
 
     [JsonIgnore]
-    public required bool IncludeSuggestions { get; init; }
+    public bool IncludeSuggestions { get; init; }
 
     public required string PostalCode { get; init; }
 

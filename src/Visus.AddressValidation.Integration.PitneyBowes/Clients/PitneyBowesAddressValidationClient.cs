@@ -29,9 +29,9 @@ internal sealed class PitneyBowesAddressValidationClient
                                                                   CancellationToken cancellationToken)
     {
         Uri requestUri = request.IncludeSuggestions
-                             ? new Uri(_options.Value.EndpointBaseUri,
+                             ? new Uri(_options.Value.EndpointUri,
                                  "/shippingservices/v1/addresses/verify-suggest?returnSuggestions=true")
-                             : new Uri(_options.Value.EndpointBaseUri,
+                             : new Uri(_options.Value.EndpointUri,
                                  "/shippingservices/v1/addresses/verify?minimalAddressValidation=false");
 
         using HttpRequestMessage httpRequest = new(HttpMethod.Post, requestUri);
