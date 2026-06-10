@@ -99,11 +99,18 @@ public sealed class FedExServiceOptions : IValidatableObject
     ///     valid.
     /// </returns>
     /// <remarks>
-    ///     Validates that <see cref="EndpointUriOverride" /> is not
-    ///     <see langword="null" /> when <see cref="ClientEnvironment" /> is
-    ///     <see cref="ClientEnvironment.SANDBOX" />, since the
-    ///     sandbox environment requires an explicit endpoint to target a local
-    ///     mock server.
+    ///     <para>
+    ///         Validates that <see cref="EndpointUriOverride" /> is not
+    ///         <see langword="null" /> when <see cref="ClientEnvironment" /> is
+    ///         <see cref="ClientEnvironment.SANDBOX" />, since the sandbox
+    ///         environment requires an explicit endpoint to target a local mock
+    ///         server.
+    ///     </para>
+    ///     <para>
+    ///         Also validates that <see cref="Locale" />, when set, is one of
+    ///         the IETF BCP 47 language tags listed in
+    ///         <see cref="Constants.SupportedLocales" />.
+    ///     </para>
     /// </remarks>
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
