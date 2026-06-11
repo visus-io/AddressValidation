@@ -714,9 +714,9 @@ namespace Visus.AddressValidation.Services
     public abstract class AbstractAuthenticationService<TClient>
         where TClient : Visus.AddressValidation.Http.IAuthenticationClient
     {
+        protected const string CacheKeyTag = "vs-ave-auth:";
         protected AbstractAuthenticationService(TClient authenticationClient, Microsoft.Extensions.Caching.Hybrid.HybridCache cache) { }
-        public string? CacheKey { get; }
-        protected abstract string? GenerateCacheKey();
+        protected abstract string GenerateCacheKey();
         public System.Threading.Tasks.Task<string?> GetAccessTokenAsync(System.Threading.CancellationToken cancellationToken = default) { }
     }
     public interface IAddressValidationService<in TRequest>
