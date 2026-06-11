@@ -10,11 +10,11 @@ using NSubstitute;
 internal sealed class AbstractAuthenticationServiceTests : IAsyncDisposable
 {
     private readonly IAuthenticationClient _authenticationClient;
-    
+
     private readonly HybridCache _cache;
-    
+
     private readonly ServiceProvider _serviceProvider;
-    
+
     private readonly TestAuthenticationService _sut;
 
     public AbstractAuthenticationServiceTests()
@@ -180,6 +180,25 @@ internal sealed class AbstractAuthenticationServiceTests : IAsyncDisposable
 
         results.Should().AllSatisfy(r => r.Should().Be("test-token"));
         callCount.Should().Be(1);
+    }
+
+    [Test]
+    public async Task GetAccessTokenAsync_WhenGenerateCacheKeyReturnsInvalidKey_ThrowsInvalidOperationException(CancellationToken cancellationToken)
+    {
+        InvalidCacheKeyAuthenticationService sut = new(_authenticationClient, _cache);
+
+        Func<Task> act = () => sut.GetAccessTokenAsync(cancellationToken);
+
+        await act.Should().ThrowExactlyAsync<InvalidOperationException>().ConfigureAwait(false);
+    }
+
+    private sealed class InvalidCacheKeyAuthenticationService(IAuthenticationClient client, HybridCache cache)
+        : AbstractAuthenticationService<IAuthenticationClient>(client, cache)
+    {
+        protected override string GenerateCacheKey()
+        {
+            return "vs-ave-auth:test key with spaces!";
+        }
     }
 
     private sealed class TestAuthenticationService(IAuthenticationClient client, HybridCache cache)
