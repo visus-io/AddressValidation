@@ -18,10 +18,10 @@ internal sealed class PitneyBowesAuthenticationService : AbstractAuthenticationS
         _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
-    protected override string? GenerateCacheKey()
+    protected override string GenerateCacheKey()
     {
-        return string.IsNullOrWhiteSpace(_options.Value.DeveloperId)
-                   ? null
-                   : $"VS_AVE_CACHE_PB_ACCESS_TOKEN_{_options.Value.DeveloperId}:{_options.Value.ClientEnvironment}";
+        return string.IsNullOrWhiteSpace(_options.Value.DeveloperId) 
+                   ? throw new InvalidOperationException($"{nameof(PitneyBowesServiceOptions.DeveloperId)} is required to generate a cache key.") 
+                   : $"{CacheKeyTag}pb:{_options.Value.DeveloperId}:{_options.Value.ClientEnvironment}";
     }
 }

@@ -12,6 +12,11 @@ using Microsoft.Extensions.Caching.Hybrid;
 /// </typeparam>
 public abstract class AbstractAuthenticationService<TClient> where TClient : IAuthenticationClient
 {
+    /// <summary>
+    ///     Prefix applied to all cache keys produced by this service to namespace them within the shared cache.
+    /// </summary>
+    protected const string CacheKeyTag = "vs-ave-auth:";
+
     private readonly TClient _authenticationClient;
 
     private readonly HybridCache _cache;
@@ -35,17 +40,25 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
         _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
-    /// <summary>
-    ///     Key used by the underlying cache service to retrieve the cached token response.
-    /// </summary>
-    public string? CacheKey
+    private string CacheKey
     {
         get
         {
-            if ( string.IsNullOrWhiteSpace(field) )
+            if ( !string.IsNullOrWhiteSpace(field) )
             {
-                field = GenerateCacheKey();
+                return field;
             }
+
+            string key = GenerateCacheKey();
+
+            if ( !IsValidCacheKey(key) )
+            {
+                throw new InvalidOperationException(
+                    $"Cache key '{key}' returned by {nameof(GenerateCacheKey)} contains invalid characters. "
+                  + "Keys must only contain A-Z, a-z, 0-9, underscores, hyphens, and colons.");
+            }
+
+            field = key;
 
             return field;
         }
@@ -57,8 +70,7 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
     /// <returns>
     ///     The current access token returned by the authentication service, or <see langword="null" /> if
-    ///     <see cref="CacheKey" /> is <see langword="null" /> or empty, or if the authentication service
-    ///     did not return a valid token.
+    ///     the authentication service did not return a valid token.
     /// </returns>
     /// <remarks>
     ///     <para>
@@ -75,11 +87,6 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     /// </remarks>
     public async Task<string?> GetAccessTokenAsync(CancellationToken cancellationToken = default)
     {
-        if ( string.IsNullOrWhiteSpace(CacheKey) )
-        {
-            return null;
-        }
-
         bool factoryRan = false;
         TokenResponse? fetched = null;
 
@@ -125,6 +132,17 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     /// <summary>
     ///     Generates a unique cache key for caching retrieved access tokens.
     /// </summary>
-    /// <returns>Generated unique key value or <see langword="null" />.</returns>
-    protected abstract string? GenerateCacheKey();
+    /// <returns>
+    ///     A non-null, non-empty string containing only A-Z, a-z, 0-9, underscores, hyphens, and colons.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when the required credentials needed to construct the key are absent or invalid,
+    ///     or when the returned key contains characters outside the allowed set.
+    /// </exception>
+    protected abstract string GenerateCacheKey();
+
+    private static bool IsValidCacheKey(string key)
+    {
+        return key.Length > 0 && key.All(c => char.IsAsciiLetterOrDigit(c) || c is '_' or '-' or ':');
+    }
 }
