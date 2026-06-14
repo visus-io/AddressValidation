@@ -19,13 +19,9 @@ internal sealed class AddressValidationResponseMapper : IApiResponseMapper<ApiRe
             return addressKeyFormat.PostcodePrimaryLow;
         }
 
-        HashSet<string?> codes = new(StringComparer.OrdinalIgnoreCase)
-        {
-            addressKeyFormat.PostcodePrimaryLow,
-            addressKeyFormat.PostcodeExtendedLow,
-        };
-
-        return string.Join("-", [.. codes,]);
+        return string.IsNullOrWhiteSpace(addressKeyFormat.PostcodeExtendedLow)
+                   ? addressKeyFormat.PostcodePrimaryLow
+                   : $"{addressKeyFormat.PostcodePrimaryLow}-{addressKeyFormat.PostcodeExtendedLow}";
     }
 
     public IAddressValidationResponse Map(ApiResponse response, IValidationResult? validationResult = null)

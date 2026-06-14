@@ -51,6 +51,12 @@ namespace Visus.AddressValidation.Resources {
             }
         }
         
+        public static string Validation_Field_MustBeBetween {
+            get {
+                return ResourceManager.GetString("Validation_Field_MustBeBetween", resourceCulture);
+            }
+        }
+
         public static string Validation_Address_LinesCannotExceedThree {
             get {
                 return ResourceManager.GetString("Validation_Address_LinesCannotExceedThree", resourceCulture);

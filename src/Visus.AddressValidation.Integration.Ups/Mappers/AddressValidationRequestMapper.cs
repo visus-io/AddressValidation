@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.Ups.Mappers;
 
+using System.Globalization;
 using AddressValidation.Mappers;
 using Contracts;
 using Models;
@@ -15,6 +16,11 @@ internal sealed class AddressValidationRequestMapper : IApiRequestMapper<UpsAddr
         {
             XavRequest = new ApiRequest.UpsXavRequest
             {
+                Request = new ApiRequest.UpsRequest
+                {
+                    RequestOption = "3",
+                },
+                MaximumCandidateListSize = request.MaximumCandidateListSize?.ToString(CultureInfo.InvariantCulture),
                 AddressKeyFormat = new ApiRequest.UpsAddressKeyFormat
                 {
                     AddressLine = [..request.AddressLines,],

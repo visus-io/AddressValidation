@@ -26,7 +26,7 @@ internal sealed class UpsAddressValidationClient
 
     private async Task<ApiResponse?> ValidateAddressInternalAsync(ApiRequest request, CancellationToken cancellationToken)
     {
-        Uri requestUri = new(_options.Value.EndpointBaseUri, "/api/addressvalidation/v2/3");
+        Uri requestUri = new(_options.Value.EndpointUri, "/api/addressvalidation/v2/3");
 
         using HttpRequestMessage httpRequest = new(HttpMethod.Post, requestUri);
 

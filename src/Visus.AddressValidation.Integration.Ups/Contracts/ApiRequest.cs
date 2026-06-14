@@ -23,8 +23,17 @@ internal sealed class ApiRequest
         public required string PostcodePrimaryLow { get; init; }
     }
 
+    internal sealed class UpsRequest
+    {
+        public required string RequestOption { get; init; }
+    }
+
     internal sealed class UpsXavRequest
     {
         public required UpsAddressKeyFormat AddressKeyFormat { get; init; }
+
+        public string? MaximumCandidateListSize { get; init; }
+
+        public required UpsRequest Request { get; init; }
     }
 }

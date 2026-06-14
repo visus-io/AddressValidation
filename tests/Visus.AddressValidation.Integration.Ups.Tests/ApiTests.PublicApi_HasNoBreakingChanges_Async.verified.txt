@@ -1,9 +1,9 @@
-﻿[assembly: System.Resources.NeutralResourcesLanguage("en")]
+[assembly: System.Resources.NeutralResourcesLanguage("en")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Integration.Ups.Tests")]
 namespace Visus.AddressValidation.Integration.Ups.Configuration
 {
-    public class UpsServiceOptions
+    public class UpsServiceOptions : System.ComponentModel.DataAnnotations.IValidatableObject
     {
         public const string SectionName = "AddressValidationSettings:Ups";
         public UpsServiceOptions() { }
@@ -14,7 +14,9 @@ namespace Visus.AddressValidation.Integration.Ups.Configuration
         public required string ClientId { get; set; }
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ClientSecret { get; set; }
-        public System.Uri EndpointBaseUri { get; }
+        public System.Uri EndpointUri { get; }
+        public System.Uri? EndpointUriOverride { get; set; }
+        public System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext) { }
     }
     [Microsoft.Extensions.Options.OptionsValidator]
     public sealed class UpsServiceOptionsValidator : Microsoft.Extensions.Options.IValidateOptions<Visus.AddressValidation.Integration.Ups.Configuration.UpsServiceOptions>
@@ -27,8 +29,8 @@ namespace Visus.AddressValidation.Integration.Ups
 {
     public static class Constants
     {
-        public static readonly System.Uri DevelopmentEndpointBaseUri;
-        public static readonly System.Uri ProductionEndpointBaseUri;
+        public static readonly System.Uri DevelopmentEndpointUri;
+        public static readonly System.Uri ProductionEndpointUri;
         public static readonly System.Collections.Frozen.FrozenSet<Visus.AddressValidation.Abstractions.CountryCode> SupportedCountries;
     }
 }
@@ -44,5 +46,6 @@ namespace Visus.AddressValidation.Integration.Ups.Models
     public sealed class UpsAddressValidationRequest : Visus.AddressValidation.Models.AbstractAddressValidationRequest
     {
         public UpsAddressValidationRequest() { }
+        public int? MaximumCandidateListSize { get; set; }
     }
 }

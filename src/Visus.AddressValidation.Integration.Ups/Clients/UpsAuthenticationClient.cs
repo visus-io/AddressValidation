@@ -20,7 +20,7 @@ internal sealed class UpsAuthenticationClient : IAuthenticationClient
 
     public async Task<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
-        Uri requestUri = new(_options.Value.EndpointBaseUri, "/security/v1/oauth/token");
+        Uri requestUri = new(_options.Value.EndpointUri, "/security/v1/oauth/token");
 
         List<KeyValuePair<string, string>> payload =
         [

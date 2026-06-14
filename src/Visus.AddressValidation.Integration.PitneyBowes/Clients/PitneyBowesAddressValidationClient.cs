@@ -55,6 +55,7 @@ internal sealed class PitneyBowesAddressValidationClient
                 await response.Content.ReadFromJsonAsync(ApiResponseJsonSerializerContext.Default.AddressResult,
                                    cancellationToken)
                               .ConfigureAwait(false);
+            
             return new ApiResponse
             {
                 Result = result,

@@ -36,6 +36,16 @@ internal sealed class AddressValidationRequestValidator : AbstractAddressValidat
             return false;
         }
 
+        if ( instance.MaximumCandidateListSize is < 0 or > 50 )
+        {
+            results.Add(ValidationState.CreateError(Resources.Validation_Field_MustBeBetween,
+                nameof(instance.MaximumCandidateListSize),
+                0,
+                50));
+
+            return false;
+        }
+
         if ( _options.Value.ClientEnvironment != ClientEnvironment.DEVELOPMENT )
         {
             return true;

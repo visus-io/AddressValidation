@@ -57,12 +57,26 @@ internal sealed class ApiResponse
         public string? Message { get; set; }
     }
 
+    internal sealed class Alert
+    {
+        public string? Code { get; set; }
+
+        public string? Description { get; set; }
+    }
+
     internal sealed class XavResponse
     {
         public AddressClassification AddressClassification { get; set; } = null!;
 
+        [JsonPropertyName("Alert")]
+        public Alert[] Alerts { get; set; } = [];
+
+        public string? AmbiguousAddressIndicator { get; set; }
+
         [JsonPropertyName("Candidate")]
         public Candidate[] Candidates { get; set; } = [];
+
+        public string? NoCandidatesIndicator { get; set; }
 
         public Response Response { get; set; } = null!;
 
