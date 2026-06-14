@@ -529,6 +529,7 @@ namespace Visus.AddressValidation.Adapters
 namespace Visus.AddressValidation
 {
     [System.AttributeUsage(System.AttributeTargets.Property)]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class CustomResponseDataPropertyAttribute : System.Attribute
     {
         public CustomResponseDataPropertyAttribute() { }
