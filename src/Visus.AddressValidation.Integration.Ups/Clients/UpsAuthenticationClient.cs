@@ -1,44 +1,27 @@
 namespace Visus.AddressValidation.Integration.Ups.Clients;
 
-using System.Net.Http.Json;
-using AddressValidation.Serialization.Json;
 using Configuration;
-using Http;
+using Http.Clients;
 using Microsoft.Extensions.Options;
 
-internal sealed class UpsAuthenticationClient : IAuthenticationClient
+internal sealed class UpsAuthenticationClient : AbstractBasicAuthenticationClient
 {
-    private readonly HttpClient _httpClient;
-
     private readonly IOptions<UpsServiceOptions> _options;
 
     public UpsAuthenticationClient(HttpClient httpClient, IOptions<UpsServiceOptions> options)
+        : base(httpClient)
     {
-        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
-    public async Task<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
+    protected override string Password => _options.Value.ClientSecret;
+
+    protected override Uri TokenUri => new(_options.Value.EndpointUri, "/security/v1/oauth/token");
+
+    protected override string Username => _options.Value.ClientId;
+
+    protected override void AddAdditionalHeaders(HttpRequestMessage request)
     {
-        Uri requestUri = new(_options.Value.EndpointUri, "/security/v1/oauth/token");
-
-        List<KeyValuePair<string, string>> payload =
-        [
-            new("grant_type", "client_credentials"),
-        ];
-
-        using HttpRequestMessage request = new(HttpMethod.Post, requestUri);
-
-        request.Content = new FormUrlEncodedContent(payload);
-        request.Headers.Authorization = new BasicAuthenticationHeaderValue(_options.Value.ClientId, _options.Value.ClientSecret);
         request.Headers.Add("x-merchant-id", _options.Value.AccountNumber);
-
-        using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-
-        response.EnsureSuccessStatusCode();
-
-        return await response.Content.ReadFromJsonAsync(DefaultJsonSerializerContext.Default.TokenResponse,
-                                  cancellationToken)
-                             .ConfigureAwait(false);
     }
 }

@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using AddressValidation.Serialization.Json;
 using Configuration;
 using Http;
+using Http.Clients;
 using Microsoft.Extensions.Options;
 
 internal sealed class FedExAuthenticationClient : IAuthenticationClient

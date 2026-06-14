@@ -1,43 +1,22 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Clients;
 
-using System.Net.Http.Json;
-using AddressValidation.Serialization.Json;
 using Configuration;
-using Http;
+using Http.Clients;
 using Microsoft.Extensions.Options;
 
-internal sealed class PitneyBowesAuthenticationClient : IAuthenticationClient
+internal sealed class PitneyBowesAuthenticationClient : AbstractBasicAuthenticationClient
 {
-    private readonly HttpClient _httpClient;
-
     private readonly IOptions<PitneyBowesServiceOptions> _options;
 
     public PitneyBowesAuthenticationClient(HttpClient httpClient, IOptions<PitneyBowesServiceOptions> options)
+        : base(httpClient)
     {
-        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
-    public async Task<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
-    {
-        Uri requestUri = new(_options.Value.EndpointUri, "/oauth/token");
+    protected override string Password => _options.Value.ApiSecret;
 
-        List<KeyValuePair<string, string>> payload =
-        [
-            new("grant_type", "client_credentials"),
-        ];
+    protected override Uri TokenUri => new(_options.Value.EndpointUri, "/oauth/token");
 
-        using HttpRequestMessage request = new(HttpMethod.Post, requestUri);
-
-        request.Content = new FormUrlEncodedContent(payload);
-        request.Headers.Authorization = new BasicAuthenticationHeaderValue(_options.Value.ApiKey, _options.Value.ApiSecret);
-
-        using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-
-        response.EnsureSuccessStatusCode();
-
-        return await response.Content.ReadFromJsonAsync(DefaultJsonSerializerContext.Default.TokenResponse,
-                                  cancellationToken)
-                             .ConfigureAwait(false);
-    }
+    protected override string Username => _options.Value.ApiKey;
 }
