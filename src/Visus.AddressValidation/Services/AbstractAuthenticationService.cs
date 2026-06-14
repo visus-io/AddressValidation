@@ -1,6 +1,7 @@
 namespace Visus.AddressValidation.Services;
 
 using Http;
+using Http.Clients;
 using Microsoft.Extensions.Caching.Hybrid;
 
 /// <summary>

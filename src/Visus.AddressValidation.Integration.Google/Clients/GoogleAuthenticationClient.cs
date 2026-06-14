@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using AddressValidation.Serialization.Json;
 using Configuration;
 using Http;
+using Http.Clients;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 

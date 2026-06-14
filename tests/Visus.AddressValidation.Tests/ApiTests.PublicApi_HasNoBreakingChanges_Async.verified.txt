@@ -565,14 +565,10 @@ namespace Visus.AddressValidation.Http
         public BasicAuthenticationHeaderValue(string userName, string? password) { }
     }
     public sealed class BearerTokenDelegatingHandler<TClient> : System.Net.Http.DelegatingHandler
-        where TClient : Visus.AddressValidation.Http.IAuthenticationClient
+        where TClient : Visus.AddressValidation.Http.Clients.IAuthenticationClient
     {
         public BearerTokenDelegatingHandler(Visus.AddressValidation.Services.AbstractAuthenticationService<TClient> authenticationService) { }
         protected override System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage> SendAsync(System.Net.Http.HttpRequestMessage request, System.Threading.CancellationToken cancellationToken) { }
-    }
-    public interface IAuthenticationClient
-    {
-        System.Threading.Tasks.Task<Visus.AddressValidation.Http.TokenResponse?> RequestClientCredentialsTokenAsync(System.Threading.CancellationToken cancellationToken = default);
     }
     [System.Text.Json.Serialization.JsonConverter(typeof(Visus.AddressValidation.Serialization.Json.TokenResponseConverter?))]
     public sealed class TokenResponse : System.IEquatable<Visus.AddressValidation.Http.TokenResponse>
@@ -586,6 +582,22 @@ namespace Visus.AddressValidation.Http
         public string? RefreshToken { get; init; }
         public string? Scope { get; init; }
         public string? TokenType { get; init; }
+    }
+}
+namespace Visus.AddressValidation.Http.Clients
+{
+    public abstract class AbstractBasicAuthenticationClient : Visus.AddressValidation.Http.Clients.IAuthenticationClient
+    {
+        protected AbstractBasicAuthenticationClient(System.Net.Http.HttpClient httpClient) { }
+        protected abstract string Password { get; }
+        protected abstract System.Uri TokenUri { get; }
+        protected abstract string Username { get; }
+        protected virtual void AddAdditionalHeaders(System.Net.Http.HttpRequestMessage request) { }
+        public System.Threading.Tasks.Task<Visus.AddressValidation.Http.TokenResponse?> RequestClientCredentialsTokenAsync(System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public interface IAuthenticationClient
+    {
+        System.Threading.Tasks.Task<Visus.AddressValidation.Http.TokenResponse?> RequestClientCredentialsTokenAsync(System.Threading.CancellationToken cancellationToken = default);
     }
 }
 namespace Visus.AddressValidation.Mappers
@@ -713,7 +725,7 @@ namespace Visus.AddressValidation.Services
         public System.Threading.Tasks.Task<Visus.AddressValidation.Models.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default) { }
     }
     public abstract class AbstractAuthenticationService<TClient>
-        where TClient : Visus.AddressValidation.Http.IAuthenticationClient
+        where TClient : Visus.AddressValidation.Http.Clients.IAuthenticationClient
     {
         protected const string CacheKeyTag = "vs-ave-auth:";
         protected AbstractAuthenticationService(TClient authenticationClient, Microsoft.Extensions.Caching.Hybrid.HybridCache cache) { }
