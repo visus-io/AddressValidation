@@ -3,21 +3,19 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Integration.FedEx.Tests")]
 namespace Visus.AddressValidation.Integration.FedEx.Configuration
 {
-    public sealed class FedExServiceOptions : System.ComponentModel.DataAnnotations.IValidatableObject
+    public sealed class FedExServiceOptions : Visus.AddressValidation.Configuration.AbstractServiceOptions
     {
         public const string SectionName = "AddressValidationSettings:FedEx";
         public FedExServiceOptions() { }
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string AccountNumber { get; set; }
-        public Visus.AddressValidation.Abstractions.ClientEnvironment ClientEnvironment { get; set; }
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ClientId { get; set; }
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ClientSecret { get; set; }
-        public System.Uri EndpointUri { get; }
-        public System.Uri? EndpointUriOverride { get; set; }
+        public override System.Uri EndpointUri { get; }
         public string? Locale { get; set; }
-        public System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext) { }
+        public override System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext) { }
     }
     [Microsoft.Extensions.Options.OptionsValidator]
     public sealed class FedExServiceOptionsValidator : Microsoft.Extensions.Options.IValidateOptions<Visus.AddressValidation.Integration.FedEx.Configuration.FedExServiceOptions>

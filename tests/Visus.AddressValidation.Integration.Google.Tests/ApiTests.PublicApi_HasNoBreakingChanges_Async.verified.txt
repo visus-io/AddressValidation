@@ -1,24 +1,22 @@
-[assembly: System.Resources.NeutralResourcesLanguage("en")]
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Integration.Google.Tests")]
 namespace Visus.AddressValidation.Integration.Google.Configuration
 {
-    public sealed class GoogleServiceOptions : System.ComponentModel.DataAnnotations.IValidatableObject
+    public sealed class GoogleServiceOptions : Visus.AddressValidation.Configuration.AbstractServiceOptions
     {
         public const string SectionName = "AddressValidationSettings:Google";
         public GoogleServiceOptions() { }
         public System.Uri AuthenticationUri { get; }
         public System.Uri? AuthenticationUriOverride { get; set; }
-        public Visus.AddressValidation.Abstractions.ClientEnvironment ClientEnvironment { get; set; }
-        public System.Uri EndpointUri { get; }
-        public System.Uri? EndpointUriOverride { get; set; }
+        public override System.Uri EndpointUri { get; }
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string PrivateKey { get; set; }
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ProjectId { get; set; }
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ServiceAccountEmail { get; set; }
-        public System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext) { }
+        public override System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext) { }
     }
     [Microsoft.Extensions.Options.OptionsValidator]
     public sealed class GoogleServiceOptionsValidator : Microsoft.Extensions.Options.IValidateOptions<Visus.AddressValidation.Integration.Google.Configuration.GoogleServiceOptions>

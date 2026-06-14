@@ -2,11 +2,12 @@ namespace Visus.AddressValidation.Integration.FedEx.Configuration;
 
 using System.ComponentModel.DataAnnotations;
 using AddressValidation.Abstractions;
+using AddressValidation.Configuration;
 
 /// <summary>
 ///     Configuration options for the FedEx address validation service.
 /// </summary>
-public sealed class FedExServiceOptions : IValidatableObject
+public sealed class FedExServiceOptions : AbstractServiceOptions
 {
     /// <summary>
     ///     The configuration section path used to bind these options from
@@ -14,11 +15,8 @@ public sealed class FedExServiceOptions : IValidatableObject
     /// </summary>
     public const string SectionName = "AddressValidationSettings:FedEx";
 
-    /// <summary>
-    ///     Gets the base URI of the FedEx API endpoint, derived from the
-    ///     current <see cref="ClientEnvironment" /> value.
-    /// </summary>
-    public Uri EndpointUri =>
+    /// <inheritdoc />
+    public override Uri EndpointUri =>
         ClientEnvironment switch
         {
             ClientEnvironment.DEVELOPMENT => Constants.DevelopmentEndpointUri,
@@ -35,14 +33,6 @@ public sealed class FedExServiceOptions : IValidatableObject
     public required string AccountNumber { get; set; }
 
     /// <summary>
-    ///     Gets or sets the target client environment, which determines
-    ///     whether requests are sent to the FedEx sandbox or production
-    ///     endpoint. Defaults to
-    ///     <see cref="AddressValidation.Abstractions.ClientEnvironment.DEVELOPMENT" />.
-    /// </summary>
-    public ClientEnvironment ClientEnvironment { get; set; } = ClientEnvironment.DEVELOPMENT;
-
-    /// <summary>
     ///     Gets or sets the OAuth 2.0 client ID issued by FedEx for the
     ///     registered application.
     /// </summary>
@@ -55,25 +45,6 @@ public sealed class FedExServiceOptions : IValidatableObject
     /// </summary>
     [Required(AllowEmptyStrings = false)]
     public required string ClientSecret { get; set; }
-
-    /// <summary>
-    ///     Gets or sets a URI that overrides the default endpoint derived from
-    ///     <see cref="ClientEnvironment" />.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         This property is <b>required</b> when
-    ///         <see cref="ClientEnvironment" /> is
-    ///         <see cref="ClientEnvironment.SANDBOX" />; validation will fail
-    ///         if it is <see langword="null" /> in that case.
-    ///     </para>
-    ///     <para>
-    ///         For all other environments this property is optional and, when
-    ///         set, has no effect — the endpoint is always resolved from
-    ///         <see cref="ClientEnvironment" />.
-    ///     </para>
-    /// </remarks>
-    public Uri? EndpointUriOverride { get; set; }
 
     /// <summary>
     ///     Gets or sets the IETF BCP 47 language tag that identifies the locale
@@ -100,11 +71,8 @@ public sealed class FedExServiceOptions : IValidatableObject
     /// </returns>
     /// <remarks>
     ///     <para>
-    ///         Validates that <see cref="EndpointUriOverride" /> is not
-    ///         <see langword="null" /> when <see cref="ClientEnvironment" /> is
-    ///         <see cref="ClientEnvironment.SANDBOX" />, since the sandbox
-    ///         environment requires an explicit endpoint to target a local mock
-    ///         server.
+    ///         Inherits the sandbox endpoint override check from
+    ///         <see cref="AbstractServiceOptions.Validate" />.
     ///     </para>
     ///     <para>
     ///         Also validates that <see cref="Locale" />, when set, is one of
@@ -112,13 +80,11 @@ public sealed class FedExServiceOptions : IValidatableObject
     ///         <see cref="Constants.SupportedLocales" />.
     ///     </para>
     /// </remarks>
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if ( ClientEnvironment == ClientEnvironment.SANDBOX && EndpointUriOverride is null )
+        foreach ( ValidationResult result in base.Validate(validationContext) )
         {
-            yield return new ValidationResult(
-                $"{nameof(EndpointUriOverride)} must be set when {nameof(ClientEnvironment)} is {nameof(ClientEnvironment.SANDBOX)}.",
-                [nameof(EndpointUriOverride),]);
+            yield return result;
         }
 
         if ( Locale is not null && !Constants.SupportedLocales.Contains(Locale) )

@@ -2,12 +2,13 @@ namespace Visus.AddressValidation.Integration.Google.Configuration;
 
 using System.ComponentModel.DataAnnotations;
 using AddressValidation.Abstractions;
+using AddressValidation.Configuration;
 
 /// <summary>
 ///     Configuration options for the Google Address Validation API service
 ///     account.
 /// </summary>
-public sealed class GoogleServiceOptions : IValidatableObject
+public sealed class GoogleServiceOptions : AbstractServiceOptions
 {
     /// <summary>
     ///     The configuration section path used to bind these options from
@@ -16,8 +17,18 @@ public sealed class GoogleServiceOptions : IValidatableObject
     public const string SectionName = "AddressValidationSettings:Google";
 
     /// <summary>
+    ///     Initializes a new instance of <see cref="GoogleServiceOptions" />
+    ///     with <see cref="AbstractServiceOptions.ClientEnvironment" /> defaulting
+    ///     to <see cref="ClientEnvironment.PRODUCTION" />.
+    /// </summary>
+    public GoogleServiceOptions()
+    {
+        ClientEnvironment = ClientEnvironment.PRODUCTION;
+    }
+
+    /// <summary>
     ///     Gets the base URI of the Google OAuth 2.0 token endpoint, derived
-    ///     from the current <see cref="ClientEnvironment" /> value.
+    ///     from the current <see cref="AbstractServiceOptions.ClientEnvironment" /> value.
     /// </summary>
     public Uri AuthenticationUri =>
         ClientEnvironment switch
@@ -27,11 +38,8 @@ public sealed class GoogleServiceOptions : IValidatableObject
             _ => Constants.ProductionAuthenticationUri,
         };
 
-    /// <summary>
-    ///     Gets the base URI of the Google Address Validation API endpoint,
-    ///     derived from the current <see cref="ClientEnvironment" /> value.
-    /// </summary>
-    public Uri EndpointUri =>
+    /// <inheritdoc />
+    public override Uri EndpointUri =>
         ClientEnvironment switch
         {
             ClientEnvironment.DEVELOPMENT or ClientEnvironment.PRODUCTION => Constants.ProductionEndpointUri,
@@ -41,49 +49,22 @@ public sealed class GoogleServiceOptions : IValidatableObject
 
     /// <summary>
     ///     Gets or sets a URI that overrides the default authentication endpoint
-    ///     derived from <see cref="ClientEnvironment" />.
+    ///     derived from <see cref="AbstractServiceOptions.ClientEnvironment" />.
     /// </summary>
     /// <remarks>
     ///     <para>
     ///         This property is <b>required</b> when
-    ///         <see cref="ClientEnvironment" /> is
-    ///         <see cref="AddressValidation.Abstractions.ClientEnvironment.SANDBOX" />; validation will fail
-    ///         if it is <see langword="null" /> in that case.
-    ///     </para>
-    ///     <para>
-    ///         For all other environments this property is optional and, when
-    ///         set, has no effect — the authentication endpoint is always
-    ///         resolved from <see cref="ClientEnvironment" />.
-    ///     </para>
-    /// </remarks>
-    public Uri? AuthenticationUriOverride { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the target client environment, which determines
-    ///     whether requests are sent to the Google production endpoint or a
-    ///     local sandbox mock server. Defaults to
-    ///     <see cref="AddressValidation.Abstractions.ClientEnvironment.PRODUCTION" />.
-    /// </summary>
-    public ClientEnvironment ClientEnvironment { get; set; } = ClientEnvironment.PRODUCTION;
-
-    /// <summary>
-    ///     Gets or sets a URI that overrides the default endpoint derived from
-    ///     <see cref="ClientEnvironment" />.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         This property is <b>required</b> when
-    ///         <see cref="ClientEnvironment" /> is
+    ///         <see cref="AbstractServiceOptions.ClientEnvironment" /> is
     ///         <see cref="ClientEnvironment.SANDBOX" />; validation will fail
     ///         if it is <see langword="null" /> in that case.
     ///     </para>
     ///     <para>
     ///         For all other environments this property is optional and, when
-    ///         set, has no effect — the endpoint is always resolved from
-    ///         <see cref="ClientEnvironment" />.
+    ///         set, has no effect — the authentication endpoint is always
+    ///         resolved from <see cref="AbstractServiceOptions.ClientEnvironment" />.
     ///     </para>
     /// </remarks>
-    public Uri? EndpointUriOverride { get; set; }
+    public Uri? AuthenticationUriOverride { get; set; }
 
     /// <summary>
     ///     Gets or sets the RSA private key associated with the service account,
@@ -118,31 +99,25 @@ public sealed class GoogleServiceOptions : IValidatableObject
     ///     valid.
     /// </returns>
     /// <remarks>
-    ///     Validates that neither <see cref="AuthenticationUriOverride" /> nor
-    ///     <see cref="EndpointUriOverride" /> is <see langword="null" /> when
-    ///     <see cref="ClientEnvironment" /> is
-    ///     <see cref="ClientEnvironment.SANDBOX" />, since the sandbox
-    ///     environment requires explicit URIs to target a local mock server.
+    ///     Inherits the sandbox endpoint override check from
+    ///     <see cref="AbstractServiceOptions.Validate" /> and additionally validates
+    ///     that <see cref="AuthenticationUriOverride" /> is not
+    ///     <see langword="null" /> when
+    ///     <see cref="AbstractServiceOptions.ClientEnvironment" /> is
+    ///     <see cref="ClientEnvironment.SANDBOX" />.
     /// </remarks>
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if ( ClientEnvironment != ClientEnvironment.SANDBOX )
+        foreach ( ValidationResult result in base.Validate(validationContext) )
         {
-            yield break;
+            yield return result;
         }
 
-        if ( AuthenticationUriOverride is null )
+        if ( ClientEnvironment == ClientEnvironment.SANDBOX && AuthenticationUriOverride is null )
         {
             yield return new ValidationResult(
                 $"{nameof(AuthenticationUriOverride)} must be set when {nameof(ClientEnvironment)} is {nameof(ClientEnvironment.SANDBOX)}.",
                 [nameof(AuthenticationUriOverride),]);
-        }
-
-        if ( EndpointUriOverride is null )
-        {
-            yield return new ValidationResult(
-                $"{nameof(EndpointUriOverride)} must be set when {nameof(ClientEnvironment)} is {nameof(ClientEnvironment.SANDBOX)}.",
-                [nameof(EndpointUriOverride),]);
         }
     }
 }
