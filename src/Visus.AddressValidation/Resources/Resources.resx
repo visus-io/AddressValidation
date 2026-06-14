@@ -27,6 +27,9 @@
     <data name="Validation_Field_CannotBeNullOrEmpty" xml:space="preserve">
         <value>{0}: Value cannot be null or empty.</value>
     </data>
+    <data name="Validation_Field_MustBeBetween" xml:space="preserve">
+        <value>{0}: Value must be between {1} and {2}.</value>
+    </data>
     <data name="Validation_Address_LinesCannotExceedThree" xml:space="preserve">
         <value>Cannot contain more than 3 entries.</value>
     </data>

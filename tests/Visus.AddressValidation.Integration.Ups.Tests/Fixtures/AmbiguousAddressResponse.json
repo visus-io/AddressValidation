@@ -1,0 +1,50 @@
+{
+  "XAVResponse": {
+    "Response": {
+      "ResponseStatus": {
+        "Code": "1",
+        "Description": "Success"
+      }
+    },
+    "AmbiguousAddressIndicator": "",
+    "AddressClassification": {
+      "Code": "0",
+      "Description": "Unknown"
+    },
+    "Candidate": [
+      {
+        "AddressClassification": {
+          "Code": "2",
+          "Description": "Residential"
+        },
+        "AddressKeyFormat": {
+          "AddressLine": [
+            "500 MARKET ST"
+          ],
+          "PoliticalDivision2": "SAN FRANCISCO",
+          "PoliticalDivision1": "CA",
+          "PostcodePrimaryLow": "94105",
+          "Region": "SAN FRANCISCO CA 94105",
+          "CountryCode": "US"
+        }
+      },
+      {
+        "AddressClassification": {
+          "Code": "1",
+          "Description": "Commercial"
+        },
+        "AddressKeyFormat": {
+          "AddressLine": [
+            "500 MARKET ST FL 2"
+          ],
+          "PoliticalDivision2": "SAN FRANCISCO",
+          "PoliticalDivision1": "CA",
+          "PostcodePrimaryLow": "94105",
+          "PostcodeExtendedLow": "2709",
+          "Region": "SAN FRANCISCO CA 94105-2709",
+          "CountryCode": "US"
+        }
+      }
+    ]
+  }
+}

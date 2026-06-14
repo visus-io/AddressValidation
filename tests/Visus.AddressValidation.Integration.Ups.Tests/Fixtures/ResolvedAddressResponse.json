@@ -1,0 +1,34 @@
+{
+  "XAVResponse": {
+    "Response": {
+      "ResponseStatus": {
+        "Code": "1",
+        "Description": "Success"
+      }
+    },
+    "ValidAddressIndicator": "",
+    "AddressClassification": {
+      "Code": "1",
+      "Description": "Commercial"
+    },
+    "Candidate": [
+      {
+        "AddressClassification": {
+          "Code": "1",
+          "Description": "Commercial"
+        },
+        "AddressKeyFormat": {
+          "AddressLine": [
+            "26601 Agoura Rd"
+          ],
+          "PoliticalDivision2": "Calabasas",
+          "PoliticalDivision1": "CA",
+          "PostcodePrimaryLow": "91302",
+          "PostcodeExtendedLow": "1985",
+          "Region": "Calabasas CA 91302-1985",
+          "CountryCode": "US"
+        }
+      }
+    ]
+  }
+}
