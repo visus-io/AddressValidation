@@ -3,7 +3,7 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Integration.PitneyBowes.Tests")]
 namespace Visus.AddressValidation.Integration.PitneyBowes.Configuration
 {
-    public sealed class PitneyBowesServiceOptions : System.ComponentModel.DataAnnotations.IValidatableObject
+    public sealed class PitneyBowesServiceOptions : Visus.AddressValidation.Configuration.AbstractServiceOptions
     {
         public const string SectionName = "AddressValidationSettings:PitneyBowes";
         public PitneyBowesServiceOptions() { }
@@ -11,12 +11,9 @@ namespace Visus.AddressValidation.Integration.PitneyBowes.Configuration
         public required string ApiKey { get; set; }
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ApiSecret { get; set; }
-        public Visus.AddressValidation.Abstractions.ClientEnvironment ClientEnvironment { get; set; }
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string DeveloperId { get; set; }
-        public System.Uri EndpointUri { get; }
-        public System.Uri? EndpointUriOverride { get; set; }
-        public System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext) { }
+        public override System.Uri EndpointUri { get; }
     }
     [Microsoft.Extensions.Options.OptionsValidator]
     public sealed class PitneyBowesServiceOptionsValidator : Microsoft.Extensions.Options.IValidateOptions<Visus.AddressValidation.Integration.PitneyBowes.Configuration.PitneyBowesServiceOptions>

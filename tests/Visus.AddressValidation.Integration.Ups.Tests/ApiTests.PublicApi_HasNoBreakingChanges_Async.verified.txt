@@ -1,22 +1,19 @@
-[assembly: System.Resources.NeutralResourcesLanguage("en")]
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Integration.Ups.Tests")]
 namespace Visus.AddressValidation.Integration.Ups.Configuration
 {
-    public class UpsServiceOptions : System.ComponentModel.DataAnnotations.IValidatableObject
+    public sealed class UpsServiceOptions : Visus.AddressValidation.Configuration.AbstractServiceOptions
     {
         public const string SectionName = "AddressValidationSettings:Ups";
         public UpsServiceOptions() { }
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string AccountNumber { get; set; }
-        public Visus.AddressValidation.Abstractions.ClientEnvironment ClientEnvironment { get; set; }
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ClientId { get; set; }
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings=false)]
         public required string ClientSecret { get; set; }
-        public System.Uri EndpointUri { get; }
-        public System.Uri? EndpointUriOverride { get; set; }
-        public System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext) { }
+        public override System.Uri EndpointUri { get; }
     }
     [Microsoft.Extensions.Options.OptionsValidator]
     public sealed class UpsServiceOptionsValidator : Microsoft.Extensions.Options.IValidateOptions<Visus.AddressValidation.Integration.Ups.Configuration.UpsServiceOptions>

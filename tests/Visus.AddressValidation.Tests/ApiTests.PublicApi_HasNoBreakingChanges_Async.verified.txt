@@ -526,6 +526,17 @@ namespace Visus.AddressValidation.Adapters
         System.Threading.Tasks.Task<TApiResponse?> ExecuteAsync(TRequest request, System.Threading.CancellationToken cancellationToken);
     }
 }
+namespace Visus.AddressValidation.Configuration
+{
+    public abstract class AbstractServiceOptions : System.ComponentModel.DataAnnotations.IValidatableObject
+    {
+        protected AbstractServiceOptions() { }
+        public Visus.AddressValidation.Abstractions.ClientEnvironment ClientEnvironment { get; set; }
+        public abstract System.Uri EndpointUri { get; }
+        public System.Uri? EndpointUriOverride { get; set; }
+        public virtual System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext) { }
+    }
+}
 namespace Visus.AddressValidation
 {
     [System.AttributeUsage(System.AttributeTargets.Property)]
