@@ -3,6 +3,7 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Tests")]
 namespace Visus.AddressValidation.Abstractions
 {
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<Visus.AddressValidation.Abstractions.ClientEnvironment>))]
     public enum ClientEnvironment
     {
         [System.ComponentModel.Description("Development")]
