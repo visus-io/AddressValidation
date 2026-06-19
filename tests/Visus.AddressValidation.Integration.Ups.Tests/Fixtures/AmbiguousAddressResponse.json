@@ -14,8 +14,8 @@
     "Candidate": [
       {
         "AddressClassification": {
-          "Code": "2",
-          "Description": "Residential"
+          "Code": "0",
+          "Description": "Unknown"
         },
         "AddressKeyFormat": {
           "AddressLine": [
