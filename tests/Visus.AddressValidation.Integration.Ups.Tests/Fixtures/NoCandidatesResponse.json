@@ -1,0 +1,16 @@
+{
+  "XAVResponse": {
+    "Response": {
+      "ResponseStatus": {
+        "Code": "1",
+        "Description": "Success"
+      }
+    },
+    "NoCandidatesIndicator": "",
+    "AddressClassification": {
+      "Code": "0",
+      "Description": "Unknown"
+    },
+    "Candidate": []
+  }
+}

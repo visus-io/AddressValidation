@@ -60,6 +60,37 @@ internal sealed class AddressValidationServiceTests : IAsyncDisposable
     }
 
     [Test]
+    public async Task ValidateAsync_WhenAddressHasNoCandidates_ReturnsEmptyResponse(CancellationToken cancellationToken)
+    {
+        StubOAuthToken();
+        StubNoCandidatesResponse();
+
+        UpsAddressValidationRequest request = new()
+        {
+            AddressLines =
+            {
+                "1 Nonexistent Blvd",
+            },
+            CityOrTown = "Nowhere",
+            StateOrProvince = "CA",
+            PostalCode = "90210",
+            Country = CountryCode.US,
+        };
+
+        IAddressValidationResponse? response = await _sut.ValidateAsync(request, cancellationToken)
+                                                         .ConfigureAwait(false);
+
+        using ( new AssertionScope() )
+        {
+            response.Should().NotBeNull();
+            response.Errors.Should().BeEmpty();
+            response.Warnings.Should().BeEmpty();
+            response.Suggestions.Should().BeEmpty();
+            response.AddressLines.Should().BeEmpty();
+        }
+    }
+
+    [Test]
     public async Task ValidateAsync_WhenAddressIsResolved_ReturnsExpectedResponse(CancellationToken cancellationToken)
     {
         StubOAuthToken();
@@ -156,6 +187,116 @@ internal sealed class AddressValidationServiceTests : IAsyncDisposable
     }
 
     [Test]
+    public async Task ValidateAsync_WhenInDevelopmentModeWithNonUsCountry_ReturnsResponseWithErrors(CancellationToken cancellationToken)
+    {
+        IAddressValidationService<UpsAddressValidationRequest> sut = BuildServiceWithEnvironment(ClientEnvironment.DEVELOPMENT);
+
+        UpsAddressValidationRequest request = new()
+        {
+            AddressLines =
+            {
+                "26601 Agoura Rd",
+            },
+            CityOrTown = "Toronto",
+            StateOrProvince = "ON",
+            PostalCode = "M5V 2T6",
+            Country = CountryCode.CA,
+        };
+
+        IAddressValidationResponse? response = await sut.ValidateAsync(request, cancellationToken)
+                                                        .ConfigureAwait(false);
+
+        using ( new AssertionScope() )
+        {
+            response.Should().NotBeNull();
+            response.Errors.Should().ContainSingle()
+                    .Which.Should().Contain(nameof(request.Country));
+        }
+    }
+
+    [Test]
+    public async Task ValidateAsync_WhenInDevelopmentModeWithUnsupportedState_ReturnsResponseWithErrors(CancellationToken cancellationToken)
+    {
+        IAddressValidationService<UpsAddressValidationRequest> sut = BuildServiceWithEnvironment(ClientEnvironment.DEVELOPMENT);
+
+        UpsAddressValidationRequest request = new()
+        {
+            AddressLines =
+            {
+                "26601 Agoura Rd",
+            },
+            CityOrTown = "Calabasas",
+            StateOrProvince = "TX",
+            PostalCode = "91302",
+            Country = CountryCode.US,
+        };
+
+        IAddressValidationResponse? response = await sut.ValidateAsync(request, cancellationToken)
+                                                        .ConfigureAwait(false);
+
+        using ( new AssertionScope() )
+        {
+            response.Should().NotBeNull();
+            response.Errors.Should().ContainSingle()
+                    .Which.Should().Contain(nameof(request.StateOrProvince));
+        }
+    }
+
+    [Test]
+    public async Task ValidateAsync_WhenMaximumCandidateListSizeExceedsMaximum_ReturnsResponseWithErrors(CancellationToken cancellationToken)
+    {
+        UpsAddressValidationRequest request = new()
+        {
+            AddressLines =
+            {
+                "26601 Agoura Rd",
+            },
+            CityOrTown = "Calabasas",
+            StateOrProvince = "CA",
+            PostalCode = "91302",
+            Country = CountryCode.US,
+            MaximumCandidateListSize = 51,
+        };
+
+        IAddressValidationResponse? response = await _sut.ValidateAsync(request, cancellationToken)
+                                                         .ConfigureAwait(false);
+
+        using ( new AssertionScope() )
+        {
+            response.Should().NotBeNull();
+            response.Errors.Should().ContainSingle()
+                    .Which.Should().Contain(nameof(request.MaximumCandidateListSize));
+        }
+    }
+
+    [Test]
+    public async Task ValidateAsync_WhenMaximumCandidateListSizeIsNegative_ReturnsResponseWithErrors(CancellationToken cancellationToken)
+    {
+        UpsAddressValidationRequest request = new()
+        {
+            AddressLines =
+            {
+                "26601 Agoura Rd",
+            },
+            CityOrTown = "Calabasas",
+            StateOrProvince = "CA",
+            PostalCode = "91302",
+            Country = CountryCode.US,
+            MaximumCandidateListSize = -1,
+        };
+
+        IAddressValidationResponse? response = await _sut.ValidateAsync(request, cancellationToken)
+                                                         .ConfigureAwait(false);
+
+        using ( new AssertionScope() )
+        {
+            response.Should().NotBeNull();
+            response.Errors.Should().ContainSingle()
+                    .Which.Should().Contain(nameof(request.MaximumCandidateListSize));
+        }
+    }
+
+    [Test]
     public async Task ValidateAsync_WhenOAuthReturnsEmptyToken_ThrowsInvalidCredentialException(
         CancellationToken cancellationToken)
     {
@@ -207,6 +348,34 @@ internal sealed class AddressValidationServiceTests : IAsyncDisposable
         await act.Should().ThrowAsync<HttpRequestException>().ConfigureAwait(false);
     }
 
+    private IAddressValidationService<UpsAddressValidationRequest> BuildServiceWithEnvironment(ClientEnvironment environment)
+    {
+        ServiceCollection services = [];
+
+        services.AddLogging()
+                .AddHybridCache();
+
+        services.AddSingleton<IConfiguration>(new ConfigurationBuilder()
+                                             .AddInMemoryCollection(new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
+                                              {
+                                                  [$"{UpsServiceOptions.SectionName}:ClientId"] = "test-client-id",
+                                                  [$"{UpsServiceOptions.SectionName}:ClientSecret"] = "test-client-secret",
+                                                  [$"{UpsServiceOptions.SectionName}:AccountNumber"] = "test-account-number",
+                                                  [$"{UpsServiceOptions.SectionName}:ClientEnvironment"] = environment.ToString(),
+                                              })
+                                             .Build());
+
+        services.AddUpsAddressValidation();
+
+        services.PostConfigure<UpsServiceOptions>(o =>
+        {
+            o.EndpointUriOverride = new Uri(_wireMockServer.Url!);
+        });
+
+        return services.BuildServiceProvider()
+                       .GetRequiredService<IAddressValidationService<UpsAddressValidationRequest>>();
+    }
+
     private void StubAddressResolve()
     {
         string body = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "ResolvedAddressResponse.json"));
@@ -236,6 +405,17 @@ internal sealed class AddressValidationServiceTests : IAsyncDisposable
         _wireMockServer.Given(Request.Create().WithPath("/api/addressvalidation/v2/3").UsingPost())
                        .RespondWith(Response.Create()
                                             .WithStatusCode(400)
+                                            .WithHeader("Content-Type", "application/json")
+                                            .WithBody(body));
+    }
+
+    private void StubNoCandidatesResponse()
+    {
+        string body = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "NoCandidatesResponse.json"));
+
+        _wireMockServer.Given(Request.Create().WithPath("/api/addressvalidation/v2/3").UsingPost())
+                       .RespondWith(Response.Create()
+                                            .WithStatusCode(200)
                                             .WithHeader("Content-Type", "application/json")
                                             .WithBody(body));
     }
