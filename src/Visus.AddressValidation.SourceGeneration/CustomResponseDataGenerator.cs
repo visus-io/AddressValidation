@@ -50,7 +50,6 @@ public sealed class CustomResponseDataGenerator : IIncrementalGenerator
             static (spc, properties) => GenerateSource(spc, properties));
     }
 
-
     private static SyntaxNodeOrToken[] CreateStringObjectTypeArguments()
     {
         return
@@ -91,7 +90,7 @@ public sealed class CustomResponseDataGenerator : IIncrementalGenerator
         }
 
         IEnumerable<IGrouping<string, PropertyInfo>> groups =
-            properties.OfType<PropertyInfo>()
+            properties.Select(static p => p!.Value)
                       .GroupBy(g => g.ContainingType.FullName, StringComparer.OrdinalIgnoreCase);
 
         foreach ( IGrouping<string, PropertyInfo>? group in groups )
@@ -145,7 +144,7 @@ public sealed class CustomResponseDataGenerator : IIncrementalGenerator
                     IdentifierName(nameof(StringComparer)),
                     IdentifierName(nameof(StringComparer.OrdinalIgnoreCase)))));
 
-        LinkedList<AssignmentExpressionSyntax> entities = [];
+        List<AssignmentExpressionSyntax> entities = [];
 
         foreach ( PropertyInfo property in properties )
         {
@@ -158,7 +157,7 @@ public sealed class CustomResponseDataGenerator : IIncrementalGenerator
                     ImplicitElementAccess().WithArgumentList(key),
                     IdentifierName(property.Name));
 
-            entities.AddLast(entity);
+            entities.Add(entity);
         }
 
         ObjectCreationExpressionSyntax dictionary =
@@ -208,8 +207,7 @@ public sealed class CustomResponseDataGenerator : IIncrementalGenerator
         return new PropertyInfo(
             SyntaxGenerationHelpers.BuildContainingTypeInfo(containingType),
             propertyKey,
-            property.Name,
-            property.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
+            property.Name
         );
     }
 }

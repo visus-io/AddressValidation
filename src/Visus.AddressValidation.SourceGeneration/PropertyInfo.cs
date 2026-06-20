@@ -9,12 +9,10 @@ namespace Visus.AddressValidation.SourceGeneration;
 ///     <c>CustomResponseDataPropertyAttribute</c>.
 /// </param>
 /// <param name="Name">The name of the property as declared in source code.</param>
-/// <param name="TypeName">The fully qualified type name of the property.</param>
-internal sealed record PropertyInfo(
+internal readonly record struct PropertyInfo(
     ContainingTypeInfo ContainingType,
     string Key,
-    string Name,
-    string TypeName)
+    string Name)
 {
     /// <summary>
     ///     Determines whether this instance is equal to another <see cref="PropertyInfo" />,
@@ -25,13 +23,11 @@ internal sealed record PropertyInfo(
     ///     <see langword="true" /> if all fields are equal (case-insensitive);
     ///     otherwise, <see langword="false" />.
     /// </returns>
-    public bool Equals(PropertyInfo? other)
+    public bool Equals(PropertyInfo other)
     {
-        return other is not null
-            && string.Equals(ContainingType.FullName, other.ContainingType.FullName, StringComparison.OrdinalIgnoreCase)
+        return string.Equals(ContainingType.FullName, other.ContainingType.FullName, StringComparison.OrdinalIgnoreCase)
             && string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase)
-            && string.Equals(Key, other.Key, StringComparison.OrdinalIgnoreCase)
-            && string.Equals(TypeName, other.TypeName, StringComparison.OrdinalIgnoreCase);
+            && string.Equals(Key, other.Key, StringComparison.OrdinalIgnoreCase);
     }
 
     public override int GetHashCode()
@@ -43,7 +39,6 @@ internal sealed record PropertyInfo(
             hash = ( hash * 31 ) + StringComparer.OrdinalIgnoreCase.GetHashCode(ContainingType.FullName);
             hash = ( hash * 31 ) + StringComparer.OrdinalIgnoreCase.GetHashCode(Name);
             hash = ( hash * 31 ) + StringComparer.OrdinalIgnoreCase.GetHashCode(Key);
-            hash = ( hash * 31 ) + StringComparer.OrdinalIgnoreCase.GetHashCode(TypeName);
 
             return hash;
         }
