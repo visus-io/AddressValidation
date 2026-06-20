@@ -1,5 +1,6 @@
 namespace Visus.AddressValidation.Integration.Google.Clients;
 
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
@@ -12,6 +13,7 @@ using Http.Clients;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
 internal sealed class GoogleAuthenticationClient : IAuthenticationClient
 {
     private readonly HttpClient _httpClient;

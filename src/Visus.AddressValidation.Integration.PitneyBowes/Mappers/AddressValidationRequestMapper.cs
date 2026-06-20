@@ -1,9 +1,11 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Mappers;
 
+using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Mappers;
 using Contracts;
 using Model;
 
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
 internal sealed class AddressValidationRequestMapper : IApiRequestMapper<PitneyBowesAddressValidationRequest, ApiRequest>
 {
     public ApiRequest Map(PitneyBowesAddressValidationRequest request)

@@ -2,10 +2,12 @@ namespace Visus.AddressValidation.Integration.Google.Validation;
 
 using System.Collections.Frozen;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Abstractions;
 using AddressValidation.Validation;
 using Contracts;
 
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
 internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 {
     private static readonly FrozenSet<Granularity> ConfirmedGranularity =

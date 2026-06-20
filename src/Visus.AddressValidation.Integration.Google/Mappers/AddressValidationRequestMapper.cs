@@ -1,9 +1,11 @@
 namespace Visus.AddressValidation.Integration.Google.Mappers;
 
+using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Mappers;
 using Contracts;
 using Models;
 
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
 internal sealed class AddressValidationRequestMapper : IApiRequestMapper<GoogleAddressValidationRequest, ApiRequest>
 {
     public ApiRequest Map(GoogleAddressValidationRequest request)

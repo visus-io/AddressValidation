@@ -9,7 +9,7 @@ internal sealed class ApiTests
     [MethodImpl(MethodImplOptions.NoInlining)]
     public async Task PublicApi_HasNoBreakingChanges_Async()
     {
-        string api = typeof(Constants).Assembly.GeneratePublicApi(new ApiGeneratorOptions
+        string api = typeof(InvalidImplementationException).Assembly.GeneratePublicApi(new ApiGeneratorOptions
         {
             ExcludeAttributes =
             [

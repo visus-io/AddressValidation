@@ -1,6 +1,7 @@
 namespace Visus.AddressValidation.Integration.Ups.Validation;
 
 using System.Collections.Frozen;
+using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Abstractions;
 using AddressValidation.Validation;
 using Configuration;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Models;
 using Resources;
 
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
 internal sealed class AddressValidationRequestValidator : AbstractAddressValidationRequestValidator<UpsAddressValidationRequest>
 {
     private readonly IOptions<UpsServiceOptions> _options;

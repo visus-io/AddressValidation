@@ -1,6 +1,4 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguage("en")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Visus.AddressValidation.Integration.PitneyBowes.Tests")]
 namespace Visus.AddressValidation.Integration.PitneyBowes.Configuration
 {
     public sealed class PitneyBowesServiceOptions : Visus.AddressValidation.Configuration.AbstractServiceOptions

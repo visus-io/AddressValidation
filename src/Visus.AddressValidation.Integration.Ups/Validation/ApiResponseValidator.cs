@@ -1,8 +1,10 @@
 namespace Visus.AddressValidation.Integration.Ups.Validation;
 
+using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Validation;
 using Contracts;
 
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
 internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 {
     protected override ValueTask<bool> PreValidateAsync(ApiResponse instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)

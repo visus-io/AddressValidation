@@ -1,11 +1,13 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Adapters;
 
+using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Adapters;
 using AddressValidation.Mappers;
 using Clients;
 using Contracts;
 using Model;
 
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
 internal sealed class ApiRequestAdapter : IApiRequestAdapter<PitneyBowesAddressValidationRequest, ApiResponse>
 {
     private readonly PitneyBowesAddressValidationClient _client;

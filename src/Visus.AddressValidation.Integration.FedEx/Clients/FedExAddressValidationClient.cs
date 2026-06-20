@@ -1,11 +1,13 @@
 namespace Visus.AddressValidation.Integration.FedEx.Clients;
 
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http.Json;
 using Configuration;
 using Contracts;
 using Microsoft.Extensions.Options;
 using Serialization.Json;
 
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
 internal sealed class FedExAddressValidationClient
 {
     private readonly HttpClient _httpClient;

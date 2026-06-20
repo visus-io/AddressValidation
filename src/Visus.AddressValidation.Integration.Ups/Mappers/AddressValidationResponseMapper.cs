@@ -2,6 +2,7 @@ namespace Visus.AddressValidation.Integration.Ups.Mappers;
 
 using System.Collections.Frozen;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using Abstractions;
 using AddressValidation.Abstractions;
 using AddressValidation.Mappers;
@@ -10,6 +11,7 @@ using AddressValidation.Validation;
 using Contracts;
 using Models;
 
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
 internal sealed class AddressValidationResponseMapper : IApiResponseMapper<ApiResponse>
 {
     public static string? FormatPostalCode(ApiResponse.AddressKeyFormat addressKeyFormat)

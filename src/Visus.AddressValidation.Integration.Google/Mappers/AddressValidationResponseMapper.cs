@@ -2,6 +2,7 @@ namespace Visus.AddressValidation.Integration.Google.Mappers;
 
 using System.Collections.Frozen;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Extensions;
 using AddressValidation.Mappers;
 using AddressValidation.Models;
@@ -9,6 +10,7 @@ using AddressValidation.Validation;
 using Contracts;
 using Models;
 
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
 internal sealed class AddressValidationResponseMapper : IApiResponseMapper<ApiResponse>
 {
     public IAddressValidationResponse Map(ApiResponse response, IValidationResult? validationResult = null)
