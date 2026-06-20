@@ -4,9 +4,9 @@ using System.Diagnostics;
 using Abstractions;
 using AddressValidation.Abstractions;
 using AddressValidation.Models;
+using AddressValidation.Resources;
 using AddressValidation.Validation;
 using Contracts;
-using Resources;
 
 internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 {
@@ -38,7 +38,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 
         foreach ( ApiResponse.Alert alert in instance.Result.Alerts )
         {
-            switch (alert.AlertType)
+            switch ( alert.AlertType )
             {
                 case AlertType.WARNING:
                     results.Add(string.IsNullOrWhiteSpace(alert.Message)
@@ -61,7 +61,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
             const string propertyName = nameof(address.StreetLinesToken);
             results.Add(ValidationState.CreateError(Resources.Validation_Verification_RowValueCouldNotBeVerified, index,
                 propertyName,
-                "Invalid suite number was provided in the request."));
+                FedEx.Resources.Resources.Validation_FedEx_InvalidSuiteNumber));
         }
 
         if ( !address.Attributes.IsValidStreetAddress && address.CountryCode != CountryCode.US )
@@ -81,7 +81,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
             const string propertyName = nameof(address.StreetLinesToken);
             results.Add(ValidationState.CreateWarning(Resources.Validation_Verification_RowValueCouldNotBeVerified, index,
                 propertyName,
-                "Suite number was not provided in the request."));
+                FedEx.Resources.Resources.Validation_FedEx_SuiteNumberNotProvided));
         }
 
         if ( address.CustomerMessages is not { Length: > 0, } customerMessages )
