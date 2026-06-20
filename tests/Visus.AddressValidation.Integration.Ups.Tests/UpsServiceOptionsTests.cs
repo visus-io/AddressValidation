@@ -2,7 +2,6 @@ namespace Visus.AddressValidation.Integration.Ups.Tests;
 
 using System.ComponentModel.DataAnnotations;
 using AddressValidation.Abstractions;
-using AwesomeAssertions;
 using Configuration;
 
 internal sealed class UpsServiceOptionsTests

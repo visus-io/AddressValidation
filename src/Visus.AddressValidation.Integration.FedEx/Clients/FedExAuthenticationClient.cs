@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.FedEx.Clients;
 
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Http.Json;
 using AddressValidation.Serialization.Json;
 using Configuration;

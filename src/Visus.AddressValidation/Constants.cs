@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation;
 
-using System.Collections.Frozen;
 using Abstractions;
 
 internal static class Constants

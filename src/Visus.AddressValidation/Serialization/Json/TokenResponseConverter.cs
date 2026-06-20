@@ -1,10 +1,7 @@
 namespace Visus.AddressValidation.Serialization.Json;
 
-using System.Collections.Frozen;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Http;
 
 /// <summary>
@@ -17,25 +14,25 @@ using Http;
 /// </remarks>
 public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
 {
-    private const string AccessTokenPropertyName = "access_token";
+    private const string s_accessTokenPropertyName = "access_token";
 
-    private const string ErrorDescriptionPropertyName = "error_description";
+    private const string s_errorDescriptionPropertyName = "error_description";
 
-    private const string ExpiresInPropertyName = "expires_in";
+    private const string s_expiresInPropertyName = "expires_in";
 
-    private const string IdentityTokenPropertyName = "identity_token";
+    private const string s_identityTokenPropertyName = "identity_token";
 
-    private const string IssuedTokenTypePropertyName = "issued_token_type";
+    private const string s_issuedTokenTypePropertyName = "issued_token_type";
 
-    private static readonly FrozenDictionary<string, string> PropertyMappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    private static readonly FrozenDictionary<string, string> s_propertyMappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
     {
-        { AccessTokenPropertyName, nameof(TokenResponse.AccessToken) },
-        { ErrorDescriptionPropertyName, nameof(TokenResponse.ErrorDescription) },
-        { ExpiresInPropertyName, nameof(TokenResponse.ExpiresIn) },
-        { IdentityTokenPropertyName, nameof(TokenResponse.IdentityToken) },
-        { IssuedTokenTypePropertyName, nameof(TokenResponse.IssuedTokenType) },
-        { RefreshTokenPropertyName, nameof(TokenResponse.RefreshToken) },
-        { TokenTypePropertyName, nameof(TokenResponse.TokenType) },
+        { s_accessTokenPropertyName, nameof(TokenResponse.AccessToken) },
+        { s_errorDescriptionPropertyName, nameof(TokenResponse.ErrorDescription) },
+        { s_expiresInPropertyName, nameof(TokenResponse.ExpiresIn) },
+        { s_identityTokenPropertyName, nameof(TokenResponse.IdentityToken) },
+        { s_issuedTokenTypePropertyName, nameof(TokenResponse.IssuedTokenType) },
+        { s_refreshTokenPropertyName, nameof(TokenResponse.RefreshToken) },
+        { s_tokenTypePropertyName, nameof(TokenResponse.TokenType) },
         { nameof(TokenResponse.AccessToken), nameof(TokenResponse.AccessToken) },
         { nameof(TokenResponse.ErrorDescription), nameof(TokenResponse.ErrorDescription) },
         { nameof(TokenResponse.ExpiresIn), nameof(TokenResponse.ExpiresIn) },
@@ -45,9 +42,9 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
         { nameof(TokenResponse.TokenType), nameof(TokenResponse.TokenType) },
     }.ToFrozenDictionary();
 
-    private const string RefreshTokenPropertyName = "refresh_token";
+    private const string s_refreshTokenPropertyName = "refresh_token";
 
-    private const string TokenTypePropertyName = "token_type";
+    private const string s_tokenTypePropertyName = "token_type";
 
     /// <inheritdoc />
     /// <summary>
@@ -83,7 +80,7 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
                 continue;
             }
 
-            string destinationPropertyName = PropertyMappings.GetValueOrDefault(sourcePropertyName, sourcePropertyName);
+            string destinationPropertyName = s_propertyMappings.GetValueOrDefault(sourcePropertyName, sourcePropertyName);
             if ( string.IsNullOrWhiteSpace(destinationPropertyName) )
             {
                 continue;
@@ -151,13 +148,13 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
 
         writer.WriteStartObject();
 
-        writer.WriteString(AccessTokenPropertyName, value.AccessToken);
-        writer.WriteString(ErrorDescriptionPropertyName, value.ErrorDescription);
-        writer.WriteNumber(ExpiresInPropertyName, value.ExpiresIn);
-        writer.WriteString(IdentityTokenPropertyName, value.IdentityToken);
-        writer.WriteString(IssuedTokenTypePropertyName, value.IssuedTokenType);
-        writer.WriteString(RefreshTokenPropertyName, value.RefreshToken);
-        writer.WriteString(TokenTypePropertyName, value.TokenType);
+        writer.WriteString(s_accessTokenPropertyName, value.AccessToken);
+        writer.WriteString(s_errorDescriptionPropertyName, value.ErrorDescription);
+        writer.WriteNumber(s_expiresInPropertyName, value.ExpiresIn);
+        writer.WriteString(s_identityTokenPropertyName, value.IdentityToken);
+        writer.WriteString(s_issuedTokenTypePropertyName, value.IssuedTokenType);
+        writer.WriteString(s_refreshTokenPropertyName, value.RefreshToken);
+        writer.WriteString(s_tokenTypePropertyName, value.TokenType);
 
         writer.WriteEndObject();
     }

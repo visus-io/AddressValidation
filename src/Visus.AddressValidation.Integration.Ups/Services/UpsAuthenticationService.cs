@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.Ups.Services;
 
-using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Services;
 using Clients;
 using Configuration;

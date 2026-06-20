@@ -1,7 +1,5 @@
 namespace Visus.AddressValidation.Tests;
 
-using AwesomeAssertions;
-
 internal sealed class InvalidImplementationExceptionTests
 {
     [Test]

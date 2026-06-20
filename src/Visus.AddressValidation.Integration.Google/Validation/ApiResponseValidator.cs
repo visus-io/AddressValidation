@@ -1,8 +1,6 @@
 namespace Visus.AddressValidation.Integration.Google.Validation;
 
-using System.Collections.Frozen;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using Abstractions;
 using AddressValidation.Validation;
 using Contracts;
@@ -10,13 +8,13 @@ using Contracts;
 [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
 internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 {
-    private static readonly FrozenSet<Granularity> ConfirmedGranularity =
+    private static readonly FrozenSet<Granularity> s_confirmedGranularity =
     [
         Granularity.PREMISE,
         Granularity.SUB_PREMISE,
     ];
 
-    private static readonly FrozenSet<ConfirmationLevel> TenuousConfirmations =
+    private static readonly FrozenSet<ConfirmationLevel> s_tenuousConfirmations =
     [
         ConfirmationLevel.UNCONFIRMED_BUT_PLAUSIBLE,
         ConfirmationLevel.UNCONFIRMED_AND_SUSPICIOUS,
@@ -48,7 +46,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
         // only exit early as cleanly confirmed when granularity is strong, address is complete,
         // and the API made no modifications (inferred, replaced, or spell-corrected components
         // are independent CONFIRM signals regardless of granularity)
-        if ( ConfirmedGranularity.Contains(verdict.ValidationGranularity)
+        if ( s_confirmedGranularity.Contains(verdict.ValidationGranularity)
           && verdict is
              {
                  AddressComplete: true,
@@ -102,7 +100,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 
         foreach ( ApiResponse.AddressComponent component in instance.Result.Address.AddressComponents )
         {
-            if ( component.ComponentName is null || !TenuousConfirmations.Contains(component.ConfirmationLevel) )
+            if ( component.ComponentName is null || !s_tenuousConfirmations.Contains(component.ConfirmationLevel) )
             {
                 continue;
             }

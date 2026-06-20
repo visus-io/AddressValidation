@@ -1,7 +1,6 @@
 namespace Visus.AddressValidation.Abstractions;
 
 using System.ComponentModel;
-using System.Text.Json.Serialization;
 
 /// <summary>
 ///     Enumeration of potential client environments

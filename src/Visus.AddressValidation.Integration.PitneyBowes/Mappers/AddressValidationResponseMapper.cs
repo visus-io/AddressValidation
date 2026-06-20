@@ -1,8 +1,6 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Mappers;
 
-using System.Collections.Frozen;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Mappers;
 using AddressValidation.Validation;
 using Contracts;

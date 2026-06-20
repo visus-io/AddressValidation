@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.Google.Services;
 
-using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Adapters;
 using AddressValidation.Mappers;
 using AddressValidation.Services;

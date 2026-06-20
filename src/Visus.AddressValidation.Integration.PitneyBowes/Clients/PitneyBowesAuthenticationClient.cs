@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Clients;
 
-using System.Diagnostics.CodeAnalysis;
 using Configuration;
 using Http.Clients;
 using Microsoft.Extensions.Options;

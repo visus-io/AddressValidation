@@ -1,7 +1,5 @@
 namespace Visus.AddressValidation;
 
-using System.Diagnostics.CodeAnalysis;
-
 /// <summary>
 ///     Marks a property as part of the custom response data for an address
 ///     validation result, optionally overriding the name used when the property

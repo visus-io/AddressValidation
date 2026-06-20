@@ -1,8 +1,6 @@
 namespace Visus.AddressValidation.Integration.FedEx.Mappers;
 
-using System.Collections.Frozen;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using Abstractions;
 using AddressValidation.Extensions;
 using AddressValidation.Mappers;

@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Contracts;
 
-using System.Text.Json.Serialization;
 using Abstractions;
 using AddressValidation.Abstractions;
 

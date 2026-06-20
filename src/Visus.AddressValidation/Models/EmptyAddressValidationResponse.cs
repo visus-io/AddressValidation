@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Models;
 
-using System.Diagnostics.CodeAnalysis;
 using Validation;
 
 /// <summary>

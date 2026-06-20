@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Mappers;
 
-using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Mappers;
 using Contracts;
 using Model;

@@ -1,7 +1,5 @@
 namespace Visus.AddressValidation.Integration.FedEx.Abstractions;
 
-using System.Text.Json.Serialization;
-
 /// <summary>
 ///     Represents the type of alert returned in a FedEx API response.
 /// </summary>

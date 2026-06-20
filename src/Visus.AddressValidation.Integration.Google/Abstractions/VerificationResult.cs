@@ -1,7 +1,5 @@
 namespace Visus.AddressValidation.Integration.Google.Abstractions;
 
-using System.Diagnostics.CodeAnalysis;
-
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 internal enum VerificationResult
 {

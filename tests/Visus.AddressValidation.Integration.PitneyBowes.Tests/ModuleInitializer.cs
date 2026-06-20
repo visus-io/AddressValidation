@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Tests;
 
-using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using VerifyTests.DiffPlex;
 

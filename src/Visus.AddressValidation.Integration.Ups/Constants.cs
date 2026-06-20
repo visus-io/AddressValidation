@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.Ups;
 
-using System.Collections.Frozen;
 using AddressValidation.Abstractions;
 
 /// <summary>

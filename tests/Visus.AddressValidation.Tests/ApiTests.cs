@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Tests;
 
-using System.Runtime.CompilerServices;
 using PublicApiGenerator;
 
 internal sealed class ApiTests

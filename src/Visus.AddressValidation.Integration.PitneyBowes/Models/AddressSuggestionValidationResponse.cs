@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes.Model;
 
-using System.Collections.Frozen;
 using AddressValidation.Abstractions;
 using Contracts;
 using Models;

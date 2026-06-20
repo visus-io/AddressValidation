@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.PitneyBowes;
 
-using System.Collections.Frozen;
 using AddressValidation.Abstractions;
 
 /// <summary>

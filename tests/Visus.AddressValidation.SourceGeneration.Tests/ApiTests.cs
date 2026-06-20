@@ -2,7 +2,6 @@ extern alias sourcegen;
 
 namespace Visus.AddressValidation.SourceGeneration.Tests;
 
-using System.Runtime.CompilerServices;
 using PublicApiGenerator;
 
 internal sealed class ApiTests

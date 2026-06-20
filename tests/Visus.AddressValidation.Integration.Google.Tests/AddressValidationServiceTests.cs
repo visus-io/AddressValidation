@@ -5,7 +5,6 @@ using System.Security.Cryptography;
 using AddressValidation.Abstractions;
 using AddressValidation.Models;
 using AddressValidation.Services;
-using AwesomeAssertions;
 using AwesomeAssertions.Execution;
 using Configuration;
 using Extensions;

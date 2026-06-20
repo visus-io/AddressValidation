@@ -1,7 +1,5 @@
 namespace Visus.AddressValidation.Integration.Ups.Contracts;
 
-using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
 using Abstractions;
 using AddressValidation.Abstractions;
 

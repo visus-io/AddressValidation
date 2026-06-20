@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.FedEx.Mappers;
 
-using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Mappers;
 using Contracts;
 using Models;

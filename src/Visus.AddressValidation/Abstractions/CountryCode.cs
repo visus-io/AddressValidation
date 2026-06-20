@@ -3,7 +3,6 @@
 namespace Visus.AddressValidation.Abstractions;
 
 using System.ComponentModel;
-using System.Text.Json.Serialization;
 
 /// <summary>
 ///     Enumeration of ISO-3166-1 Alpha 2 Country Codes

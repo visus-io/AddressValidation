@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.Ups.Mappers;
 
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using AddressValidation.Mappers;
 using Contracts;

@@ -1,15 +1,13 @@
 namespace Visus.AddressValidation.Serialization.Json;
 
-using System.Collections.Frozen;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 /// <summary>
 ///     Converts JSON strings representing boolean values to and from <see cref="bool" />.
 /// </summary>
 public sealed class JsonStringBooleanConverter : JsonConverter<bool>
 {
-    private static readonly FrozenSet<string> PossibleBooleanFalseStrings =
+    private static readonly FrozenSet<string> s_possibleBooleanFalseStrings =
         new[]
         {
             "0",
@@ -19,7 +17,7 @@ public sealed class JsonStringBooleanConverter : JsonConverter<bool>
             "NO",
         }.ToFrozenSet(StringComparer.OrdinalIgnoreCase);
 
-    private static readonly FrozenSet<string> PossibleBooleanTrueStrings =
+    private static readonly FrozenSet<string> s_possibleBooleanTrueStrings =
         new[]
         {
             "-1",
@@ -56,12 +54,12 @@ public sealed class JsonStringBooleanConverter : JsonConverter<bool>
             return defaultValue;
         }
 
-        if ( PossibleBooleanTrueStrings.Contains(value) )
+        if ( s_possibleBooleanTrueStrings.Contains(value) )
         {
             return true;
         }
 
-        if ( PossibleBooleanFalseStrings.Contains(value) )
+        if ( s_possibleBooleanFalseStrings.Contains(value) )
         {
             return false;
         }

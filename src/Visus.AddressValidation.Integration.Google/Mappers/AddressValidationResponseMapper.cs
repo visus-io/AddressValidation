@@ -1,8 +1,6 @@
 namespace Visus.AddressValidation.Integration.Google.Mappers;
 
-using System.Collections.Frozen;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Extensions;
 using AddressValidation.Mappers;
 using AddressValidation.Models;

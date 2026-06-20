@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.Google.Clients;
 
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Http.Json;
 using Configuration;
 using Contracts;

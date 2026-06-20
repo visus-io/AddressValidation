@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.Ups.Clients;
 
-using System.Diagnostics.CodeAnalysis;
 using Configuration;
 using Http.Clients;
 using Microsoft.Extensions.Options;

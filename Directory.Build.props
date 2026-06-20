@@ -39,4 +39,18 @@
     <BeforePack>$(BeforePack);IncludeAnalyzersInPackage</BeforePack>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Using Include="System.Diagnostics.CodeAnalysis"/>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
+    <Using Include="System.Collections.Frozen"/>
+    <Using Include="System.Text.Json.Serialization"/>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
+    <Using Include="AwesomeAssertions"/>
+    <Using Include="System.Runtime.CompilerServices"/>
+  </ItemGroup>
+
 </Project>

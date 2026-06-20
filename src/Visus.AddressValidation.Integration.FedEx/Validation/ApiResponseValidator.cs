@@ -1,7 +1,6 @@
 namespace Visus.AddressValidation.Integration.FedEx.Validation;
 
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using Abstractions;
 using AddressValidation.Abstractions;
 using AddressValidation.Models;

@@ -1,9 +1,7 @@
 namespace Visus.AddressValidation.Tests.Validation;
 
-using System.Collections.Frozen;
 using Abstractions;
 using AddressValidation.Validation;
-using AwesomeAssertions;
 using Models;
 
 internal sealed class AbstractAddressValidationRequestValidatorTests
@@ -165,7 +163,7 @@ internal sealed class AbstractAddressValidationRequestValidatorTests
         IValidationResult result = await _validator.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
 
         result.HasErrors.Should().BeTrue();
-        result.Errors.Should().ContainSingle(e => e.Message.Contains(TestValidator.Name));
+        result.Errors.Should().ContainSingle(e => e.Message.Contains(TestValidator.s_name));
         result.Errors.Should().NotContain(e => e.Message.Contains(nameof(request.AddressLines)));
     }
 
@@ -225,9 +223,9 @@ internal sealed class AbstractAddressValidationRequestValidatorTests
 
     private sealed class TestValidator : AbstractAddressValidationRequestValidator<TestRequest>
     {
-        internal const string Name = "Test";
+        internal const string s_name = "Test";
 
-        protected override string ProviderName => Name;
+        protected override string ProviderName => s_name;
 
         protected override FrozenSet<CountryCode> SupportedCountries =>
             new[]

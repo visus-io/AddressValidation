@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.Ups.Models;
 
-using System.Collections.Frozen;
 using Abstractions;
 using AddressValidation.Models;
 using Contracts;

@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.FedEx;
 
-using System.Collections.Frozen;
 using AddressValidation.Abstractions;
 
 /// <summary>

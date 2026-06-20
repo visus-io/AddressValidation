@@ -2,7 +2,6 @@ namespace Visus.AddressValidation.Integration.Google.Tests;
 
 using System.ComponentModel.DataAnnotations;
 using AddressValidation.Abstractions;
-using AwesomeAssertions;
 using Configuration;
 
 internal sealed class GoogleServiceOptionsTests

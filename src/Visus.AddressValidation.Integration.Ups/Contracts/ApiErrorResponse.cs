@@ -1,7 +1,5 @@
 namespace Visus.AddressValidation.Integration.Ups.Contracts;
 
-using System.Text.Json.Serialization;
-
 internal sealed class ApiErrorResponse
 {
     [JsonPropertyName("response")]

@@ -1,7 +1,5 @@
 namespace Visus.AddressValidation.Integration.Google.Validation;
 
-using System.Collections.Frozen;
-using System.Diagnostics.CodeAnalysis;
 using AddressValidation.Abstractions;
 using AddressValidation.Validation;
 using Models;

@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Integration.Google.Tests;
 
-using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using VerifyTests.DiffPlex;
 

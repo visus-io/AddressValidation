@@ -1,7 +1,5 @@
 namespace Visus.AddressValidation.Validation;
 
-using System.Collections.Frozen;
-
 internal sealed class ValidationResult : IValidationResult
 {
     public ValidationResult(IReadOnlySet<ValidationState> states)

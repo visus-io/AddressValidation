@@ -1,8 +1,6 @@
 namespace Visus.AddressValidation.Integration.Ups.Mappers;
 
-using System.Collections.Frozen;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using Abstractions;
 using AddressValidation.Abstractions;
 using AddressValidation.Mappers;

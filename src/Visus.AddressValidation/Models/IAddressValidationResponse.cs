@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Models;
 
-using System.Text.Json.Serialization;
 using Abstractions;
 
 /// <summary>

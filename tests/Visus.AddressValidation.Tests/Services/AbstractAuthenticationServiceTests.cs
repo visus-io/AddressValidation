@@ -1,7 +1,6 @@
 namespace Visus.AddressValidation.Tests.Services;
 
 using AddressValidation.Services;
-using AwesomeAssertions;
 using Http;
 using Http.Clients;
 using Microsoft.Extensions.Caching.Hybrid;
