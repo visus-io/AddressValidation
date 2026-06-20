@@ -105,13 +105,13 @@ internal sealed partial class ApiResponse
         public bool IsValidStreetAddress { get; set; }
 
         [CustomResponseDataProperty]
-        [JsonPropertyName(nameof(MatchSource))]
-        public string MatchSource { get; set; } = null!;
-
-        [CustomResponseDataProperty]
         [JsonConverter(typeof(JsonStringBooleanConverter))]
         [JsonPropertyName(nameof(Matched))]
         public bool Matched { get; set; }
+
+        [CustomResponseDataProperty]
+        [JsonPropertyName(nameof(MatchSource))]
+        public string MatchSource { get; set; } = null!;
 
         [JsonConverter(typeof(JsonStringBooleanConverter))]
         [JsonPropertyName(nameof(MultipleMatches))]

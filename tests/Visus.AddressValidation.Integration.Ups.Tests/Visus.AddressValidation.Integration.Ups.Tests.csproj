@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="TUnit"/>
-    <PackageReference Include="WireMock.Net" />
+    <PackageReference Include="WireMock.Net"/>
   </ItemGroup>
 
   <ItemGroup>

@@ -20,7 +20,7 @@ public enum ClientEnvironment
     /// </summary>
     [Description("Production")]
     PRODUCTION = 1,
-    
+
     /// <summary>
     ///     Sandbox (mock/integration test)
     /// </summary>

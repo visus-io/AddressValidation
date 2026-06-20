@@ -38,6 +38,13 @@ internal sealed class ApiResponse
         public string? Region { get; set; }
     }
 
+    internal sealed class Alert
+    {
+        public string? Code { get; set; }
+
+        public string? Description { get; set; }
+    }
+
     internal sealed class Candidate
     {
         public AddressClassification AddressClassification { get; set; } = null!;
@@ -55,13 +62,6 @@ internal sealed class ApiResponse
         public ResponseStatusCode? Code { get; set; }
 
         public string? Message { get; set; }
-    }
-
-    internal sealed class Alert
-    {
-        public string? Code { get; set; }
-
-        public string? Description { get; set; }
     }
 
     internal sealed class XavResponse

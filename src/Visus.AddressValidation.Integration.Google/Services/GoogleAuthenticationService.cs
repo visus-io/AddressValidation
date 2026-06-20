@@ -20,7 +20,7 @@ internal sealed class GoogleAuthenticationService : AbstractAuthenticationServic
 
     protected override string GenerateCacheKey()
     {
-        return string.IsNullOrWhiteSpace(_options.Value.ProjectId) 
+        return string.IsNullOrWhiteSpace(_options.Value.ProjectId)
                    ? throw new InvalidOperationException($"{nameof(GoogleServiceOptions.ProjectId)} is required to generate a cache key.")
                    : $"{CacheKeyTag}google:{_options.Value.ProjectId}";
     }

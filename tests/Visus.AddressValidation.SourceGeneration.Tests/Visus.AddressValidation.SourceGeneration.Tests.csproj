@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="TUnit"/>
-    <PackageReference Include="Verify.SourceGenerators" />
+    <PackageReference Include="Verify.SourceGenerators"/>
   </ItemGroup>
 
   <ItemGroup>

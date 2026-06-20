@@ -1,7 +1,5 @@
 namespace Visus.AddressValidation.Http.Clients;
 
-using Http;
-
 /// <summary>
 ///     Abstraction for implementing an authentication client
 /// </summary>

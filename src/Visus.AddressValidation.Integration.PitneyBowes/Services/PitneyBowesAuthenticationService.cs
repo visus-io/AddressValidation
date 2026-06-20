@@ -20,8 +20,8 @@ internal sealed class PitneyBowesAuthenticationService : AbstractAuthenticationS
 
     protected override string GenerateCacheKey()
     {
-        return string.IsNullOrWhiteSpace(_options.Value.DeveloperId) 
-                   ? throw new InvalidOperationException($"{nameof(PitneyBowesServiceOptions.DeveloperId)} is required to generate a cache key.") 
+        return string.IsNullOrWhiteSpace(_options.Value.DeveloperId)
+                   ? throw new InvalidOperationException($"{nameof(PitneyBowesServiceOptions.DeveloperId)} is required to generate a cache key.")
                    : $"{CacheKeyTag}pb:{_options.Value.DeveloperId}:{_options.Value.ClientEnvironment}";
     }
 }

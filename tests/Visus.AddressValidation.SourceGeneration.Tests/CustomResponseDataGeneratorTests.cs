@@ -17,7 +17,7 @@ internal sealed class CustomResponseDataGeneratorTests : SourceGeneratorTestBase
     {
         const string source = """
                               using Visus.AddressValidation;
-                              
+
                               namespace Visus.AddressValidation.SourceGeneration.Tests;
 
                               partial class Response
@@ -36,7 +36,7 @@ internal sealed class CustomResponseDataGeneratorTests : SourceGeneratorTestBase
                                   }
                               }
                               """;
-        
+
         return VerifyGenerateSourcesAsync(source, new CustomResponseDataGenerator());
     }
 
@@ -45,7 +45,7 @@ internal sealed class CustomResponseDataGeneratorTests : SourceGeneratorTestBase
     {
         const string source = """
                               using Visus.AddressValidation;
-                              
+
                               namespace Visus.AddressValidation.SourceGeneration.Tests;
 
                               partial class ApiResponse
@@ -57,7 +57,7 @@ internal sealed class CustomResponseDataGeneratorTests : SourceGeneratorTestBase
                                   public string ResponseText { get; set; }
                               }
                               """;
-        
+
         return VerifyGenerateSourcesAsync(source, new CustomResponseDataGenerator());
     }
 }

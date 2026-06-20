@@ -20,8 +20,8 @@ internal sealed class FedExAuthenticationService : AbstractAuthenticationService
 
     protected override string GenerateCacheKey()
     {
-        return string.IsNullOrWhiteSpace(_options.Value.AccountNumber) 
-                   ? throw new InvalidOperationException($"{nameof(FedExServiceOptions.AccountNumber)} is required to generate a cache key.") 
+        return string.IsNullOrWhiteSpace(_options.Value.AccountNumber)
+                   ? throw new InvalidOperationException($"{nameof(FedExServiceOptions.AccountNumber)} is required to generate a cache key.")
                    : $"{CacheKeyTag}fdx:{_options.Value.AccountNumber}:{_options.Value.ClientEnvironment}";
     }
 }

@@ -20,7 +20,7 @@ internal sealed class UpsAuthenticationService : AbstractAuthenticationService<U
 
     protected override string GenerateCacheKey()
     {
-        return string.IsNullOrWhiteSpace(_options.Value.AccountNumber) 
+        return string.IsNullOrWhiteSpace(_options.Value.AccountNumber)
                    ? throw new InvalidOperationException($"{nameof(UpsServiceOptions.AccountNumber)} is required to generate a cache key.")
                    : $"{CacheKeyTag}ups:{_options.Value.AccountNumber}:{_options.Value.ClientEnvironment}";
     }
