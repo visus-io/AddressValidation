@@ -55,7 +55,7 @@ At application startup, you will need to register the integration with the [Micr
 builder.Services.AddGoogleAddressValidation();
 ```
 
-[!INCLUDE [distributed-cache-required](../includes/distributed-cache-required.md)]
+[!INCLUDE [hybrid-cache-required](../includes/hybrid-cache-required.md)]
 
 ## Configuration
 
@@ -94,50 +94,45 @@ Configuration is bound from the `AddressValidationSettings:Google` section. The 
 With the setup and configuration now complete, you can leverage the validator:
 
 ```csharp
-public class ValidateController(IAddressValidationService<GoogleAddressValidationRequest> validationService)
+public class ValidateController
 {
-    private readonly IAddressValidationService<GoogleAddressValidationRequest> _validationService = validationService ?? throw new ArgumentNullException(nameof(validationService));
-    
-    [HttpGet]
-    public async ValueTask<IActionResult> Get()
+    private readonly IAddressValidationService<GoogleAddressValidationRequest> _validationService;
+
+    public ValidateController(IAddressValidationService<GoogleAddressValidationRequest> validationService)
     {
-        new GoogleAddressValidationRequest
-        {
-            AddressLines =
-            {
-                "1600 Amphitheatre Pkwy"
-            },
-            CityOrTown = "Mountain View",
-            StateOrProvince = "CA",
-            PostalCode = "94043",
-            Country = CountryCode.US
-        };
-        
-        IAddressValidationResponse? response = await ValidationService.ValidateAsync(request);
+        _validationService = validationService ?? throw new ArgumentNullException(nameof(validationService));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] GoogleAddressValidationRequest request, CancellationToken cancellationToken = default)
+    {
+        IAddressValidationResponse? response = await _validationService.ValidateAsync(request, cancellationToken);
         
         return response is null
-            ? new NoContentResult()
-            : new OkObjectResult(response);
+            ? new NotFoundResult()
+            : response.Errors.Count > 0
+                ? new UnprocessableEntityObjectResult(response)
+                : new OkObjectResult(response);
     }
 }
 ```
 
 > [!NOTE]
-> [`EnableUspsCass`](xref:Visus.AddressValidation.Integration.Google.Http.GoogleAddressValidationRequest#Visus_AddressValidation_Integration_Google_Http_GoogleAddressValidationRequest_EnableUspsCass) is a computed property and will only be `true` if the Country is `US`.
+> [`EnableUspsCass`](xref:Visus.AddressValidation.Integration.Google.Models.GoogleAddressValidationRequest#Visus_AddressValidation_Integration_Google_Models_GoogleAddressValidationRequest_EnableUspsCass) is a computed property and will only be `true` if the Country is `US`.
 
 > [!TIP]
-> When re-validating an address, be sure to set the property [`PreviousResponseId`](xref:Visus.AddressValidation.Integration.Google.Http.GoogleAddressValidationRequest#Visus_AddressValidation_Integration_Google_Http_GoogleAddressValidationRequest_PreviousResponseId) value within [`GoogleAddressValidationRequest`](xref:Visus.AddressValidation.Integration.Google.Http.GoogleAddressValidationRequest). The value can be retrieved from the [`CustomResponseData`](xref:Visus.AddressValidation.Model.IAddressValidationResponse#Visus_AddressValidation_Model_IAddressValidationResponse_CustomResponseData) dictionary with the key `responseId`.
+> When re-validating an address, be sure to set the property [`PreviousResponseId`](xref:Visus.AddressValidation.Integration.Google.Models.GoogleAddressValidationRequest#Visus_AddressValidation_Integration_Google_Models_GoogleAddressValidationRequest_PreviousResponseId) value within [`GoogleAddressValidationRequest`](xref:Visus.AddressValidation.Integration.Google.Models.GoogleAddressValidationRequest). The value can be retrieved from the [`CustomResponseData`](xref:Visus.AddressValidation.Models.IAddressValidationResponse#Visus_AddressValidation_Models_IAddressValidationResponse_CustomResponseData) dictionary with the key `responseId`.
 
 # [Request](#tab/tab-ave-google-json-request)
 ```JSON
 {
   "address": {
     "addressLines": [
-      "1600 Amphitheatre Pkwy"
+      "1600 Pennsylvania Ave NW"
     ],
-    "administrativeArea": "CA",
-    "locality": "Mountain View",
-    "postalCode": "94043",
+    "administrativeArea": "DC",
+    "locality": "Washington",
+    "postalCode": "20500",
     "regionCode": "US"
   },
   "enableUspsCass": true
@@ -147,16 +142,16 @@ public class ValidateController(IAddressValidationService<GoogleAddressValidatio
 ```JSON
 {
   "addressLines": [
-    "1600 AMPHITHEATRE PKWY"
+    "1600 PENNSYLVANIA AVE NW"
   ],
-  "cityOrTown": "MOUNTAIN VIEW",
+  "cityOrTown": "WASHINGTON",
   "country": "US",
   "customResponseData": {
     "addressRecordType": "S",
-    "carrierRoute": "C909",
+    "carrierRoute": "C000",
     "carrierRouteIndicator": "D",
     "cassProcessed": true,
-    "county": "SANTA CLARA",
+    "county": "DISTRICT OF COLUMBIA",
     "deliveryPointCheckDigit": "0",
     "deliveryPointCode": "00",
     "dpvCmra": "N",
@@ -167,25 +162,24 @@ public class ValidateController(IAddressValidationService<GoogleAddressValidatio
     "dpvFootnote": "AABB",
     "dpvNonDeliveryDays": "N",
     "dpvNoSecureLocation": "N",
-    "dpvNoStat": "Y",
-    "dpvNoStatReasonCode": 5,
+    "dpvNoStat": "N",
     "dpvPbsa": "N",
     "dpvThrowback": "N",
     "dpvVacant": "N",
     "elotFlag": "A",
-    "elotNumber": "0103",
-    "fipsCountyCode": "085",
-    "googlePlaceId": "ChIJF4Yf2Ry7j4AR__1AkytDyAE",
-    "latitude": 37.4215939,
-    "longitude": -122.0845152,
-    "postOfficeCity": "MOUNTAIN VIEW",
-    "postOfficeState": "CA",
-    "responseId": "b951c4fe-2c9f-4222-a539-1cafd8348a42"
+    "elotNumber": "0001",
+    "fipsCountyCode": "001",
+    "googlePlaceId": "ChIJ37HL3ry3t4kRv3YLyiMEoGg",
+    "latitude": 38.8976763,
+    "longitude": -77.0365298,
+    "postOfficeCity": "WASHINGTON",
+    "postOfficeState": "DC",
+    "responseId": "c3d4e5f6-a7b8-9012-cdef-34567890abcd"
   },
   "errors": [],
   "isResidential": false,
-  "postalCode": "94043-1351",
-  "stateOrProvince": "CA",
+  "postalCode": "20500-0003",
+  "stateOrProvince": "DC",
   "suggestions": [],
   "warnings": []
 }

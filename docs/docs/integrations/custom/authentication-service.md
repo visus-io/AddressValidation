@@ -10,35 +10,57 @@ After implementing an [authentication client](xref:custom-authentication-client)
 The authentication service wraps around the [authentication client](xref:custom-authentication-client) and ensures the following:
 
 - An authentication request is made to the underlying service for an [access token](https://oauth.net/2/access-tokens/).
-- The access token that is cached by an [`IDistributedCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.distributed.idistributedcache) instance to avoid superfluous calls.
+- The access token that is cached by [`HybridCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.hybrid.hybridcache) to avoid superfluous calls.
   - If the cache hit misses due to expiration, an authentication request is made to retrieve a new token.
+
+The example below assumes a `MyServiceOptions` class that extends [`AbstractServiceOptions`](xref:Visus.AddressValidation.Configuration.AbstractServiceOptions) and exposes the provider credentials:
+
+```csharp
+public sealed class MyServiceOptions : AbstractServiceOptions
+{
+    public const string SectionName = "AddressValidationSettings:MyProvider";
+
+    public override Uri EndpointUri => /* ... */;
+
+    [Required(AllowEmptyStrings = false)]
+    public required string ClientId { get; set; }
+
+    [Required(AllowEmptyStrings = false)]
+    public required string ClientSecret { get; set; }
+}
+```
+
+> [!NOTE]
+> See [Registering Services](xref:custom-registering-services) for the complete options class definition, including the `EndpointUri` implementation and source-generated validator.
 
 Below is an example of a simple authentication service that wraps the [authentication client](xref:custom-authentication-client).
 
 ```csharp
-internal sealed class MyAuthenticationService(
-    IDistributedCache cache,
-    IConfiguration configuration,
-    MyAuthenticationClient authenticationClient)
-    : AbstractAuthenticationService<MyAuthenticationClient>(authenticationClient, cache)
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
+internal sealed class MyAuthenticationService : AbstractAuthenticationService<MyAuthenticationClient>
 {
-    private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-    
-    protected override string? GenerateCacheKey()
+    private readonly IOptions<MyServiceOptions> _options;
+
+    internal MyAuthenticationService(
+        HybridCache cache,
+        IOptions<MyServiceOptions> options,
+        MyAuthenticationClient authenticationClient)
+        : base(authenticationClient, cache)
     {
-        string? uniqueIdentifier = _configuration["AVE_MY_UNIQUE_IDENTIFIER"];
-        if ( string.IsNullOrWhiteSpace(uniqueIdentifier) )
-        {
-            return null;
-        }
-        
-        return $"AVE_CACHE_MY_ACCESS_TOKEN_{uniqueIdentifier}";
+        _options = options ?? throw new ArgumentNullException(nameof(options));
+    }
+
+    protected override string GenerateCacheKey()
+    {
+        return string.IsNullOrWhiteSpace(_options.Value.ClientId)
+                   ? throw new InvalidOperationException($"{nameof(MyServiceOptions.ClientId)} is required to generate a cache key.")
+                   : $"{CacheKeyTag}my-provider:{_options.Value.ClientId}:{_options.Value.ClientEnvironment}";
     }
 }
 ```
 
 > [!IMPORTANT]
-> [`GenerateCacheKey()`](xref:Visus.AddressValidation.Services.AbstractAuthenticationService`1#Visus_AddressValidation_Services_AbstractAuthenticationService_1_GenerateCacheKey) **must** return a static unique value. If no value is returned, the [authentication client](xref:custom-authentication-client) **will not be called**.
+> [`GenerateCacheKey()`](xref:Visus.AddressValidation.Services.AbstractAuthenticationService`1#Visus_AddressValidation_Services_AbstractAuthenticationService_1_GenerateCacheKey) **must** return a non-null, non-empty string. The key may only contain letters, digits, underscores, hyphens, and colons. If the required credentials are absent, throw an `InvalidOperationException` rather than returning an empty or invalid value — the base class will throw anyway if the key fails validation.
 
 > [!IMPORTANT]
 > The service **must** inherit the [`AbstractAuthenticationService<TClient>`](xref:Visus.AddressValidation.Services.AbstractAuthenticationService`1) class.

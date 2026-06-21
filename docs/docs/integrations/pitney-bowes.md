@@ -36,7 +36,7 @@ At application startup, you will need to register the integration with the [Micr
 builder.Services.AddPitneyBowesAddressValidation();
 ```
 
-[!INCLUDE [distributed-cache-required](../includes/distributed-cache-required.md)]
+[!INCLUDE [hybrid-cache-required](../includes/hybrid-cache-required.md)]
 
 ## Configuration
 
@@ -76,30 +76,25 @@ For situations where the validation has failed or the address being provided is 
 [address suggestion request](#suggestion-example) instead.
 
 ```csharp
-public class ValidateController(IAddressValidationService<PitneyBowesAddressValidationRequest> validationService)
+public class ValidateController
 {
-    private readonly IAddressValidationService<PitneyBowesAddressValidationRequest> _validationService = validationService ?? throw new ArgumentNullException(nameof(validationService));
-    
-    [HttpGet]
-    public async ValueTask<IActionResult> Get()
+    private readonly IAddressValidationService<PitneyBowesAddressValidationRequest> _validationService;
+
+    public ValidateController(IAddressValidationService<PitneyBowesAddressValidationRequest> validationService)
     {
-        new PitneyBowesAddressValidationRequest
-        {
-            AddressLines =
-            {
-                "1600 Amphitheatre Pkwy"
-            },
-            CityOrTown = "Mountain View",
-            StateOrProvince = "CA",
-            PostalCode = "94043",
-            Country = CountryCode.US            
-        };
-        
-        IAddressValidationResponse? response = await ValidationService.ValidateAsync(request);
+        _validationService = validationService ?? throw new ArgumentNullException(nameof(validationService));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] PitneyBowesAddressValidationRequest request, CancellationToken cancellationToken = default)
+    {
+        IAddressValidationResponse? response = await _validationService.ValidateAsync(request, cancellationToken);
         
         return response is null
-            ? new NoContentResult()
-            : new OkObjectResult(response);
+            ? new NotFoundResult()
+            : response.Errors.Count > 0
+                ? new UnprocessableEntityObjectResult(response)
+                : new OkObjectResult(response);
     }
 }
 ```
@@ -107,11 +102,11 @@ public class ValidateController(IAddressValidationService<PitneyBowesAddressVali
 ```JSON
 {
   "addressLines": [
-    "1600 Amphitheatre Pkwy"
+    "350 5th Ave"
   ],
-  "cityTown": "Mountain View",
-  "stateProvince": "CA",
-  "postalCode": "94043",
+  "cityTown": "New York",
+  "stateProvince": "NY",
+  "postalCode": "10118",
   "countryCode": "US"
 }
 ```
@@ -119,14 +114,14 @@ public class ValidateController(IAddressValidationService<PitneyBowesAddressVali
 ```JSON
 {
   "addressLines": [
-    "1600 AMPHITHEATRE PKWY"
+    "350 5TH AVE"
   ],
-  "cityOrTown": "MOUNTAIN VIEW",
+  "cityOrTown": "NEW YORK",
   "country": "US",
   "errors": [],
   "isResidential": false,
-  "postalCode": "94043-1351",
-  "stateOrProvince": "CA",
+  "postalCode": "10118-0001",
+  "stateOrProvince": "NY",
   "suggestions": [],
   "warnings": []
 }
@@ -139,37 +134,31 @@ public class ValidateController(IAddressValidationService<PitneyBowesAddressVali
 
 The following example demonstrates an address suggestion request. Scenarios in which such requests are made include:
 
-- [Standard request](#standard-example) returned a validation failure in the [Errors](xref:Visus.AddressValidation.Model.IAddressValidationResponse#Visus_AddressValidation_Model_IAddressValidationResponse_Errors) collection.
+- [Standard request](#standard-example) returned a validation failure in the [Errors](xref:Visus.AddressValidation.Models.IAddressValidationResponse#Visus_AddressValidation_Models_IAddressValidationResponse_Errors) collection.
 - Provided address is incomplete or ambiguous.
 
 In order to trigger an address suggestion request, set the `IncludeSuggestions` property to `true`.
 
 ```csharp
-public class ValidateController(IAddressValidationService<PitneyBowesAddressValidationRequest> validationService)
+public class ValidateController
 {
-    private readonly IAddressValidationService<PitneyBowesAddressValidationRequest> _validationService = validationService ?? throw new ArgumentNullException(nameof(validationService));
-    
-    [HttpGet]
-    public async ValueTask<IActionResult> Get()
+    private readonly IAddressValidationService<PitneyBowesAddressValidationRequest> _validationService;
+
+    public ValidateController(IAddressValidationService<PitneyBowesAddressValidationRequest> validationService)
     {
-        new PitneyBowesAddressValidationRequest
-        {
-            AddressLines =
-            {
-                "3 1st Ave NW"
-            },
-            CityOrTown = "Litz",
-            StateOrProvince = "FL",
-            PostalCode = "33549",
-            Country = CountryCode.US,
-            IncludeSuggestions = true # triggers an address suggestion request           
-        };
-        
-        IAddressValidationResponse? response = await ValidationService.ValidateAsync(request);
+        _validationService = validationService ?? throw new ArgumentNullException(nameof(validationService));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] PitneyBowesAddressValidationRequest request, CancellationToken cancellationToken = default)
+    {
+        IAddressValidationResponse? response = await _validationService.ValidateAsync(request, cancellationToken);
         
         return response is null
-            ? new NoContentResult()
-            : new OkObjectResult(response);
+            ? new NotFoundResult()
+            : response.Errors.Count > 0
+                ? new UnprocessableEntityObjectResult(response)
+                : new OkObjectResult(response);
     }
 }
 ```
@@ -177,40 +166,38 @@ public class ValidateController(IAddressValidationService<PitneyBowesAddressVali
 # [Suggestion Request](#tab/tab-ave-pitney-bowes-json-suggest-request)
 ```JSON
 {
-  "address": {
-    "addressLines": [
-      "3 1st Ave NW"
-    ],
-    "cityTown": "Litz",
-    "stateProvince": "FL",
-    "postalCode": "33549",
-    "countryCode": "US"
-  }
+  "addressLines": [
+    "30 Rockefeller Plz"
+  ],
+  "cityTown": "New York",
+  "stateProvince": "NY",
+  "postalCode": "10112",
+  "countryCode": "US"
 }
 ```
 # [Suggestion Response](#tab/tab-ave-pitney-bowes-json-suggest-response)
 ```JSON
 {
   "addressLines": [
-    "3 1ST AVE NW"
+    "30 ROCKEFELLER PLZ"
   ],
-  "cityOrTown": "LITZ",
+  "cityOrTown": "NEW YORK",
   "country": "US",
   "errors": [],
-  "isResidential": null,
-  "postalCode": "33549",
-  "stateOrProvince": "FL",
+  "isResidential": false,
+  "postalCode": "10112-0015",
+  "stateOrProvince": "NY",
   "suggestions": [
     {
       "addressLines": [
-        "3 1ST AVE NE"
+        "1270 6TH AVE"
       ],
-      "cityOrTown": "LITZ",
+      "cityOrTown": "NEW YORK",
       "country": "US",
       "errors": [],
-      "isResidential": null,
-      "postalCode": "33549",
-      "stateOrProvince": "FL",
+      "isResidential": false,
+      "postalCode": "10020-1406",
+      "stateOrProvince": "NY",
       "suggestions": [],
       "warnings": []
     }
