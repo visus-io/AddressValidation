@@ -40,20 +40,34 @@ builder.Services.AddPitneyBowesAddressValidation();
 
 ## Configuration
 
-Configuration of the integration is relatively straight forward and all parameters are read through an `IConfiguration` instance.
+Configuration is bound from the `AddressValidationSettings:PitneyBowes` section.
 
-| Key                            | Notes                                                                                               |
-|--------------------------------|-----------------------------------------------------------------------------------------------------|
-| `VS_AVE_PB_DEVELOPER_ID`       | [Developer ID](https://docs.shippingapi.pitneybowes.com/getting-started.html#get-your-developer-id) |
-| `VS_AVE_PB_CLIENT_ENVIRONMENT` | Accepted values are `PRODUCTION` or `DEVELOPMENT`                                                   |
-| `VS_AVE_PB_API_KEY`            |                                                                                                     |
-| `VS_AVE_PB_API_SECRET`         |                                                                                                     |
+```json
+{
+  "AddressValidationSettings": {
+    "PitneyBowes": {
+      "DeveloperId": "<your developer id>",
+      "ApiKey": "<your api key>",
+      "ApiSecret": "<your api secret>",
+      "ClientEnvironment": "PRODUCTION"
+    }
+  }
+}
+```
+
+| Property | Required | Description |
+|---|---|---|
+| `DeveloperId` | Yes | [Developer ID](https://docs.shippingapi.pitneybowes.com/getting-started.html#get-your-developer-id) associated with your registered application |
+| `ApiKey` | Yes | API key issued by Pitney Bowes for your registered application |
+| `ApiSecret` | Yes | API secret issued by Pitney Bowes for your registered application |
+| `ClientEnvironment` | No | Accepted values: `PRODUCTION`, `DEVELOPMENT`, `SANDBOX`. Defaults to `DEVELOPMENT` |
+| `EndpointUriOverride` | SANDBOX only | Custom endpoint URI; required when `ClientEnvironment` is `SANDBOX` |
 
 > [!NOTE]
-> `VS_AVE_PB_DEVELOPER_ID` is only used for the purposes of constructing a cache key for the authentication cache.
+> `DeveloperId` is only used to construct the cache key for the authentication cache.
 
 > [!IMPORTANT]
-> `VS_AVE_PB_API_KEY` and `VS_AVE_PB_API_SECRET` should be stored encrypted at rest. See the [Security](../index.md#security) for additional details.
+> `ApiKey` and `ApiSecret` should be stored encrypted at rest. See the [Security](../index.md#security) for additional details.
 
 ## Standard Example
 

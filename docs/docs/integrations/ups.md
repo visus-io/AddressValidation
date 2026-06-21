@@ -34,18 +34,31 @@ builder.Services.AddUpsAddressValidation();
 
 ## Configuration
 
-Configuration of the integration is relatively straight forward and all parameters are read through an `IConfiguration` instance.
+Configuration is bound from the `AddressValidationSettings:Ups` section.
 
+```json
+{
+  "AddressValidationSettings": {
+    "Ups": {
+      "AccountNumber": "<your account number>",
+      "ClientId": "<your client id>",
+      "ClientSecret": "<your client secret>",
+      "ClientEnvironment": "PRODUCTION"
+    }
+  }
+}
+```
 
-| Key                             | Notes                                             |
-|---------------------------------|---------------------------------------------------|
-| `VS_AVE_UPS_ACCOUNT_NUMBER`     |                                                   |                                                                               
-| `VS_AVE_UPS_CLIENT_ENVIRONMENT` | Accepted values are `PRODUCTION` or `DEVELOPMENT` |
-| `VS_AVE_UPS_CLIENT_ID`          |                                                   |
-| `VS_AVE_UPS_CLIENT_SECRET`      |                                                   |
+| Property | Required | Description |
+|---|---|---|
+| `AccountNumber` | Yes | Your UPS account number |
+| `ClientId` | Yes | OAuth 2.0 client ID issued by UPS for your registered application |
+| `ClientSecret` | Yes | OAuth 2.0 client secret issued by UPS for your registered application |
+| `ClientEnvironment` | No | Accepted values: `PRODUCTION`, `DEVELOPMENT`, `SANDBOX`. Defaults to `DEVELOPMENT` |
+| `EndpointUriOverride` | SANDBOX only | Custom endpoint URI; required when `ClientEnvironment` is `SANDBOX` |
 
 > [!IMPORTANT]
-> `VS_AVE_UPS_CLIENT_ID` and `VS_AVE_UPS_CLIENT_SECRET` should be stored encrypted at rest. See the [Security](../index.md#security) for additional details.
+> `ClientId` and `ClientSecret` should be stored encrypted at rest. See the [Security](../index.md#security) for additional details.
 
 ## Standard Example
 
@@ -82,7 +95,7 @@ public class ValidateController(IAddressValidationService<UpsAddressValidationRe
 ```
 
 > [!NOTE]
-> When `VS_AVE_UPS_CLIENT_ENVIRONMENT` is set to `DEVELOPMENT` only addresses in New York (`NY`) and California (`CA`) are supported.
+> When `ClientEnvironment` is set to `DEVELOPMENT` only addresses in New York (`NY`) and California (`CA`) are supported.
 
 # [Request](#tab/tab-ave-pitney-bowes-json-request)
 ```JSON
@@ -153,7 +166,7 @@ public class ValidateController(IAddressValidationService<UpsAddressValidationRe
 ```
 
 > [!NOTE]
-> When `VS_AVE_UPS_CLIENT_ENVIRONMENT` is set to `DEVELOPMENT` only addresses in New York (`NY`) and California (`CA`) are supported.
+> When `ClientEnvironment` is set to `DEVELOPMENT` only addresses in New York (`NY`) and California (`CA`) are supported.
 
 # [Suggest Request](#tab/tab-ave-pitney-bowes-json-suggest-request)
 ```JSON

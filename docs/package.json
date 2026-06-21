@@ -2,20 +2,8 @@
   "name": "addressvalidation-docs-watch",
   "description": "Address Validation Library Documentation Watcher",
   "scripts": {
-    "watch": "npm-watch build",
+    "watch": "chokidar 'api/**/*.{md,yml}' 'docs/**/*.{md,yml}' 'toc.yml' 'index.md' -c 'bun run build'",
     "build": "docfx build --serve"
-  },
-  "watch": {
-    "build": {
-      "patterns": [
-        "api",
-        "docs",
-        "toc",
-        "index"
-      ],
-      "extensions": "md,yml",
-      "quiet": false
-    }
   },
   "repository": {
     "type": "git",
@@ -28,6 +16,6 @@
   },
   "homepage": "https://github.com/visus-io/addressvalidation#readme",
   "devDependencies": {
-    "npm-watch": "^0.13.0"
+    "chokidar-cli": "^3.0.0"
   }
 }

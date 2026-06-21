@@ -59,20 +59,35 @@ builder.Services.AddGoogleAddressValidation();
 
 ## Configuration
 
-Configuration of the integration is relatively straight forward and **all** parameters are read through an `IConfiguration` instance.
-The necessary configuration values can be extracted from the `$SA_NAME-key.json` file that was produced earlier in the [credentials](#credentials) step.
+Configuration is bound from the `AddressValidationSettings:Google` section. The necessary values can be extracted from the `$SA_NAME-key.json` file produced in the [credentials](#credentials) step.
 
-| Key                                      | JSON Field   |
-|------------------------------------------|--------------|
-| `VS_AVE_GCP_SERVICE_ACCOUNT_EMAIL`       | client_email |
-| `VS_AVE_GCP_PROJECT_ID`                  | project_id   |
-| `VS_AVE_GCP_SERVICE_ACCOUNT_PRIVATE_KEY` | private_key  |
+```json
+{
+  "AddressValidationSettings": {
+    "Google": {
+      "ServiceAccountEmail": "<client_email from key file>",
+      "ProjectId": "<project_id from key file>",
+      "PrivateKey": "<private_key from key file>",
+      "ClientEnvironment": "PRODUCTION"
+    }
+  }
+}
+```
+
+| Property | Required | Description |
+|---|---|---|
+| `ServiceAccountEmail` | Yes | Maps to `client_email` in the service account key file |
+| `ProjectId` | Yes | Maps to `project_id` in the service account key file |
+| `PrivateKey` | Yes | Maps to `private_key` in the service account key file |
+| `ClientEnvironment` | No | Accepted values: `PRODUCTION`, `DEVELOPMENT`, `SANDBOX`. Defaults to `PRODUCTION` |
+| `EndpointUriOverride` | SANDBOX only | Custom endpoint URI; required when `ClientEnvironment` is `SANDBOX` |
+| `AuthenticationUriOverride` | SANDBOX only | Custom authentication URI; required when `ClientEnvironment` is `SANDBOX` |
 
 > [!IMPORTANT]
-> Formatting of the `private_key` value **must** be preserved.
+> Formatting of the `PrivateKey` value **must** be preserved (newlines included).
 
 > [!IMPORTANT]
-> `VS_AVE_GCP_SERVICE_ACCOUNT_PRIVATE_KEY` should be stored encrypted at rest. See the [Security](../index.md#security) for additional details.
+> `PrivateKey` should be stored encrypted at rest. See the [Security](../index.md#security) for additional details.
 
 ## Standard Example
 
