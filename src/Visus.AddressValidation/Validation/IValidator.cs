@@ -3,7 +3,7 @@ namespace Visus.AddressValidation.Validation;
 /// <summary>
 ///     Defines a validator for a given type.
 /// </summary>
-/// <typeparam name="T">Object that will be validated.</typeparam>
+/// <typeparam name="T">The type of object to validate.</typeparam>
 public interface IValidator<in T>
     where T : class
 {

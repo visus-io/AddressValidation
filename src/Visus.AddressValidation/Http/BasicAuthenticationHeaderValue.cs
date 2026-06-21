@@ -7,20 +7,16 @@ using System.Text;
 ///     HTTP Basic Authentication Authorization Header
 /// </summary>
 /// <seealso cref="AuthenticationHeaderValue" />
-/// <remarks>
-///     Instantiates a new instance of the <see cref="BasicAuthenticationHeaderValue" /> class.
-/// </remarks>
 public sealed class BasicAuthenticationHeaderValue : AuthenticationHeaderValue
 {
     /// <summary>
-    ///     HTTP Basic Authentication Authorization Header
+    ///     Initializes a new instance of <see cref="BasicAuthenticationHeaderValue" />.
     /// </summary>
-    /// <seealso cref="AuthenticationHeaderValue" />
-    /// <remarks>
-    ///     Instantiates a new instance of the <see cref="BasicAuthenticationHeaderValue" /> class.
-    /// </remarks>
     /// <param name="userName">The name of the user.</param>
     /// <param name="password">The password for the given user.</param>
+    /// <exception cref="ArgumentException">
+    ///     Thrown when <paramref name="userName" /> is <see langword="null" /> or whitespace.
+    /// </exception>
     public BasicAuthenticationHeaderValue(string userName, string? password)
         : base("Basic", EncodeCredentials(userName, password))
     {

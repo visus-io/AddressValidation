@@ -1,7 +1,7 @@
 namespace Visus.AddressValidation.Validation;
 
 /// <summary>
-///     Base class for implemented a validator.
+///     Base class for implementing a validator.
 /// </summary>
 /// <typeparam name="T">The object instance to be validated.</typeparam>
 public abstract class AbstractValidator<T> : IValidator<T>

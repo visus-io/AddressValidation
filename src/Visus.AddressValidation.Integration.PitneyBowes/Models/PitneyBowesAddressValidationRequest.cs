@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 using Models;
 
 /// <summary>
-///     Representation of a uniformed address validation request to Pitney Bowes
+///     Representation of a unified address validation request to Pitney Bowes
 /// </summary>
 [UsedImplicitly]
 public sealed class PitneyBowesAddressValidationRequest : AbstractAddressValidationRequest

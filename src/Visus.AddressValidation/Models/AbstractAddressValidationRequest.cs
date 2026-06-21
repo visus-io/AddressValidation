@@ -3,14 +3,14 @@ namespace Visus.AddressValidation.Models;
 using Abstractions;
 
 /// <summary>
-///     Base class for implementing a uniformed address validation request.
+///     Base class for implementing a unified address validation request.
 /// </summary>
 public abstract class AbstractAddressValidationRequest
 {
     private CountryCode? _country;
 
     /// <summary>
-    ///     Gets or sets address lines
+    ///     Gets the set of address lines for the address; comparisons are case-insensitive.
     /// </summary>
     public ISet<string> AddressLines { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -24,7 +24,7 @@ public abstract class AbstractAddressValidationRequest
     public virtual string? NoPostalCodeFallback => null;
 
     /// <summary>
-    ///     Gets or sets the city (town)
+    ///     Gets or sets the city or town name.
     /// </summary>
     public string? CityOrTown { get; set; }
 

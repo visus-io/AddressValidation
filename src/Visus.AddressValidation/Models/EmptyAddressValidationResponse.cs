@@ -5,18 +5,12 @@ using Validation;
 /// <summary>
 ///     Represents an empty validation response
 /// </summary>
-/// <remarks>
-///     Initializes a new instance of the <see cref="EmptyAddressValidationResponse" />.
-/// </remarks>
 [ExcludeFromCodeCoverage]
 public sealed class EmptyAddressValidationResponse : AbstractAddressValidationResponse
 {
     /// <summary>
-    ///     Represents an empty validation response
+    ///     Initializes a new instance of <see cref="EmptyAddressValidationResponse" />.
     /// </summary>
-    /// <remarks>
-    ///     Initializes a new instance of the <see cref="EmptyAddressValidationResponse" />.
-    /// </remarks>
     /// <param name="validationResult">
     ///     Current validation state of the response represented as an instance of
     ///     <see cref="IValidationResult" />.
