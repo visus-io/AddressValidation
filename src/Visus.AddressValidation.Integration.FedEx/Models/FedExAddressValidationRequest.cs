@@ -4,7 +4,7 @@ using AddressValidation.Models;
 using JetBrains.Annotations;
 
 /// <summary>
-///     Representation of a uniformed address validation request to FedEx.
+///     Representation of a unified address validation request to FedEx.
 /// </summary>
 [UsedImplicitly]
 public sealed class FedExAddressValidationRequest : AbstractAddressValidationRequest
@@ -13,7 +13,7 @@ public sealed class FedExAddressValidationRequest : AbstractAddressValidationReq
     public override string? NoPostalCodeFallback => "00000";
 
     /// <summary>
-    ///     Gets or sets the Client Reference ID
+    ///     Gets or sets an optional client-defined reference identifier passed through to the FedEx API response.
     /// </summary>
     public string? ClientReferenceId { get; set; }
 

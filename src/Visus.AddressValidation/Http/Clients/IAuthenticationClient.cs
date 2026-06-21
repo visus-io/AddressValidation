@@ -1,7 +1,7 @@
 namespace Visus.AddressValidation.Http.Clients;
 
 /// <summary>
-///     Abstraction for implementing an authentication client
+///     Defines the contract for an OAuth 2.0 client-credentials authentication client.
 /// </summary>
 public interface IAuthenticationClient
 {

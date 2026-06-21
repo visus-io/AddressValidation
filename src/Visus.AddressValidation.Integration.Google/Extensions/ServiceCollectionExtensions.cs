@@ -29,6 +29,10 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
     /// <returns>The same service collection so that multiple calls can be chained.</returns>
+    /// <remarks>
+    ///     Options are loaded from the <c>AddressValidationSettings:Google</c> configuration section
+    ///     (see <see cref="GoogleServiceOptions.SectionName" />) and validated at application startup.
+    /// </remarks>
     public static IServiceCollection AddGoogleAddressValidation(this IServiceCollection services)
     {
         ArgumentNullException.ThrowIfNull(services);

@@ -3,18 +3,18 @@ namespace Visus.AddressValidation.Models;
 using Abstractions;
 
 /// <summary>
-///     Represents a uniformed address validation response.
+///     Represents a unified address validation response.
 /// </summary>
 public interface IAddressValidationResponse
 {
     /// <summary>
-    ///     Gets the address lines
+    ///     Gets the validated address lines returned by the provider.
     /// </summary>
     [JsonPropertyName("addressLines")]
     IReadOnlySet<string> AddressLines { get; }
 
     /// <summary>
-    ///     Gets the city (town)
+    ///     Gets the validated city or town name returned by the provider.
     /// </summary>
     [JsonPropertyName("cityOrTown")]
     string? CityOrTown { get; }
@@ -22,7 +22,7 @@ public interface IAddressValidationResponse
     /// <summary>
     ///     Gets the country code
     /// </summary>
-    /// <remarks>Refer to <see cref="Country" /> for values.</remarks>
+    /// <remarks>Refer to <see cref="CountryCode" /> for accepted values.</remarks>
     [JsonPropertyName("country")]
     CountryCode Country { get; }
 
@@ -34,7 +34,7 @@ public interface IAddressValidationResponse
     IReadOnlyDictionary<string, object?> CustomResponseData { get; }
 
     /// <summary>
-    ///     Gets any errors returned during validation
+    ///     Gets the set of error messages produced during request or response validation; empty when validation succeeds.
     /// </summary>
     [JsonPropertyName("errors")]
     IReadOnlySet<string> Errors { get; }
@@ -71,7 +71,7 @@ public interface IAddressValidationResponse
     IReadOnlyList<IAddressValidationResponse> Suggestions { get; }
 
     /// <summary>
-    ///     Gets any warnings returned during validation
+    ///     Gets the set of warning messages produced during request or response validation; empty when no warnings are present.
     /// </summary>
     [JsonPropertyName("warnings")]
     IReadOnlySet<string> Warnings { get; }

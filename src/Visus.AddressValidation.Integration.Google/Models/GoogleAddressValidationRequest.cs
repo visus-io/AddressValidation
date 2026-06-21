@@ -5,13 +5,13 @@ using AddressValidation.Models;
 using JetBrains.Annotations;
 
 /// <summary>
-///     Representation of a uniformed address validation request to Google.
+///     Representation of a unified address validation request to Google.
 /// </summary>
 [UsedImplicitly]
 public sealed class GoogleAddressValidationRequest : AbstractAddressValidationRequest
 {
     /// <summary>
-    ///     Gets if USPS CASS processing is supported
+    ///     Gets a value indicating whether USPS CASS processing is enabled for this request.
     /// </summary>
     /// <remarks>Currently, USPS CASS is only supported for the <see cref="CountryCode.US" />.</remarks>
     public bool EnableUspsCass => Country == CountryCode.US;

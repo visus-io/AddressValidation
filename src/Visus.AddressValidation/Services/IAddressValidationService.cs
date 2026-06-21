@@ -5,7 +5,7 @@ using Models;
 /// <summary>
 ///     Abstraction for implementing an address validation service.
 /// </summary>
-/// <typeparam name="TRequest">The request that will be used for validation.</typeparam>
+/// <typeparam name="TRequest">The provider-specific request type; must derive from <see cref="AbstractAddressValidationRequest" />.</typeparam>
 public interface IAddressValidationService<in TRequest>
     where TRequest : AbstractAddressValidationRequest
 {

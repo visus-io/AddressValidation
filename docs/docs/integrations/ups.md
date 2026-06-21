@@ -30,71 +30,81 @@ At application startup, you will need to register the integration with the [Micr
 builder.Services.AddUpsAddressValidation();
 ```
 
-[!INCLUDE [distributed-cache-required](../includes/distributed-cache-required.md)]
+[!INCLUDE [hybrid-cache-required](../includes/hybrid-cache-required.md)]
 
 ## Configuration
 
-Configuration of the integration is relatively straight forward and all parameters are read through an `IConfiguration` instance.
+Configuration is bound from the `AddressValidationSettings:Ups` section.
 
+```json
+{
+  "AddressValidationSettings": {
+    "Ups": {
+      "AccountNumber": "<your account number>",
+      "ClientId": "<your client id>",
+      "ClientSecret": "<your client secret>",
+      "ClientEnvironment": "PRODUCTION"
+    }
+  }
+}
+```
 
-| Key                             | Notes                                             |
-|---------------------------------|---------------------------------------------------|
-| `VS_AVE_UPS_ACCOUNT_NUMBER`     |                                                   |                                                                               
-| `VS_AVE_UPS_CLIENT_ENVIRONMENT` | Accepted values are `PRODUCTION` or `DEVELOPMENT` |
-| `VS_AVE_UPS_CLIENT_ID`          |                                                   |
-| `VS_AVE_UPS_CLIENT_SECRET`      |                                                   |
+| Property | Required | Description |
+|---|---|---|
+| `AccountNumber` | Yes | Your UPS account number |
+| `ClientId` | Yes | OAuth 2.0 client ID issued by UPS for your registered application |
+| `ClientSecret` | Yes | OAuth 2.0 client secret issued by UPS for your registered application |
+| `ClientEnvironment` | No | Accepted values: `PRODUCTION`, `DEVELOPMENT`, `SANDBOX`. Defaults to `DEVELOPMENT` |
+| `EndpointUriOverride` | SANDBOX only | Custom endpoint URI; required when `ClientEnvironment` is `SANDBOX` |
 
 > [!IMPORTANT]
-> `VS_AVE_UPS_CLIENT_ID` and `VS_AVE_UPS_CLIENT_SECRET` should be stored encrypted at rest. See the [Security](../index.md#security) for additional details.
+> `ClientId` and `ClientSecret` should be stored encrypted at rest. See the [Security](../index.md#security) for additional details.
 
 ## Standard Example
 
 The following example demonstrates a standard address validation request.
 
 ```csharp
-public class ValidateController(IAddressValidationService<UpsAddressValidationRequest> validationService)
+public class ValidateController
 {
-    private readonly IAddressValidationService<UpsAddressValidationRequest> _validationService = validationService ?? throw new ArgumentNullException(nameof(validationService));
-    
-    [HttpGet]
-    public async ValueTask<IActionResult> Get()
+    private readonly IAddressValidationService<UpsAddressValidationRequest> _validationService;
+
+    public ValidateController(IAddressValidationService<UpsAddressValidationRequest> validationService)
     {
-        // UPS Customer Center - Los Angeles, CA US
-        new UpsAddressValidationRequest
-        {
-            AddressLines =
-            {
-                "1800 N Main St"
-            },
-            CityOrTown = "Los Angeles",
-            StateOrProvince = "CA",
-            PostalCode = "90031",
-            Country = CountryCode.US            
-        };
-        
-        IAddressValidationResponse? response = await ValidationService.ValidateAsync(request);
+        _validationService = validationService ?? throw new ArgumentNullException(nameof(validationService));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] UpsAddressValidationRequest request, CancellationToken cancellationToken = default)
+    {
+        IAddressValidationResponse? response = await _validationService.ValidateAsync(request, cancellationToken);
         
         return response is null
-            ? new NoContentResult()
-            : new OkObjectResult(response);
+            ? new NotFoundResult()
+            : response.Errors.Count > 0
+                ? new UnprocessableEntityObjectResult(response)
+                : new OkObjectResult(response);
     }
 }
 ```
 
 > [!NOTE]
-> When `VS_AVE_UPS_CLIENT_ENVIRONMENT` is set to `DEVELOPMENT` only addresses in New York (`NY`) and California (`CA`) are supported.
+> When `ClientEnvironment` is set to `DEVELOPMENT` only addresses in New York (`NY`) and California (`CA`) are supported.
 
 # [Request](#tab/tab-ave-pitney-bowes-json-request)
 ```JSON
 {
   "XAVRequest": {
+    "Request": {
+      "RequestOption": "3"
+    },
     "AddressKeyFormat": {
       "AddressLine": [
-        "1800 N Main St"
+        "1 Infinite Loop"
       ],
-      "PoliticalDivision2": "Los Angeles",
+      "PoliticalDivision2": "Cupertino",
       "PoliticalDivision1": "CA",
-      "PostcodePrimaryLow": "90031",
+      "PostcodePrimaryLow": "95014",
       "CountryCode": "US"
     }
   }
@@ -104,13 +114,13 @@ public class ValidateController(IAddressValidationService<UpsAddressValidationRe
 ```JSON
 {
   "addressLines": [
-    "1800 N MAIN ST"
+    "1 INFINITE LOOP"
   ],
-  "cityOrTown": "LOS ANGELES",
+  "cityOrTown": "CUPERTINO",
   "country": "US",
   "errors": [],
-  "isResidential": true,
-  "postalCode": "90031-3262",
+  "isResidential": false,
+  "postalCode": "95014-2083",
   "stateOrProvince": "CA",
   "suggestions": [],
   "warnings": []
@@ -123,49 +133,46 @@ public class ValidateController(IAddressValidationService<UpsAddressValidationRe
 In the event of an incomplete or ambiguous request, a potential match along with suggestions may be returned.
 
 ```csharp
-public class ValidateController(IAddressValidationService<UpsAddressValidationRequest> validationService)
+public class ValidateController
 {
-    private readonly IAddressValidationService<UpsAddressValidationRequest> _validationService = validationService ?? throw new ArgumentNullException(nameof(validationService));
-    
-    [HttpGet]
-    public async ValueTask<IActionResult> Get()
+    private readonly IAddressValidationService<UpsAddressValidationRequest> _validationService;
+
+    public ValidateController(IAddressValidationService<UpsAddressValidationRequest> validationService)
     {
-        // UPS Customer Center - Los Angeles, CA US (Malformed Address)
-        new UpsAddressValidationRequest
-        {
-            AddressLines =
-            {
-                "1800 Main St"
-            },
-            CityOrTown = "Los Angeles",
-            StateOrProvince = "CA",
-            PostalCode = "90025",
-            Country = CountryCode.US            
-        };
-        
-        IAddressValidationResponse? response = await ValidationService.ValidateAsync(request);
+        _validationService = validationService ?? throw new ArgumentNullException(nameof(validationService));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] UpsAddressValidationRequest request, CancellationToken cancellationToken = default)
+    {
+        IAddressValidationResponse? response = await _validationService.ValidateAsync(request, cancellationToken);
         
         return response is null
-            ? new NoContentResult()
-            : new OkObjectResult(response);
+            ? new NotFoundResult()
+            : response.Errors.Count > 0
+                ? new UnprocessableEntityObjectResult(response)
+                : new OkObjectResult(response);
     }
 }
 ```
 
 > [!NOTE]
-> When `VS_AVE_UPS_CLIENT_ENVIRONMENT` is set to `DEVELOPMENT` only addresses in New York (`NY`) and California (`CA`) are supported.
+> When `ClientEnvironment` is set to `DEVELOPMENT` only addresses in New York (`NY`) and California (`CA`) are supported.
 
 # [Suggest Request](#tab/tab-ave-pitney-bowes-json-suggest-request)
 ```JSON
 {
   "XAVRequest": {
+    "Request": {
+      "RequestOption": "3"
+    },
     "AddressKeyFormat": {
       "AddressLine": [
-        "1800 Main St"
+        "1 Infinite Lp"
       ],
-      "PoliticalDivision2": "Los Angeles",
+      "PoliticalDivision2": "Cupertino",
       "PoliticalDivision1": "CA",
-      "PostcodePrimaryLow": "90025",
+      "PostcodePrimaryLow": "95014",
       "CountryCode": "US"
     }
   }
@@ -175,24 +182,24 @@ public class ValidateController(IAddressValidationService<UpsAddressValidationRe
 ```JSON
 {
   "addressLines": [
-    "1800 S MAIN ST"
+    "1 INFINITE LP"
   ],
-  "cityOrTown": "LOS ANGELES",
+  "cityOrTown": "CUPERTINO",
   "country": "US",
   "errors": [],
   "isResidential": false,
-  "postalCode": "90015-3612",
+  "postalCode": "95014",
   "stateOrProvince": "CA",
   "suggestions": [
     {
       "addressLines": [
-        "1800 N MAIN ST"
+        "1 INFINITE LOOP"
       ],
-      "cityOrTown": "LOS ANGELES",
+      "cityOrTown": "CUPERTINO",
       "country": "US",
       "errors": [],
-      "isResidential": true,
-      "postalCode": "90031-3262",
+      "isResidential": false,
+      "postalCode": "95014-2083",
       "stateOrProvince": "CA",
       "suggestions": [],
       "warnings": []

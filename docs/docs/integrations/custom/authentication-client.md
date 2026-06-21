@@ -19,13 +19,18 @@ An authentication client implementation is simply a [typed](https://learn.micros
 Below is an example of a basic authentication client that makes a [`client_credentials`](https://www.oauth.com/oauth2-servers/access-tokens/client-credentials/) request to obtain an [access token](https://oauth.net/2/access-tokens/):
 
 ```csharp
-internal sealed class MyAuthenticationClient(IConfiguration configuration, HttpClient client)
-    : IAuthenticationClient
+internal sealed class MyAuthenticationClient : IAuthenticationClient
 {
-    private readonly IConfiguration _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-    
-    private readonly HttpClient _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-    
+    private readonly IConfiguration _configuration;
+
+    private readonly HttpClient _httpClient;
+
+    internal MyAuthenticationClient(IConfiguration configuration, HttpClient client)
+    {
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _httpClient = client ?? throw new ArgumentNullException(nameof(client));
+    }
+
     public async ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
         string? clientId = _configuration["AVE_MY_CLIENT_ID"];
@@ -56,7 +61,7 @@ internal sealed class MyAuthenticationClient(IConfiguration configuration, HttpC
 ```
 
 > [!IMPORTANT]
-> The client **must** implement the [`IAuthenticationClient`](xref:Visus.AddressValidation.Http.IAuthenticationClient) interface.
+> The client **must** implement the [`IAuthenticationClient`](xref:Visus.AddressValidation.Http.Clients.IAuthenticationClient) interface.
 
 > [!NOTE]
 > The [`DefaultJsonSerializerContext`](xref:Visus.AddressValidation.Serialization.Json.DefaultJsonSerializerContext) instance is used by [`ReadFromJsonAsync(...)`](https://learn.microsoft.com/en-us/dotnet/api/system.net.http.json.httpcontentjsonextensions.readfromjsonasync) method 

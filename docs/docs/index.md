@@ -14,26 +14,28 @@ AddressValidation comes with several service integrations pre-built and ready to
 
 | Service                                                                                                       | Integration                                  | Coverage                                                                                      | Status       |
 |---------------------------------------------------------------------------------------------------------------|----------------------------------------------|-----------------------------------------------------------------------------------------------|--------------|
-| [FedEx&reg; Address Validation API](https://developer.fedex.com/api/en-us/catalog/address-validation.html)    |                                              | [46 countries](https://developer.fedex.com/api/en-us/catalog/address-validation/v1/docs.html) | *Planned*    |
+| [FedEx&reg; Address Validation API](https://developer.fedex.com/api/en-us/catalog/address-validation.html)    | [FedEx](integrations/fedex.md)               | [46 countries](https://developer.fedex.com/api/en-us/catalog/address-validation/v1/docs.html) | **Complete** |
 | [Google Address Validation API](https://developers.google.com/maps/documentation/address-validation/overview) | [Google](integrations/google.md)             | [39 countries](https://developers.google.com/maps/documentation/address-validation/coverage)  | **Complete** |
 | [Pitney Bowes Address Validation API](https://docs.shippingapi.pitneybowes.com/address-validation.html)       | [Pitney Bowes](integrations/pitney-bowes.md) | United States                                                                                 | **Complete** |
 | [UPS&reg; Address Validation API](https://developer.ups.com/api/reference)                                    | [UPS](integrations/ups.md)                   | United States                                                                                 | **Complete** |
-
-> [!NOTE]
-> Due to the inability to redact query arguments in HttpClient logging (see [dotnet/runtime#68675](https://github.com/dotnet/runtime/issues/68675) and [dotnet/runtime#77312](https://github.com/dotnet/runtime/issues/77312)), there are no plans to build a service integration for the [USPS&reg; Address Validation API](https://developer.usps.com/api/93) at this time. 
-> 
-> If support for [USPS&reg; CASS&trade;](https://postalpro.usps.com/certifications/cass) is required, then the [Google](integrations/google.md) integration is recommended.
+| [USPS&reg; Address Validation API](https://developer.usps.com/api/93)                                        |                                              | United States                                                                                 | *Planned*    |
 
 If there is no integration for a service you wish to you use, you can either open a [feature request](#) or you can read on how to develop a [custom integration](integrations/custom/introduction.md).
 
 ## Caching
 
-To provide maximum performance all integrations within AddressValidation require an instance of [IDistributedCache](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.distributed.idistributedcache) to cache operations.
+To provide maximum performance all integrations within AddressValidation require [`HybridCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.hybrid.hybridcache) to cache authentication tokens. Register it at application startup:
 
-For single-server deployments, local development, and testing environments, the [distributed memory cache](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/distributed#distributed-memory-cache) provider is sufficient. For all other use cases, refer to the [documentation](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/distributed) on additional providers and solutions.
+```csharp
+builder.Services.AddHybridCache();
+```
+
+By default, `HybridCache` uses an in-process (L1) cache, which is sufficient for single-server deployments, local development, and testing environments. For multi-server deployments, also register an [`IDistributedCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.distributed.idistributedcache) provider to serve as the distributed (L2) cache layer. Refer to the [documentation](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/distributed) for available providers.
 
 > [!NOTE]
-> Currently only [access tokens](https://oauth.net/2/access-tokens/) are cached. Caching of requests and responses is not natively supported due to [GDPR](https://gdpr-info.eu/) and [CCPA](https://oag.ca.gov/privacy/ccpa) concerns.
+> Currently only [access tokens](https://oauth.net/2/access-tokens/) are cached. Caching of requests and responses is not natively supported for two reasons:
+> - **Privacy regulations** — Address data constitutes personally identifiable information (PII) subject to [GDPR](https://gdpr-info.eu/) and [CCPA](https://oag.ca.gov/privacy/ccpa).
+> - **Provider Terms of Service** — Google, Pitney Bowes, and UPS all restrict caching of API responses. Google and Pitney Bowes both permit temporary caching for up to 30 days under specific conditions (user consent, secure storage, no cross-user reuse); UPS prohibits all uses of response data not explicitly permitted by their agreement.
 
 ## Security
 
@@ -50,10 +52,3 @@ Fortunately, there are several options available to ensure that this information
 - [Custom Configuration Provider with Google Secrets Manager](https://www.nuget.org/packages/Gcp.SecretManager.Provider)
 
 For any other implementation a [custom configuration provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/custom-configuration-provider) will be required.
-
----
-
-The **AddressValidation.Demo** project contains a barebones [ConfigurationProvider](#) implementation that utilizes the [Data Protection API](https://learn.microsoft.com/en-us/aspnet/core/security/data-protection/introduction) and can be used as a reference.
-
-> [!WARNING]
-> Take care when using the [Data Protection API](https://learn.microsoft.com/en-us/aspnet/core/security/data-protection/introduction) and ensure that the key is [stored](https://learn.microsoft.com/en-us/aspnet/core/security/data-protection/implementation/key-storage-providers) securely.

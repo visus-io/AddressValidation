@@ -16,12 +16,12 @@ public readonly struct ValidationState : IEquatable<ValidationState>
     }
 
     /// <summary>
-    ///     Gets the message
+    ///     Gets the human-readable message describing the validation issue.
     /// </summary>
     public string Message { get; }
 
     /// <summary>
-    ///     Gets the severity
+    ///     Gets the severity level of this validation state.
     /// </summary>
     public ValidationSeverity Severity { get; }
 
@@ -47,7 +47,7 @@ public readonly struct ValidationState : IEquatable<ValidationState>
     ///     <see href="https://learn.microsoft.com/dotnet/standard/base-types/composite-formatting">composite format string</see>
     ///     .
     /// </param>
-    /// <param name="args">An object array to contains zero or more objects to format.</param>
+    /// <param name="args">An object array that contains zero or more objects to format.</param>
     /// <returns><see cref="ValidationState" /> instance.</returns>
     public static ValidationState CreateError(string messageFormat, params object[] args)
     {
@@ -80,7 +80,7 @@ public readonly struct ValidationState : IEquatable<ValidationState>
     ///     <see href="https://learn.microsoft.com/dotnet/standard/base-types/composite-formatting">composite format string</see>
     ///     .
     /// </param>
-    /// <param name="args">An object array to contains zero or more objects to format.</param>
+    /// <param name="args">An object array that contains zero or more objects to format.</param>
     /// <returns><see cref="ValidationState" /> instance.</returns>
     public static ValidationState CreateWarning(string messageFormat, params object[] args)
     {

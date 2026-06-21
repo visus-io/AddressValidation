@@ -2,6 +2,8 @@
 - name: Integrations
   expanded: true
   items:
+    - name: FedEx
+      href: integrations/fedex.md
     - name: Google
       href: integrations/google.md
     - name: Pitney Bowes
@@ -14,13 +16,25 @@
   items:
     - name: Introduction
       href: integrations/custom/introduction.md
+    - name: Request Model
+      href: integrations/custom/request-model.md
+    - name: Provider API Contracts
+      href: integrations/custom/contracts.md
+    - name: Request Mapper
+      href: integrations/custom/request-mapper.md
+    - name: Response Mapper
+      href: integrations/custom/response-mapper.md
     - name: Authentication Client
       href: integrations/custom/authentication-client.md
     - name: Authentication Service
       href: integrations/custom/authentication-service.md
-    - name: Internal Validators
-    - name: Validation Service
     - name: Validation Client
       href: integrations/custom/validation-client.md
+    - name: Request Adapter
+      href: integrations/custom/request-adapter.md
+    - name: Validators
+      href: integrations/custom/validators.md
+    - name: Validation Service
+      href: integrations/custom/validation-service.md
     - name: Registering Services
       href: integrations/custom/registering-services.md
