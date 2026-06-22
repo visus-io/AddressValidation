@@ -5,7 +5,7 @@ uid: custom-validators
 
 ## Validators
 
-Two validators are required: one for the incoming [request](xref:custom-request-model) and one for the provider's [API response](xref:custom-contracts). Both run inside the validation pipeline managed by [`AbstractAddressValidationService<TRequest, TApiResponse>`](xref:Visus.AddressValidation.Services.AbstractAddressValidationService`2) — the request validator runs before the API call, and the response validator runs after.
+Two validators are required: one for the incoming [request](xref:custom-models) and one for the provider's [API response](xref:custom-models). Both run inside the validation pipeline managed by [`AbstractAddressValidationService<TRequest, TApiResponse>`](xref:Visus.AddressValidation.Services.AbstractAddressValidationService`2) — the request validator runs before the API call, and the response validator runs after.
 
 ## Request Validator
 

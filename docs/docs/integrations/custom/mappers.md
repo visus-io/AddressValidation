@@ -1,11 +1,39 @@
 ---
-title: Response Mapper | Custom Integration
-uid: custom-response-mapper
+title: Mappers | Custom Integration
+uid: custom-mappers
 ---
+
+## Request Mapper
+
+The request mapper translates the public-facing [request model](xref:custom-models) into the provider-specific [API contract](xref:custom-models). Implement [`IApiRequestMapper<TRequest, TApiRequest>`](xref:Visus.AddressValidation.Mappers.IApiRequestMapper`2) with a single `Map` method.
+
+```csharp
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
+internal sealed class AddressValidationRequestMapper : IApiRequestMapper<MyAddressValidationRequest, ApiRequest>
+{
+    public ApiRequest Map(MyAddressValidationRequest request)
+    {
+        return new ApiRequest
+        {
+            Address = new ApiRequest.AddressPayload
+            {
+                Lines = [.. request.AddressLines],
+                City = request.CityOrTown,
+                State = request.StateOrProvince,
+                PostalCode = request.PostalCode,
+                CountryCode = request.Country?.Value,
+            },
+        };
+    }
+}
+```
+
+> [!NOTE]
+> It is not necessary for the request mapper to be `internal`, but it is **strongly** recommended if redistributing as a library.
 
 ## Response Mapper
 
-The response mapper converts the provider's raw [API response](xref:custom-contracts) into the unified [`IAddressValidationResponse`](xref:Visus.AddressValidation.Models.IAddressValidationResponse) returned to callers. Implement [`IApiResponseMapper<TApiResponse>`](xref:Visus.AddressValidation.Mappers.IApiResponseMapper`1) with a single `Map` method.
+The response mapper converts the provider's raw [API response](xref:custom-models) into the unified [`IAddressValidationResponse`](xref:Visus.AddressValidation.Models.IAddressValidationResponse) returned to callers. Implement [`IApiResponseMapper<TApiResponse>`](xref:Visus.AddressValidation.Mappers.IApiResponseMapper`1) with a single `Map` method.
 
 ```csharp
 [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]

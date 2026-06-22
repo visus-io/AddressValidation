@@ -71,10 +71,40 @@ internal sealed class MyAddressValidationClient
 > Source-generated contexts are required for correct behavior in [trimmed](https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/prepare-libraries-for-trimming) and [native AOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/) deployments.
 
 > [!NOTE]
-> Unlike the [Authentication Client](xref:custom-authentication-client), the validation client does **not** implement an interface. It is referenced directly by its concrete type from the request adapter.
+> Unlike the [Authentication Client](xref:custom-authentication), the validation client does **not** implement an interface. It is referenced directly by its concrete type from the request adapter.
 
 > [!IMPORTANT]
 > The `Authorization` header must be redacted from HTTP logs. This is configured during [service registration](xref:custom-registering-services) via `RedactLoggedHeaders(["Authorization"])` on the `IHttpClientBuilder` — there is nothing to configure in the client itself. Without this configuration, bearer tokens will appear in structured logs.
 
 > [!NOTE]
 > It is not necessary for the validation client to be `internal`, but it is **strongly** recommended if redistributing as a library.
+
+## Request Adapter
+
+The request adapter bridges the public request to the [validation client](#validation-client). It maps the incoming [request model](xref:custom-models) to the provider DTO using the [request mapper](xref:custom-mappers), then forwards it to the typed HTTP client. Implement [`IApiRequestAdapter<TRequest, TApiResponse>`](xref:Visus.AddressValidation.Adapters.IApiRequestAdapter`2).
+
+```csharp
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
+internal sealed class ApiRequestAdapter : IApiRequestAdapter<MyAddressValidationRequest, ApiResponse>
+{
+    private readonly MyAddressValidationClient _client;
+
+    private readonly IApiRequestMapper<MyAddressValidationRequest, ApiRequest> _requestMapper;
+
+    public ApiRequestAdapter(MyAddressValidationClient client,
+                             IApiRequestMapper<MyAddressValidationRequest, ApiRequest> requestMapper)
+    {
+        _client = client ?? throw new ArgumentNullException(nameof(client));
+        _requestMapper = requestMapper ?? throw new ArgumentNullException(nameof(requestMapper));
+    }
+
+    public Task<ApiResponse?> ExecuteAsync(MyAddressValidationRequest request, CancellationToken cancellationToken)
+    {
+        ApiRequest apiRequest = _requestMapper.Map(request);
+        return _client.ValidateAddressAsync(apiRequest, cancellationToken);
+    }
+}
+```
+
+> [!NOTE]
+> It is not necessary for the request adapter to be `internal`, but it is **strongly** recommended if redistributing as a library.

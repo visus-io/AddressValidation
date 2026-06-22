@@ -7,6 +7,30 @@ uid: custom-registering-services
 
 After implementing all components, wire them together in a static extension method on [`IServiceCollection`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection). This is the pattern used by all built-in integrations and is the single call a consumer makes at application startup.
 
+## Validation Service
+
+The validation service wires all pipeline components together. Extend [`AbstractAddressValidationService<TRequest, TApiResponse>`](xref:Visus.AddressValidation.Services.AbstractAddressValidationService`2) and forward the four constructor dependencies to the base class.
+
+```csharp
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
+internal sealed class AddressValidationService : AbstractAddressValidationService<MyAddressValidationRequest, ApiResponse>
+{
+    public AddressValidationService(IApiRequestAdapter<MyAddressValidationRequest, ApiResponse> requestAdapter,
+                                    IApiResponseMapper<ApiResponse> responseMapper,
+                                    IValidator<MyAddressValidationRequest> requestValidator,
+                                    IValidator<ApiResponse> responseValidator)
+        : base(requestAdapter, responseMapper, requestValidator, responseValidator)
+    {
+    }
+}
+```
+
+> [!NOTE]
+> No additional logic belongs here. The base class manages the full validation pipeline: pre-validating the request, calling the API via the [request adapter](xref:custom-validation-client), validating the response, and mapping it to an [`IAddressValidationResponse`](xref:Visus.AddressValidation.Models.IAddressValidationResponse).
+
+> [!NOTE]
+> It is not necessary for the validation service to be `internal`, but it is **strongly** recommended if redistributing as a library.
+
 ## Options
 
 Define a configuration options class by extending [`AbstractServiceOptions`](xref:Visus.AddressValidation.Configuration.AbstractServiceOptions). The base class provides `ClientEnvironment` and the optional `EndpointUriOverride`; you only need to implement the abstract `EndpointUri` property and declare any provider-specific required fields.
