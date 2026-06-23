@@ -51,6 +51,7 @@
       "_appTitle": "AddressValidation",
       "_appFooter": "<span>Copyright &copy; 2024-2026 Visus Development Team. Built with <a href=\"https://docfx.github.io/docfx\">docfx</a>.</span>",
       "_enableSearch": true,
+      "_lang": "en",
       "pdf": false
     }
   }
