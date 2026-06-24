@@ -132,30 +132,6 @@ public class ValidateController
 
 In the event of an incomplete or ambiguous request, a potential match along with suggestions may be returned.
 
-```csharp
-public class ValidateController
-{
-    private readonly IAddressValidationService<UpsAddressValidationRequest> _validationService;
-
-    public ValidateController(IAddressValidationService<UpsAddressValidationRequest> validationService)
-    {
-        _validationService = validationService ?? throw new ArgumentNullException(nameof(validationService));
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Post([FromBody] UpsAddressValidationRequest request, CancellationToken cancellationToken = default)
-    {
-        IAddressValidationResponse? response = await _validationService.ValidateAsync(request, cancellationToken);
-        
-        return response is null
-            ? new NotFoundResult()
-            : response.Errors.Count > 0
-                ? new UnprocessableEntityObjectResult(response)
-                : new OkObjectResult(response);
-    }
-}
-```
-
 > [!NOTE]
 > When `ClientEnvironment` is set to `DEVELOPMENT` only addresses in New York (`NY`) and California (`CA`) are supported.
 

@@ -7,15 +7,17 @@ on:
         paths-ignore:
             - "**.md"
             - "renovate.json"
+            - "docs/**"
             - ".github/ISSUE_TEMPLATE/**"
             - ".github/PULL_REQUEST_TEMPLATE/**"
             - ".github/workflows/docs.yml"
             - ".github/workflows/release.yml"
-    
+
     pull_request:
         paths-ignore:
             - "**.md"
             - "renovate.json"
+            - "docs/**"
             - ".github/ISSUE_TEMPLATE/**"
             - ".github/PULL_REQUEST_TEMPLATE/**"
             - ".github/workflows/docs.yml"

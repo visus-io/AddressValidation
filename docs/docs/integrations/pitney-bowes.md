@@ -139,30 +139,6 @@ The following example demonstrates an address suggestion request. Scenarios in w
 
 In order to trigger an address suggestion request, set the `IncludeSuggestions` property to `true`.
 
-```csharp
-public class ValidateController
-{
-    private readonly IAddressValidationService<PitneyBowesAddressValidationRequest> _validationService;
-
-    public ValidateController(IAddressValidationService<PitneyBowesAddressValidationRequest> validationService)
-    {
-        _validationService = validationService ?? throw new ArgumentNullException(nameof(validationService));
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Post([FromBody] PitneyBowesAddressValidationRequest request, CancellationToken cancellationToken = default)
-    {
-        IAddressValidationResponse? response = await _validationService.ValidateAsync(request, cancellationToken);
-        
-        return response is null
-            ? new NotFoundResult()
-            : response.Errors.Count > 0
-                ? new UnprocessableEntityObjectResult(response)
-                : new OkObjectResult(response);
-    }
-}
-```
-
 # [Suggestion Request](#tab/tab-ave-pitney-bowes-json-suggest-request)
 ```JSON
 {
