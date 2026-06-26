@@ -6,6 +6,7 @@ on:
             - main
         paths-ignore:
             - "**.md"
+            - "crowdin.yml"
             - "renovate.json"
             - "docs/**"
             - ".github/ISSUE_TEMPLATE/**"
@@ -16,6 +17,7 @@ on:
     pull_request:
         paths-ignore:
             - "**.md"
+            - "crowdin.yml"
             - "renovate.json"
             - "docs/**"
             - ".github/ISSUE_TEMPLATE/**"
