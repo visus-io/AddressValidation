@@ -1,9 +1,17 @@
 preserve_hierarchy: true
 
 files:
-  - source: "**/Resources/Resources.resx"
-    translation: "**/Resources/Resources.%locale%.resx"
+  - source: "/src/**/Resources/Resources.resx"
+    translation: "/src/**/Resources/Resources.%locale%.resx"
     export_only_approved: true
+    languages_mapping:
+      locale:
+        de: "de-DE"
+        es-ES: "es-ES"
+        fr: "fr-FR"
+        it: "it-IT"
+        pt-BR: "pt-BR"
+        pt-PT: "pt-PT"
 
 pull_request_title: "chore(l10n): new translations"
 
