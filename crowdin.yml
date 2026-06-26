@@ -4,3 +4,17 @@ files:
   - source: "**/Resources/Resources.resx"
     translation: "**/Resources/Resources.%locale%.resx"
     export_only_approved: true
+
+pull_request_title: "chore(l10n): new translations"
+
+pull_request_labels:
+  - "Feature: i10n"
+
+commit_message: "chore(l10n): new translations %original_file_name% (%language%)"
+append_commit_message: false
+
+pull_request_assignees:
+  - "visus-io/project-administrators"
+
+pull_request_reviewers:
+  - "visus-io/project-administrators"
