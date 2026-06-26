@@ -1,0 +1,6 @@
+preserve_hierarchy: true
+
+files:
+  - source: "**/Resources/Resources.resx"
+    translation: "**/Resources/Resources.%locale%.resx"
+    export_only_approved: true
