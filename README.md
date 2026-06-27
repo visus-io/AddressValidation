@@ -22,11 +22,11 @@ AddressValidation is a .NET library that provides a unified, provider-agnostic A
 
 | Service | Package | Coverage | Status |
 |---|---|---|---|
-| [FedEx&reg; Address Validation API](https://developer.fedex.com/api/en-us/catalog/address-validation.html) | `Visus.AddressValidation.Integration.FedEx` | [46 countries](https://developer.fedex.com/api/en-us/catalog/address-validation/v1/docs.html) | **Complete** |
-| [Google Address Validation API](https://developers.google.com/maps/documentation/address-validation/overview) | `Visus.AddressValidation.Integration.Google` | [39 countries](https://developers.google.com/maps/documentation/address-validation/coverage) | **Complete** |
-| [Pitney Bowes Address Validation API](https://docs.shippingapi.pitneybowes.com/address-validation.html) | `Visus.AddressValidation.Integration.PitneyBowes` | United States | **Complete** |
-| [UPS&reg; Address Validation API](https://developer.ups.com/api/reference) | `Visus.AddressValidation.Integration.Ups` | United States | **Complete** |
-| [USPS&reg; Address Validation API](https://developer.usps.com/api/93) | — | United States | *Planned* |
+| [FedEx&reg; Address Validation API](https://developer.fedex.com/api/en-us/catalog/address-validation.html) | `Visus.AddressValidation.Integration.FedEx` | [46 countries](https://developer.fedex.com/api/en-us/catalog/address-validation/v1/docs.html) | ![Status](https://img.shields.io/badge/status-complete-green?style=flat-square) |
+| [Google Address Validation API](https://developers.google.com/maps/documentation/address-validation/overview) | `Visus.AddressValidation.Integration.Google` | [39 countries](https://developers.google.com/maps/documentation/address-validation/coverage) | ![Status](https://img.shields.io/badge/status-complete-green?style=flat-square) |
+| [Pitney Bowes Address Validation API](https://docs.shippingapi.pitneybowes.com/address-validation.html) | `Visus.AddressValidation.Integration.PitneyBowes` | United States | ![Status](https://img.shields.io/badge/status-complete-green?style=flat-square) |
+| [UPS&reg; Address Validation API](https://developer.ups.com/api/reference) | `Visus.AddressValidation.Integration.Ups` | United States | ![Status](https://img.shields.io/badge/status-complete-green?style=flat-square) |
+| [USPS&reg; Address Validation API](https://developer.usps.com/api/93) | — | United States | ![Status](https://img.shields.io/badge/status-planned-blue?style=flat-square) |
 
 ## Quick Start
 
