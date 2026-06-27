@@ -1,5 +1,0 @@
-allowRemediationCommits:
-  individual: true
-
-allowedUsers:
-  - visus-svc

@@ -1,0 +1,82 @@
+name: Localization Guard
+
+on:
+    pull_request:
+        types:
+            - opened
+            - synchronize
+            - reopened
+        paths:
+            - "**/Resources/Resources.*.resx"
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    guard:
+        name: Guard Locale Resources
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        permissions:
+            contents: read
+            pull-requests: write
+
+        steps:
+            -   name: Close PR if locale .resx files are modified by non-Crowdin actor
+                uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+                with:
+                    script: |
+                        if (context.actor === 'visus-svc') {
+                            core.info('Actor is visus-svc — skipping.');
+                            return;
+                        }
+
+                        const files = await github.paginate(
+                            github.rest.pulls.listFiles,
+                            {
+                                owner: context.repo.owner,
+                                repo: context.repo.repo,
+                                pull_number: context.payload.pull_request.number,
+                            }
+                        );
+
+                        const localeResxFiles = files
+                            .map(f => f.filename)
+                            .filter(name => /Resources\/Resources\.[^.]+\.resx$/.test(name));
+
+                        if (localeResxFiles.length === 0) {
+                            core.info('No locale .resx files found in diff — skipping.');
+                            return;
+                        }
+
+                        core.info(`Locale .resx files detected: ${localeResxFiles.join(', ')}`);
+
+                        await github.rest.issues.createComment({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            issue_number: context.payload.pull_request.number,
+                            body: [
+                                'Thank you for your contribution!',
+                                '',
+                                'Locale resource files (`Resources.*.resx`) are managed exclusively through [Crowdin](https://crowdin.com) and cannot be accepted via direct pull requests.',
+                                '',
+                                'To submit a translation or correction, please visit the [Crowdin project](https://crowdin.com/project/visus-io-addressvalidation) and make your changes there. Once the translations are reviewed and approved, Crowdin will automatically open a pull request on your behalf.',
+                                '',
+                                'This pull request has been closed automatically.',
+                            ].join('\n'),
+                        });
+
+                        await github.rest.issues.addLabels({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            issue_number: context.payload.pull_request.number,
+                            labels: ['Status: Rejected'],
+                        });
+
+                        await github.rest.pulls.update({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            pull_number: context.payload.pull_request.number,
+                            state: 'closed',
+                        });
