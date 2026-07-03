@@ -54,10 +54,28 @@ internal sealed class AddressValidationResponseMapper : IApiResponseMapper<ApiRe
             CityOrTown = response.Result.City,
             StateOrProvince = response.Result.State,
             PostalCode = response.Result.PostalCode,
+            CustomResponseData = response.GetCustomResponseData(),
         };
     }
 }
 ```
+
+> [!NOTE]
+> `GetCustomResponseData()` is generated at compile time by `Visus.AddressValidation.SourceGeneration` for every contract type that has at least one [`[CustomResponseDataProperty]`](xref:Visus.AddressValidation.CustomResponseDataPropertyAttribute)-decorated property. It returns `IReadOnlyDictionary<string, object?>`. See [Data Models](xref:custom-models) for how to annotate contract properties.
+>
+> When custom data is spread across multiple nested contract types, merge the dictionaries before assigning:
+>
+> ```csharp
+> Dictionary<string, object?> customResponseData = new(StringComparer.OrdinalIgnoreCase);
+> customResponseData.Merge(response.GetCustomResponseData());
+> customResponseData.Merge(response.Result.GetCustomResponseData());
+>
+> return new AddressValidationResponse(response, validationResult)
+> {
+>     // ...
+>     CustomResponseData = customResponseData.AsReadOnly(),
+> };
+> ```
 
 > [!NOTE]
 > The concrete return type — `AddressValidationResponse` in the example above — should extend [`AbstractAddressValidationResponse<TResponse>`](xref:Visus.AddressValidation.Models.AbstractAddressValidationResponse`1) where `TResponse` is the provider DTO (`ApiResponse`). The base class automatically populates the `Errors` and `Warnings` collections from the `validationResult`.
