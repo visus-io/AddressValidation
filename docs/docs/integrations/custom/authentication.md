@@ -61,7 +61,7 @@ internal sealed class MyAuthenticationClient : IAuthenticationClient
         _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
-    public async ValueTask<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
+    public async Task<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
     {
         Uri requestUri = new(_options.Value.EndpointUri, "/oauth/token");
 

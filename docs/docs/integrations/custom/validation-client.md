@@ -60,7 +60,8 @@ internal sealed class MyAddressValidationClient
 > The [`JsonContent.Create(...)`](https://learn.microsoft.com/en-us/dotnet/api/system.net.http.json.jsoncontent.create) and [`ReadFromJsonAsync(...)`](https://learn.microsoft.com/en-us/dotnet/api/system.net.http.json.httpcontentjsonextensions.readfromjsonasync) calls reference [source-generated](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation) JSON serializer contexts. Create one `internal sealed partial class` per DTO direction, annotated with `[JsonSerializable(...)]`:
 > ```csharp
 > [JsonSerializable(typeof(ApiRequest))]
-> [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+> [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
+>     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
 > internal sealed partial class MyApiRequestJsonSerializerContext : JsonSerializerContext { }
 >
 > [JsonSerializable(typeof(ApiResponse))]
