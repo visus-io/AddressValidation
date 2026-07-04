@@ -61,7 +61,7 @@ internal sealed class AddressValidationResponseMapper : IApiResponseMapper<ApiRe
 ```
 
 > [!NOTE]
-> `GetCustomResponseData()` is generated at compile time by `Visus.AddressValidation.SourceGeneration` for every contract type that has at least one [`[CustomResponseDataProperty]`](xref:Visus.AddressValidation.CustomResponseDataPropertyAttribute)-decorated property. It returns `IReadOnlyDictionary<string, object?>`. See [Data Models](xref:custom-models) for how to annotate contract properties.
+> `GetCustomResponseData()` is generated at compile time by the source generator bundled in `VisusIO.AddressValidation` for every contract type that has at least one [`[CustomResponseDataProperty]`](xref:Visus.AddressValidation.CustomResponseDataPropertyAttribute)-decorated property. It returns `IReadOnlyDictionary<string, object?>`. See [Data Models](xref:custom-models) for how to annotate contract properties.
 >
 > When custom data is spread across multiple nested contract types, merge the dictionaries before assigning:
 >

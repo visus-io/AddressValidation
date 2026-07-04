@@ -102,6 +102,6 @@ When a property needs both a different JSON name and a place in `CustomResponseD
 public string? DeliveryPointValidation { get; set; }
 ```
 
-The `Visus.AddressValidation.SourceGeneration` package generates a `GetCustomResponseData()` method at compile time on any type that has at least one decorated property. No runtime reflection is involved. See the [Response Mapper](xref:custom-mappers) page for how to call it and assign `CustomResponseData` on the unified response.
+The source generator bundled in `VisusIO.AddressValidation` generates a `GetCustomResponseData()` method at compile time on any type that has at least one decorated property. No runtime reflection is involved. See the [Response Mapper](xref:custom-mappers) page for how to call it and assign `CustomResponseData` on the unified response.
 
 Any type that has at least one `[CustomResponseDataProperty]`-decorated property must be declared `partial`. When the decorated type is a nested class, every enclosing type in the chain must also be `partial` so the generator can emit the `GetCustomResponseData()` method inside the correct nested class hierarchy. Types with no decorated properties — such as `ErrorPayload` above — do not need to be `partial`.

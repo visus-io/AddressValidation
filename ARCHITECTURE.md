@@ -1,6 +1,6 @@
 # Architecture
 
-This document describes the internal architecture of the `Visus.AddressValidation` library suite. It is intended for contributors and maintainers who need to understand how the codebase is structured, how the runtime pipeline works, and what contracts must be satisfied when adding a new provider integration.
+This document describes the internal architecture of the `VisusIO.AddressValidation` library suite. It is intended for contributors and maintainers who need to understand how the codebase is structured, how the runtime pipeline works, and what contracts must be satisfied when adding a new provider integration.
 
 ---
 
@@ -30,7 +30,7 @@ Each integration package is independently versioned and published to NuGet. Cons
 
 ## Core Abstractions
 
-The `Visus.AddressValidation` package defines every interface and base class shared across providers. Integration packages depend on it; it never depends on them.
+The `VisusIO.AddressValidation` package defines every interface and base class shared across providers. Integration packages depend on it; it never depends on them.
 
 ### Domain Model
 
@@ -192,7 +192,7 @@ The library is designed to work in Native AOT and trimmed deployments:
 
 ## Roslyn Source Generator
 
-The `Visus.AddressValidation.SourceGeneration` package contains a single `IIncrementalGenerator` (`CustomResponseDataGenerator`) that targets `netstandard2.0`.
+The `VisusIO.AddressValidation` package ships a bundled Roslyn source generator (`CustomResponseDataGenerator`) that targets `netstandard2.0`.
 
 ### Purpose
 

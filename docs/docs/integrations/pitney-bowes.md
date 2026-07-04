@@ -22,11 +22,11 @@ The easiest way to install the integration into a project is through NuGet:
 
 # [.NET CLI](#tab/tab-ave-pitney-bowes-cli)
 ```Shell
-dotnet package add Visus.AddressValidation.Integration.PitneyBowes
+dotnet package add VisusIO.AddressValidation.Integration.PitneyBowes
 ```
 # [Package Manager](#tab/tab-ave-pitney-bowes-pm)
 ```PowerShell
-Install-Package Visus.AddressValidation.Integration.PitneyBowes
+Install-Package VisusIO.AddressValidation.Integration.PitneyBowes
 ```
 ---
 

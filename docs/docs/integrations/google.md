@@ -41,11 +41,11 @@ The easiest way to install the integration into a project is through NuGet:
 
 # [.NET CLI](#tab/tab-ave-google-cli)
 ```Shell
-dotnet package add Visus.AddressValidation.Integration.Google
+dotnet package add VisusIO.AddressValidation.Integration.Google
 ```
 # [Package Manager](#tab/tab-ave-google-pm)
 ```PowerShell
-Install-Package Visus.AddressValidation.Integration.Google
+Install-Package VisusIO.AddressValidation.Integration.Google
 ```
 ---
 

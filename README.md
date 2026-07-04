@@ -8,10 +8,10 @@
 
 | Package | Version | Downloads |
 |---|---|---|
-| `Visus.AddressValidation.Integration.FedEx` | [![NuGet Version](https://img.shields.io/nuget/v/Visus.AddressValidation.Integration.FedEx?style=flat-square&logo=nuget)](https://www.nuget.org/packages/Visus.AddressValidation.Integration.FedEx) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Visus.AddressValidation.Integration.FedEx?style=flat-square&logo=nuget)](https://www.nuget.org/packages/Visus.AddressValidation.Integration.FedEx) |
-| `Visus.AddressValidation.Integration.Google` | [![NuGet Version](https://img.shields.io/nuget/v/Visus.AddressValidation.Integration.Google?style=flat-square&logo=nuget)](https://www.nuget.org/packages/Visus.AddressValidation.Integration.Google) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Visus.AddressValidation.Integration.Google?style=flat-square&logo=nuget)](https://www.nuget.org/packages/Visus.AddressValidation.Integration.Google) |
-| `Visus.AddressValidation.Integration.PitneyBowes` | [![NuGet Version](https://img.shields.io/nuget/v/Visus.AddressValidation.Integration.PitneyBowes?style=flat-square&logo=nuget)](https://www.nuget.org/packages/Visus.AddressValidation.Integration.PitneyBowes) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Visus.AddressValidation.Integration.PitneyBowes?style=flat-square&logo=nuget)](https://www.nuget.org/packages/Visus.AddressValidation.Integration.PitneyBowes) |
-| `Visus.AddressValidation.Integration.Ups` | [![NuGet Version](https://img.shields.io/nuget/v/Visus.AddressValidation.Integration.Ups?style=flat-square&logo=nuget)](https://www.nuget.org/packages/Visus.AddressValidation.Integration.Ups) | [![NuGet Downloads](https://img.shields.io/nuget/dt/Visus.AddressValidation.Integration.Ups?style=flat-square&logo=nuget)](https://www.nuget.org/packages/Visus.AddressValidation.Integration.Ups) |
+| `VisusIO.AddressValidation.Integration.FedEx` | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation.Integration.FedEx?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.FedEx) | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation.Integration.FedEx?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.FedEx) |
+| `VisusIO.AddressValidation.Integration.Google` | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation.Integration.Google?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.Google) | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation.Integration.Google?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.Google) |
+| `VisusIO.AddressValidation.Integration.PitneyBowes` | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation.Integration.PitneyBowes?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.PitneyBowes) | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation.Integration.PitneyBowes?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.PitneyBowes) |
+| `VisusIO.AddressValidation.Integration.Ups` | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation.Integration.Ups?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.Ups) | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation.Integration.Ups?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.Ups) |
 
 AddressValidation is a .NET library that provides a unified, provider-agnostic API for validating physical mailing addresses.
 
@@ -35,7 +35,7 @@ AddressValidation is a .NET library that provides a unified, provider-agnostic A
 Install the integration package for your chosen provider via the .NET CLI:
 
 ```shell
-dotnet package add Visus.AddressValidation.Integration.FedEx
+dotnet package add VisusIO.AddressValidation.Integration.FedEx
 ```
 
 ### Registration

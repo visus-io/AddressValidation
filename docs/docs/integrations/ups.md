@@ -16,11 +16,11 @@ The easiest way to install the integration into a project is through NuGet:
 
 # [.NET CLI](#tab/tab-ave-pitney-bowes-cli)
 ```Shell
-dotnet package add Visus.AddressValidation.Integration.Ups
+dotnet package add VisusIO.AddressValidation.Integration.Ups
 ```
 # [Package Manager](#tab/tab-ave-pitney-bowes-pm)
 ```PowerShell
-Install-Package Visus.AddressValidation.Integration.Ups
+Install-Package VisusIO.AddressValidation.Integration.Ups
 ```
 ---
 

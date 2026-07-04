@@ -16,11 +16,11 @@ The easiest way to install the integration into a project is through NuGet:
 
 # [.NET CLI](#tab/tab-ave-fedex-cli)
 ```Shell
-dotnet package add Visus.AddressValidation.Integration.FedEx
+dotnet package add VisusIO.AddressValidation.Integration.FedEx
 ```
 # [Package Manager](#tab/tab-ave-fedex-pm)
 ```PowerShell
-Install-Package Visus.AddressValidation.Integration.FedEx
+Install-Package VisusIO.AddressValidation.Integration.FedEx
 ```
 ---
 
