@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <IsAotCompatible>true</IsAotCompatible>
     <PackageId>VisusIO.AddressValidation.Integration.Google</PackageId>
+    <PackageTags>$(PackageTags) google google-maps</PackageTags>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
   </PropertyGroup>
 
@@ -26,5 +27,6 @@
                       SetTargetFramework="TargetFramework=netstandard2.0"
                       ReferenceOutputAssembly="false"/>
   </ItemGroup>
+
 
 </Project>

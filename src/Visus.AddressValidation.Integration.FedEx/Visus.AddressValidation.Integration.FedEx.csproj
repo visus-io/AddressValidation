@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <IsAotCompatible>true</IsAotCompatible>
     <PackageId>VisusIO.AddressValidation.Integration.FedEx</PackageId>
+    <PackageTags>$(PackageTags) fedex</PackageTags>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
   </PropertyGroup>
 
@@ -39,5 +40,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
+
 
 </Project>

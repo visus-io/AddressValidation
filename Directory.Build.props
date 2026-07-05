@@ -27,6 +27,17 @@
     <RepositoryUrl>https://github.com/visus-io/addressvalidation.git</RepositoryUrl>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(IsTestProject)' != 'true'">
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageTags>address validation address-validation</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(IsTestProject)' != 'true'">
+    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
