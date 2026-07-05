@@ -1,0 +1,128 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in the library
+title: '[Bug]: '
+labels: ['Issue: Pending Confirmation', 'Priority: Medium']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the following information to help us investigate.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of the bug
+      placeholder: What happened that shouldn't have?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the bug
+      placeholder: |
+        1. Register provider with...
+        2. Call ValidateAsync with...
+        3. Observe error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Code Sample
+      description: Minimal code to reproduce the issue
+      render: csharp
+      placeholder: |
+        services.AddHybridCache();
+        services.AddFedExAddressValidation(configuration);
+
+        var response = await service.ValidateAsync(request, cancellationToken).ConfigureAwait(false);
+    validations:
+      required: false
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Error Message / Stack Trace
+      description: Any error messages or stack traces
+      render: shell
+    validations:
+      required: false
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Affected Package(s)
+      description: Which package(s) are affected?
+      multiple: true
+      options:
+        - Visus.AddressValidation (core)
+        - Visus.AddressValidation.Integration.FedEx
+        - Visus.AddressValidation.Integration.Google
+        - Visus.AddressValidation.Integration.PitneyBowes
+        - Visus.AddressValidation.Integration.Ups
+        - Visus.AddressValidation.SourceGeneration
+    validations:
+      required: true
+
+  - type: input
+    id: package-version
+    attributes:
+      label: Package Version
+      placeholder: e.g., 1.2.0
+    validations:
+      required: true
+
+  - type: input
+    id: dotnet-version
+    attributes:
+      label: .NET Version
+      placeholder: e.g., 10.0.100
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: aot
+    attributes:
+      label: Deployment Mode
+      options:
+        - label: Running under Native AOT or trimmed publish
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other context about the problem
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues to ensure this bug hasn't been reported already
+          required: true
+        - label: I am using the latest version of the affected package(s)
+          required: false
+        - label: I have included a minimal code sample that reproduces the issue
+          required: false

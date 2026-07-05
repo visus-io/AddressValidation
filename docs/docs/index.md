@@ -20,7 +20,7 @@ AddressValidation comes with several service integrations pre-built and ready to
 | [UPS&reg; Address Validation API](https://developer.ups.com/api/reference)                                    | [UPS](integrations/ups.md)                   | United States                                                                                 | **Complete** |
 | [USPS&reg; Address Validation API](https://developer.usps.com/api/93)                                        |                                              | United States                                                                                 | *Planned*    |
 
-If there is no integration for a service you wish to you use, you can either open a [feature request](#) or you can read on how to develop a [custom integration](integrations/custom/introduction.md).
+If there is no integration for a service you wish to you use, you can either open a [feature request](https://github.com/visus-io/AddressValidation/issues/new?template=feature_request.yml) or you can read on how to develop a [custom integration](integrations/custom/introduction.md).
 
 ## Caching
 

@@ -31,7 +31,18 @@
         <File Path="README.md" />
         <File Path="renovate.json" />
     </Folder>
-    <Folder Name="/Solution Items/.github/" />
+    <Folder Name="/Solution Items/.github/">
+        <File Path=".github\copilot-instructions.md" />
+        <File Path=".github\PULL_REQUEST_TEMPLATE.md" />
+    </Folder>
+    <Folder Name="/Solution Items/.github/ISSUE_TEMPLATE/">
+        <File Path=".github\ISSUE_TEMPLATE\bug_report.yml" />
+        <File Path=".github\ISSUE_TEMPLATE\config.yml" />
+        <File Path=".github\ISSUE_TEMPLATE\documentation.yml" />
+        <File Path=".github\ISSUE_TEMPLATE\feature_request.yml" />
+        <File Path=".github\ISSUE_TEMPLATE\localization.yml" />
+        <File Path=".github\ISSUE_TEMPLATE\performance.yml" />
+    </Folder>
     <Folder Name="/Solution Items/.github/workflows/">
         <File Path=".github/workflows/ci.yml" />
         <File Path=".github\workflows\release.yml" />

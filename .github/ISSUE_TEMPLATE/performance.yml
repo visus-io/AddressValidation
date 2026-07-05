@@ -1,0 +1,129 @@
+name: Performance Issue
+description: Report performance problems or suggest optimizations
+title: '[Performance]: '
+labels: ['Issue: Pending Confirmation', 'Priority: Medium']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping us improve library performance!
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Performance Issue Description
+      description: Describe the performance problem you're experiencing
+      placeholder: When I call ValidateAsync with..., validation takes longer than expected / memory spikes / etc.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      options:
+        - Slow validation latency
+        - High memory usage
+        - Excessive token refresh calls
+        - Cache contention / stampede
+        - HTTP resilience overhead
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected Area(s)
+      multiple: true
+      options:
+        - Validation Pipeline
+        - Authentication / Token Caching
+        - HTTP Client / Resilience
+        - Request / Response Mapping
+        - FedEx Integration
+        - Google Integration
+        - Pitney Bowes Integration
+        - UPS Integration
+        - Other
+    validations:
+      required: false
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce the performance issue?
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Code Sample
+      description: Minimal code that demonstrates the issue
+      render: csharp
+    validations:
+      required: false
+
+  - type: textarea
+    id: metrics
+    attributes:
+      label: Performance Metrics
+      description: Any measurements you've collected
+      placeholder: |
+        - P99 latency: 3s
+        - Memory: 500 MB
+        - Token refreshes/min: 60
+    validations:
+      required: false
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Performance
+      placeholder: I expected this to complete in...
+    validations:
+      required: false
+
+  - type: input
+    id: package-version
+    attributes:
+      label: Package Version
+      placeholder: e.g., 1.2.0
+    validations:
+      required: true
+
+  - type: input
+    id: dotnet-version
+    attributes:
+      label: .NET Version
+      placeholder: e.g., 10.0.100
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: aot
+    attributes:
+      label: Deployment Mode
+      options:
+        - label: Running under Native AOT or trimmed publish
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues to ensure this hasn't been reported already
+          required: true
+        - label: I have tested with the latest version of the affected package(s)
+          required: false
+        - label: I have profiled or measured the performance issue
+          required: false

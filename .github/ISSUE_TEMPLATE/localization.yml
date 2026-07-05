@@ -1,0 +1,91 @@
+name: Localization Issue
+description: Report a missing, incorrect, or untranslatable string, or request a new locale
+title: '[Localization]: '
+labels: ['Maintenance: Translations', 'Status: Review Needed']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > **Note:** Translations are managed through [Crowdin](https://crowdin.com/project/visus-io-addressvalidation).
+        > If you are correcting an existing translation, please make the change there directly — Crowdin will open a pull request automatically once approved.
+        >
+        > Use this issue for: incorrect **source** strings (English), missing `.resx` entries, untranslatable strings, or new locale requests.
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      options:
+        - Incorrect source string (English)
+        - Missing source string
+        - String is difficult or impossible to translate
+        - STYLE_GUIDE.md missing placeholder semantics
+        - New locale request
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Affected Package(s)
+      multiple: true
+      options:
+        - Visus.AddressValidation (core)
+        - Visus.AddressValidation.Integration.FedEx
+        - Visus.AddressValidation.Integration.Google
+        - Visus.AddressValidation.Integration.PitneyBowes
+        - Visus.AddressValidation.Integration.Ups
+    validations:
+      required: false
+
+  - type: input
+    id: resource-key
+    attributes:
+      label: Resource Key
+      description: The `.resx` key for the affected string, if known
+      placeholder: e.g., AddressLine_Required
+    validations:
+      required: false
+
+  - type: dropdown
+    id: locale
+    attributes:
+      label: Affected Locale(s)
+      description: Leave blank for source string issues or new locale requests
+      multiple: true
+      options:
+        - de-DE
+        - es-ES
+        - fr-FR
+        - it-IT
+        - pt-BR
+        - pt-PT
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the issue or the locale being requested
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested Fix
+      description: Proposed corrected string, new source text, or placeholder semantics
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues to ensure this hasn't been reported already
+          required: true
+        - label: I understand that translation corrections should be submitted via Crowdin, not a pull request
+          required: true

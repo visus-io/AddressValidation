@@ -1,0 +1,83 @@
+name: Documentation Improvement
+description: Report issues with documentation or suggest improvements
+title: '[Docs]: '
+labels: ['Status: Review Needed', 'Priority: Low']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve our documentation!
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation needs improvement?
+      options:
+        - README
+        - ARCHITECTURE.md
+        - STYLE_GUIDE.md
+        - XML Doc Comments
+        - Code Examples
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      options:
+        - Missing documentation
+        - Incorrect or outdated information
+        - Unclear explanation
+        - Typo or formatting issue
+        - Missing examples
+        - Broken links
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: Location
+      description: Where is the documentation issue located?
+      placeholder: |
+        File: ARCHITECTURE.md
+        Section: ## Authentication & Token Caching
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What's wrong or confusing about the current documentation?
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested Improvement
+      description: How should the documentation be improved?
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have checked that this documentation issue hasn't been reported already
+          required: true
+        - label: I am willing to submit a pull request to fix this
+          required: false
