@@ -3,9 +3,3 @@ contact_links:
   - name: Ask a Question
     url: https://github.com/visus-io/AddressValidation/discussions/new?category=q-a
     about: Ask questions and get help using the library in Discussions
-  - name: NuGet — Visus.AddressValidation
-    url: https://www.nuget.org/packages/Visus.AddressValidation
-    about: Core package on NuGet
-  - name: Architecture Documentation
-    url: https://github.com/visus-io/AddressValidation/blob/main/ARCHITECTURE.md
-    about: Internal architecture and contributor guide
