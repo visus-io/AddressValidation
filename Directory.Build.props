@@ -31,7 +31,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageTags>address validation address-validation</PackageTags>
+    <PackageTags>address validation address-validation aot trimming</PackageTags>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' != 'true'">

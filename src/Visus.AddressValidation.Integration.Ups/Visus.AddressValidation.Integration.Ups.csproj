@@ -6,6 +6,7 @@
     <PackageId>VisusIO.AddressValidation.Integration.Ups</PackageId>
     <PackageTags>$(PackageTags) ups</PackageTags>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+    <Description>UPS Address Validation API integration for VisusIO.AddressValidation. Supports United States address validation.</Description>
   </PropertyGroup>
 
   <ItemGroup>

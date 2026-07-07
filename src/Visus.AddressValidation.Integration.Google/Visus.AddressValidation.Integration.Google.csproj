@@ -6,6 +6,7 @@
     <PackageId>VisusIO.AddressValidation.Integration.Google</PackageId>
     <PackageTags>$(PackageTags) google google-maps</PackageTags>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+    <Description>Google Address Validation API integration for VisusIO.AddressValidation. Supports address validation across 39 countries.</Description>
   </PropertyGroup>
 
   <ItemGroup>

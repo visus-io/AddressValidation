@@ -6,6 +6,7 @@
     <PackageId>VisusIO.AddressValidation.Integration.FedEx</PackageId>
     <PackageTags>$(PackageTags) fedex</PackageTags>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+    <Description>FedEx Address Validation API integration for VisusIO.AddressValidation. Supports address validation across 46 countries.</Description>
   </PropertyGroup>
 
   <ItemGroup>
