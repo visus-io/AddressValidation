@@ -10,11 +10,13 @@ This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.
 
 ## Reporting Security Vulnerabilities
 
-**Do not open a public issue for security vulnerabilities.** Email [admin@projects.visus.io](mailto:admin@projects.visus.io) with a description of the vulnerability, steps to reproduce, and any relevant version information. You will receive a response within 72 hours.
+**Do not open a public issue for security vulnerabilities.** See [SECURITY.md](SECURITY.md) for the full disclosure policy and contact details.
 
 ## Reporting Bugs
 
 Before opening a bug report, search the [existing issues](https://github.com/visus-io/AddressValidation/issues) to check whether the problem has already been reported.
+
+Use the [issue template chooser](https://github.com/visus-io/AddressValidation/issues/new/choose) to select the right category (bug report, feature request, performance, documentation, or localization).
 
 When filing a new bug, include:
 
@@ -25,7 +27,7 @@ When filing a new bug, include:
 
 ## Requesting Features
 
-Open a [feature request](https://github.com/visus-io/AddressValidation/issues/new) describing the use case before writing any code. This allows the maintainers to discuss feasibility and design before implementation work begins. Pull requests for non-trivial new features that arrive without a prior issue may be closed without review.
+Open a [feature request](https://github.com/visus-io/AddressValidation/issues/new/choose) describing the use case before writing any code. This allows the maintainers to discuss feasibility and design before implementation work begins. Pull requests for non-trivial new features that arrive without a prior issue may be closed without review.
 
 ## Development Setup
 
@@ -48,6 +50,17 @@ dotnet test
 
 Integration tests use [WireMock.Net](https://github.com/WireMock-Net/WireMock.Net) and never call live provider APIs. No credentials are required to run the test suite.
 
+#### Test Frameworks
+
+All test projects use the following libraries — do not substitute alternatives:
+
+| Concern | Library |
+|---|---|
+| Test runner | **TUnit** (Microsoft Testing Platform) |
+| Assertions | **AwesomeAssertions** |
+| Mocking | **NSubstitute** |
+| Test data | **AutoFixture** |
+
 #### Updating Public API Snapshots
 
 After changing any public API surface, regenerate the snapshot files before committing:
@@ -68,6 +81,8 @@ Commit the updated `*.verified.txt` files alongside your code changes.
 6. Push your branch and open a pull request against `main`.
 
 Pull requests should be focused — one logical change per PR. If your work spans multiple concerns, split them into separate PRs.
+
+PR titles must follow the same Conventional Commits format as commit messages — CI will reject the pull request if the title does not conform.
 
 ## Developer Certificate of Origin
 
@@ -118,6 +133,8 @@ All contributions must follow the project's code style rules, which are enforced
 - Explicit accessibility modifiers on every member.
 - `s_` prefix for `private static` fields.
 - `ConfigureAwait` is required on every `await` expression — violations are build errors.
+- `using` directives must be placed **inside** the namespace declaration, never before it — enforced by `.editorconfig`.
+- `using` sort order: `System.*` namespaces first, then all other namespaces alphabetically.
 - All public members must carry XML doc comments (`<summary>` at minimum).
 - All user-facing validation error messages must be defined in the project's `Resources/Resources.resx` file. Never hardcode message strings in C# source.
 
