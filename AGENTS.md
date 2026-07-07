@@ -57,6 +57,7 @@
 - Do not use `Activator`, `MethodInfo`, `PropertyInfo`, or any other reflection type in non-test code.
 - Do not use `IMemoryCache` or `IDistributedCache` for OAuth tokens.
 - Do not reference one integration package from another — they are peer packages that share only `Visus.AddressValidation`.
+- Do not add third-party (non-Microsoft) runtime NuGet dependencies to source projects under `src/` — consumers inherit the transitive package graph. Analyzer and build-only packages (`<PrivateAssets>all</PrivateAssets>`) are exempt. Test projects under `tests/` are also exempt.
 - Do not modify `Directory.Build.props` or `Directory.Build.targets` without understanding the MSBuild property inheritance across all projects.
 - Do not suppress analyzer warnings with `#pragma warning disable` or `[SuppressMessage]` without a code comment explaining why.
 - Do not add a `<Version>` element to any `.csproj` — versioning is handled by the release pipeline.
