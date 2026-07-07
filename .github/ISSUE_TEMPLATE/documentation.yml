@@ -16,7 +16,7 @@ body:
       options:
         - README
         - ARCHITECTURE.md
-        - STYLE_GUIDE.md
+        - AGENTS.md / ARCHITECTURE.md
         - XML Doc Comments
         - Code Examples
         - Other

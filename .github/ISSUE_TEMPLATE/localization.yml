@@ -19,7 +19,7 @@ body:
         - Incorrect source string (English)
         - Missing source string
         - String is difficult or impossible to translate
-        - STYLE_GUIDE.md missing placeholder semantics
+        - Missing placeholder semantics documentation
         - New locale request
         - Other
     validations:

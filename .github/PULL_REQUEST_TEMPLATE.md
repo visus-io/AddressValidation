@@ -45,7 +45,7 @@ Related to #
 
 ## Documentation
 
-- [ ] New `.resx` strings added to `STYLE_GUIDE.md` with placeholder semantics
+- [ ] New `.resx` strings: placeholder semantics and do-not-translate tokens documented in this PR description
 - [ ] `ARCHITECTURE.md` updated (if structure or patterns changed)
 
 ## Breaking Changes

@@ -17,6 +17,9 @@
 - **Explicit accessibility modifiers** on every member.
 - **`s_` prefix** for `private static` fields.
 - **`ConfigureAwait` is required** on every `await` expression — violations are build errors.
+- **`using` directives inside the namespace** — never before the `namespace` declaration (`.editorconfig` enforces this).
+- **`using` sort order** — `System.*` namespaces first, then all other namespaces alphabetically; `using static` sorted among them by namespace. ReSharper *Full Cleanup* enforces this automatically.
+- **Member ordering** — members are grouped by access level (public → protected → internal → private). Within each access group the order is: constants/static fields → instance fields → constructors → destructors → delegates → events → enums → interfaces → properties → indexers → methods → nested types (structs, classes, records). Within each category, sort by: static before instance, readonly before mutable, then alphabetically by name. ReSharper *Full Cleanup* enforces this automatically.
 - All public members must carry XML doc comments (`<summary>` at minimum).
 - Follow the rules in `.editorconfig` exactly. Do not override them with inline suppression unless there is a documented reason.
 
@@ -46,7 +49,7 @@
 ## Error Messages and Localization
 
 - All user-facing validation error messages must be defined in the project's `Resources/Resources.resx` file. Never hardcode error message strings in C# source.
-- Do not add new `.resx` entries without also updating `STYLE_GUIDE.md` with the new string's placeholder semantics and do-not-translate list.
+- Do not add new `.resx` entries without documenting the new string's placeholder semantics and do-not-translate list in the pull request description.
 
 ## What NOT to Do
 
