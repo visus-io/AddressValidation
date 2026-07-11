@@ -20,6 +20,24 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     /// </summary>
     protected const string CacheKeyTag = "vs-ave-auth:";
 
+    private const string s_activityName = "address_validation.token_fetch";
+
+    private const string s_cacheResultHit = "hit";
+
+    private const string s_cacheResultMiss = "miss";
+
+    private const string s_resultEmptyToken = "empty_token";
+
+    private const string s_resultError = "error";
+
+    private const string s_resultSuccess = "success";
+
+    private const string s_tagCacheResult = "address_validation.cache_result";
+
+    private const string s_tagClientType = "address_validation.client_type";
+
+    private const string s_tagResult = "address_validation.result";
+
     private readonly TClient _authenticationClient;
 
     private readonly HybridCache _cache;
@@ -109,16 +127,16 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
         {
             AddressValidationDiagnostics.CacheResultCounter.Add(
                 1,
-                new KeyValuePair<string, object?>("address_validation.client_type", typeof(TClient).Name),
-                new KeyValuePair<string, object?>("address_validation.cache_result", "hit"));
+                new KeyValuePair<string, object?>(s_tagClientType, typeof(TClient).Name),
+                new KeyValuePair<string, object?>(s_tagCacheResult, s_cacheResultHit));
 
             return string.IsNullOrWhiteSpace(tokenResponse?.AccessToken) ? null : tokenResponse.AccessToken;
         }
 
         AddressValidationDiagnostics.CacheResultCounter.Add(
             1,
-            new KeyValuePair<string, object?>("address_validation.client_type", typeof(TClient).Name),
-            new KeyValuePair<string, object?>("address_validation.cache_result", "miss"));
+            new KeyValuePair<string, object?>(s_tagClientType, typeof(TClient).Name),
+            new KeyValuePair<string, object?>(s_tagCacheResult, s_cacheResultMiss));
 
         if ( fetched is null || string.IsNullOrWhiteSpace(fetched.AccessToken) )
         {
@@ -157,32 +175,32 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
 
     private async Task<TokenResponse?> FetchTokenAsync(CancellationToken cancellationToken)
     {
-        using Activity? activity = AddressValidationDiagnostics.ActivitySource.StartActivity("address_validation.token_fetch");
-        activity?.SetTag("address_validation.client_type", typeof(TClient).Name);
+        using Activity? activity = AddressValidationDiagnostics.ActivitySource.StartActivity(s_activityName);
+        activity?.SetTag(s_tagClientType, typeof(TClient).Name);
 
         long startTimestamp = Stopwatch.GetTimestamp();
-        string result = "success";
+        string result = s_resultSuccess;
 
         try
         {
             TokenResponse? tokenResponse = await _authenticationClient.RequestClientCredentialsTokenAsync(cancellationToken).ConfigureAwait(false);
-            result = tokenResponse is null || string.IsNullOrWhiteSpace(tokenResponse.AccessToken) ? "empty_token" : "success";
+            result = tokenResponse is null || string.IsNullOrWhiteSpace(tokenResponse.AccessToken) ? s_resultEmptyToken : s_resultSuccess;
             return tokenResponse;
         }
         catch ( Exception ex )
         {
-            result = "error";
+            result = s_resultError;
             activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
             activity?.AddException(ex);
             throw;
         }
         finally
         {
-            activity?.SetTag("address_validation.result", result);
+            activity?.SetTag(s_tagResult, result);
             AddressValidationDiagnostics.TokenFetchDuration.Record(
                 Stopwatch.GetElapsedTime(startTimestamp).TotalSeconds,
-                new KeyValuePair<string, object?>("address_validation.client_type", typeof(TClient).Name),
-                new KeyValuePair<string, object?>("address_validation.result", result));
+                new KeyValuePair<string, object?>(s_tagClientType, typeof(TClient).Name),
+                new KeyValuePair<string, object?>(s_tagResult, result));
         }
     }
 }

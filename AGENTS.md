@@ -15,7 +15,7 @@
 - **No `var`** — always use explicit types.
 - **Allman braces** — opening `{` on its own line.
 - **Explicit accessibility modifiers** on every member.
-- **`s_` prefix** for `private static` fields.
+- **`s_` prefix** for `private static` fields, including `private const` fields (the `.editorconfig` naming rule applies to any `private`/`internal`/`private protected` field with the `static` modifier, and `const` fields are implicitly static).
 - **Collection expressions** (IDE0300–IDE0305) — prefer `[...]` collection-expression syntax over `new T[]`, `.ToArray()`, `.ToList()`, and similar fluent terminal calls when the target type supports it (e.g. `[.. source.Select(...)]` instead of `source.Select(...).ToArray()`).
 - **Simplified collection initialization** ([IDE0028](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0028)) — never declare a collection then populate it with sequential `.Add(...)` calls; initialize it inline (e.g. `List<T> list = [item1, item2];` instead of `List<T> list = new(); list.Add(item1); list.Add(item2);`).
 - **Trailing comma on multiline lists** ([MA0007](https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0007.md)) — add a trailing comma after the last element of any object initializer, collection expression, or other multiline list of values.

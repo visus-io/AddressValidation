@@ -21,6 +21,26 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
     where TRequest : AbstractAddressValidationRequest
     where TApiResponse : class
 {
+    private const string s_activityName = "address_validation.validate";
+
+    private const string s_resultError = "error";
+
+    private const string s_resultInvalidRequest = "invalid_request";
+
+    private const string s_resultInvalidResponse = "invalid_response";
+
+    private const string s_resultNoResponse = "no_response";
+
+    private const string s_resultSuccess = "success";
+
+    private const string s_tagCountry = "address_validation.country";
+
+    private const string s_tagRequestType = "address_validation.request_type";
+
+    private const string s_tagResult = "address_validation.result";
+
+    private const string s_unknownCountry = "unknown";
+
     private readonly IApiRequestAdapter<TRequest, TApiResponse> _requestAdapter;
 
     private readonly IValidator<TRequest> _requestValidator;
@@ -84,9 +104,9 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
     {
         AddressValidationDiagnostics.ValidationDuration.Record(
             Stopwatch.GetElapsedTime(startTimestamp).TotalSeconds,
-            new KeyValuePair<string, object?>("address_validation.request_type", typeof(TRequest).Name),
-            new KeyValuePair<string, object?>("address_validation.result", result),
-            new KeyValuePair<string, object?>("address_validation.country", country));
+            new KeyValuePair<string, object?>(s_tagRequestType, typeof(TRequest).Name),
+            new KeyValuePair<string, object?>(s_tagResult, result),
+            new KeyValuePair<string, object?>(s_tagCountry, country));
 
         if ( response is null )
         {
@@ -95,26 +115,26 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
 
         AddressValidationDiagnostics.ResponseWarningCount.Record(
             response.Warnings.Count,
-            new KeyValuePair<string, object?>("address_validation.request_type", typeof(TRequest).Name),
-            new KeyValuePair<string, object?>("address_validation.result", result),
-            new KeyValuePair<string, object?>("address_validation.country", country));
+            new KeyValuePair<string, object?>(s_tagRequestType, typeof(TRequest).Name),
+            new KeyValuePair<string, object?>(s_tagResult, result),
+            new KeyValuePair<string, object?>(s_tagCountry, country));
 
         AddressValidationDiagnostics.ResponseSuggestionCount.Record(
             response.Suggestions.Count,
-            new KeyValuePair<string, object?>("address_validation.request_type", typeof(TRequest).Name),
-            new KeyValuePair<string, object?>("address_validation.result", result),
-            new KeyValuePair<string, object?>("address_validation.country", country));
+            new KeyValuePair<string, object?>(s_tagRequestType, typeof(TRequest).Name),
+            new KeyValuePair<string, object?>(s_tagResult, result),
+            new KeyValuePair<string, object?>(s_tagCountry, country));
     }
 
     private async Task<IAddressValidationResponse?> ValidateInternalAsync(TRequest request, CancellationToken cancellationToken)
     {
-        using Activity? activity = AddressValidationDiagnostics.ActivitySource.StartActivity("address_validation.validate");
-        string country = request.Country?.ToString() ?? "unknown";
-        activity?.SetTag("address_validation.request_type", typeof(TRequest).Name);
-        activity?.SetTag("address_validation.country", country);
+        using Activity? activity = AddressValidationDiagnostics.ActivitySource.StartActivity(s_activityName);
+        string country = request.Country?.ToString() ?? s_unknownCountry;
+        activity?.SetTag(s_tagRequestType, typeof(TRequest).Name);
+        activity?.SetTag(s_tagCountry, country);
 
         long startTimestamp = Stopwatch.GetTimestamp();
-        string result = "success";
+        string result = s_resultSuccess;
         IAddressValidationResponse? response = null;
 
         try
@@ -122,7 +142,7 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
             IValidationResult requestValidationResult = await _requestValidator.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
             if ( requestValidationResult.HasErrors )
             {
-                result = "invalid_request";
+                result = s_resultInvalidRequest;
                 response = new EmptyAddressValidationResponse(requestValidationResult);
                 return response;
             }
@@ -130,14 +150,14 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
             TApiResponse? apiResponse = await _requestAdapter.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
             if ( apiResponse is null )
             {
-                result = "no_response";
+                result = s_resultNoResponse;
                 return null;
             }
 
             IValidationResult responseValidationResult = await _responseValidator.ExecuteAsync(apiResponse, cancellationToken).ConfigureAwait(false);
             if ( responseValidationResult.HasErrors )
             {
-                result = "invalid_response";
+                result = s_resultInvalidResponse;
                 response = new EmptyAddressValidationResponse(responseValidationResult);
                 return response;
             }
@@ -147,14 +167,14 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
         }
         catch ( Exception ex )
         {
-            result = "error";
+            result = s_resultError;
             activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
             activity?.AddException(ex);
             throw;
         }
         finally
         {
-            activity?.SetTag("address_validation.result", result);
+            activity?.SetTag(s_tagResult, result);
             RecordMetrics(startTimestamp, result, country, response);
         }
     }
