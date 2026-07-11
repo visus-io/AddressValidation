@@ -49,6 +49,17 @@ jobs:
             -   name: Build
                 run: dotnet build -c Release --no-restore -p:ContinuousIntegrationBuild=true -p:MinVerBuildMetadata=${{ github.run_number }}
 
+            -   name: Run tests
+                run: dotnet test -c Release --no-build --no-restore -- --report-trx
+
+            -   name: Upload test results
+                if: always()
+                uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+                with:
+                    name: test-results
+                    path: "**/TestResults/*.trx"
+                    retention-days: 1
+
             -   name: Pack
                 run: |
                     dotnet pack -c Release --no-build --no-restore \
