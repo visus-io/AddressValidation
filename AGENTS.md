@@ -8,20 +8,25 @@
 
 - Target framework is `net10.0`. The Roslyn source generator targets `netstandard2.0`.
 - Language version is C# 14 (`LangVersion 14` in `Directory.Build.props`).
-- All source packages carry `IsAotCompatible = true`. Never introduce reflection-based APIs (e.g., `Type`-accepting `JsonSerializer` overloads, `Activator.CreateInstance`, `MethodInfo.Invoke`).
+- All source packages carry `IsAotCompatible = true`. Never introduce reflection-based APIs (e.g., `Type`-accepting `JsonSerializer` overloads, `Activator.CreateInstance`, `MethodInfo.Invoke`, `Assembly.GetCustomAttribute`/`GetCustomAttributes`, or any other `System.Reflection` member). This includes reflection used only to read metadata (e.g., pulling an assembly version via `AssemblyInformationalVersionAttribute`) — it is just as AOT/trim-unsafe as reflection used to invoke members.
 
 ## Code Style
 
 - **No `var`** — always use explicit types.
 - **Allman braces** — opening `{` on its own line.
 - **Explicit accessibility modifiers** on every member.
-- **`s_` prefix** for `private static` fields.
+- **`s_` prefix** for `private static` fields, including `private const` fields (the `.editorconfig` naming rule applies to any `private`/`internal`/`private protected` field with the `static` modifier, and `const` fields are implicitly static).
+- **Collection expressions** (IDE0300–IDE0305) — prefer `[...]` collection-expression syntax over `new T[]`, `.ToArray()`, `.ToList()`, and similar fluent terminal calls when the target type supports it (e.g. `[.. source.Select(...)]` instead of `source.Select(...).ToArray()`).
+- **Simplified collection initialization** ([IDE0028](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0028)) — never declare a collection then populate it with sequential `.Add(...)` calls; initialize it inline (e.g. `List<T> list = [item1, item2];` instead of `List<T> list = new(); list.Add(item1); list.Add(item2);`).
+- **Trailing comma on multiline lists** ([MA0007](https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0007.md)) — add a trailing comma after the last element of any object initializer, collection expression, array/collection initializer, or enum declaration, when written across multiple lines. This does **not** apply to method call argument lists or method declaration parameter lists — C# does not permit a trailing comma there (it is a compile error, `CS1525`), regardless of how many lines the call spans.
 - **`ConfigureAwait` is required** on every `await` expression — violations are build errors.
 - **`using` directives inside the namespace** — never before the `namespace` declaration (`.editorconfig` enforces this).
 - **`using` sort order** — `System.*` namespaces first, then all other namespaces alphabetically; `using static` sorted among them by namespace. ReSharper *Full Cleanup* enforces this automatically.
 - **Member ordering** — members are grouped by access level (public → protected → internal → private). Within each access group the order is: constants/static fields → instance fields → constructors → destructors → delegates → events → enums → interfaces → properties → indexers → methods → nested types (structs, classes, records). Within each category, sort by: static before instance, readonly before mutable, then alphabetically by name. ReSharper *Full Cleanup* enforces this automatically.
-- All public members must carry XML doc comments (`<summary>` at minimum).
+- All public members must carry XML doc comments (`<summary>` at minimum) **when they are part of the assembly's externally-visible API surface** — i.e., the member itself is `public`/`protected` *and* every containing type is also `public`/`protected`. A `public` member on an `internal` type (e.g. `Constants.CityStates`, `AddressValidationDiagnostics.ActivitySource`) is not externally visible and does not require one.
 - Follow the rules in `.editorconfig` exactly. Do not override them with inline suppression unless there is a documented reason.
+- Before flagging or "fixing" any whitespace/spacing style in review (e.g. spaces inside parentheses, brace placement, blank lines), check `.editorconfig` first — do not assume a convention from general C# style. For example, `csharp_space_between_parentheses = control_flow_statements, expressions` means `if ( condition )` with inner spaces is correct here, not a defect, even though it looks unusual.
+- Before finishing any change, run `dotnet format whitespace`, `dotnet format style --severity info`, and `dotnet format analyzers --severity info` against `AddressValidation.slnx` with `--verify-no-changes` (omit it to apply fixes) to catch style/analyzer violations (e.g. IDE0028, IDE03xx, MA0007) that the build alone does not surface.
 
 ## Project Structure Rules
 
@@ -54,7 +59,7 @@
 ## What NOT to Do
 
 - Do not add `using var` or `var` anywhere.
-- Do not use `Activator`, `MethodInfo`, `PropertyInfo`, or any other reflection type in non-test code.
+- Do not use `Activator`, `MethodInfo`, `PropertyInfo`, `Assembly` (e.g. `Assembly.GetCustomAttribute`), or any other `System.Reflection` type in non-test code — including read-only metadata lookups, not just member invocation.
 - Do not use `IMemoryCache` or `IDistributedCache` for OAuth tokens.
 - Do not reference one integration package from another — they are peer packages that share only `Visus.AddressValidation`.
 - Do not add third-party (non-Microsoft) runtime NuGet dependencies to source projects under `src/` — consumers inherit the transitive package graph. Analyzer and build-only packages (`<PrivateAssets>all</PrivateAssets>`) are exempt. Test projects under `tests/` are also exempt.

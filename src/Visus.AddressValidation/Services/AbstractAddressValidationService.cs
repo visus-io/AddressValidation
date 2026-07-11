@@ -1,6 +1,8 @@
 namespace Visus.AddressValidation.Services;
 
+using System.Diagnostics;
 using Adapters;
+using Diagnostics;
 using Mappers;
 using Models;
 using Validation;
@@ -19,6 +21,26 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
     where TRequest : AbstractAddressValidationRequest
     where TApiResponse : class
 {
+    private const string s_activityName = "address_validation.validate";
+
+    private const string s_resultError = "error";
+
+    private const string s_resultInvalidRequest = "invalid_request";
+
+    private const string s_resultInvalidResponse = "invalid_response";
+
+    private const string s_resultNoResponse = "no_response";
+
+    private const string s_resultSuccess = "success";
+
+    private const string s_tagCountry = "address_validation.country";
+
+    private const string s_tagRequestType = "address_validation.request_type";
+
+    private const string s_tagResult = "address_validation.result";
+
+    private const string s_unknownCountry = "unknown";
+
     private readonly IApiRequestAdapter<TRequest, TApiResponse> _requestAdapter;
 
     private readonly IValidator<TRequest> _requestValidator;
@@ -78,23 +100,82 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
         return ValidateInternalAsync(request, cancellationToken);
     }
 
-    private async Task<IAddressValidationResponse?> ValidateInternalAsync(TRequest request, CancellationToken cancellationToken)
+    private static void RecordMetrics(long startTimestamp, string result, string country, IAddressValidationResponse? response)
     {
-        IValidationResult requestValidationResult = await _requestValidator.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
-        if ( requestValidationResult.HasErrors )
-        {
-            return new EmptyAddressValidationResponse(requestValidationResult);
-        }
+        AddressValidationDiagnostics.ValidationDuration.Record(
+            Stopwatch.GetElapsedTime(startTimestamp).TotalSeconds,
+            new KeyValuePair<string, object?>(s_tagRequestType, typeof(TRequest).Name),
+            new KeyValuePair<string, object?>(s_tagResult, result),
+            new KeyValuePair<string, object?>(s_tagCountry, country));
 
-        TApiResponse? response = await _requestAdapter.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
         if ( response is null )
         {
-            return null;
+            return;
         }
 
-        IValidationResult responseValidationResult = await _responseValidator.ExecuteAsync(response, cancellationToken).ConfigureAwait(false);
-        return responseValidationResult.HasErrors
-                   ? new EmptyAddressValidationResponse(responseValidationResult)
-                   : _responseMapper.Map(response, responseValidationResult);
+        AddressValidationDiagnostics.ResponseWarningCount.Record(
+            response.Warnings.Count,
+            new KeyValuePair<string, object?>(s_tagRequestType, typeof(TRequest).Name),
+            new KeyValuePair<string, object?>(s_tagResult, result),
+            new KeyValuePair<string, object?>(s_tagCountry, country));
+
+        AddressValidationDiagnostics.ResponseSuggestionCount.Record(
+            response.Suggestions.Count,
+            new KeyValuePair<string, object?>(s_tagRequestType, typeof(TRequest).Name),
+            new KeyValuePair<string, object?>(s_tagResult, result),
+            new KeyValuePair<string, object?>(s_tagCountry, country));
+    }
+
+    private async Task<IAddressValidationResponse?> ValidateInternalAsync(TRequest request, CancellationToken cancellationToken)
+    {
+        using Activity? activity = AddressValidationDiagnostics.ActivitySource.StartActivity(s_activityName);
+        string country = request.Country?.ToString() ?? s_unknownCountry;
+        activity?.SetTag(s_tagRequestType, typeof(TRequest).Name);
+        activity?.SetTag(s_tagCountry, country);
+
+        long startTimestamp = Stopwatch.GetTimestamp();
+        string result = s_resultSuccess;
+        IAddressValidationResponse? response = null;
+
+        try
+        {
+            IValidationResult requestValidationResult = await _requestValidator.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
+            if ( requestValidationResult.HasErrors )
+            {
+                result = s_resultInvalidRequest;
+                response = new EmptyAddressValidationResponse(requestValidationResult);
+                return response;
+            }
+
+            TApiResponse? apiResponse = await _requestAdapter.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
+            if ( apiResponse is null )
+            {
+                result = s_resultNoResponse;
+                return null;
+            }
+
+            IValidationResult responseValidationResult = await _responseValidator.ExecuteAsync(apiResponse, cancellationToken).ConfigureAwait(false);
+            if ( responseValidationResult.HasErrors )
+            {
+                result = s_resultInvalidResponse;
+                response = new EmptyAddressValidationResponse(responseValidationResult);
+                return response;
+            }
+
+            response = _responseMapper.Map(apiResponse, responseValidationResult);
+            return response;
+        }
+        catch ( Exception ex )
+        {
+            result = s_resultError;
+            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+            activity?.AddException(ex);
+            throw;
+        }
+        finally
+        {
+            activity?.SetTag(s_tagResult, result);
+            RecordMetrics(startTimestamp, result, country, response);
+        }
     }
 }

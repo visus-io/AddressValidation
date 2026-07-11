@@ -52,3 +52,7 @@ Fortunately, there are several options available to ensure that this information
 - [Custom Configuration Provider with Google Secrets Manager](https://www.nuget.org/packages/Gcp.SecretManager.Provider)
 
 For any other implementation a [custom configuration provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/custom-configuration-provider) will be required.
+
+## Instrumentation
+
+All integrations emit OpenTelemetry-compatible traces and metrics via `System.Diagnostics`, covering both address validation calls and OAuth token fetches/cache results. See [Instrumentation](instrumentation.md) for setup, the full list of activities and metrics, and export examples for popular observability backends.

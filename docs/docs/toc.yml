@@ -28,3 +28,5 @@
       href: integrations/custom/validators.md
     - name: Registering Services
       href: integrations/custom/registering-services.md
+- name: Instrumentation
+  href: instrumentation.md

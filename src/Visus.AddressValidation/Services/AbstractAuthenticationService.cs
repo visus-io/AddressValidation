@@ -1,5 +1,7 @@
 namespace Visus.AddressValidation.Services;
 
+using System.Diagnostics;
+using Diagnostics;
 using Http;
 using Http.Clients;
 using Microsoft.Extensions.Caching.Hybrid;
@@ -17,6 +19,24 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     ///     Prefix applied to all cache keys produced by this service to namespace them within the shared cache.
     /// </summary>
     protected const string CacheKeyTag = "vs-ave-auth:";
+
+    private const string s_activityName = "address_validation.token_fetch";
+
+    private const string s_cacheResultHit = "hit";
+
+    private const string s_cacheResultMiss = "miss";
+
+    private const string s_resultEmptyToken = "empty_token";
+
+    private const string s_resultError = "error";
+
+    private const string s_resultSuccess = "success";
+
+    private const string s_tagCacheResult = "address_validation.cache_result";
+
+    private const string s_tagClientType = "address_validation.client_type";
+
+    private const string s_tagResult = "address_validation.result";
 
     private readonly TClient _authenticationClient;
 
@@ -95,11 +115,7 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
                                                         async ct =>
                                                         {
                                                             factoryRan = true;
-
-                                                            fetched = await _authenticationClient
-                                                                           .RequestClientCredentialsTokenAsync(ct)
-                                                                           .ConfigureAwait(false);
-
+                                                            fetched = await FetchTokenAsync(ct).ConfigureAwait(false);
                                                             return fetched;
                                                         },
                                                         null,
@@ -109,8 +125,18 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
 
         if ( !factoryRan ) // NOSONAR S2583 - false positive: factoryRan is mutated inside the async lambda above
         {
+            AddressValidationDiagnostics.CacheResultCounter.Add(
+                1,
+                new KeyValuePair<string, object?>(s_tagClientType, typeof(TClient).Name),
+                new KeyValuePair<string, object?>(s_tagCacheResult, s_cacheResultHit));
+
             return string.IsNullOrWhiteSpace(tokenResponse?.AccessToken) ? null : tokenResponse.AccessToken;
         }
+
+        AddressValidationDiagnostics.CacheResultCounter.Add(
+            1,
+            new KeyValuePair<string, object?>(s_tagClientType, typeof(TClient).Name),
+            new KeyValuePair<string, object?>(s_tagCacheResult, s_cacheResultMiss));
 
         if ( fetched is null || string.IsNullOrWhiteSpace(fetched.AccessToken) )
         {
@@ -145,5 +171,36 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     private static bool IsValidCacheKey(string key)
     {
         return key.Length > 0 && key.All(c => char.IsAsciiLetterOrDigit(c) || c is '_' or '-' or ':');
+    }
+
+    private async Task<TokenResponse?> FetchTokenAsync(CancellationToken cancellationToken)
+    {
+        using Activity? activity = AddressValidationDiagnostics.ActivitySource.StartActivity(s_activityName);
+        activity?.SetTag(s_tagClientType, typeof(TClient).Name);
+
+        long startTimestamp = Stopwatch.GetTimestamp();
+        string result = s_resultSuccess;
+
+        try
+        {
+            TokenResponse? tokenResponse = await _authenticationClient.RequestClientCredentialsTokenAsync(cancellationToken).ConfigureAwait(false);
+            result = tokenResponse is null || string.IsNullOrWhiteSpace(tokenResponse.AccessToken) ? s_resultEmptyToken : s_resultSuccess;
+            return tokenResponse;
+        }
+        catch ( Exception ex )
+        {
+            result = s_resultError;
+            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+            activity?.AddException(ex);
+            throw;
+        }
+        finally
+        {
+            activity?.SetTag(s_tagResult, result);
+            AddressValidationDiagnostics.TokenFetchDuration.Record(
+                Stopwatch.GetElapsedTime(startTimestamp).TotalSeconds,
+                new KeyValuePair<string, object?>(s_tagClientType, typeof(TClient).Name),
+                new KeyValuePair<string, object?>(s_tagResult, result));
+        }
     }
 }
