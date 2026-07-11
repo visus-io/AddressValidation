@@ -41,11 +41,11 @@ Both activities are marked with `ActivityStatusCode.Error` and record the except
 
 | Name | Kind | Unit | Tags | Description |
 |---|---|---|---|---|
-| `visus.address_validation.validate.duration` | Histogram\<double\> | s | request_type, result, country | Duration of a `ValidateAsync` call. |
-| `visus.address_validation.validate.response_warning_count` | Histogram\<long\> | — | request_type, result, country | Number of warnings on the produced response. Not recorded when the API returns no response. |
-| `visus.address_validation.validate.response_suggestion_count` | Histogram\<long\> | — | request_type, result, country | Number of suggestions on the produced response. Not recorded when the API returns no response. |
-| `visus.address_validation.token_fetch.duration` | Histogram\<double\> | s | client_type, result | Duration of a token fetch (cache miss only). |
-| `visus.address_validation.token_fetch.cache_result` | Counter\<long\> | — | client_type, cache_result | Incremented on every token cache lookup, whether it hits or misses. |
+| `visus.address_validation.validate.duration` | Histogram\<double\> | s | `address_validation.request_type`, `address_validation.result`, `address_validation.country` | Duration of a `ValidateAsync` call. |
+| `visus.address_validation.validate.response_warning_count` | Histogram\<long\> | — | `address_validation.request_type`, `address_validation.result`, `address_validation.country` | Number of warnings on the produced response. Not recorded when the API returns no response. |
+| `visus.address_validation.validate.response_suggestion_count` | Histogram\<long\> | — | `address_validation.request_type`, `address_validation.result`, `address_validation.country` | Number of suggestions on the produced response. Not recorded when the API returns no response. |
+| `visus.address_validation.token_fetch.duration` | Histogram\<double\> | s | `address_validation.client_type`, `address_validation.result` | Duration of a token fetch (cache miss only). |
+| `visus.address_validation.token_fetch.cache_result` | Counter\<long\> | — | `address_validation.client_type`, `address_validation.cache_result` | Incremented on every token cache lookup, whether it hits or misses. |
 
 ### Tag Values
 
