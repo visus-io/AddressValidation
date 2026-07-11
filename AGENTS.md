@@ -8,7 +8,7 @@
 
 - Target framework is `net10.0`. The Roslyn source generator targets `netstandard2.0`.
 - Language version is C# 14 (`LangVersion 14` in `Directory.Build.props`).
-- All source packages carry `IsAotCompatible = true`. Never introduce reflection-based APIs (e.g., `Type`-accepting `JsonSerializer` overloads, `Activator.CreateInstance`, `MethodInfo.Invoke`).
+- All source packages carry `IsAotCompatible = true`. Never introduce reflection-based APIs (e.g., `Type`-accepting `JsonSerializer` overloads, `Activator.CreateInstance`, `MethodInfo.Invoke`, `Assembly.GetCustomAttribute`/`GetCustomAttributes`, or any other `System.Reflection` member). This includes reflection used only to read metadata (e.g., pulling an assembly version via `AssemblyInformationalVersionAttribute`) — it is just as AOT/trim-unsafe as reflection used to invoke members.
 
 ## Code Style
 
@@ -25,6 +25,7 @@
 - **Member ordering** — members are grouped by access level (public → protected → internal → private). Within each access group the order is: constants/static fields → instance fields → constructors → destructors → delegates → events → enums → interfaces → properties → indexers → methods → nested types (structs, classes, records). Within each category, sort by: static before instance, readonly before mutable, then alphabetically by name. ReSharper *Full Cleanup* enforces this automatically.
 - All public members must carry XML doc comments (`<summary>` at minimum).
 - Follow the rules in `.editorconfig` exactly. Do not override them with inline suppression unless there is a documented reason.
+- Before flagging or "fixing" any whitespace/spacing style in review (e.g. spaces inside parentheses, brace placement, blank lines), check `.editorconfig` first — do not assume a convention from general C# style. For example, `csharp_space_between_parentheses = control_flow_statements, expressions` means `if ( condition )` with inner spaces is correct here, not a defect, even though it looks unusual.
 - Before finishing any change, run `dotnet format whitespace`, `dotnet format style --severity info`, and `dotnet format analyzers --severity info` against `AddressValidation.slnx` with `--verify-no-changes` (omit it to apply fixes) to catch style/analyzer violations (e.g. IDE0028, IDE03xx, MA0007) that the build alone does not surface.
 
 ## Project Structure Rules
@@ -58,7 +59,7 @@
 ## What NOT to Do
 
 - Do not add `using var` or `var` anywhere.
-- Do not use `Activator`, `MethodInfo`, `PropertyInfo`, or any other reflection type in non-test code.
+- Do not use `Activator`, `MethodInfo`, `PropertyInfo`, `Assembly` (e.g. `Assembly.GetCustomAttribute`), or any other `System.Reflection` type in non-test code — including read-only metadata lookups, not just member invocation.
 - Do not use `IMemoryCache` or `IDistributedCache` for OAuth tokens.
 - Do not reference one integration package from another — they are peer packages that share only `Visus.AddressValidation`.
 - Do not add third-party (non-Microsoft) runtime NuGet dependencies to source projects under `src/` — consumers inherit the transitive package graph. Analyzer and build-only packages (`<PrivateAssets>all</PrivateAssets>`) are exempt. Test projects under `tests/` are also exempt.

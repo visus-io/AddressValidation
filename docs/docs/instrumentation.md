@@ -20,7 +20,7 @@ builder.Services.AddOpenTelemetry()
 This requires the `OpenTelemetry.Extensions.Hosting` package:
 
 ```shell
-dotnet package add OpenTelemetry.Extensions.Hosting
+dotnet add package OpenTelemetry.Extensions.Hosting
 ```
 
 > [!NOTE]
@@ -78,7 +78,7 @@ builder.Services.AddOpenTelemetry()
 ```
 
 ```shell
-dotnet package add OpenTelemetry.Exporter.Console
+dotnet add package OpenTelemetry.Exporter.Console
 ```
 
 # [OTLP Collector](#tab/tab-ave-otel-otlp)
@@ -97,7 +97,7 @@ builder.Services.AddOpenTelemetry()
 ```
 
 ```shell
-dotnet package add OpenTelemetry.Exporter.OpenTelemetryProtocol
+dotnet add package OpenTelemetry.Exporter.OpenTelemetryProtocol
 ```
 
 # [Azure Monitor](#tab/tab-ave-otel-azure)
@@ -118,7 +118,7 @@ builder.Services.AddOpenTelemetry()
 ```
 
 ```shell
-dotnet package add Azure.Monitor.OpenTelemetry.Exporter
+dotnet add package Azure.Monitor.OpenTelemetry.Exporter
 ```
 
 # [Datadog](#tab/tab-ave-otel-datadog)
@@ -137,7 +137,7 @@ builder.Services.AddOpenTelemetry()
 ```
 
 ```shell
-dotnet package add OpenTelemetry.Exporter.OpenTelemetryProtocol
+dotnet add package OpenTelemetry.Exporter.OpenTelemetryProtocol
 ```
 
 > [!NOTE]
@@ -169,7 +169,7 @@ builder.Services.AddOpenTelemetry()
 ```
 
 ```shell
-dotnet package add OpenTelemetry.Exporter.OpenTelemetryProtocol
+dotnet add package OpenTelemetry.Exporter.OpenTelemetryProtocol
 ```
 
 > [!NOTE]
@@ -191,7 +191,7 @@ builder.Services.AddOpenTelemetry()
 ```
 
 ```shell
-dotnet package add OpenTelemetry.Exporter.OpenTelemetryProtocol
+dotnet add package OpenTelemetry.Exporter.OpenTelemetryProtocol
 ```
 
 > [!NOTE]
@@ -213,7 +213,7 @@ app.MapPrometheusScrapingEndpoint();
 ```
 
 ```shell
-dotnet package add OpenTelemetry.Exporter.Prometheus.AspNetCore
+dotnet add package OpenTelemetry.Exporter.Prometheus.AspNetCore
 ```
 
 ---

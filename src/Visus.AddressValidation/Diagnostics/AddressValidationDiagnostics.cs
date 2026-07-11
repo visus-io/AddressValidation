@@ -2,13 +2,12 @@ namespace Visus.AddressValidation.Diagnostics;
 
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
-using System.Reflection;
 
 internal static class AddressValidationDiagnostics
 {
-    public static readonly ActivitySource ActivitySource = new(AddressValidationTelemetry.SourceName, GetVersion());
+    public static readonly ActivitySource ActivitySource = new(AddressValidationTelemetry.SourceName);
 
-    private static readonly Meter s_meter = new(AddressValidationTelemetry.SourceName, GetVersion());
+    private static readonly Meter s_meter = new(AddressValidationTelemetry.SourceName);
 
     /// <summary>Records the number of access token cache lookups, tagged by cache hit/miss result.</summary>
     public static readonly Counter<long> CacheResultCounter = s_meter.CreateCounter<long>(
@@ -36,11 +35,4 @@ internal static class AddressValidationDiagnostics
         "visus.address_validation.validate.duration",
         "s",
         "The duration of address validation operations in seconds.");
-
-
-    private static string GetVersion()
-    {
-        return typeof(AddressValidationDiagnostics).Assembly
-                                                   .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "unknown";
-    }
 }

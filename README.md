@@ -36,7 +36,7 @@ AddressValidation is a .NET library that provides a unified, provider-agnostic A
 Install the integration package for your chosen provider via the .NET CLI:
 
 ```shell
-dotnet package add VisusIO.AddressValidation.Integration.FedEx
+dotnet add package VisusIO.AddressValidation.Integration.FedEx
 ```
 
 ### Registration
@@ -124,8 +124,8 @@ builder.Services.AddOpenTelemetry()
 This requires the `OpenTelemetry.Extensions.Hosting` and `OpenTelemetry.Exporter.Console` packages:
 
 ```shell
-dotnet package add OpenTelemetry.Extensions.Hosting
-dotnet package add OpenTelemetry.Exporter.Console
+dotnet add package OpenTelemetry.Extensions.Hosting
+dotnet add package OpenTelemetry.Exporter.Console
 ```
 
 See the [documentation](https://ave.projects.visus.io/docs/instrumentation.html) for the full list of activities, metrics, and tags emitted.
