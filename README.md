@@ -107,6 +107,29 @@ public class ValidateController
 
 Each integration package exposes its own `TRequest` type (e.g., `FedExAddressValidationRequest`, `GoogleAddressValidationRequest`) and a corresponding `Add*AddressValidation()` extension method. See the [documentation](https://ave.projects.visus.io/) for provider-specific options.
 
+### Instrumentation
+
+Every integration emits traces and metrics via `System.Diagnostics` (`ActivitySource` / `Meter`), which OpenTelemetry can collect directly. Both share the name in `AddressValidationTelemetry.SourceName`:
+
+```csharp
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracing => tracing
+        .AddSource(AddressValidationTelemetry.SourceName)
+        .AddConsoleExporter())
+    .WithMetrics(metrics => metrics
+        .AddMeter(AddressValidationTelemetry.SourceName)
+        .AddConsoleExporter());
+```
+
+This requires the `OpenTelemetry.Extensions.Hosting` and `OpenTelemetry.Exporter.Console` packages:
+
+```shell
+dotnet package add OpenTelemetry.Extensions.Hosting
+dotnet package add OpenTelemetry.Exporter.Console
+```
+
+See the [documentation](https://ave.projects.visus.io/docs/instrumentation.html) for the full list of activities, metrics, and tags emitted.
+
 ## Documentation
 
 Full documentation is available at [https://ave.projects.visus.io/](https://ave.projects.visus.io/).

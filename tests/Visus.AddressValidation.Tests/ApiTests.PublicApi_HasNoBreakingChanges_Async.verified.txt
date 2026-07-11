@@ -553,6 +553,13 @@ namespace Visus.AddressValidation
         public InvalidImplementationException(string message, System.Exception innerException) { }
     }
 }
+namespace Visus.AddressValidation.Diagnostics
+{
+    public static class AddressValidationTelemetry
+    {
+        public const string SourceName = "Visus.AddressValidation";
+    }
+}
 namespace Visus.AddressValidation.Extensions
 {
     public static class DictionaryExtensions

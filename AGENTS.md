@@ -16,12 +16,16 @@
 - **Allman braces** — opening `{` on its own line.
 - **Explicit accessibility modifiers** on every member.
 - **`s_` prefix** for `private static` fields.
+- **Collection expressions** (IDE0300–IDE0305) — prefer `[...]` collection-expression syntax over `new T[]`, `.ToArray()`, `.ToList()`, and similar fluent terminal calls when the target type supports it (e.g. `[.. source.Select(...)]` instead of `source.Select(...).ToArray()`).
+- **Simplified collection initialization** ([IDE0028](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0028)) — never declare a collection then populate it with sequential `.Add(...)` calls; initialize it inline (e.g. `List<T> list = [item1, item2];` instead of `List<T> list = new(); list.Add(item1); list.Add(item2);`).
+- **Trailing comma on multiline lists** ([MA0007](https://github.com/meziantou/Meziantou.Analyzer/blob/main/docs/Rules/MA0007.md)) — add a trailing comma after the last element of any object initializer, collection expression, or other multiline list of values.
 - **`ConfigureAwait` is required** on every `await` expression — violations are build errors.
 - **`using` directives inside the namespace** — never before the `namespace` declaration (`.editorconfig` enforces this).
 - **`using` sort order** — `System.*` namespaces first, then all other namespaces alphabetically; `using static` sorted among them by namespace. ReSharper *Full Cleanup* enforces this automatically.
 - **Member ordering** — members are grouped by access level (public → protected → internal → private). Within each access group the order is: constants/static fields → instance fields → constructors → destructors → delegates → events → enums → interfaces → properties → indexers → methods → nested types (structs, classes, records). Within each category, sort by: static before instance, readonly before mutable, then alphabetically by name. ReSharper *Full Cleanup* enforces this automatically.
 - All public members must carry XML doc comments (`<summary>` at minimum).
 - Follow the rules in `.editorconfig` exactly. Do not override them with inline suppression unless there is a documented reason.
+- Before finishing any change, run `dotnet format whitespace`, `dotnet format style --severity info`, and `dotnet format analyzers --severity info` against `AddressValidation.slnx` with `--verify-no-changes` (omit it to apply fixes) to catch style/analyzer violations (e.g. IDE0028, IDE03xx, MA0007) that the build alone does not surface.
 
 ## Project Structure Rules
 

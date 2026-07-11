@@ -13,4 +13,8 @@
     <ProjectReference Include="..\..\src\Visus.AddressValidation\Visus.AddressValidation.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
+  </ItemGroup>
+
 </Project>

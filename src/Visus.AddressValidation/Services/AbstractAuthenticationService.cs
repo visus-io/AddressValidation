@@ -1,5 +1,7 @@
 namespace Visus.AddressValidation.Services;
 
+using System.Diagnostics;
+using Diagnostics;
 using Http;
 using Http.Clients;
 using Microsoft.Extensions.Caching.Hybrid;
@@ -95,11 +97,7 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
                                                         async ct =>
                                                         {
                                                             factoryRan = true;
-
-                                                            fetched = await _authenticationClient
-                                                                           .RequestClientCredentialsTokenAsync(ct)
-                                                                           .ConfigureAwait(false);
-
+                                                            fetched = await FetchTokenAsync(ct).ConfigureAwait(false);
                                                             return fetched;
                                                         },
                                                         null,
@@ -109,8 +107,18 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
 
         if ( !factoryRan ) // NOSONAR S2583 - false positive: factoryRan is mutated inside the async lambda above
         {
+            AddressValidationDiagnostics.CacheResultCounter.Add(
+                1,
+                new KeyValuePair<string, object?>("address_validation.client_type", typeof(TClient).Name),
+                new KeyValuePair<string, object?>("address_validation.cache_result", "hit"));
+
             return string.IsNullOrWhiteSpace(tokenResponse?.AccessToken) ? null : tokenResponse.AccessToken;
         }
+
+        AddressValidationDiagnostics.CacheResultCounter.Add(
+            1,
+            new KeyValuePair<string, object?>("address_validation.client_type", typeof(TClient).Name),
+            new KeyValuePair<string, object?>("address_validation.cache_result", "miss"));
 
         if ( fetched is null || string.IsNullOrWhiteSpace(fetched.AccessToken) )
         {
@@ -145,5 +153,36 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     private static bool IsValidCacheKey(string key)
     {
         return key.Length > 0 && key.All(c => char.IsAsciiLetterOrDigit(c) || c is '_' or '-' or ':');
+    }
+
+    private async Task<TokenResponse?> FetchTokenAsync(CancellationToken cancellationToken)
+    {
+        using Activity? activity = AddressValidationDiagnostics.ActivitySource.StartActivity("address_validation.token_fetch");
+        activity?.SetTag("address_validation.client_type", typeof(TClient).Name);
+
+        long startTimestamp = Stopwatch.GetTimestamp();
+        string result = "success";
+
+        try
+        {
+            TokenResponse? tokenResponse = await _authenticationClient.RequestClientCredentialsTokenAsync(cancellationToken).ConfigureAwait(false);
+            result = tokenResponse is null || string.IsNullOrWhiteSpace(tokenResponse.AccessToken) ? "empty_token" : "success";
+            return tokenResponse;
+        }
+        catch ( Exception ex )
+        {
+            result = "error";
+            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+            activity?.AddException(ex);
+            throw;
+        }
+        finally
+        {
+            activity?.SetTag("address_validation.result", result);
+            AddressValidationDiagnostics.TokenFetchDuration.Record(
+                Stopwatch.GetElapsedTime(startTimestamp).TotalSeconds,
+                new KeyValuePair<string, object?>("address_validation.client_type", typeof(TClient).Name),
+                new KeyValuePair<string, object?>("address_validation.result", result));
+        }
     }
 }

@@ -1,6 +1,8 @@
 namespace Visus.AddressValidation.Services;
 
+using System.Diagnostics;
 using Adapters;
+using Diagnostics;
 using Mappers;
 using Models;
 using Validation;
@@ -78,23 +80,82 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
         return ValidateInternalAsync(request, cancellationToken);
     }
 
-    private async Task<IAddressValidationResponse?> ValidateInternalAsync(TRequest request, CancellationToken cancellationToken)
+    private static void RecordMetrics(long startTimestamp, string result, string country, IAddressValidationResponse? response)
     {
-        IValidationResult requestValidationResult = await _requestValidator.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
-        if ( requestValidationResult.HasErrors )
-        {
-            return new EmptyAddressValidationResponse(requestValidationResult);
-        }
+        AddressValidationDiagnostics.ValidationDuration.Record(
+            Stopwatch.GetElapsedTime(startTimestamp).TotalSeconds,
+            new KeyValuePair<string, object?>("address_validation.request_type", typeof(TRequest).Name),
+            new KeyValuePair<string, object?>("address_validation.result", result),
+            new KeyValuePair<string, object?>("address_validation.country", country));
 
-        TApiResponse? response = await _requestAdapter.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
         if ( response is null )
         {
-            return null;
+            return;
         }
 
-        IValidationResult responseValidationResult = await _responseValidator.ExecuteAsync(response, cancellationToken).ConfigureAwait(false);
-        return responseValidationResult.HasErrors
-                   ? new EmptyAddressValidationResponse(responseValidationResult)
-                   : _responseMapper.Map(response, responseValidationResult);
+        AddressValidationDiagnostics.ResponseWarningCount.Record(
+            response.Warnings.Count,
+            new KeyValuePair<string, object?>("address_validation.request_type", typeof(TRequest).Name),
+            new KeyValuePair<string, object?>("address_validation.result", result),
+            new KeyValuePair<string, object?>("address_validation.country", country));
+
+        AddressValidationDiagnostics.ResponseSuggestionCount.Record(
+            response.Suggestions.Count,
+            new KeyValuePair<string, object?>("address_validation.request_type", typeof(TRequest).Name),
+            new KeyValuePair<string, object?>("address_validation.result", result),
+            new KeyValuePair<string, object?>("address_validation.country", country));
+    }
+
+    private async Task<IAddressValidationResponse?> ValidateInternalAsync(TRequest request, CancellationToken cancellationToken)
+    {
+        using Activity? activity = AddressValidationDiagnostics.ActivitySource.StartActivity("address_validation.validate");
+        string country = request.Country?.ToString() ?? "unknown";
+        activity?.SetTag("address_validation.request_type", typeof(TRequest).Name);
+        activity?.SetTag("address_validation.country", country);
+
+        long startTimestamp = Stopwatch.GetTimestamp();
+        string result = "success";
+        IAddressValidationResponse? response = null;
+
+        try
+        {
+            IValidationResult requestValidationResult = await _requestValidator.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
+            if ( requestValidationResult.HasErrors )
+            {
+                result = "invalid_request";
+                response = new EmptyAddressValidationResponse(requestValidationResult);
+                return response;
+            }
+
+            TApiResponse? apiResponse = await _requestAdapter.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
+            if ( apiResponse is null )
+            {
+                result = "no_response";
+                return null;
+            }
+
+            IValidationResult responseValidationResult = await _responseValidator.ExecuteAsync(apiResponse, cancellationToken).ConfigureAwait(false);
+            if ( responseValidationResult.HasErrors )
+            {
+                result = "invalid_response";
+                response = new EmptyAddressValidationResponse(responseValidationResult);
+                return response;
+            }
+
+            response = _responseMapper.Map(apiResponse, responseValidationResult);
+            return response;
+        }
+        catch ( Exception ex )
+        {
+            result = "error";
+            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+            activity?.AddException(ex);
+            throw;
+        }
+        finally
+        {
+            activity?.SetTag("address_validation.result", result);
+            RecordMetrics(startTimestamp, result, country, response);
+        }
     }
 }
