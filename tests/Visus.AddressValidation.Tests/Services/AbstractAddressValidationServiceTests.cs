@@ -17,7 +17,7 @@ internal sealed class AbstractAddressValidationServiceTests : IDisposable
 
     private readonly IApiResponseMapper<TestApiResponse> _responseMapper;
 
-    private readonly IValidator<TestApiResponse> _responseValidator;
+    private readonly TestResponseValidator _responseValidator;
 
     private readonly TestAddressValidationService _sut;
 
@@ -25,7 +25,7 @@ internal sealed class AbstractAddressValidationServiceTests : IDisposable
     {
         _requestAdapter = Substitute.For<IApiRequestAdapter<TestAddressValidationRequest, TestApiResponse>>();
         _responseMapper = Substitute.For<IApiResponseMapper<TestApiResponse>>();
-        _responseValidator = Substitute.For<IValidator<TestApiResponse>>();
+        _responseValidator = new TestResponseValidator();
 
         _sut = new TestAddressValidationService(_requestAdapter, _responseMapper, new TestRequestValidator(), _responseValidator);
     }
@@ -65,6 +65,16 @@ internal sealed class AbstractAddressValidationServiceTests : IDisposable
     }
 
     [Test]
+    public void Constructor_WhenResponseValidatorIsNotAbstractValidatorSubclass_ThrowsInvalidImplementationException()
+    {
+        IValidator<TestApiResponse> notARealValidator = Substitute.For<IValidator<TestApiResponse>>();
+
+        Action act = () => _ = new TestAddressValidationService(_requestAdapter, _responseMapper, new TestRequestValidator(), notARealValidator);
+
+        act.Should().ThrowExactly<InvalidImplementationException>();
+    }
+
+    [Test]
     public void Constructor_WhenResponseValidatorIsNull_ThrowsArgumentNullException()
     {
         Action act = () => _ = new TestAddressValidationService(_requestAdapter, _responseMapper, new TestRequestValidator(), null!);
@@ -99,7 +109,7 @@ internal sealed class AbstractAddressValidationServiceTests : IDisposable
         IAddressValidationResponse? result = await _sut.ValidateAsync(request, cancellationToken).ConfigureAwait(false);
 
         result.Should().BeNull();
-        await _responseValidator.DidNotReceive().ExecuteAsync(Arg.Any<TestApiResponse>(), Arg.Any<CancellationToken>()).ConfigureAwait(false);
+        await _responseValidator.Inner.DidNotReceive().ExecuteAsync(Arg.Any<TestApiResponse>(), Arg.Any<CancellationToken>()).ConfigureAwait(false);
     }
 
     [Test]
@@ -354,7 +364,7 @@ internal sealed class AbstractAddressValidationServiceTests : IDisposable
     private void StubResponseValidator(TestApiResponse response, bool hasErrors)
     {
 #pragma warning disable CA2012 // NSubstitute's Returns() consumes the ValueTask via its ambient call router, not a real double-await.
-        _responseValidator.ExecuteAsync(response, Arg.Any<CancellationToken>()).Returns(_ => ValueTask.FromResult(StubValidationResult(hasErrors)));
+        _responseValidator.Inner.ExecuteAsync(response, Arg.Any<CancellationToken>()).Returns(_ => ValueTask.FromResult(StubValidationResult(hasErrors)));
 #pragma warning restore CA2012
     }
 
@@ -377,5 +387,26 @@ internal sealed class AbstractAddressValidationServiceTests : IDisposable
         {
             CountryCode.US,
         }.ToFrozenSet();
+    }
+
+    private sealed class TestResponseValidator : AbstractValidator<TestApiResponse>
+    {
+        internal IValidator<TestApiResponse> Inner { get; } = Substitute.For<IValidator<TestApiResponse>>();
+
+        protected override async ValueTask<bool> PreValidateAsync(TestApiResponse instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
+        {
+            IValidationResult result = await Inner.ExecuteAsync(instance, cancellationToken).ConfigureAwait(false);
+            foreach ( ValidationState state in result.Errors )
+            {
+                results.Add(state);
+            }
+
+            foreach ( ValidationState state in result.Warnings )
+            {
+                results.Add(state);
+            }
+
+            return true;
+        }
     }
 }
