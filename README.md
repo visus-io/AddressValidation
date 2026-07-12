@@ -1,8 +1,8 @@
 # AddressValidation
 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/visus-io/AddressValidation/ci.yml?style=for-the-badge&logo=github)
-![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/visus%3AAddressValidation?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonar)
-![Sonar Coverage](https://img.shields.io/sonar/coverage/visus%3AAddressValidation?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonar)
+[![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/visus%3AAddressValidation?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonar)](https://sonarcloud.io/summary/overall?id=visus%3AAddressValidation&branch=main)
+[![Sonar Coverage](https://img.shields.io/sonar/coverage/visus%3AAddressValidation?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonar)](https://sonarcloud.io/summary/overall?id=visus%3AAddressValidation&branch=main)
 
 ![Static Badge](https://img.shields.io/badge/license-mit-green?style=for-the-badge)
 
