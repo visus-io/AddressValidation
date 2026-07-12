@@ -1,46 +1,23 @@
 namespace Visus.AddressValidation.Integration.FedEx.Clients;
 
-using System.Net.Http.Json;
-using AddressValidation.Serialization.Json;
 using Configuration;
-using Http;
 using Http.Clients;
 using Microsoft.Extensions.Options;
 
 [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
-internal sealed class FedExAuthenticationClient : IAuthenticationClient
+internal sealed class FedExAuthenticationClient : AbstractClientCredentialsAuthenticationClient
 {
-    private readonly HttpClient _httpClient;
-
     private readonly IOptions<FedExServiceOptions> _options;
 
     public FedExAuthenticationClient(HttpClient httpClient, IOptions<FedExServiceOptions> options)
+        : base(httpClient)
     {
-        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
-    public async Task<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default)
-    {
-        Uri requestUri = new(_options.Value.EndpointUri, "/oauth/token");
+    protected override string ClientId => _options.Value.ClientId;
 
-        List<KeyValuePair<string, string>> payload =
-        [
-            new("client_id", _options.Value.ClientId),
-            new("client_secret", _options.Value.ClientSecret),
-            new("grant_type", "client_credentials"),
-        ];
+    protected override string ClientSecret => _options.Value.ClientSecret;
 
-        using HttpRequestMessage request = new(HttpMethod.Post, requestUri);
-
-        request.Content = new FormUrlEncodedContent(payload);
-
-        using HttpResponseMessage response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-
-        response.EnsureSuccessStatusCode();
-
-        return await response.Content.ReadFromJsonAsync(DefaultJsonSerializerContext.Default.TokenResponse,
-                                  cancellationToken)
-                             .ConfigureAwait(false);
-    }
+    protected override Uri TokenUri => new(_options.Value.EndpointUri, "/oauth/token");
 }
