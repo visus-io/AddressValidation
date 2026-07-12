@@ -120,7 +120,7 @@ public static class ServiceCollectionExtensions
 [!INCLUDE [hybrid-cache-required](../../includes/hybrid-cache-required.md)]
 
 > [!NOTE]
-> `ValidateOnStart()` surfaces configuration errors — such as missing required properties or an invalid `SANDBOX`/`EndpointUriOverride` combination — immediately at application startup rather than on the first validation request.
+> `ValidateOnStart()` surfaces configuration errors (such as missing required properties or an invalid `SANDBOX`/`EndpointUriOverride` combination) immediately at application startup rather than on the first validation request.
 
 > [!IMPORTANT]
 > The type argument to [`BearerTokenDelegatingHandler<TClient>`](xref:Visus.AddressValidation.Http.BearerTokenDelegatingHandler`1) must match the exact authentication client type registered via `AddHttpClient<TClient>()`. A mismatch results in a runtime failure when the DI container tries to resolve the handler.

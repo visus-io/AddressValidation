@@ -34,8 +34,8 @@ By default, `HybridCache` uses an in-process (L1) cache, which is sufficient for
 
 > [!NOTE]
 > Currently only [access tokens](https://oauth.net/2/access-tokens/) are cached. Caching of requests and responses is not natively supported for two reasons:
-> - **Privacy regulations** — Address data constitutes personally identifiable information (PII) subject to [GDPR](https://gdpr-info.eu/) and [CCPA](https://oag.ca.gov/privacy/ccpa).
-> - **Provider Terms of Service** — Google, Pitney Bowes, and UPS all restrict caching of API responses. Google and Pitney Bowes both permit temporary caching for up to 30 days under specific conditions (user consent, secure storage, no cross-user reuse); UPS prohibits all uses of response data not explicitly permitted by their agreement.
+> - **Privacy regulations:** address data constitutes personally identifiable information (PII) subject to [GDPR](https://gdpr-info.eu/) and [CCPA](https://oag.ca.gov/privacy/ccpa).
+> - **Provider Terms of Service:** Google, Pitney Bowes, and UPS all restrict caching of API responses. Google and Pitney Bowes both permit temporary caching for up to 30 days under specific conditions (user consent, secure storage, no cross-user reuse); UPS prohibits all uses of response data not explicitly permitted by their agreement.
 
 ## Security
 

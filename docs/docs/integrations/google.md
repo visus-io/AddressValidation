@@ -13,24 +13,45 @@ It is assumed that an active project with the [Google Address Validation API](ht
 
 To create the service account, you can refer to the following [article](https://cloud.google.com/iam/docs/service-accounts-create#iam-service-accounts-create-console), or if you have access to the [gcloud CLI](https://cloud.google.com/cli?hl=en) you can run the following:
 
-```Bash
+# [Shell](#tab/tab-ave-google-gcloud-shell)
+```bash
 gcloud iam service-accounts create $SA_NAME \
     --description="Address Validation Service" \
     --display-name="Address Validation Service"
 ```
+# [PowerShell](#tab/tab-ave-google-gcloud-powershell)
+```PowerShell
+gcloud iam service-accounts create $SA_NAME `
+    --description="Address Validation Service" `
+    --display-name="Address Validation Service"
+```
+---
 
 After the service account has been created, it will need to be granted a [Domain-wide Delegation](https://support.google.com/a/answer/162106?hl=en#zippy=%2Cset-up-domain-wide-delegation-for-a-client) for the scope `https://www.googleapis.com/auth/cloud-platform`. You can execute the following command to get the `oauth2ClientId` value, otherwise you can retrieve it from the [service accounts dashboard](https://console.cloud.google.com/iam-admin/serviceaccounts) under the heading `OAuth 2 Client ID`:
 
-```Bash
+# [Shell](#tab/tab-ave-google-gcloud-shell)
+```bash
 gcloud iam service-accounts describe $SA_NAME@$PROJECT_ID.iam.gserviceaccount.com
 ```
+# [PowerShell](#tab/tab-ave-google-gcloud-powershell)
+```PowerShell
+gcloud iam service-accounts describe $SA_NAME@$PROJECT_ID.iam.gserviceaccount.com
+```
+---
 
 Finally, create your [service account key](https://cloud.google.com/iam/docs/keys-create-delete#iam-service-account-keys-create-gcloud) and store it in a safe location as it will be needed later.
 
-```Bash
+# [Shell](#tab/tab-ave-google-gcloud-shell)
+```bash
 gcloud iam service-accounts keys create /tmp/$SA_NAME-key.json \
     --iam-account=$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com
 ```
+# [PowerShell](#tab/tab-ave-google-gcloud-powershell)
+```PowerShell
+gcloud iam service-accounts keys create $env:TEMP\$SA_NAME-key.json `
+    --iam-account=$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com
+```
+---
 
 > [!NOTE]
 > There are no plans to support [API Key authentication](https://developers.google.com/maps/documentation/address-validation/get-api-key) at this time.
@@ -91,7 +112,7 @@ Configuration is bound from the `AddressValidationSettings:Google` section. The 
 
 ## Standard Example
 
-With the setup and configuration now complete, you can leverage the validator:
+With the setup and configuration now complete, you can use the validator:
 
 ```csharp
 public class ValidateController

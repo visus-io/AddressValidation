@@ -78,7 +78,7 @@ internal sealed class AddressValidationResponseMapper : IApiResponseMapper<ApiRe
 > ```
 
 > [!NOTE]
-> The concrete return type — `AddressValidationResponse` in the example above — should extend [`AbstractAddressValidationResponse<TResponse>`](xref:Visus.AddressValidation.Models.AbstractAddressValidationResponse`1) where `TResponse` is the provider DTO (`ApiResponse`). The base class automatically populates the `Errors` and `Warnings` collections from the `validationResult`.
+> The concrete return type (`AddressValidationResponse` in the example above) should extend [`AbstractAddressValidationResponse<TResponse>`](xref:Visus.AddressValidation.Models.AbstractAddressValidationResponse`1) where `TResponse` is the provider DTO (`ApiResponse`). The base class automatically populates the `Errors` and `Warnings` collections from the `validationResult`.
 >
 > ```csharp
 > internal sealed class AddressValidationResponse : AbstractAddressValidationResponse<ApiResponse>

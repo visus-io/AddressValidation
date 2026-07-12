@@ -75,7 +75,7 @@ internal sealed class MyAddressValidationClient
 > Unlike the [Authentication Client](xref:custom-authentication), the validation client does **not** implement an interface. It is referenced directly by its concrete type from the request adapter.
 
 > [!IMPORTANT]
-> The `Authorization` header must be redacted from HTTP logs. This is configured during [service registration](xref:custom-registering-services) via `RedactLoggedHeaders(["Authorization"])` on the `IHttpClientBuilder` — there is nothing to configure in the client itself. Without this configuration, bearer tokens will appear in structured logs.
+> The `Authorization` header must be redacted from HTTP logs. This is configured during [service registration](xref:custom-registering-services) via `RedactLoggedHeaders(["Authorization"])` on the `IHttpClientBuilder`; there is nothing to configure in the client itself. Without this configuration, bearer tokens will appear in structured logs.
 
 > [!NOTE]
 > It is not necessary for the validation client to be `internal`, but it is **strongly** recommended if redistributing as a library.

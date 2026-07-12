@@ -5,14 +5,14 @@ uid: custom-authentication
 
 ## Authentication Client
 
-An authentication client is a [typed](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests#how-to-use-typed-clients-with-ihttpclientfactory) `HttpClient` whose sole responsibility is requesting an access token from the provider. The [Authentication Service](#authentication-service) handles caching and refresh — the client only needs to make the token request.
+An authentication client is a [typed](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests#how-to-use-typed-clients-with-ihttpclientfactory) `HttpClient` whose sole responsibility is requesting an access token from the provider. The [Authentication Service](#authentication-service) handles caching and refresh. The client only needs to make the token request.
 
 > [!NOTE]
 > There are general-purpose libraries for OAuth 2.0 such as [IdentityModel](https://github.com/IdentityModel/IdentityModel). To maintain maximum performance, avoid third-party dependencies, and support [trimming](https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/prepare-libraries-for-trimming) and [native AOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/), it is best to use native .NET components instead.
 
 ### Using AbstractBasicAuthenticationClient
 
-For providers that use the [`client_credentials`](https://www.oauth.com/oauth2-servers/access-tokens/client-credentials/) grant with [HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Authentication#basic_authentication_scheme), extend [`AbstractBasicAuthenticationClient`](xref:Visus.AddressValidation.Http.Clients.AbstractBasicAuthenticationClient). The base class handles the token request, Basic Auth header, and JSON deserialization — you only implement three abstract properties:
+For providers that use the [`client_credentials`](https://www.oauth.com/oauth2-servers/access-tokens/client-credentials/) grant with [HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Authentication#basic_authentication_scheme), extend [`AbstractBasicAuthenticationClient`](xref:Visus.AddressValidation.Http.Clients.AbstractBasicAuthenticationClient). The base class handles the token request, Basic Auth header, and JSON deserialization; you only implement three abstract properties:
 
 ```csharp
 [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
@@ -149,13 +149,13 @@ internal sealed class MyAuthenticationService : AbstractAuthenticationService<My
 ```
 
 > [!IMPORTANT]
-> [`GenerateCacheKey()`](xref:Visus.AddressValidation.Services.AbstractAuthenticationService`1#Visus_AddressValidation_Services_AbstractAuthenticationService_1_GenerateCacheKey) **must** return a non-null, non-empty string. The key may only contain letters, digits, underscores, hyphens, and colons. If the required credentials are absent, throw an `InvalidOperationException` rather than returning an empty or invalid value — the base class will throw anyway if the key fails validation.
+> [`GenerateCacheKey()`](xref:Visus.AddressValidation.Services.AbstractAuthenticationService`1#Visus_AddressValidation_Services_AbstractAuthenticationService_1_GenerateCacheKey) **must** return a non-null, non-empty string. The key may only contain letters, digits, underscores, hyphens, and colons. If the required credentials are absent, throw an `InvalidOperationException` rather than returning an empty or invalid value. The base class will throw anyway if the key fails validation.
 
 > [!IMPORTANT]
 > The service **must** inherit the [`AbstractAuthenticationService<TClient>`](xref:Visus.AddressValidation.Services.AbstractAuthenticationService`1) class.
 
 > [!NOTE]
-> [`BearerTokenDelegatingHandler<TClient>`](xref:Visus.AddressValidation.Http.BearerTokenDelegatingHandler`1) leverages this service to automatically attach a [bearer token](https://oauth.net/2/bearer-tokens/) to the request. Refer to the <xref:custom-registering-services> page for details.
+> [`BearerTokenDelegatingHandler<TClient>`](xref:Visus.AddressValidation.Http.BearerTokenDelegatingHandler`1) uses this service to automatically attach a [bearer token](https://oauth.net/2/bearer-tokens/) to the request. Refer to the <xref:custom-registering-services> page for details.
 
 > [!NOTE]
 > It is not necessary for the authentication service to be `internal` but it is **strongly** recommended if redistributing as a library.

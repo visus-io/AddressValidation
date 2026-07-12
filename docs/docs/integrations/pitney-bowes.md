@@ -137,7 +137,7 @@ The following example demonstrates an address suggestion request. Scenarios in w
 - [Standard request](#standard-example) returned a validation failure in the [Errors](xref:Visus.AddressValidation.Models.IAddressValidationResponse#Visus_AddressValidation_Models_IAddressValidationResponse_Errors) collection.
 - Provided address is incomplete or ambiguous.
 
-In order to trigger an address suggestion request, set the `IncludeSuggestions` property to `true`.
+To trigger an address suggestion request, set the `IncludeSuggestions` property to `true`.
 
 # [Suggestion Request](#tab/tab-ave-pitney-bowes-json-suggest-request)
 ```JSON

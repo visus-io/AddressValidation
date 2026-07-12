@@ -5,7 +5,7 @@ uid: custom-validators
 
 ## Validators
 
-Two validators are required: one for the incoming [request](xref:custom-models) and one for the provider's [API response](xref:custom-models). Both run inside the validation pipeline managed by [`AbstractAddressValidationService<TRequest, TApiResponse>`](xref:Visus.AddressValidation.Services.AbstractAddressValidationService`2) — the request validator runs before the API call, and the response validator runs after.
+Two validators are required: one for the incoming [request](xref:custom-models) and one for the provider's [API response](xref:custom-models). Both run inside the validation pipeline managed by [`AbstractAddressValidationService<TRequest, TApiResponse>`](xref:Visus.AddressValidation.Services.AbstractAddressValidationService`2): the request validator runs before the API call, and the response validator runs after.
 
 ## Request Validator
 
@@ -22,7 +22,7 @@ internal sealed class AddressValidationRequestValidator : AbstractAddressValidat
 ```
 
 > [!NOTE]
-> `ProviderName` is the human-readable name of the provider. It appears in validation error messages when the request's `Country` is absent or not in `SupportedCountries` — for example, *"Country 'XX' is not supported by My Provider"*.
+> `ProviderName` is the human-readable name of the provider. It appears in validation error messages when the request's `Country` is absent or not in `SupportedCountries`, for example *"Country 'XX' is not supported by My Provider"*.
 
 > [!NOTE]
 > `SupportedCountries` is the [`FrozenSet<CountryCode>`](xref:Visus.AddressValidation.Abstractions.CountryCode) checked by the base `PreValidateAsync`. If `Country` is `null` or not in this set, an error is added to `results` and the pipeline short-circuits before `ValidateAsync` runs. By convention, define it in a static `Constants` class within the integration:
@@ -39,7 +39,7 @@ internal sealed class AddressValidationRequestValidator : AbstractAddressValidat
 
 The inherited `ValidateAsync` validates the remaining address fields after the country check passes: `AddressLines` must be non-empty and contain at most 3 lines; `CityOrTown`, `StateOrProvince`, and `PostalCode` must be present (with country-specific exceptions for city-states and countries without postal codes).
 
-To add provider-specific pre-validation — such as enforcing field ranges or environment-specific restrictions — override `PreValidateAsync` and always call `base.PreValidateAsync` first:
+To add provider-specific pre-validation (such as enforcing field ranges or environment-specific restrictions), override `PreValidateAsync` and always call `base.PreValidateAsync` first:
 
 ```csharp
 protected override async ValueTask<bool> PreValidateAsync(MyAddressValidationRequest instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
@@ -90,9 +90,9 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 ```
 
 > [!NOTE]
-> `PreValidateAsync` controls whether `ValidateAsync` runs. Return `false` to short-circuit — errors already added to `results` will surface in `IAddressValidationResponse.Errors`, and `ValidateAsync` is not called. Return `true` to proceed to `ValidateAsync` for field-level checks on a structurally-valid response.
+> `PreValidateAsync` controls whether `ValidateAsync` runs. Return `false` to short-circuit: errors already added to `results` will surface in `IAddressValidationResponse.Errors`, and `ValidateAsync` is not called. Return `true` to proceed to `ValidateAsync` for field-level checks on a structurally-valid response.
 
 > [!NOTE]
-> Override `ValidateAsync` for field-level validation that only applies once the response is structurally valid. Use [`ValidationState.CreateWarning`](xref:Visus.AddressValidation.Validation.ValidationState.CreateWarning*) for non-fatal conditions — warnings surface in `IAddressValidationResponse.Warnings` rather than `Errors`.
+> Override `ValidateAsync` for field-level validation that only applies once the response is structurally valid. Use [`ValidationState.CreateWarning`](xref:Visus.AddressValidation.Validation.ValidationState.CreateWarning*) for non-fatal conditions: warnings surface in `IAddressValidationResponse.Warnings` rather than `Errors`.
 
 [!INCLUDE [internal-validation-note](../../includes/internal-validation-note.md)]

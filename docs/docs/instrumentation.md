@@ -19,12 +19,12 @@ builder.Services.AddOpenTelemetry()
 
 This requires the `OpenTelemetry.Extensions.Hosting` package:
 
-```shell
+```Shell
 dotnet add package OpenTelemetry.Extensions.Hosting
 ```
 
 > [!NOTE]
-> The snippet above only registers the source and meter — it does not send data anywhere. Add an exporter to `WithTracing` / `WithMetrics` as shown in [Exporting to a Backend](#exporting-to-a-backend) below.
+> The snippet above only registers the source and meter. It does not send data anywhere; add an exporter to `WithTracing` / `WithMetrics` as shown in [Exporting to a Backend](#exporting-to-a-backend) below.
 
 ## What Is Measured
 
@@ -64,7 +64,7 @@ The tabs below each extend the [Setup](#setup) snippet with an exporter. Pick th
 
 # [Console](#tab/tab-ave-otel-console)
 
-For local development and debugging — writes traces and metrics to standard output.
+For local development and debugging. Writes traces and metrics to standard output.
 
 ```csharp
 builder.Services.AddOpenTelemetry()
@@ -77,13 +77,12 @@ builder.Services.AddOpenTelemetry()
         .AddConsoleExporter());
 ```
 
-```shell
+```Shell
 dotnet add package OpenTelemetry.Exporter.Console
 ```
-
 # [OTLP Collector](#tab/tab-ave-otel-otlp)
 
-Sends data to any collector that accepts the [OpenTelemetry Protocol](https://opentelemetry.io/docs/specs/otlp/) — including [Jaeger](https://www.jaegertracing.io/) and [Grafana Tempo](https://grafana.com/oss/tempo/) — via a local [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/).
+Sends data to any collector that accepts the [OpenTelemetry Protocol](https://opentelemetry.io/docs/specs/otlp/) (including [Jaeger](https://www.jaegertracing.io/) and [Grafana Tempo](https://grafana.com/oss/tempo/)) via a local [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/).
 
 ```csharp
 builder.Services.AddOpenTelemetry()
@@ -96,13 +95,12 @@ builder.Services.AddOpenTelemetry()
         .AddOtlpExporter(otlp => otlp.Endpoint = new Uri("http://localhost:4317")));
 ```
 
-```shell
+```Shell
 dotnet add package OpenTelemetry.Exporter.OpenTelemetryProtocol
 ```
-
 # [Azure Monitor](#tab/tab-ave-otel-azure)
 
-Sends data directly to [Azure Monitor Application Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-enable) using its connection string — no collector required.
+Sends data directly to [Azure Monitor Application Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-enable) using its connection string. No collector required.
 
 ```csharp
 string connectionString = builder.Configuration["ApplicationInsights:ConnectionString"]!;
@@ -117,10 +115,9 @@ builder.Services.AddOpenTelemetry()
         .AddAzureMonitorMetricExporter(azure => azure.ConnectionString = connectionString));
 ```
 
-```shell
+```Shell
 dotnet add package Azure.Monitor.OpenTelemetry.Exporter
 ```
-
 # [Datadog](#tab/tab-ave-otel-datadog)
 
 The [Datadog Agent](https://docs.datadoghq.com/opentelemetry/setup/agentless/) accepts OTLP directly, so this reuses the standard OTLP exporter pointed at the agent's OTLP intake port.
@@ -136,16 +133,15 @@ builder.Services.AddOpenTelemetry()
         .AddOtlpExporter(otlp => otlp.Endpoint = new Uri("http://localhost:4318")));
 ```
 
-```shell
+```Shell
 dotnet add package OpenTelemetry.Exporter.OpenTelemetryProtocol
 ```
 
 > [!NOTE]
 > The Datadog Agent must have OTLP ingestion enabled (`otlp_config.receiver.protocols.grpc` in `datadog.yaml`, or the `DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT` environment variable). See the [Datadog OTLP ingestion docs](https://docs.datadoghq.com/opentelemetry/setup/otlp_ingest_in_the_agent/) for details.
-
 # [New Relic](#tab/tab-ave-otel-newrelic)
 
-[New Relic](https://docs.newrelic.com/docs/opentelemetry/best-practices/opentelemetry-otlp/) accepts OTLP directly — no collector required. Authenticate with a [license key](https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/) sent as the `api-key` header.
+[New Relic](https://docs.newrelic.com/docs/opentelemetry/best-practices/opentelemetry-otlp/) accepts OTLP directly. No collector required. Authenticate with a [license key](https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/) sent as the `api-key` header.
 
 ```csharp
 string licenseKey = builder.Configuration["NewRelic:LicenseKey"]!;
@@ -168,13 +164,12 @@ builder.Services.AddOpenTelemetry()
         }));
 ```
 
-```shell
+```Shell
 dotnet add package OpenTelemetry.Exporter.OpenTelemetryProtocol
 ```
 
 > [!NOTE]
 > Use `https://otlp.eu01.nr-data.net:4317` instead if your account is hosted in the EU data center. See the [New Relic OTLP endpoint docs](https://docs.newrelic.com/docs/opentelemetry/best-practices/opentelemetry-otlp/#review-settings) for details.
-
 # [AWS (X-Ray / CloudWatch)](#tab/tab-ave-otel-aws)
 
 Sends data to a local [AWS Distro for OpenTelemetry (ADOT) Collector](https://aws-otel.github.io/docs/getting-started/collector), which forwards traces to [X-Ray](https://aws.amazon.com/xray/) and metrics to [CloudWatch](https://aws.amazon.com/cloudwatch/).
@@ -190,16 +185,15 @@ builder.Services.AddOpenTelemetry()
         .AddOtlpExporter(otlp => otlp.Endpoint = new Uri("http://localhost:4317")));
 ```
 
-```shell
+```Shell
 dotnet add package OpenTelemetry.Exporter.OpenTelemetryProtocol
 ```
 
 > [!NOTE]
 > Configuring the ADOT Collector itself (X-Ray and CloudWatch exporters, IAM permissions) is outside the scope of this library. See the [ADOT Collector documentation](https://aws-otel.github.io/docs/getting-started/collector) for setup instructions.
-
 # [Prometheus + Grafana](#tab/tab-ave-otel-prometheus)
 
-Exposes metrics on a scrape endpoint for [Prometheus](https://prometheus.io/) to pull, visualized in [Grafana](https://grafana.com/). Traces still need an OTLP target such as Tempo — see the OTLP Collector tab above.
+Exposes metrics on a scrape endpoint for [Prometheus](https://prometheus.io/) to pull, visualized in [Grafana](https://grafana.com/). Traces still need an OTLP target such as Tempo; see the OTLP Collector tab above.
 
 ```csharp
 builder.Services.AddOpenTelemetry()
@@ -212,7 +206,7 @@ builder.Services.AddOpenTelemetry()
 app.MapPrometheusScrapingEndpoint();
 ```
 
-```shell
+```Shell
 dotnet add package OpenTelemetry.Exporter.Prometheus.AspNetCore
 ```
 
