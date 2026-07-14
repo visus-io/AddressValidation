@@ -603,13 +603,14 @@ namespace Visus.AddressValidation.Http
 }
 namespace Visus.AddressValidation.Http.Clients
 {
-    public abstract class AbstractBasicAuthenticationClient : Visus.AddressValidation.Http.Clients.IAuthenticationClient
+    public abstract class AbstractClientCredentialsAuthenticationClient : Visus.AddressValidation.Http.Clients.IAuthenticationClient
     {
-        protected AbstractBasicAuthenticationClient(System.Net.Http.HttpClient httpClient) { }
-        protected abstract string Password { get; }
+        protected AbstractClientCredentialsAuthenticationClient(System.Net.Http.HttpClient httpClient) { }
+        protected abstract string ClientId { get; }
+        protected abstract string ClientSecret { get; }
         protected abstract System.Uri TokenUri { get; }
-        protected abstract string Username { get; }
-        protected virtual void AddAdditionalHeaders(System.Net.Http.HttpRequestMessage request) { }
+        protected virtual bool UseHttpBasicAuthentication { get; }
+        protected virtual void ApplyAdditionalHeaders(System.Net.Http.HttpRequestMessage request) { }
         public System.Threading.Tasks.Task<Visus.AddressValidation.Http.TokenResponse?> RequestClientCredentialsTokenAsync(System.Threading.CancellationToken cancellationToken = default) { }
     }
     public interface IAuthenticationClient

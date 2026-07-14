@@ -1,9 +1,9 @@
 namespace Visus.AddressValidation.Tests.Services;
 
 using System.Diagnostics;
+using AddressValidation.Http;
+using AddressValidation.Http.Clients;
 using AddressValidation.Services;
-using Http;
-using Http.Clients;
 using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
