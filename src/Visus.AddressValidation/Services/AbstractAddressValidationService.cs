@@ -88,14 +88,14 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
         _requestValidator = requestValidator ?? throw new ArgumentNullException(nameof(requestValidator));
         _responseValidator = responseValidator ?? throw new ArgumentNullException(nameof(responseValidator));
 
-        if ( !requestValidator.GetType().IsSubclassOf(typeof(AbstractAddressValidationRequestValidator<TRequest>)) )
+        if ( requestValidator is not AbstractAddressValidationRequestValidator<TRequest> )
         {
-            throw new InvalidImplementationException($"{nameof(requestValidator)} must implement {nameof(AbstractAddressValidationRequestValidator<>)}");
+            throw new InvalidImplementationException($"{nameof(requestValidator)} must derive from {nameof(AbstractAddressValidationRequestValidator<>)}");
         }
 
-        if ( !responseValidator.GetType().IsSubclassOf(typeof(AbstractValidator<TApiResponse>)) )
+        if ( responseValidator is not AbstractValidator<TApiResponse> )
         {
-            throw new InvalidImplementationException($"{nameof(responseValidator)} must implement {nameof(AbstractValidator<>)}");
+            throw new InvalidImplementationException($"{nameof(responseValidator)} must derive from {nameof(AbstractValidator<>)}");
         }
     }
 
