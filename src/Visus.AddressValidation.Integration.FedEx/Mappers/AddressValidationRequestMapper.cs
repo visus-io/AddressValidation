@@ -13,21 +13,7 @@ internal sealed class AddressValidationRequestMapper : IApiRequestMapper<FedExAd
 
         return new ApiRequest
         {
-            AddressesToValidate =
-            [
-                new ApiRequest.FedExAddressToValidate
-                {
-                    Address = new ApiRequest.FedExAddress
-                    {
-                        StreetLines = [..request.AddressLines,],
-                        City = request.CityOrTown,
-                        StateOrProvince = request.StateOrProvince,
-                        PostalCode = request.PostalCode,
-                        CountryCode = request.Country!.Value,
-                    },
-                    ClientReferenceId = request.ClientReferenceId,
-                },
-            ],
+            AddressesToValidate = [FedExAddressToValidateMapper.Map(request),],
             CustomerTransactionId = request.CustomerTransactionId,
         };
     }

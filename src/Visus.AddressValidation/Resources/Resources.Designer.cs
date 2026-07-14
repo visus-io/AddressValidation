@@ -98,5 +98,11 @@ namespace Visus.AddressValidation.Resources {
                 return ResourceManager.GetString("Validation_Verification_RowValueCouldNotBeVerified", resourceCulture);
             }
         }
+
+        public static string Validation_Batch_ExceedsMaximumSize {
+            get {
+                return ResourceManager.GetString("Validation_Batch_ExceedsMaximumSize", resourceCulture);
+            }
+        }
     }
 }

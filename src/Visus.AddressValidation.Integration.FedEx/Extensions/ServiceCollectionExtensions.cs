@@ -54,6 +54,14 @@ public static class ServiceCollectionExtensions
 
         services.TryAddScoped<IAddressValidationService<FedExAddressValidationRequest>, AddressValidationService>();
 
+        services.TryAddScoped<IBatchApiResponseMapper<ApiResponse>, BatchAddressValidationResponseMapper>();
+        services.TryAddScoped<IBatchApiRequestMapper<FedExAddressValidationRequest, ApiRequest>, BatchAddressValidationRequestMapper>();
+        services.TryAddScoped<IBatchApiRequestAdapter<FedExAddressValidationRequest, ApiResponse>, BatchApiRequestAdapter>();
+
+        services.TryAddScoped<IBatchValidator<ApiResponse>, BatchApiResponseValidator>();
+
+        services.TryAddScoped<IBatchAddressValidationService<FedExAddressValidationRequest>, BatchAddressValidationService>();
+
         services.AddHttpClient<FedExAuthenticationClient>()
                 .AddAuthenticationClientResilienceHandler();
 

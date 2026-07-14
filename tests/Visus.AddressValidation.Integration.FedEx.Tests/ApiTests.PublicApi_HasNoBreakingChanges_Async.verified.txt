@@ -26,6 +26,7 @@ namespace Visus.AddressValidation.Integration.FedEx
 {
     public static class Constants
     {
+        public const int MaxBatchSize = 100;
         public static readonly System.Uri DevelopmentEndpointUri;
         public static readonly System.Uri ProductionEndpointUri;
         public static readonly System.Collections.Frozen.FrozenSet<Visus.AddressValidation.Abstractions.CountryCode> SupportedCountries;

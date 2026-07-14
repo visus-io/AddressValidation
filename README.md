@@ -6,28 +6,31 @@
 
 ![Static Badge](https://img.shields.io/badge/license-mit-green?style=for-the-badge)
 
-| Package | Version | Downloads |
-|---|---|---|
-| `VisusIO.AddressValidation` | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation) | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation) |
-| `VisusIO.AddressValidation.Integration.FedEx` | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation.Integration.FedEx?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.FedEx) | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation.Integration.FedEx?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.FedEx) |
-| `VisusIO.AddressValidation.Integration.Google` | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation.Integration.Google?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.Google) | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation.Integration.Google?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.Google) |
+| Package                                             | Version                                                                                                                                                                                                             | Downloads                                                                                                                                                                                                              |
+|-----------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `VisusIO.AddressValidation`                         | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation)                                                 | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation)                                                 |
+| `VisusIO.AddressValidation.Integration.FedEx`       | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation.Integration.FedEx?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.FedEx)             | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation.Integration.FedEx?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.FedEx)             |
+| `VisusIO.AddressValidation.Integration.Google`      | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation.Integration.Google?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.Google)           | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation.Integration.Google?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.Google)           |
 | `VisusIO.AddressValidation.Integration.PitneyBowes` | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation.Integration.PitneyBowes?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.PitneyBowes) | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation.Integration.PitneyBowes?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.PitneyBowes) |
-| `VisusIO.AddressValidation.Integration.Ups` | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation.Integration.Ups?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.Ups) | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation.Integration.Ups?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.Ups) |
+| `VisusIO.AddressValidation.Integration.Ups`         | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation.Integration.Ups?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.Ups)                 | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation.Integration.Ups?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.Ups)                 |
 
-AddressValidation is a .NET library that provides a unified, provider-agnostic API for validating physical mailing addresses.
+AddressValidation is a .NET library that provides a unified, provider-agnostic API for validating physical mailing
+addresses.
 
 > [!NOTE]
-> AddressValidation supports [trimming](https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/prepare-libraries-for-trimming) and [native AOT deployments](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/).
+> AddressValidation
+> supports [trimming](https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/prepare-libraries-for-trimming)
+> and [native AOT deployments](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/).
 
 ## Integrations
 
-| Service | Coverage | Status |
-|---|---|---|
-| [FedEx&reg; Address Validation API](https://developer.fedex.com/api/en-us/catalog/address-validation.html) | [46 countries](https://developer.fedex.com/api/en-us/catalog/address-validation/v1/docs.html) | ![Status](https://img.shields.io/badge/status-complete-green?style=flat-square) |
-| [Google Address Validation API](https://developers.google.com/maps/documentation/address-validation/overview) | [39 countries](https://developers.google.com/maps/documentation/address-validation/coverage) | ![Status](https://img.shields.io/badge/status-complete-green?style=flat-square) |
-| [Pitney Bowes Address Validation API](https://docs.shippingapi.pitneybowes.com/address-validation.html) | United States | ![Status](https://img.shields.io/badge/status-complete-green?style=flat-square) |
-| [UPS&reg; Address Validation API](https://developer.ups.com/api/reference) | United States | ![Status](https://img.shields.io/badge/status-complete-green?style=flat-square) |
-| [USPS&reg; Address Validation API](https://developer.usps.com/api/93) | United States | ![Status](https://img.shields.io/badge/status-planned-blue?style=flat-square) |
+| Service                                                                                                       | Coverage                                                                                      | Status                                                                          |
+|---------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| [FedEx&reg; Address Validation API](https://developer.fedex.com/api/en-us/catalog/address-validation.html)    | [46 countries](https://developer.fedex.com/api/en-us/catalog/address-validation/v1/docs.html) | ![Status](https://img.shields.io/badge/status-complete-green?style=flat-square) |
+| [Google Address Validation API](https://developers.google.com/maps/documentation/address-validation/overview) | [39 countries](https://developers.google.com/maps/documentation/address-validation/coverage)  | ![Status](https://img.shields.io/badge/status-complete-green?style=flat-square) |
+| [Pitney Bowes Address Validation API](https://docs.shippingapi.pitneybowes.com/address-validation.html)       | United States                                                                                 | ![Status](https://img.shields.io/badge/status-complete-green?style=flat-square) |
+| [UPS&reg; Address Validation API](https://developer.ups.com/api/reference)                                    | United States                                                                                 | ![Status](https://img.shields.io/badge/status-complete-green?style=flat-square) |
+| [USPS&reg; Address Validation API](https://developer.usps.com/api/93)                                         | United States                                                                                 | ![Status](https://img.shields.io/badge/status-planned-blue?style=flat-square)   |
 
 ## Quick Start
 
@@ -41,7 +44,9 @@ dotnet add package VisusIO.AddressValidation.Integration.FedEx
 
 ### Registration
 
-All integrations require [`HybridCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.hybrid.hybridcache) for OAuth token caching. Register it alongside the integration at application startup:
+All integrations require [
+`HybridCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.hybrid.hybridcache) for OAuth
+token caching. Register it alongside the integration at application startup:
 
 ```csharp
 builder.Services.AddHybridCache();
@@ -65,17 +70,20 @@ Configuration is read from `appsettings.json` under the `AddressValidationSettin
 }
 ```
 
-| Property | Required | Description |
-|---|---|---|
-| `AccountNumber` | Yes | Your FedEx account number |
-| `ClientId` | Yes | OAuth 2.0 client ID |
-| `ClientSecret` | Yes | OAuth 2.0 client secret |
-| `ClientEnvironment` | No | `PRODUCTION`, `DEVELOPMENT`, or `SANDBOX`. Defaults to `DEVELOPMENT` |
+| Property            | Required | Description                                                          |
+|---------------------|----------|----------------------------------------------------------------------|
+| `AccountNumber`     | Yes      | Your FedEx account number                                            |
+| `ClientId`          | Yes      | OAuth 2.0 client ID                                                  |
+| `ClientSecret`      | Yes      | OAuth 2.0 client secret                                              |
+| `ClientEnvironment` | No       | `PRODUCTION`, `DEVELOPMENT`, or `SANDBOX`. Defaults to `DEVELOPMENT` |
 
 > [!IMPORTANT]
-> `ClientId` and `ClientSecret` should be stored encrypted at rest. See [Security](https://ave.projects.visus.io/docs/index.html#security) in the documentation for recommended approaches.
+> `ClientId` and `ClientSecret` should be stored encrypted at rest.
+> See [Security](https://ave.projects.visus.io/docs/index.html#security) in the documentation for recommended
+> approaches.
 
-Each provider has its own set of configuration properties. See the [documentation](https://ave.projects.visus.io/) for the full reference.
+Each provider has its own set of configuration properties. See the [documentation](https://ave.projects.visus.io/) for
+the full reference.
 
 ### Usage
 
@@ -105,11 +113,14 @@ public class ValidateController
 }
 ```
 
-Each integration package exposes its own `TRequest` type (e.g., `FedExAddressValidationRequest`, `GoogleAddressValidationRequest`) and a corresponding `Add*AddressValidation()` extension method. See the [documentation](https://ave.projects.visus.io/) for provider-specific options.
+Each integration package exposes its own `TRequest` type (e.g., `FedExAddressValidationRequest`,
+`GoogleAddressValidationRequest`) and a corresponding `Add*AddressValidation()` extension method. See
+the [documentation](https://ave.projects.visus.io/) for provider-specific options.
 
 ### Instrumentation
 
-Every integration emits traces and metrics via `System.Diagnostics` (`ActivitySource` / `Meter`), which OpenTelemetry can collect directly. Both share the name in `AddressValidationTelemetry.SourceName`:
+Every integration emits traces and metrics via `System.Diagnostics` (`ActivitySource` / `Meter`), which OpenTelemetry
+can collect directly. Both share the name in `AddressValidationTelemetry.SourceName`:
 
 ```csharp
 builder.Services.AddOpenTelemetry()
@@ -128,7 +139,8 @@ dotnet add package OpenTelemetry.Extensions.Hosting
 dotnet add package OpenTelemetry.Exporter.Console
 ```
 
-See the [documentation](https://ave.projects.visus.io/docs/instrumentation.html) for the full list of activities, metrics, and tags emitted.
+See the [documentation](https://ave.projects.visus.io/docs/instrumentation.html) for the full list of activities,
+metrics, and tags emitted.
 
 ## Documentation
 

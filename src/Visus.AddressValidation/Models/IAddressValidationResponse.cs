@@ -71,7 +71,8 @@ public interface IAddressValidationResponse
     IReadOnlyList<IAddressValidationResponse> Suggestions { get; }
 
     /// <summary>
-    ///     Gets the set of warning messages produced during request or response validation; empty when no warnings are present.
+    ///     Gets the set of warning messages produced during request or response validation; empty when no warnings are
+    ///     present.
     /// </summary>
     [JsonPropertyName("warnings")]
     IReadOnlySet<string> Warnings { get; }

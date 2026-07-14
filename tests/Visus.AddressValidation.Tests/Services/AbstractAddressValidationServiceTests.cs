@@ -89,6 +89,19 @@ internal sealed class AbstractAddressValidationServiceTests : IDisposable
 
     [Test]
     [NotInParallel]
+    public async Task ValidateAsync_WhenAdapterReturnsNull_DoesNotRecordResponseWarningOrSuggestionCount(CancellationToken cancellationToken)
+    {
+        TestAddressValidationRequest request = ValidRequest();
+        _requestAdapter.ExecuteAsync(request, Arg.Any<CancellationToken>()).Returns(Task.FromResult<TestApiResponse?>(null));
+
+        await _sut.ValidateAsync(request, cancellationToken).ConfigureAwait(false);
+
+        _capture.Measurements.Should().NotContain(m => string.Equals(m.InstrumentName, "visus.address_validation.validate.response_warning_count", StringComparison.Ordinal));
+        _capture.Measurements.Should().NotContain(m => string.Equals(m.InstrumentName, "visus.address_validation.validate.response_suggestion_count", StringComparison.Ordinal));
+    }
+
+    [Test]
+    [NotInParallel]
     public async Task ValidateAsync_WhenAdapterReturnsNull_RecordsResultTagNoResponse(CancellationToken cancellationToken)
     {
         TestAddressValidationRequest request = ValidRequest();
@@ -114,12 +127,15 @@ internal sealed class AbstractAddressValidationServiceTests : IDisposable
 
     [Test]
     [NotInParallel]
-    public async Task ValidateAsync_WhenAdapterReturnsNull_DoesNotRecordResponseWarningOrSuggestionCount(CancellationToken cancellationToken)
+    public async Task ValidateAsync_WhenAdapterThrows_DoesNotRecordResponseWarningOrSuggestionCount(CancellationToken cancellationToken)
     {
         TestAddressValidationRequest request = ValidRequest();
-        _requestAdapter.ExecuteAsync(request, Arg.Any<CancellationToken>()).Returns(Task.FromResult<TestApiResponse?>(null));
+        InvalidOperationException thrown = new("adapter failed");
+        _requestAdapter.ExecuteAsync(request, Arg.Any<CancellationToken>()).Returns<Task<TestApiResponse?>>(_ => throw thrown);
 
-        await _sut.ValidateAsync(request, cancellationToken).ConfigureAwait(false);
+        Func<Task> act = () => _sut.ValidateAsync(request, cancellationToken);
+
+        await act.Should().ThrowExactlyAsync<InvalidOperationException>().ConfigureAwait(false);
 
         _capture.Measurements.Should().NotContain(m => string.Equals(m.InstrumentName, "visus.address_validation.validate.response_warning_count", StringComparison.Ordinal));
         _capture.Measurements.Should().NotContain(m => string.Equals(m.InstrumentName, "visus.address_validation.validate.response_suggestion_count", StringComparison.Ordinal));
@@ -143,22 +159,6 @@ internal sealed class AbstractAddressValidationServiceTests : IDisposable
     }
 
     [Test]
-    [NotInParallel]
-    public async Task ValidateAsync_WhenAdapterThrows_DoesNotRecordResponseWarningOrSuggestionCount(CancellationToken cancellationToken)
-    {
-        TestAddressValidationRequest request = ValidRequest();
-        InvalidOperationException thrown = new("adapter failed");
-        _requestAdapter.ExecuteAsync(request, Arg.Any<CancellationToken>()).Returns<Task<TestApiResponse?>>(_ => throw thrown);
-
-        Func<Task> act = () => _sut.ValidateAsync(request, cancellationToken);
-
-        await act.Should().ThrowExactlyAsync<InvalidOperationException>().ConfigureAwait(false);
-
-        _capture.Measurements.Should().NotContain(m => string.Equals(m.InstrumentName, "visus.address_validation.validate.response_warning_count", StringComparison.Ordinal));
-        _capture.Measurements.Should().NotContain(m => string.Equals(m.InstrumentName, "visus.address_validation.validate.response_suggestion_count", StringComparison.Ordinal));
-    }
-
-    [Test]
     public async Task ValidateAsync_WhenAllStepsSucceed_ReturnsMapperResult(CancellationToken cancellationToken)
     {
         TestAddressValidationRequest request = ValidRequest();
@@ -175,14 +175,6 @@ internal sealed class AbstractAddressValidationServiceTests : IDisposable
     }
 
     [Test]
-    public async Task ValidateAsync_WhenRequestIsNull_ThrowsArgumentNullException()
-    {
-        Func<Task> act = () => _sut.ValidateAsync(null!, CancellationToken.None);
-
-        await act.Should().ThrowExactlyAsync<ArgumentNullException>().ConfigureAwait(false);
-    }
-
-    [Test]
     [NotInParallel]
     public async Task ValidateAsync_WhenRequestHasNoCountry_RecordsCountryTagAsUnknown(CancellationToken cancellationToken)
     {
@@ -192,6 +184,14 @@ internal sealed class AbstractAddressValidationServiceTests : IDisposable
 
         Activity validateActivity = _capture.Activities.Should().ContainSingle(a => string.Equals(a.OperationName, "address_validation.validate", StringComparison.Ordinal)).Subject;
         validateActivity.GetTagItem("address_validation.country").Should().Be("unknown");
+    }
+
+    [Test]
+    public async Task ValidateAsync_WhenRequestIsNull_ThrowsArgumentNullException()
+    {
+        Func<Task> act = () => _sut.ValidateAsync(null!, CancellationToken.None);
+
+        await act.Should().ThrowExactlyAsync<ArgumentNullException>().ConfigureAwait(false);
     }
 
     [Test]
@@ -305,7 +305,7 @@ internal sealed class AbstractAddressValidationServiceTests : IDisposable
         {
             "address was interpolated",
         });
-        mapped.Suggestions.Returns([suggestion]);
+        mapped.Suggestions.Returns([suggestion,]);
 
         _requestAdapter.ExecuteAsync(request, Arg.Any<CancellationToken>()).Returns(Task.FromResult<TestApiResponse?>(apiResponse));
         StubResponseValidator(apiResponse, false);
@@ -363,9 +363,9 @@ internal sealed class AbstractAddressValidationServiceTests : IDisposable
 
     private void StubResponseValidator(TestApiResponse response, bool hasErrors)
     {
-#pragma warning disable CA2012 // NSubstitute's Returns() consumes the ValueTask via its ambient call router, not a real double-await.
+        #pragma warning disable CA2012 // NSubstitute's Returns() consumes the ValueTask via its ambient call router, not a real double-await.
         _responseValidator.Inner.ExecuteAsync(response, Arg.Any<CancellationToken>()).Returns(_ => ValueTask.FromResult(StubValidationResult(hasErrors)));
-#pragma warning restore CA2012
+        #pragma warning restore CA2012
     }
 
     internal sealed class TestAddressValidationRequest : AbstractAddressValidationRequest;

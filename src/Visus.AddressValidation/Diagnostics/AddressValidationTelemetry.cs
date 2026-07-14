@@ -11,6 +11,9 @@ namespace Visus.AddressValidation.Diagnostics;
 /// </remarks>
 public static class AddressValidationTelemetry
 {
-    /// <summary>The name shared by this library's <see cref="System.Diagnostics.ActivitySource" /> and <see cref="System.Diagnostics.Metrics.Meter" />.</summary>
+    /// <summary>
+    ///     The name shared by this library's <see cref="System.Diagnostics.ActivitySource" /> and
+    ///     <see cref="System.Diagnostics.Metrics.Meter" />.
+    /// </summary>
     public const string SourceName = "Visus.AddressValidation";
 }

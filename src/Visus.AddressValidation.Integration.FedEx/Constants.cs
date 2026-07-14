@@ -13,6 +13,11 @@ public static class Constants
     public static readonly Uri DevelopmentEndpointUri = new("https://apis-sandbox.fedex.com");
 
     /// <summary>
+    ///     The maximum number of addresses that can be validated in a single batch request.
+    /// </summary>
+    public const int MaxBatchSize = 100;
+
+    /// <summary>
     ///     FedEx API Production Endpoint
     /// </summary>
     public static readonly Uri ProductionEndpointUri = new("https://apis.fedex.com");

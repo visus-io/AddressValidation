@@ -2,9 +2,6 @@ namespace Visus.AddressValidation.Integration.FedEx.Validation;
 
 using System.Diagnostics;
 using Abstractions;
-using AddressValidation.Abstractions;
-using AddressValidation.Models;
-using AddressValidation.Resources;
 using AddressValidation.Validation;
 using Contracts;
 
@@ -34,7 +31,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 
         for ( int i = 0; i < instance.Result.ResolvedAddresses.Length; i++ )
         {
-            ValidateResolvedAddress(instance.Result.ResolvedAddresses[i], i, results);
+            ResolvedAddressValidator.Validate(instance.Result.ResolvedAddresses[i], i, results);
         }
 
         foreach ( ApiResponse.Alert alert in instance.Result.Alerts )
@@ -53,48 +50,5 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
         }
 
         return ValueTask.CompletedTask;
-    }
-
-    private static void ValidateResolvedAddress(ApiResponse.ResolvedAddress address, int index, ISet<ValidationState> results)
-    {
-        if ( address.Attributes.InvalidSuiteNumber )
-        {
-            const string propertyName = nameof(address.StreetLinesToken);
-            results.Add(ValidationState.CreateError(Resources.Validation_Verification_RowValueCouldNotBeVerified, index,
-                propertyName,
-                FedEx.Resources.Resources.Validation_FedEx_InvalidSuiteNumber));
-        }
-
-        if ( !address.Attributes.IsValidStreetAddress && address.CountryCode != CountryCode.US )
-        {
-            const string propertyName = nameof(AbstractAddressValidationRequest.AddressLines);
-            results.Add(ValidationState.CreateWarning(Resources.Validation_Verification_ValueCouldNotBeVerified, propertyName));
-        }
-
-        if ( !address.Attributes.IsValidPostalCode && address.CountryCode == CountryCode.US )
-        {
-            const string propertyName = nameof(AbstractAddressValidationRequest.PostalCode);
-            results.Add(ValidationState.CreateError(Resources.Validation_Verification_ValueCouldNotBeVerified, propertyName));
-        }
-
-        if ( address.Attributes.SuiteRequiredButMissing )
-        {
-            const string propertyName = nameof(address.StreetLinesToken);
-            results.Add(ValidationState.CreateWarning(Resources.Validation_Verification_RowValueCouldNotBeVerified, index,
-                propertyName,
-                FedEx.Resources.Resources.Validation_FedEx_SuiteNumberNotProvided));
-        }
-
-        if ( address.CustomerMessages is not { Length: > 0, } customerMessages )
-        {
-            return;
-        }
-
-        foreach ( ApiResponse.CustomerMessage message in customerMessages )
-        {
-            results.Add(string.IsNullOrWhiteSpace(message.Message)
-                            ? ValidationState.CreateWarning(message.Code)
-                            : ValidationState.CreateWarning($"{message.Code}: {message.Message}"));
-        }
     }
 }
