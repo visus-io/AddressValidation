@@ -393,7 +393,6 @@
       "VisusIO.AddressValidation": {
         "type": "Project",
         "dependencies": {
-          "JetBrains.Annotations": "[2026.2.0, )",
           "Microsoft.Extensions.Caching.Hybrid": "[10.7.0, )",
           "Microsoft.Extensions.Configuration.Abstractions": "[10.0.9, )",
           "Microsoft.Extensions.Http.Resilience": "[10.7.0, )"
