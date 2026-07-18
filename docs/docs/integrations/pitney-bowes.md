@@ -6,6 +6,8 @@ title: Pitney Bowes
 
 AddressValidation offers a complete integration to the [Pitney Bowes Address Validation API](https://docs.shippingapi.pitneybowes.com/address-validation.html) to provide validation for the United States and Puerto Rico.
 
+[!INCLUDE [batch-validation-not-supported-note](../includes/batch-validation-not-supported-note.md)]
+
 ## Credentials
 
 Before utilizing the integration, you will need a [developer account](https://docs.shippingapi.pitneybowes.com/getting-started.html#sign-up-or-log-in) with Pitney Bowes. After you have signed in to the account, [follow these instructions](https://docs.shippingapi.pitneybowes.com/getting-started.html#get-your-api-key-and-secret) to obtain your API key and secret. 

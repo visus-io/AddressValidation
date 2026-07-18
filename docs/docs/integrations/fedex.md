@@ -161,3 +161,114 @@ public class ValidateController
 [!INCLUDE [is-residential-note](../includes/is-residential-note.md)]
 
 [!INCLUDE [internal-validation-note](../includes/internal-validation-note.md)]
+
+## Batch Example
+
+FedEx&reg; is currently the only integration that supports validating multiple addresses in a single call. Inject [`IBatchAddressValidationService<FedExAddressValidationRequest>`](xref:Visus.AddressValidation.Services.IBatchAddressValidationService`1) and call `ValidateManyAsync` with up to 100 requests.
+
+```csharp
+public class ValidateController
+{
+    private readonly IBatchAddressValidationService<FedExAddressValidationRequest> _batchValidationService;
+
+    public ValidateController(IBatchAddressValidationService<FedExAddressValidationRequest> batchValidationService)
+    {
+        _batchValidationService = batchValidationService ?? throw new ArgumentNullException(nameof(batchValidationService));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] IReadOnlyList<FedExAddressValidationRequest> requests, CancellationToken cancellationToken = default)
+    {
+        IReadOnlyList<IAddressValidationResponse?> responses = await _batchValidationService.ValidateManyAsync(requests, cancellationToken);
+
+        return new OkObjectResult(responses);
+    }
+}
+```
+
+> [!NOTE]
+> `ValidateManyAsync` returns one entry per request, in the same order the requests were submitted. An entry is an [`EmptyAddressValidationResponse`](xref:Visus.AddressValidation.Models.EmptyAddressValidationResponse) when that request failed local validation or FedEx could not resolve it, and `null` only when the entire batch call produced no response. Since the result carries per-item outcomes rather than a single status, inspect each entry instead of relying on the HTTP status code.
+
+# [Request](#tab/tab-ave-fedex-batch-json-request)
+```JSON
+{
+  "addressesToValidate": [
+    {
+      "address": {
+        "streetLines": [
+          "7372 Parkridge Blvd",
+          "Apt 286"
+        ],
+        "city": "Irving",
+        "stateOrProvince": "TX",
+        "postalCode": "75063",
+        "countryCode": "US"
+      }
+    },
+    {
+      "address": {
+        "streetLines": [
+          "1600 Pennsylvania Ave NW"
+        ],
+        "city": "Washington",
+        "stateOrProvince": "DC",
+        "postalCode": "20500",
+        "countryCode": "US"
+      }
+    }
+  ]
+}
+```
+# [Response](#tab/tab-ave-fedex-batch-json-response)
+```JSON
+[
+  {
+    "addressLines": [
+      "7372 PARKRIDGE BLVD",
+      "APT 286"
+    ],
+    "cityOrTown": "IRVING",
+    "country": "US",
+    "errors": [],
+    "isResidential": false,
+    "postalCode": "75063-8365",
+    "stateOrProvince": "TX",
+    "suggestions": [],
+    "warnings": [
+      "Recipient Postal-City Mismatch."
+    ]
+  },
+  {
+    "addressLines": [
+      "1600 PENNSYLVANIA AVE NW"
+    ],
+    "cityOrTown": "WASHINGTON",
+    "country": "US",
+    "errors": [],
+    "isResidential": false,
+    "postalCode": "20500-0001",
+    "stateOrProvince": "DC",
+    "suggestions": [],
+    "warnings": [
+      "Recipient Postal-City Mismatch."
+    ]
+  }
+]
+```
+---
+
+> [!NOTE]
+> `customResponseData` is populated on each entry the same way as the [Standard Example](#standard-example); it is omitted above to keep the example readable.
+
+> [!NOTE]
+> A batch is limited to 100 addresses. Submitting more throws an `ArgumentException` before any request reaches FedEx.
+
+> [!NOTE]
+> FedEx accepts only one transaction identifier per batch call, so [`CustomerTransactionId`](xref:Visus.AddressValidation.Integration.FedEx.Models.FedExAddressValidationRequest#Visus_AddressValidation_Integration_FedEx_Models_FedExAddressValidationRequest_CustomerTransactionId) set on any request other than the first in the batch is not transmitted.
+
+> [!NOTE]
+> FedEx's resolve endpoint does not echo `clientReferenceId` (or any other per-item identifier) back on a resolved address, so results are correlated to requests strictly by their position in the list, not by any field in the response. `clientReferenceId` is still transmitted to FedEx for their own tracking, but it has no effect on how this library associates a response with its request.
+
+[!INCLUDE [is-residential-note](../includes/is-residential-note.md)]
+
+[!INCLUDE [internal-validation-note](../includes/internal-validation-note.md)]

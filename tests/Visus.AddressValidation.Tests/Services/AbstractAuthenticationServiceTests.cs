@@ -100,6 +100,28 @@ internal sealed class AbstractAuthenticationServiceTests : IAsyncDisposable
 
     [Test]
     [NotInParallel]
+    public async Task GetAccessTokenAsync_WhenCacheHit_RecordsCacheResultCounterTaggedHit(CancellationToken cancellationToken)
+    {
+        TokenResponse validResponse = new("test-token", null, null, null, 3600, null, "Bearer", null);
+
+        _authenticationClient
+           .RequestClientCredentialsTokenAsync(Arg.Any<CancellationToken>())
+           .Returns(Task.FromResult<TokenResponse?>(validResponse));
+
+        await _sut.GetAccessTokenAsync(cancellationToken).ConfigureAwait(false);
+        await _sut.GetAccessTokenAsync(cancellationToken).ConfigureAwait(false);
+
+        DiagnosticsCapture.Measurement measurement = _capture.Measurements
+                                                             .Should()
+                                                             .ContainSingle(m => string.Equals(m.InstrumentName, "visus.address_validation.token_fetch.cache_result", StringComparison.Ordinal)
+                                                                              && m.Tags.Contains(new KeyValuePair<string, object?>("address_validation.cache_result", "hit")))
+                                                             .Subject;
+        measurement.Value.Should().Be(1);
+        measurement.Tags.Should().Contain(new KeyValuePair<string, object?>("address_validation.client_type", nameof(IAuthenticationClient)));
+    }
+
+    [Test]
+    [NotInParallel]
     public async Task GetAccessTokenAsync_WhenCacheMiss_CallsClientOnceAndReturnsToken(CancellationToken cancellationToken)
     {
         TokenResponse validResponse = new("test-token", null, null, null, 3600, null, "Bearer", null);
@@ -114,6 +136,27 @@ internal sealed class AbstractAuthenticationServiceTests : IAsyncDisposable
         await _authenticationClient.Received(1)
                                    .RequestClientCredentialsTokenAsync(Arg.Any<CancellationToken>())
                                    .ConfigureAwait(false);
+    }
+
+    [Test]
+    [NotInParallel]
+    public async Task GetAccessTokenAsync_WhenCacheMiss_RecordsCacheResultCounterTaggedMiss(CancellationToken cancellationToken)
+    {
+        TokenResponse validResponse = new("test-token", null, null, null, 3600, null, "Bearer", null);
+
+        _authenticationClient
+           .RequestClientCredentialsTokenAsync(Arg.Any<CancellationToken>())
+           .Returns(Task.FromResult<TokenResponse?>(validResponse));
+
+        await _sut.GetAccessTokenAsync(cancellationToken).ConfigureAwait(false);
+
+        DiagnosticsCapture.Measurement measurement = _capture.Measurements
+                                                             .Should()
+                                                             .ContainSingle(m => string.Equals(m.InstrumentName, "visus.address_validation.token_fetch.cache_result", StringComparison.Ordinal))
+                                                             .Subject;
+        measurement.Value.Should().Be(1);
+        measurement.Tags.Should().Contain(new KeyValuePair<string, object?>("address_validation.client_type", nameof(IAuthenticationClient)));
+        measurement.Tags.Should().Contain(new KeyValuePair<string, object?>("address_validation.cache_result", "miss"));
     }
 
     [Test]
@@ -140,49 +183,6 @@ internal sealed class AbstractAuthenticationServiceTests : IAsyncDisposable
         measurement.Value.Should().BeGreaterThanOrEqualTo(0);
         measurement.Tags.Should().Contain(new KeyValuePair<string, object?>("address_validation.client_type", nameof(IAuthenticationClient)));
         measurement.Tags.Should().Contain(new KeyValuePair<string, object?>("address_validation.result", "success"));
-    }
-
-    [Test]
-    [NotInParallel]
-    public async Task GetAccessTokenAsync_WhenCacheMiss_RecordsCacheResultCounterTaggedMiss(CancellationToken cancellationToken)
-    {
-        TokenResponse validResponse = new("test-token", null, null, null, 3600, null, "Bearer", null);
-
-        _authenticationClient
-           .RequestClientCredentialsTokenAsync(Arg.Any<CancellationToken>())
-           .Returns(Task.FromResult<TokenResponse?>(validResponse));
-
-        await _sut.GetAccessTokenAsync(cancellationToken).ConfigureAwait(false);
-
-        DiagnosticsCapture.Measurement measurement = _capture.Measurements
-                                                             .Should()
-                                                             .ContainSingle(m => string.Equals(m.InstrumentName, "visus.address_validation.token_fetch.cache_result", StringComparison.Ordinal))
-                                                             .Subject;
-        measurement.Value.Should().Be(1);
-        measurement.Tags.Should().Contain(new KeyValuePair<string, object?>("address_validation.client_type", nameof(IAuthenticationClient)));
-        measurement.Tags.Should().Contain(new KeyValuePair<string, object?>("address_validation.cache_result", "miss"));
-    }
-
-    [Test]
-    [NotInParallel]
-    public async Task GetAccessTokenAsync_WhenCacheHit_RecordsCacheResultCounterTaggedHit(CancellationToken cancellationToken)
-    {
-        TokenResponse validResponse = new("test-token", null, null, null, 3600, null, "Bearer", null);
-
-        _authenticationClient
-           .RequestClientCredentialsTokenAsync(Arg.Any<CancellationToken>())
-           .Returns(Task.FromResult<TokenResponse?>(validResponse));
-
-        await _sut.GetAccessTokenAsync(cancellationToken).ConfigureAwait(false);
-        await _sut.GetAccessTokenAsync(cancellationToken).ConfigureAwait(false);
-
-        DiagnosticsCapture.Measurement measurement = _capture.Measurements
-                                                             .Should()
-                                                             .ContainSingle(m => string.Equals(m.InstrumentName, "visus.address_validation.token_fetch.cache_result", StringComparison.Ordinal)
-                                                                               && m.Tags.Contains(new KeyValuePair<string, object?>("address_validation.cache_result", "hit")))
-                                                             .Subject;
-        measurement.Value.Should().Be(1);
-        measurement.Tags.Should().Contain(new KeyValuePair<string, object?>("address_validation.client_type", nameof(IAuthenticationClient)));
     }
 
     [Test]

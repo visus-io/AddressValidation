@@ -56,5 +56,11 @@ namespace Visus.AddressValidation.Integration.FedEx.Resources {
                 return ResourceManager.GetString("Validation_FedEx_SuiteNumberNotProvided", resourceCulture);
             }
         }
+
+        internal static string Validation_Batch_ResolvedAddressCountMismatch {
+            get {
+                return ResourceManager.GetString("Validation_Batch_ResolvedAddressCountMismatch", resourceCulture);
+            }
+        }
     }
 }

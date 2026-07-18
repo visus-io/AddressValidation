@@ -524,6 +524,12 @@ namespace Visus.AddressValidation.Adapters
     {
         System.Threading.Tasks.Task<TApiResponse?> ExecuteAsync(TRequest request, System.Threading.CancellationToken cancellationToken);
     }
+    public interface IBatchApiRequestAdapter<in TRequest, TApiResponse>
+        where in TRequest : Visus.AddressValidation.Models.AbstractAddressValidationRequest
+        where TApiResponse :  class
+    {
+        System.Threading.Tasks.Task<TApiResponse?> ExecuteAsync(System.Collections.Generic.IReadOnlyList<TRequest> requests, System.Threading.CancellationToken cancellationToken);
+    }
 }
 namespace Visus.AddressValidation.Configuration
 {
@@ -630,6 +636,17 @@ namespace Visus.AddressValidation.Mappers
         where in TResponse :  class
     {
         Visus.AddressValidation.Models.IAddressValidationResponse Map(TResponse response, Visus.AddressValidation.Validation.IValidationResult? validationResult = null);
+    }
+    public interface IBatchApiRequestMapper<in TRequest, out TApiRequest>
+        where in TRequest : Visus.AddressValidation.Models.AbstractAddressValidationRequest
+        where out TApiRequest :  class
+    {
+        TApiRequest Map(System.Collections.Generic.IReadOnlyList<TRequest> requests);
+    }
+    public interface IBatchApiResponseMapper<in TResponse>
+        where in TResponse :  class
+    {
+        Visus.AddressValidation.Models.IAddressValidationResponse Map(TResponse response, int index, Visus.AddressValidation.Validation.IValidationResult? validationResult = null);
     }
 }
 namespace Visus.AddressValidation.Models
@@ -750,10 +767,23 @@ namespace Visus.AddressValidation.Services
         protected abstract string GenerateCacheKey();
         public System.Threading.Tasks.Task<string?> GetAccessTokenAsync(System.Threading.CancellationToken cancellationToken = default) { }
     }
+    public abstract class AbstractBatchAddressValidationService<TRequest, TApiResponse> : Visus.AddressValidation.Services.IBatchAddressValidationService<TRequest>
+        where TRequest : Visus.AddressValidation.Models.AbstractAddressValidationRequest
+        where TApiResponse :  class
+    {
+        protected AbstractBatchAddressValidationService(Visus.AddressValidation.Adapters.IBatchApiRequestAdapter<TRequest, TApiResponse> batchRequestAdapter, Visus.AddressValidation.Mappers.IBatchApiResponseMapper<TApiResponse> batchResponseMapper, Visus.AddressValidation.Validation.IValidator<TRequest> requestValidator, Visus.AddressValidation.Validation.IBatchValidator<TApiResponse> batchResponseValidator) { }
+        protected abstract int MaxBatchSize { get; }
+        public System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<Visus.AddressValidation.Models.IAddressValidationResponse?>> ValidateManyAsync(System.Collections.Generic.IReadOnlyList<TRequest> requests, System.Threading.CancellationToken cancellationToken = default) { }
+    }
     public interface IAddressValidationService<in TRequest>
         where in TRequest : Visus.AddressValidation.Models.AbstractAddressValidationRequest
     {
         System.Threading.Tasks.Task<Visus.AddressValidation.Models.IAddressValidationResponse?> ValidateAsync(TRequest request, System.Threading.CancellationToken cancellationToken = default);
+    }
+    public interface IBatchAddressValidationService<in TRequest>
+        where in TRequest : Visus.AddressValidation.Models.AbstractAddressValidationRequest
+    {
+        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<Visus.AddressValidation.Models.IAddressValidationResponse?>> ValidateManyAsync(System.Collections.Generic.IReadOnlyList<TRequest> requests, System.Threading.CancellationToken cancellationToken = default);
     }
 }
 namespace Visus.AddressValidation.Validation
@@ -767,6 +797,14 @@ namespace Visus.AddressValidation.Validation
         protected override System.Threading.Tasks.ValueTask<bool> PreValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
         protected override System.Threading.Tasks.ValueTask ValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
     }
+    public abstract class AbstractBatchValidator<T> : Visus.AddressValidation.Validation.IBatchValidator<T>
+        where T :  class
+    {
+        protected AbstractBatchValidator() { }
+        public System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyList<Visus.AddressValidation.Validation.IValidationResult>> ExecuteAsync(T instance, System.Collections.Generic.IReadOnlyList<int> requestIndexes, System.Threading.CancellationToken cancellationToken = default) { }
+        protected virtual System.Threading.Tasks.ValueTask<bool> PreValidateAsync(T instance, System.Collections.Generic.IReadOnlyList<int> requestIndexes, System.Collections.Generic.IReadOnlyList<System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState>> results, System.Threading.CancellationToken cancellationToken = default) { }
+        protected virtual System.Threading.Tasks.ValueTask ValidateAsync(T instance, System.Collections.Generic.IReadOnlyList<int> requestIndexes, System.Collections.Generic.IReadOnlyList<System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState>> results, System.Threading.CancellationToken cancellationToken = default) { }
+    }
     public abstract class AbstractValidator<T> : Visus.AddressValidation.Validation.IValidator<T>
         where T :  class
     {
@@ -774,6 +812,11 @@ namespace Visus.AddressValidation.Validation
         public System.Threading.Tasks.ValueTask<Visus.AddressValidation.Validation.IValidationResult> ExecuteAsync(T instance, System.Threading.CancellationToken cancellationToken = default) { }
         protected virtual System.Threading.Tasks.ValueTask<bool> PreValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
         protected virtual System.Threading.Tasks.ValueTask ValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public interface IBatchValidator<in T>
+        where in T :  class
+    {
+        System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyList<Visus.AddressValidation.Validation.IValidationResult>> ExecuteAsync(T instance, System.Collections.Generic.IReadOnlyList<int> requestIndexes, System.Threading.CancellationToken cancellationToken = default);
     }
     public interface IValidationResult
     {

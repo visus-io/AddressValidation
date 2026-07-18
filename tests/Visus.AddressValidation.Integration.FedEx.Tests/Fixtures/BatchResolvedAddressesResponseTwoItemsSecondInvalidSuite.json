@@ -1,0 +1,105 @@
+{
+  "transactionId": "APIF_SV_ADVC_TxID9e0329e5-fcb0-40c7-bb92-5adc0c3825b3",
+  "customerTransactionId": "APIF_SV_ADVC_TxIDcustomer_test",
+  "output": {
+    "alerts": [],
+    "resolvedAddresses": [
+      {
+        "streetLinesToken": [
+          "7372 PARKRIDGE BLVD"
+        ],
+        "city": "IRVING",
+        "stateOrProvinceCode": "TX",
+        "postalCode": "75063",
+        "parsedPostalCode": {
+          "base": "75063",
+          "addOn": "8365",
+          "deliveryPoint": "61"
+        },
+        "countryCode": "US",
+        "classification": "UNKNOWN",
+        "ruralRouteHighwayContract": false,
+        "generalDelivery": false,
+        "customerMessages": [],
+        "normalizedStatusNameDPV": true,
+        "standardizedStatusNameMatchSource": "Postal",
+        "resolutionMethodName": "USPS_VALIDATE",
+        "attributes": {
+          "POBox": false,
+          "POBoxOnlyZIP": false,
+          "SplitZIP": false,
+          "SuiteRequiredButMissing": false,
+          "InvalidSuiteNumber": false,
+          "ResolutionInput": "RAW_ADDRESS",
+          "DPV": true,
+          "ResolutionMethod": "USPS_VALIDATE",
+          "DataVintage": "February 2023",
+          "MatchSource": "Postal",
+          "CountrySupported": true,
+          "ValidlyFormed": true,
+          "Matched": true,
+          "Resolved": true,
+          "Inserted": false,
+          "MultiUnitBase": false,
+          "ZIP11Match": true,
+          "ZIP4Match": true,
+          "UniqueZIP": false,
+          "StreetAddress": true,
+          "RRConversion": false,
+          "ValidMultiUnit": true,
+          "AddressType": "STANDARDIZED",
+          "AddressPrecision": "MULTI_TENANT_UNIT",
+          "MultipleMatches": false
+        }
+      },
+      {
+        "streetLinesToken": [
+          "350 FIFTH AVE"
+        ],
+        "city": "NEW YORK",
+        "stateOrProvinceCode": "NY",
+        "postalCode": "10118",
+        "parsedPostalCode": {
+          "base": "10118",
+          "addOn": "0110",
+          "deliveryPoint": "05"
+        },
+        "countryCode": "US",
+        "classification": "UNKNOWN",
+        "ruralRouteHighwayContract": false,
+        "generalDelivery": false,
+        "customerMessages": [],
+        "normalizedStatusNameDPV": true,
+        "standardizedStatusNameMatchSource": "Postal",
+        "resolutionMethodName": "USPS_VALIDATE",
+        "attributes": {
+          "POBox": false,
+          "POBoxOnlyZIP": false,
+          "SplitZIP": false,
+          "SuiteRequiredButMissing": false,
+          "InvalidSuiteNumber": true,
+          "ResolutionInput": "RAW_ADDRESS",
+          "DPV": true,
+          "ResolutionMethod": "USPS_VALIDATE",
+          "DataVintage": "February 2023",
+          "MatchSource": "Postal",
+          "CountrySupported": true,
+          "ValidlyFormed": true,
+          "Matched": true,
+          "Resolved": true,
+          "Inserted": false,
+          "MultiUnitBase": false,
+          "ZIP11Match": true,
+          "ZIP4Match": true,
+          "UniqueZIP": false,
+          "StreetAddress": true,
+          "RRConversion": false,
+          "ValidMultiUnit": true,
+          "AddressType": "STANDARDIZED",
+          "AddressPrecision": "MULTI_TENANT_UNIT",
+          "MultipleMatches": false
+        }
+      }
+    ]
+  }
+}

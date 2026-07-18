@@ -22,6 +22,12 @@ AddressValidation comes with several service integrations pre-built and ready to
 
 If there is no integration for a service you wish to you use, you can either open a [feature request](https://github.com/visus-io/AddressValidation/issues/new?template=feature_request.yml) or you can read on how to develop a [custom integration](integrations/custom/introduction.md).
 
+## Batch Validation
+
+[`IBatchAddressValidationService<TRequest>`](xref:Visus.AddressValidation.Services.IBatchAddressValidationService`1) is an opt-in interface for integrations whose provider API natively supports validating multiple addresses in a single call. Where available, it lets you submit a list of requests and get back a positionally-aligned list of responses instead of issuing one call per address.
+
+[FedEx](integrations/fedex.md#batch-example) is currently the only integration that implements it. If you are building a [custom integration](integrations/custom/introduction.md) against a provider that supports multi-address requests, see the [Batch Validation](integrations/custom/registering-services.md#batch-validation-service-optional) section of the custom integration guide.
+
 ## Caching
 
 To provide maximum performance all integrations within AddressValidation require [`HybridCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.hybrid.hybridcache) to cache authentication tokens. Register it at application startup:

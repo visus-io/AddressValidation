@@ -66,6 +66,47 @@ public sealed partial class MyServiceOptionsValidator : IValidateOptions<MyServi
 > [!NOTE]
 > The `[OptionsValidator]` attribute generates validation of all `[Required]` and other data-annotation attributes declared on the options class at compile time. No manual validation code is needed unless cross-property rules are required; the cross-property `SANDBOX`/`EndpointUriOverride` rule is already handled by [`AbstractServiceOptions`](xref:Visus.AddressValidation.Configuration.AbstractServiceOptions).
 
+## Batch Validation Service (Optional)
+
+> [!NOTE]
+> This section only applies when the provider's API natively supports validating multiple addresses in a single call. Skip it if the provider only offers a single-address endpoint.
+
+Extend [`AbstractBatchAddressValidationService<TRequest, TApiResponse>`](xref:Visus.AddressValidation.Services.AbstractBatchAddressValidationService`2) and forward its four constructor dependencies to the base class, alongside the provider's maximum batch size.
+
+```csharp
+[SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
+internal sealed class BatchAddressValidationService : AbstractBatchAddressValidationService<MyAddressValidationRequest, ApiResponse>
+{
+    public BatchAddressValidationService(IBatchApiRequestAdapter<MyAddressValidationRequest, ApiResponse> batchRequestAdapter,
+                                         IBatchApiResponseMapper<ApiResponse> batchResponseMapper,
+                                         IValidator<MyAddressValidationRequest> requestValidator,
+                                         IBatchValidator<ApiResponse> batchResponseValidator)
+        : base(batchRequestAdapter, batchResponseMapper, requestValidator, batchResponseValidator)
+    {
+    }
+
+    protected override int MaxBatchSize => Constants.MaxBatchSize;
+}
+```
+
+> [!NOTE]
+> `requestValidator` is the same [`IValidator<TRequest>`](xref:custom-validators) used by the singular pipeline; there is no separate batch request validator. Each request is still validated individually before the batch call is made. See [Batch Validators](xref:custom-batch-validators) for the response side, and [Batch Mappers](xref:custom-batch-mappers) and [Batch Validation Client](xref:custom-batch-validation-client) for the remaining components.
+
+Implement the required components (batch request adapter, batch request mapper, batch response mapper, batch response validator) as described in [Batch Mappers](xref:custom-batch-mappers), [Batch Validation Client](xref:custom-batch-validation-client), and [Batch Validators](xref:custom-batch-validators), then register them alongside the singular pipeline's registrations inside the same extension method:
+
+```csharp
+services.TryAddScoped<IBatchApiResponseMapper<ApiResponse>, BatchAddressValidationResponseMapper>();
+services.TryAddScoped<IBatchApiRequestMapper<MyAddressValidationRequest, ApiRequest>, BatchAddressValidationRequestMapper>();
+services.TryAddScoped<IBatchApiRequestAdapter<MyAddressValidationRequest, ApiResponse>, BatchApiRequestAdapter>();
+
+services.TryAddScoped<IBatchValidator<ApiResponse>, BatchApiResponseValidator>();
+
+services.TryAddScoped<IBatchAddressValidationService<MyAddressValidationRequest>, BatchAddressValidationService>();
+```
+
+> [!NOTE]
+> There is no separate `Add*BatchAddressValidation()` extension method. A single call to `AddMyProviderAddressValidation()` registers both `IAddressValidationService<MyAddressValidationRequest>` and `IBatchAddressValidationService<MyAddressValidationRequest>` in the same container, since both share the same options, HTTP client, and authentication service.
+
 ## Extension Method
 
 Register all components using a single `IServiceCollection` extension method:
@@ -152,3 +193,30 @@ public class ValidateController
     }
 }
 ```
+
+## Batch Usage
+
+If the [batch validation service](#batch-validation-service-optional) was registered, inject [`IBatchAddressValidationService<TRequest>`](xref:Visus.AddressValidation.Services.IBatchAddressValidationService`1) wherever multiple addresses need to be validated in one call:
+
+```csharp
+public class BatchValidateController
+{
+    private readonly IBatchAddressValidationService<MyAddressValidationRequest> _batchValidationService;
+
+    public BatchValidateController(IBatchAddressValidationService<MyAddressValidationRequest> batchValidationService)
+    {
+        _batchValidationService = batchValidationService ?? throw new ArgumentNullException(nameof(batchValidationService));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] IReadOnlyList<MyAddressValidationRequest> requests, CancellationToken cancellationToken = default)
+    {
+        IReadOnlyList<IAddressValidationResponse?> responses = await _batchValidationService.ValidateManyAsync(requests, cancellationToken);
+
+        return new OkObjectResult(responses);
+    }
+}
+```
+
+> [!NOTE]
+> The returned list is positionally aligned with `requests`, not a single response, so there is no single status code to branch on. See [`IBatchAddressValidationService<TRequest>`](xref:Visus.AddressValidation.Services.IBatchAddressValidationService`1) for the full null/`EmptyAddressValidationResponse` semantics per entry.

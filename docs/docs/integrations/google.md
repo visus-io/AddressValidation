@@ -6,6 +6,8 @@ title: Google
 
 AddressValidation offers a complete integration to the [Google Address Validation API](https://developers.google.com/maps/documentation/address-validation/overview) to provide validation for over [39 countries](https://developers.google.com/maps/documentation/address-validation/coverage).
 
+[!INCLUDE [batch-validation-not-supported-note](../includes/batch-validation-not-supported-note.md)]
+
 ## Credentials
 
 Before utilizing the integration, the setup and configuration of a [service account](https://cloud.google.com/iam/docs/service-account-overview) is required. 
