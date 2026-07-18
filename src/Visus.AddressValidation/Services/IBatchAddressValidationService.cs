@@ -34,5 +34,9 @@ public interface IBatchAddressValidationService<in TRequest>
     ///     Thrown synchronously when <paramref name="requests" /> contains more items than the provider's maximum
     ///     supported batch size.
     /// </exception>
+    /// <exception cref="InvalidImplementationException">
+    ///     Thrown when the registered batch response validator returns a different number of results than the
+    ///     number of items sent to the provider.
+    /// </exception>
     Task<IReadOnlyList<IAddressValidationResponse?>> ValidateManyAsync(IReadOnlyList<TRequest> requests, CancellationToken cancellationToken = default);
 }

@@ -166,6 +166,13 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
         IReadOnlyList<IValidationResult> perItemValidation =
             await _batchResponseValidator.ExecuteAsync(apiResponse, validIndexes, cancellationToken).ConfigureAwait(false);
 
+        if ( perItemValidation.Count != validIndexes.Count )
+        {
+            throw new InvalidImplementationException(
+                $"{nameof(IBatchValidator<>)}.{nameof(IBatchValidator<>.ExecuteAsync)} must return exactly one " +
+                $"{nameof(IValidationResult)} per sent request ({validIndexes.Count}), but returned {perItemValidation.Count}.");
+        }
+
         bool anyItemInvalid = false;
         for ( int j = 0; j < validIndexes.Count; j++ )
         {

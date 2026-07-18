@@ -191,6 +191,20 @@ internal sealed class AbstractBatchAddressValidationServiceTests : IDisposable
     }
 
     [Test]
+    public async Task ValidateManyAsync_WhenBatchResponseValidatorReturnsWrongResultCount_ThrowsInvalidImplementationException(CancellationToken cancellationToken)
+    {
+        TestBatchAddressValidationService sut = new(_requestAdapter, _responseMapper, new TestRequestValidator(), new BrokenCountBatchResponseValidator());
+        List<TestAddressValidationRequest> requests = [ValidRequest(), ValidRequest(),];
+        TestApiResponse apiResponse = new();
+        _requestAdapter.ExecuteAsync(Arg.Any<IReadOnlyList<TestAddressValidationRequest>>(), Arg.Any<CancellationToken>())
+                       .Returns(Task.FromResult<TestApiResponse?>(apiResponse));
+
+        Func<Task> act = () => sut.ValidateManyAsync(requests, cancellationToken);
+
+        await act.Should().ThrowExactlyAsync<InvalidImplementationException>().ConfigureAwait(false);
+    }
+
+    [Test]
     public async Task ValidateManyAsync_WhenCountExceedsMaxBatchSize_ThrowsArgumentException(CancellationToken cancellationToken)
     {
         List<TestAddressValidationRequest> requests = [ValidRequest(), ValidRequest(), ValidRequest(), ValidRequest(),];
@@ -340,6 +354,14 @@ internal sealed class AbstractBatchAddressValidationServiceTests : IDisposable
     internal sealed class TestAddressValidationRequest : AbstractAddressValidationRequest;
 
     internal sealed class TestApiResponse;
+
+    private sealed class BrokenCountBatchResponseValidator : AbstractBatchValidator<TestApiResponse>, IBatchValidator<TestApiResponse>
+    {
+        ValueTask<IReadOnlyList<IValidationResult>> IBatchValidator<TestApiResponse>.ExecuteAsync(TestApiResponse instance, IReadOnlyList<int> requestIndexes, CancellationToken cancellationToken)
+        {
+            return ValueTask.FromResult<IReadOnlyList<IValidationResult>>([]);
+        }
+    }
 
     private sealed class TestBatchAddressValidationService(
         IBatchApiRequestAdapter<TestAddressValidationRequest, TestApiResponse> requestAdapter,

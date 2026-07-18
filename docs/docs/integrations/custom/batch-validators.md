@@ -64,4 +64,7 @@ internal sealed class BatchApiResponseValidator : AbstractBatchValidator<ApiResp
 > [!NOTE]
 > Batch-level information that cannot be attributed to one specific address, such as a response-wide warning alert, should also be broadcast to every item's result set in `ValidateAsync` rather than assigned arbitrarily to a single item.
 
+> [!IMPORTANT]
+> `ExecuteAsync` must return exactly one [`IValidationResult`](xref:Visus.AddressValidation.Validation.IValidationResult) per item in `requestIndexes`. Extending `AbstractBatchValidator<T>` through `PreValidateAsync`/`ValidateAsync` as shown above guarantees this automatically. If a custom implementation violates the count contract, `ValidateManyAsync` throws `InvalidImplementationException` rather than silently misaligning results.
+
 [!INCLUDE [internal-validation-note](../../includes/internal-validation-note.md)]
