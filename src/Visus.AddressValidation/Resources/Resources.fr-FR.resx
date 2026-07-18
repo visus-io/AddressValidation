@@ -48,4 +48,7 @@
   <data name="Validation_Verification_RowValueCouldNotBeVerified" xml:space="preserve">
         <value>[Row {0}] {1}: {2}</value>
     </data>
+  <data name="Validation_Batch_ExceedsMaximumSize" xml:space="preserve">
+        <value>The batch contains {0} addresses, which exceeds the maximum of {1} supported by this provider.</value>
+    </data>
 </root>

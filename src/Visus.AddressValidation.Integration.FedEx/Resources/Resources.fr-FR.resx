@@ -27,4 +27,7 @@
   <data name="Validation_FedEx_SuiteNumberNotProvided" xml:space="preserve">
         <value>Suite number was not provided in the request.</value>
     </data>
+  <data name="Validation_Batch_ResolvedAddressCountMismatch" xml:space="preserve">
+        <value>Expected {0} resolved addresses but the API returned {1}.</value>
+    </data>
 </root>
