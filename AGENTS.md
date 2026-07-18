@@ -56,6 +56,12 @@
 - All user-facing validation error messages must be defined in the project's `Resources/Resources.resx` file. Never hardcode error message strings in C# source.
 - Do not add new `.resx` entries without documenting the new string's placeholder semantics and do-not-translate list in the pull request description.
 
+## Documentation
+
+- Any change to core behavior — a public API added, changed, or removed; a supported provider, country, or feature added or removed; a validation rule or pipeline step added, changed, or removed; a configuration option added, changed, or removed — must be accompanied by a matching update to the docs under `docs/docs/` (and `README.md` where it summarizes the same information) in the same change. Treat missing doc updates as an incomplete change, not a follow-up.
+- When adding a new provider integration, add its docs page under `docs/docs/integrations/` and list it in `docs/docs/toc.yml`.
+- If you are unsure whether a change qualifies as "core behavior," err on the side of updating the docs.
+
 ## What NOT to Do
 
 - Do not add `using var` or `var` anywhere.

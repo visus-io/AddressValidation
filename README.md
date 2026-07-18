@@ -117,6 +117,32 @@ Each integration package exposes its own `TRequest` type (e.g., `FedExAddressVal
 `GoogleAddressValidationRequest`) and a corresponding `Add*AddressValidation()` extension method. See
 the [documentation](https://ave.projects.visus.io/) for provider-specific options.
 
+### Batch Validation
+
+Providers whose API supports validating multiple addresses in one call also expose
+`IBatchAddressValidationService<TRequest>`. FedEx is currently the only integration that implements it:
+
+```csharp
+public class ValidateController
+{
+    private readonly IBatchAddressValidationService<FedExAddressValidationRequest> _batchValidationService;
+
+    public ValidateController(IBatchAddressValidationService<FedExAddressValidationRequest> batchValidationService)
+    {
+        _batchValidationService = batchValidationService ?? throw new ArgumentNullException(nameof(batchValidationService));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] IReadOnlyList<FedExAddressValidationRequest> requests, CancellationToken cancellationToken = default)
+    {
+        IReadOnlyList<IAddressValidationResponse?> responses = await _batchValidationService.ValidateManyAsync(requests, cancellationToken);
+        return new OkObjectResult(responses);
+    }
+}
+```
+
+The returned list is positionally aligned with `requests`. See the [documentation](https://ave.projects.visus.io/docs/index.html#batch-validation) for the full semantics.
+
 ### Instrumentation
 
 Every integration emits traces and metrics via `System.Diagnostics` (`ActivitySource` / `Meter`), which OpenTelemetry

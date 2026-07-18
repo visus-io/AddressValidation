@@ -6,6 +6,8 @@ title: UPS
 
 AddressValidation offers a complete integration to the [UPS&reg; Address Validation API](https://developer.ups.com/api/reference) to provide validation for the United States and Puerto Rico.
 
+[!INCLUDE [batch-validation-not-supported-note](../includes/batch-validation-not-supported-note.md)]
+
 ## Credentials
 
 Before utilizing the integration, you will need a [developer account](https://developer.ups.com/) along with an active UPS account. After you have signed in to the account, [follow these instructions](https://developer.ups.com/get-started) to obtain your credentials.

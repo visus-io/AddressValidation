@@ -16,6 +16,10 @@ Follow these steps to build a custom integration:
 4. [Validation Client](xref:custom-validation-client): call the provider's address validation endpoint and bridge the public request to the client
 5. [Validators](xref:custom-validators): validate the request before sending and the response after receiving
 6. [Registering Services](xref:custom-registering-services): wire the pipeline components together and register all components with the DI container
+7. Batch Validation *(optional)*: [Batch Mappers](xref:custom-batch-mappers), [Batch Validation Client](xref:custom-batch-validation-client), and [Batch Validators](xref:custom-batch-validators)
 
 > [!NOTE]
 > Step 3 is only required when the provider uses OAuth 2.0 bearer tokens. Providers that authenticate via static API keys, query string parameters, or other schemes can skip that step and omit the [`BearerTokenDelegatingHandler<TClient>`](xref:Visus.AddressValidation.Http.BearerTokenDelegatingHandler`1) from the HTTP client pipeline during [service registration](xref:custom-registering-services).
+
+> [!NOTE]
+> Step 7 only applies when the provider's API natively supports validating multiple addresses in a single call. It adds three components alongside the ones built in steps 1–6 and wires them up in the [Batch Validation Service](xref:custom-registering-services#batch-validation-service-optional) section of service registration.
