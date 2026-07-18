@@ -353,14 +353,14 @@ internal sealed class AbstractBatchAddressValidationServiceTests : IDisposable
     {
         internal Func<TestApiResponse, int, IReadOnlyList<IValidationResult>>? Stub { get; set; }
 
-        protected override ValueTask<bool> PreValidateAsync(TestApiResponse instance, int expectedResultCount, IReadOnlyList<ISet<ValidationState>> results, CancellationToken cancellationToken = default)
+        protected override ValueTask<bool> PreValidateAsync(TestApiResponse instance, IReadOnlyList<int> requestIndexes, IReadOnlyList<ISet<ValidationState>> results, CancellationToken cancellationToken = default)
         {
             if ( Stub is null )
             {
                 return ValueTask.FromResult(true);
             }
 
-            IReadOnlyList<IValidationResult> stubbedResults = Stub(instance, expectedResultCount);
+            IReadOnlyList<IValidationResult> stubbedResults = Stub(instance, requestIndexes.Count);
             for ( int i = 0; i < results.Count; i++ )
             {
                 foreach ( ValidationState state in stubbedResults[i].Errors )

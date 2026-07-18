@@ -136,6 +136,30 @@ internal sealed class BatchAddressValidationServiceTests : IAsyncDisposable
     }
 
     [Test]
+    public async Task ValidateManyAsync_WhenRequestBeforeItFailsLocalValidation_ErrorMessageReferencesOriginalIndex(CancellationToken cancellationToken)
+    {
+        StubOAuthToken();
+        StubTwoItemBatchResolveWithSecondInvalidSuite();
+
+        FedExAddressValidationRequest invalid = new()
+        {
+            Country = CountryCode.US,
+        };
+
+        List<FedExAddressValidationRequest> requests = [invalid, ValidRequest(), ValidRequest(),];
+
+        IReadOnlyList<IAddressValidationResponse?> results = await _sut.ValidateManyAsync(requests, cancellationToken)
+                                                                       .ConfigureAwait(false);
+
+        using ( new AssertionScope() )
+        {
+            results[0].Should().BeOfType<EmptyAddressValidationResponse>();
+            results[2].Should().BeOfType<EmptyAddressValidationResponse>();
+            results[2]!.Errors.Should().Contain(e => e.Contains("[Row 2]", StringComparison.Ordinal));
+        }
+    }
+
+    [Test]
     public async Task ValidateManyAsync_WhenSomeRequestsFailLocalValidation_OnlySendsValidOnesToApi(CancellationToken cancellationToken)
     {
         StubOAuthToken();
@@ -236,6 +260,17 @@ internal sealed class BatchAddressValidationServiceTests : IAsyncDisposable
     private void StubSingleAddressResolve()
     {
         string body = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "ResolvedAddressResponse.json"));
+
+        _wireMockServer.Given(Request.Create().WithPath("/address/v1/addresses/resolve").UsingPost())
+                       .RespondWith(Response.Create()
+                                            .WithStatusCode(200)
+                                            .WithHeader("Content-Type", "application/json")
+                                            .WithBody(body));
+    }
+
+    private void StubTwoItemBatchResolveWithSecondInvalidSuite()
+    {
+        string body = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "BatchResolvedAddressesResponseTwoItemsSecondInvalidSuite.json"));
 
         _wireMockServer.Given(Request.Create().WithPath("/address/v1/addresses/resolve").UsingPost())
                        .RespondWith(Response.Create()

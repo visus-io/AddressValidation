@@ -101,12 +101,12 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
         _requestValidator = requestValidator ?? throw new ArgumentNullException(nameof(requestValidator));
         _batchResponseValidator = batchResponseValidator ?? throw new ArgumentNullException(nameof(batchResponseValidator));
 
-        if ( !requestValidator.GetType().IsSubclassOf(typeof(AbstractAddressValidationRequestValidator<TRequest>)) )
+        if ( requestValidator is not AbstractAddressValidationRequestValidator<TRequest> )
         {
             throw new InvalidImplementationException($"{nameof(requestValidator)} must implement {nameof(AbstractAddressValidationRequestValidator<>)}");
         }
 
-        if ( !batchResponseValidator.GetType().IsSubclassOf(typeof(AbstractBatchValidator<TApiResponse>)) )
+        if ( batchResponseValidator is not AbstractBatchValidator<TApiResponse> )
         {
             throw new InvalidImplementationException($"{nameof(batchResponseValidator)} must implement {nameof(AbstractBatchValidator<>)}");
         }
@@ -164,7 +164,7 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
                                                     CancellationToken cancellationToken)
     {
         IReadOnlyList<IValidationResult> perItemValidation =
-            await _batchResponseValidator.ExecuteAsync(apiResponse, validRequests.Count, cancellationToken).ConfigureAwait(false);
+            await _batchResponseValidator.ExecuteAsync(apiResponse, validIndexes, cancellationToken).ConfigureAwait(false);
 
         bool anyItemInvalid = false;
         for ( int j = 0; j < validIndexes.Count; j++ )

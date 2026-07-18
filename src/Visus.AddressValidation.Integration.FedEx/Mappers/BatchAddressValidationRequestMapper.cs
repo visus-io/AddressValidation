@@ -11,6 +11,8 @@ internal sealed class BatchAddressValidationRequestMapper : IBatchApiRequestMapp
     {
         ArgumentNullException.ThrowIfNull(requests);
 
+        // FedEx's resolve endpoint accepts a single CustomerTransactionId per call, not one per address, so only
+        // the first request's value can be transmitted; use ClientReferenceId for per-item correlation instead.
         return new ApiRequest
         {
             AddressesToValidate = [.. requests.Select(FedExAddressToValidateMapper.Map),],

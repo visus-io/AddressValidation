@@ -9,7 +9,7 @@ using Resources;
 [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
 internal sealed class BatchApiResponseValidator : AbstractBatchValidator<ApiResponse>
 {
-    protected override ValueTask<bool> PreValidateAsync(ApiResponse instance, int expectedResultCount, IReadOnlyList<ISet<ValidationState>> results, CancellationToken cancellationToken = default)
+    protected override ValueTask<bool> PreValidateAsync(ApiResponse instance, IReadOnlyList<int> requestIndexes, IReadOnlyList<ISet<ValidationState>> results, CancellationToken cancellationToken = default)
     {
         if ( instance.ErrorResponse is not null )
         {
@@ -17,11 +17,11 @@ internal sealed class BatchApiResponseValidator : AbstractBatchValidator<ApiResp
             return ValueTask.FromResult(false);
         }
 
-        if ( instance.Result is null || instance.Result.ResolvedAddresses.Length != expectedResultCount )
+        if ( instance.Result is null || instance.Result.ResolvedAddresses.Length != requestIndexes.Count )
         {
             ValidationState state = ValidationState.CreateError(
                 Resources.Validation_Batch_ResolvedAddressCountMismatch,
-                expectedResultCount,
+                requestIndexes.Count,
                 instance.Result?.ResolvedAddresses.Length ?? 0);
 
             BroadcastToAll(state, results);
@@ -31,13 +31,13 @@ internal sealed class BatchApiResponseValidator : AbstractBatchValidator<ApiResp
         return ValueTask.FromResult(true);
     }
 
-    protected override ValueTask ValidateAsync(ApiResponse instance, IReadOnlyList<ISet<ValidationState>> results, CancellationToken cancellationToken = default)
+    protected override ValueTask ValidateAsync(ApiResponse instance, IReadOnlyList<int> requestIndexes, IReadOnlyList<ISet<ValidationState>> results, CancellationToken cancellationToken = default)
     {
         Debug.Assert(instance.Result is not null);
 
         for ( int i = 0; i < instance.Result.ResolvedAddresses.Length; i++ )
         {
-            ResolvedAddressValidator.Validate(instance.Result.ResolvedAddresses[i], i, results[i]);
+            ResolvedAddressValidator.Validate(instance.Result.ResolvedAddresses[i], requestIndexes[i], results[i]);
         }
 
         // Alerts are batch/response-level, not per-address, so there is no way to correlate them to one

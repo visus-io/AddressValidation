@@ -20,5 +20,11 @@ public sealed class FedExAddressValidationRequest : AbstractAddressValidationReq
     /// <summary>
     ///     Gets or sets the Customer Transaction ID used to identify the transaction.
     /// </summary>
+    /// <remarks>
+    ///     When submitted via <see cref="AddressValidation.Services.IBatchAddressValidationService{TRequest}" />,
+    ///     FedEx's API accepts only one transaction identifier for the entire batch call, so only the value set on
+    ///     the first request in the batch is transmitted. Use <see cref="ClientReferenceId" /> to correlate
+    ///     individual items within a batch.
+    /// </remarks>
     public string? CustomerTransactionId { get; set; }
 }
