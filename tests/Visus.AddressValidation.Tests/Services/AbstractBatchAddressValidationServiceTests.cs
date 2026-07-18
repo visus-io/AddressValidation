@@ -69,7 +69,7 @@ internal sealed class AbstractBatchAddressValidationServiceTests : IDisposable
     [Test]
     public void Constructor_WhenRequestValidatorIsNull_ThrowsArgumentNullException()
     {
-        Action act = () => _ = new TestBatchAddressValidationService(_requestAdapter, null!, new TestRequestValidator(), _responseValidator);
+        Action act = () => _ = new TestBatchAddressValidationService(_requestAdapter, _responseMapper, null!, _responseValidator);
 
         act.Should().ThrowExactly<ArgumentNullException>();
     }
