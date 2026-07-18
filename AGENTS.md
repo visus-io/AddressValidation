@@ -60,6 +60,7 @@
 ## Documentation
 
 - Any change to core behavior — a public API added, changed, or removed; a supported provider, country, or feature added or removed; a validation rule or pipeline step added, changed, or removed; a configuration option added, changed, or removed — must be accompanied by a matching update to the docs under `docs/docs/` (and `README.md` where it summarizes the same information) in the same change. Treat missing doc updates as an incomplete change, not a follow-up.
+- The same rule applies to `ARCHITECTURE.md` whenever the change affects what it describes — a new or changed abstraction, base class, pipeline step, directory layout convention, or architectural pattern. Update it in the same change rather than leaving it to describe only the pre-change design.
 - When adding a new provider integration, add its docs page under `docs/docs/integrations/` and list it in `docs/docs/toc.yml`.
 - If you are unsure whether a change qualifies as "core behavior," err on the side of updating the docs.
 

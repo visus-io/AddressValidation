@@ -259,7 +259,9 @@ internal sealed class AbstractBatchAddressValidationServiceTests : IDisposable
     public async Task ValidateManyAsync_WhenSomeRequestsFailValidation_OnlySendsValidOnesAndPreservesOriginalOrder(CancellationToken cancellationToken)
     {
         TestAddressValidationRequest invalid = new();
-        List<TestAddressValidationRequest> requests = [ValidRequest(), invalid, ValidRequest(),];
+        TestAddressValidationRequest firstValid = ValidRequest();
+        TestAddressValidationRequest secondValid = ValidRequest();
+        List<TestAddressValidationRequest> requests = [firstValid, invalid, secondValid,];
         TestApiResponse apiResponse = new();
         List<TestAddressValidationRequest>? sentToAdapter = null;
         _requestAdapter.ExecuteAsync(Arg.Any<IReadOnlyList<TestAddressValidationRequest>>(), Arg.Any<CancellationToken>())
@@ -273,7 +275,7 @@ internal sealed class AbstractBatchAddressValidationServiceTests : IDisposable
 
         IReadOnlyList<IAddressValidationResponse?> results = await _sut.ValidateManyAsync(requests, cancellationToken).ConfigureAwait(false);
 
-        sentToAdapter.Should().HaveCount(2);
+        sentToAdapter.Should().Equal(firstValid, secondValid);
         results[1].Should().BeOfType<EmptyAddressValidationResponse>();
         results[0].Should().NotBeOfType<EmptyAddressValidationResponse>();
         results[2].Should().NotBeOfType<EmptyAddressValidationResponse>();
@@ -382,9 +384,9 @@ internal sealed class AbstractBatchAddressValidationServiceTests : IDisposable
     {
         protected override string ProviderName => "Test";
 
-        protected override FrozenSet<CountryCode> SupportedCountries => new[]
-        {
+        protected override FrozenSet<CountryCode> SupportedCountries =>
+        [
             CountryCode.US,
-        }.ToFrozenSet();
+        ];
     }
 }

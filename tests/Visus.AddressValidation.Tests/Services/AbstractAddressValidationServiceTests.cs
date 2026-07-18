@@ -363,9 +363,9 @@ internal sealed class AbstractAddressValidationServiceTests : IDisposable
 
     private void StubResponseValidator(TestApiResponse response, bool hasErrors)
     {
-        #pragma warning disable CA2012 // NSubstitute's Returns() consumes the ValueTask via its ambient call router, not a real double-await.
+#pragma warning disable CA2012 // NSubstitute's Returns() consumes the ValueTask via its ambient call router, not a real double-await.
         _responseValidator.Inner.ExecuteAsync(response, Arg.Any<CancellationToken>()).Returns(_ => ValueTask.FromResult(StubValidationResult(hasErrors)));
-        #pragma warning restore CA2012
+#pragma warning restore CA2012
     }
 
     internal sealed class TestAddressValidationRequest : AbstractAddressValidationRequest;

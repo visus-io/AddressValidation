@@ -36,12 +36,12 @@ internal sealed class BatchAddressValidationServiceTests : IAsyncDisposable
 
         services.AddSingleton<IConfiguration>(new ConfigurationBuilder()
                                              .AddInMemoryCollection(new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
-                                              {
-                                                  [$"{FedExServiceOptions.SectionName}:ClientId"] = "test-client-id",
-                                                  [$"{FedExServiceOptions.SectionName}:ClientSecret"] = "test-client-secret",
-                                                  [$"{FedExServiceOptions.SectionName}:AccountNumber"] = "test-account",
-                                                  [$"{FedExServiceOptions.SectionName}:ClientEnvironment"] = nameof(ClientEnvironment.SANDBOX),
-                                              })
+                                             {
+                                                 [$"{FedExServiceOptions.SectionName}:ClientId"] = "test-client-id",
+                                                 [$"{FedExServiceOptions.SectionName}:ClientSecret"] = "test-client-secret",
+                                                 [$"{FedExServiceOptions.SectionName}:AccountNumber"] = "test-account",
+                                                 [$"{FedExServiceOptions.SectionName}:ClientEnvironment"] = nameof(ClientEnvironment.SANDBOX),
+                                             })
                                              .Build());
 
         services.AddFedExAddressValidation();

@@ -32,10 +32,11 @@ internal sealed class BatchAddressValidationRequestMapper : IBatchApiRequestMapp
 > /// <remarks>
 > ///     When submitted via <see cref="IBatchAddressValidationService{TRequest}" />, the provider accepts only
 > ///     one transaction identifier for the entire batch call, so only the value set on the first request is
-> ///     transmitted. Use a per-item field to correlate individual items within a batch.
+> ///     transmitted.
 > /// </remarks>
 > public string? TransactionId { get; set; }
 > ```
+> Do not assume a per-item identifier submitted on the request (such as FedEx's `ClientReferenceId`) is echoed back on the provider's response unless you have confirmed it against the provider's actual response schema. If it isn't, say so on that property's doc comment, since the [batch response mapper](#batch-response-mapper) has no way to use it and must rely on positional correlation instead.
 
 ## Batch Response Mapper
 

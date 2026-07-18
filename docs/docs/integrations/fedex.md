@@ -264,7 +264,10 @@ public class ValidateController
 > A batch is limited to 100 addresses. Submitting more throws an `ArgumentException` before any request reaches FedEx.
 
 > [!NOTE]
-> FedEx accepts only one transaction identifier per batch call, so [`CustomerTransactionId`](xref:Visus.AddressValidation.Integration.FedEx.Models.FedExAddressValidationRequest#Visus_AddressValidation_Integration_FedEx_Models_FedExAddressValidationRequest_CustomerTransactionId) set on any request other than the first in the batch is not transmitted. Use `ClientReferenceId` to correlate individual items within a batch instead.
+> FedEx accepts only one transaction identifier per batch call, so [`CustomerTransactionId`](xref:Visus.AddressValidation.Integration.FedEx.Models.FedExAddressValidationRequest#Visus_AddressValidation_Integration_FedEx_Models_FedExAddressValidationRequest_CustomerTransactionId) set on any request other than the first in the batch is not transmitted.
+
+> [!NOTE]
+> FedEx's resolve endpoint does not echo `clientReferenceId` (or any other per-item identifier) back on a resolved address, so results are correlated to requests strictly by their position in the list, not by any field in the response. `clientReferenceId` is still transmitted to FedEx for their own tracking, but it has no effect on how this library associates a response with its request.
 
 [!INCLUDE [is-residential-note](../includes/is-residential-note.md)]
 
