@@ -33,17 +33,18 @@ dotnet add package OpenTelemetry.Extensions.Hosting
 | Name | Emitted By | Tags | Description |
 |---|---|---|---|
 | `address_validation.validate` | [`AbstractAddressValidationService<TRequest, TApiResponse>`](xref:Visus.AddressValidation.Services.AbstractAddressValidationService`2) | `address_validation.request_type`, `address_validation.country`, `address_validation.result` | Wraps a single `ValidateAsync` call, from request validation through response mapping. |
+| `address_validation.validate_many` | [`AbstractBatchAddressValidationService<TRequest, TApiResponse>`](xref:Visus.AddressValidation.Services.AbstractBatchAddressValidationService`2) | `address_validation.request_type`, `address_validation.batch_size`, `address_validation.country`, `address_validation.result` | Wraps a single `ValidateManyAsync` call, from per-item request validation through response mapping. `address_validation.country` is always the `batch` sentinel, since a batch may span multiple countries. |
 | `address_validation.token_fetch` | [`AbstractAuthenticationService<TClient>`](xref:Visus.AddressValidation.Services.AbstractAuthenticationService`1) | `address_validation.client_type`, `address_validation.result` | Wraps a single OAuth 2.0 token fetch on a cache miss. Not started on a cache hit. |
 
-Both activities are marked with `ActivityStatusCode.Error` and record the exception when the underlying operation throws.
+All activities are marked with `ActivityStatusCode.Error` and record the exception when the underlying operation throws.
 
 ### Metrics
 
 | Name | Kind | Unit | Tags | Description |
 |---|---|---|---|---|
-| `visus.address_validation.validate.duration` | Histogram\<double\> | s | `address_validation.request_type`, `address_validation.result`, `address_validation.country` | Duration of a `ValidateAsync` call. |
-| `visus.address_validation.validate.response_warning_count` | Histogram\<long\> | — | `address_validation.request_type`, `address_validation.result`, `address_validation.country` | Number of warnings on the produced response. Not recorded when the API returns no response. |
-| `visus.address_validation.validate.response_suggestion_count` | Histogram\<long\> | — | `address_validation.request_type`, `address_validation.result`, `address_validation.country` | Number of suggestions on the produced response. Not recorded when the API returns no response. |
+| `visus.address_validation.validate.duration` | Histogram\<double\> | s | `address_validation.request_type`, `address_validation.result`, `address_validation.country` | Duration of a `ValidateAsync` or `ValidateManyAsync` call. For a batch call, `address_validation.country` is the `batch` sentinel. |
+| `visus.address_validation.validate.response_warning_count` | Histogram\<long\> | — | `address_validation.request_type`, `address_validation.result`, `address_validation.country` | Number of warnings on the produced response. Not recorded when the API returns no response. For a batch call, one recording is made per item. |
+| `visus.address_validation.validate.response_suggestion_count` | Histogram\<long\> | — | `address_validation.request_type`, `address_validation.result`, `address_validation.country` | Number of suggestions on the produced response. Not recorded when the API returns no response. For a batch call, one recording is made per item. |
 | `visus.address_validation.token_fetch.duration` | Histogram\<double\> | s | `address_validation.client_type`, `address_validation.result` | Duration of a token fetch (cache miss only). |
 | `visus.address_validation.token_fetch.cache_result` | Counter\<long\> | — | `address_validation.client_type`, `address_validation.cache_result` | Incremented on every token cache lookup, whether it hits or misses. |
 
@@ -52,11 +53,13 @@ Both activities are marked with `ActivityStatusCode.Error` and record the except
 | Tag | Values |
 |---|---|
 | `address_validation.result` (validate) | `success`, `invalid_request`, `no_response`, `invalid_response`, `error` |
+| `address_validation.result` (validate_many) | `success`, `partial`, `invalid_request`, `no_response`, `error` for the overall call; `success`, `invalid_request`, `invalid_response` per item |
 | `address_validation.result` (token_fetch) | `success`, `empty_token`, `error` |
 | `address_validation.cache_result` | `hit`, `miss` |
 | `address_validation.request_type` | The `TRequest` type name (e.g., `FedExAddressValidationRequest`) |
+| `address_validation.batch_size` | The number of requests passed to `ValidateManyAsync` |
 | `address_validation.client_type` | The `TClient` type name of the provider's authentication client |
-| `address_validation.country` | The [`CountryCode`](xref:Visus.AddressValidation.Abstractions.CountryCode) of the request, or `unknown` when absent |
+| `address_validation.country` | The [`CountryCode`](xref:Visus.AddressValidation.Abstractions.CountryCode) of the request, or `unknown` when absent; `batch` for the overall `validate_many` activity and its duration metric |
 
 ## Exporting to a Backend
 

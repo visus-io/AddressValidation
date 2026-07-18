@@ -103,12 +103,12 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
 
         if ( requestValidator is not AbstractAddressValidationRequestValidator<TRequest> )
         {
-            throw new InvalidImplementationException($"{nameof(requestValidator)} must implement {nameof(AbstractAddressValidationRequestValidator<>)}");
+            throw new InvalidImplementationException($"{nameof(requestValidator)} must derive from {nameof(AbstractAddressValidationRequestValidator<>)}");
         }
 
         if ( batchResponseValidator is not AbstractBatchValidator<TApiResponse> )
         {
-            throw new InvalidImplementationException($"{nameof(batchResponseValidator)} must implement {nameof(AbstractBatchValidator<>)}");
+            throw new InvalidImplementationException($"{nameof(batchResponseValidator)} must derive from {nameof(AbstractBatchValidator<>)}");
         }
     }
 
@@ -216,6 +216,7 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
         using Activity? activity = AddressValidationDiagnostics.ActivitySource.StartActivity(s_activityName);
         activity?.SetTag(s_tagRequestType, typeof(TRequest).Name);
         activity?.SetTag(s_tagBatchSize, requests.Count);
+        activity?.SetTag(s_tagCountry, s_sentinelBatchCountry);
 
         long startTimestamp = Stopwatch.GetTimestamp();
         string result = s_resultSuccess;
