@@ -55,6 +55,7 @@
 
 - All user-facing validation error messages must be defined in the project's `Resources/Resources.resx` file. Never hardcode error message strings in C# source.
 - Do not add new `.resx` entries without documenting the new string's placeholder semantics and do-not-translate list in the pull request description.
+- When adding, changing, or removing resource strings, only edit `Resources/Resources.resx` (the neutral-culture, source-of-truth file). Never edit the localized `Resources/Resources.<culture>.resx` files (e.g. `Resources.de-DE.resx`, `Resources.fr-FR.resx`) — those are owned by Crowdin, which opens its own signed PRs to sync translations after `Resources.resx` changes.
 
 ## Documentation
 
