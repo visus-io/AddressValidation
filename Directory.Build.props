@@ -8,15 +8,9 @@
     <NeutralLanguage>en</NeutralLanguage>
     <Nullable>enable</Nullable>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -25,6 +19,7 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/visus-io/addressvalidation.git</RepositoryUrl>
+    <BeforePack>$(BeforePack);IncludeAnalyzersInPackage</BeforePack>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsTestProject)' != 'true'">
@@ -36,6 +31,7 @@
 
   <ItemGroup Condition="'$(IsTestProject)' != 'true'">
     <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\"/>
+    <None Include="$(MSBuildThisFileDirectory)SECURITY.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
@@ -44,10 +40,6 @@
 
   <PropertyGroup Condition="'$(CI)' == 'true'">
     <RestoreLockedMode>true</RestoreLockedMode>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <BeforePack>$(BeforePack);IncludeAnalyzersInPackage</BeforePack>
   </PropertyGroup>
 
   <ItemGroup>
