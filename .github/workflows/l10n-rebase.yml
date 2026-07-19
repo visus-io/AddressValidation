@@ -72,6 +72,5 @@ jobs:
                             --head l10n-rebase \
                             --title "chore(l10n): rebase onto main" \
                             --reviewer visus-io/project-administrators \
-                            --assignee visus-io/project-administrators \
                             --body "Automated rebase of \`l10n\` onto \`main\`."
                     fi
