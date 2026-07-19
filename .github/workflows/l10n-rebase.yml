@@ -1,0 +1,60 @@
+name: Rebase l10n Branch
+
+on:
+    push:
+        branches:
+            - main
+    schedule:
+        -   cron: '17 6 * * *'
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}
+    cancel-in-progress: false
+
+jobs:
+    rebase:
+        name: Rebase l10n onto main
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        permissions:
+            contents: write
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+                with:
+                    fetch-depth: 0
+                    show-progress: false
+
+            -   name: Check l10n branch exists
+                id: branch-check
+                run: |
+                    if git ls-remote --exit-code --heads origin l10n > /dev/null 2>&1; then
+                        echo "exists=true" >> "${GITHUB_OUTPUT}"
+                    else
+                        echo "exists=false" >> "${GITHUB_OUTPUT}"
+                    fi
+
+            -   name: Check whether rebase is needed
+                if: steps.branch-check.outputs.exists == 'true'
+                id: drift-check
+                run: |
+                    COUNT=$(git rev-list --count origin/l10n..origin/main)
+                    echo "commits-behind=${COUNT}" >> "${GITHUB_OUTPUT}"
+
+            -   name: Rebase and push
+                if: steps.branch-check.outputs.exists == 'true' && steps.drift-check.outputs.commits-behind != '0'
+                run: |
+                    git config user.name "github-actions[bot]"
+                    git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+                    git checkout -b l10n origin/l10n
+
+                    if ! git rebase origin/main; then
+                        git rebase --abort
+                        echo "::error::Rebase of l10n onto main failed due to conflicts. Manual intervention required."
+                        exit 1
+                    fi
+
+                    git push --force-with-lease origin l10n:l10n

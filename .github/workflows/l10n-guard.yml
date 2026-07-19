@@ -11,7 +11,7 @@ on:
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
-    cancel-in-progress: true
+    cancel-in-progress: false
 
 jobs:
     guard:
@@ -23,12 +23,14 @@ jobs:
             pull-requests: write
 
         steps:
-            -   name: Close PR if locale .resx files are modified by non-Crowdin actor
+            -   name: Flag locale .resx files modified by non-Crowdin actor
                 uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
                 with:
                     script: |
-                        if (context.actor === 'visus-svc') {
-                            core.info('Actor is visus-svc — skipping.');
+                        const MARKER = '<!-- l10n-guard -->';
+
+                        if (context.actor === 'visus-svc' || context.actor === 'github-actions[bot]') {
+                            core.info(`Actor is ${context.actor} — skipping.`);
                             return;
                         }
 
@@ -45,38 +47,60 @@ jobs:
                             .map(f => f.filename)
                             .filter(name => /Resources\/Resources\.[^.]+\.resx$/.test(name));
 
+                        const comments = await github.paginate(
+                            github.rest.issues.listComments,
+                            {
+                                owner: context.repo.owner,
+                                repo: context.repo.repo,
+                                issue_number: context.payload.pull_request.number,
+                            }
+                        );
+
+                        const existingComment = comments.find(c => c.body.includes(MARKER));
+
                         if (localeResxFiles.length === 0) {
                             core.info('No locale .resx files found in diff — skipping.');
+
+                            if (existingComment) {
+                                core.info('Removing stale locale-guard comment.');
+                                await github.rest.issues.deleteComment({
+                                    owner: context.repo.owner,
+                                    repo: context.repo.repo,
+                                    comment_id: existingComment.id,
+                                });
+                            }
+
                             return;
                         }
 
                         core.info(`Locale .resx files detected: ${localeResxFiles.join(', ')}`);
 
-                        await github.rest.issues.createComment({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            issue_number: context.payload.pull_request.number,
-                            body: [
-                                'Thank you for your contribution!',
-                                '',
-                                'Locale resource files (`Resources.*.resx`) are managed exclusively through [Crowdin](https://crowdin.com) and cannot be accepted via direct pull requests.',
-                                '',
-                                'To submit a translation or correction, please visit the [Crowdin project](https://crowdin.com/project/visus-io-addressvalidation) and make your changes there. Once the translations are reviewed and approved, Crowdin will automatically open a pull request on your behalf.',
-                                '',
-                                'This pull request has been closed automatically.',
-                            ].join('\n'),
-                        });
+                        const body = [
+                            MARKER,
+                            'Thank you for your contribution!',
+                            '',
+                            'Locale resource files (`Resources.*.resx`) are managed exclusively through [Crowdin](https://crowdin.com) and cannot be accepted via direct pull requests.',
+                            '',
+                            'To submit a translation or correction, please visit the [Crowdin project](https://crowdin.com/project/visus-io-addressvalidation) and make your changes there. Once the translations are reviewed and approved, Crowdin will automatically open a pull request on your behalf.',
+                            '',
+                            'Please remove the following files from this pull request:',
+                            ...localeResxFiles.map(f => `- \`${f}\``),
+                        ].join('\n');
 
-                        await github.rest.issues.addLabels({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            issue_number: context.payload.pull_request.number,
-                            labels: ['Status: Rejected'],
-                        });
+                        if (existingComment) {
+                            await github.rest.issues.updateComment({
+                                owner: context.repo.owner,
+                                repo: context.repo.repo,
+                                comment_id: existingComment.id,
+                                body,
+                            });
+                        } else {
+                            await github.rest.issues.createComment({
+                                owner: context.repo.owner,
+                                repo: context.repo.repo,
+                                issue_number: context.payload.pull_request.number,
+                                body,
+                            });
+                        }
 
-                        await github.rest.pulls.update({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            pull_number: context.payload.pull_request.number,
-                            state: 'closed',
-                        });
+                        core.setFailed(`Locale resource files modified: ${localeResxFiles.join(', ')}`);

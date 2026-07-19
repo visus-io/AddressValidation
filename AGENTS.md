@@ -28,6 +28,11 @@
 - Before flagging or "fixing" any whitespace/spacing style in review (e.g. spaces inside parentheses, brace placement, blank lines), check `.editorconfig` first — do not assume a convention from general C# style. For example, `csharp_space_between_parentheses = control_flow_statements, expressions` means `if ( condition )` with inner spaces is correct here, not a defect, even though it looks unusual.
 - Before finishing any change that touches a `.cs` file under `src/` or `tests/`, run `dotnet format whitespace`, `dotnet format style --severity info`, and `dotnet format analyzers --severity info` against `AddressValidation.slnx` with `--verify-no-changes` (omit it to apply fixes) to catch style/analyzer violations (e.g. IDE0028, IDE03xx, MA0007) that the build alone does not surface. Skip this for changes confined to other paths (e.g. `docs/`, root-level `.md` files) — there is no C# to format.
 
+## YAML and Workflow Files
+
+- Before finishing any change that touches a `.yml`/`.yaml` file, check whether `yamllint` is available (`command -v yamllint`) and, if so, run it against the changed file(s) (config lives at `.yamllint.yml`). Skip silently only if the tool is not installed.
+- If the changed `.yml` file is a GitHub Actions workflow under `.github/workflows/`, additionally check whether `actionlint` is available (`command -v actionlint`) and, if so, run it against the changed file(s). Skip silently only if the tool is not installed.
+
 ## Project Structure Rules
 
 - New provider integrations go under `src/` and must mirror the canonical directory layout described in ARCHITECTURE.md (Abstractions, Adapters, Clients, Configuration, Constants.cs, Contracts, Extensions, Mappers, Models, Resources, Serialization, Services, Validation).

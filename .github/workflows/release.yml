@@ -108,11 +108,13 @@ jobs:
             -   name: Generate job summary
                 if: success()
                 run: |
-                    echo "## Release Published" >> "${GITHUB_STEP_SUMMARY}"
-                    echo "" >> "${GITHUB_STEP_SUMMARY}"
-                    echo "**Version:** ${{ needs.pack.outputs.version }}" >> "${GITHUB_STEP_SUMMARY}"
-                    echo "" >> "${GITHUB_STEP_SUMMARY}"
-                    echo "### Published Packages" >> "${GITHUB_STEP_SUMMARY}"
-                    for f in nupkgs/*.nupkg; do
-                        echo "- \`$(basename "$f")\`" >> "${GITHUB_STEP_SUMMARY}"
-                    done
+                    {
+                        echo "## Release Published"
+                        echo ""
+                        echo "**Version:** ${{ needs.pack.outputs.version }}"
+                        echo ""
+                        echo "### Published Packages"
+                        for f in nupkgs/*.nupkg; do
+                            echo "- \`$(basename "$f")\`"
+                        done
+                    } >> "${GITHUB_STEP_SUMMARY}"
