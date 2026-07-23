@@ -29,7 +29,7 @@ jobs:
                     script: |
                         const MARKER = '<!-- l10n-guard -->';
 
-                        if (context.actor === 'visus-svc' || context.actor === 'github-actions[bot]') {
+                        if (context.actor === 'visus-svc' || context.actor === 'github-actions[bot]' || context.actor === 'renovate[bot]') {
                             core.info(`Actor is ${context.actor} — skipping.`);
                             return;
                         }
