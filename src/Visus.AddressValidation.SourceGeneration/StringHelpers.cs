@@ -12,7 +12,7 @@ internal static class StringHelpers
     /// <param name="name">The identifier to convert.</param>
     /// <returns>
     ///     <paramref name="name" /> with its first character lowercased. Returns the original value if
-    ///     <paramref name="name" /> is <see langword="null" /> or empty.
+    ///     <paramref name="name" /> is <see langword="null" />, empty, or all white space.
     /// </returns>
     internal static string ToCamelCase(string name)
     {
@@ -20,8 +20,8 @@ internal static class StringHelpers
     }
 
     /// <summary>
-    ///     Converts a fully qualified type name into a safe file name. It replaces characters that file systems
-    ///     reject.
+    ///     Converts a fully qualified type name into a safe file name. It removes <c>global::</c> and replaces
+    ///     <c>.</c>, <c>&lt;</c>, and <c>&gt;</c> with underscores.
     /// </summary>
     /// <param name="fullyQualifiedName">The fully qualified type name to convert.</param>
     /// <returns>

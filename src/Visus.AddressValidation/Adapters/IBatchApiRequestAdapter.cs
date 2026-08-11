@@ -24,7 +24,8 @@ public interface IBatchApiRequestAdapter<in TRequest, TApiResponse>
     /// <param name="cancellationToken">A token that cancels the operation.</param>
     /// <remarks>
     ///     Implementations must submit <paramref name="requests" /> to the provider in the given order. Callers
-    ///     correlate each <typeparamref name="TApiResponse" /> item back to its request strictly by position.
+    ///     correlate each item within the resulting <typeparamref name="TApiResponse" /> back to its request,
+    ///     strictly by position.
     /// </remarks>
     /// <returns>
     ///     A task that represents the asynchronous operation. The task result holds the API response, or
