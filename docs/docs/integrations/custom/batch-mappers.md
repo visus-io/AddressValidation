@@ -78,4 +78,4 @@ internal sealed class BatchAddressValidationResponseMapper : IBatchApiResponseMa
 > When response fields are shared between the singular and batch response DTOs, factor the per-item mapping logic (including `GetCustomResponseData()` handling, see [Data Models](xref:custom-models)) into an internal static helper and call it from both the singular and batch response mappers.
 
 > [!NOTE]
-> Mark both batch mappers `internal` unless you redistribute them as a library.
+> Mark both batch mappers `internal`. This reduces the public API surface if you redistribute the integration as a library.

@@ -61,4 +61,4 @@ private async Task<ApiResponse?> ValidateAddressesInternalAsync(ApiRequest reque
 ```
 
 > [!NOTE]
-> Mark the batch request adapter `internal` unless you redistribute it as a library.
+> Mark the batch request adapter `internal`. This reduces the public API surface if you redistribute the integration as a library.

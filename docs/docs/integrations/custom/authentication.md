@@ -92,7 +92,7 @@ internal sealed class MyAuthenticationClient : IAuthenticationClient
 > The [`DefaultJsonSerializerContext`](xref:Visus.AddressValidation.Serialization.Json.DefaultJsonSerializerContext) instance passed to [`ReadFromJsonAsync(...)`](https://learn.microsoft.com/en-us/dotnet/api/system.net.http.json.httpcontentjsonextensions.readfromjsonasync) is a System.Text.Json [source generator](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation), required for correct behavior in trimmed and native AOT deployments.
 
 > [!NOTE]
-> Mark the authentication client `internal` unless you redistribute it as a library.
+> Mark the authentication client `internal`. This reduces the public API surface if you redistribute the integration as a library.
 
 ## Authentication Service
 
@@ -158,4 +158,4 @@ internal sealed class MyAuthenticationService : AbstractAuthenticationService<My
 > [`BearerTokenDelegatingHandler<TClient>`](xref:Visus.AddressValidation.Http.BearerTokenDelegatingHandler`1) uses this service to attach a [bearer token](https://oauth.net/2/bearer-tokens/) to the request automatically. See the <xref:custom-registering-services> page for details.
 
 > [!NOTE]
-> Mark the authentication service `internal` unless you redistribute it as a library.
+> Mark the authentication service `internal`. This reduces the public API surface if you redistribute the integration as a library.

@@ -29,7 +29,7 @@ internal sealed class AddressValidationService : AbstractAddressValidationServic
 > No additional logic belongs here. The base class manages the full validation pipeline: pre-validating the request, calling the API via the [request adapter](xref:custom-validation-client), validating the response, and mapping it to an [`IAddressValidationResponse`](xref:Visus.AddressValidation.Models.IAddressValidationResponse).
 
 > [!NOTE]
-> Mark the validation service `internal` unless you redistribute it as a library.
+> Mark the validation service `internal`. This reduces the public API surface if you redistribute the integration as a library.
 
 ## Options
 

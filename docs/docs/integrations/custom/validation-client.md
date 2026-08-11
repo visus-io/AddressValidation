@@ -78,7 +78,7 @@ internal sealed class MyAddressValidationClient
 > Redact the `Authorization` header from HTTP logs. Configure this during [service registration](xref:custom-registering-services) via `RedactLoggedHeaders(["Authorization"])` on the `IHttpClientBuilder` — there is nothing to configure in the client itself. Without this configuration, bearer tokens appear in structured logs.
 
 > [!NOTE]
-> Mark the validation client `internal` unless you redistribute it as a library.
+> Mark the validation client `internal`. This reduces the public API surface if you redistribute the integration as a library.
 
 ## Request Adapter
 
@@ -108,4 +108,4 @@ internal sealed class ApiRequestAdapter : IApiRequestAdapter<MyAddressValidation
 ```
 
 > [!NOTE]
-> Mark the request adapter `internal` unless you redistribute it as a library.
+> Mark the request adapter `internal`. This reduces the public API surface if you redistribute the integration as a library.

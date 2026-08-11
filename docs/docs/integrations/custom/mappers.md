@@ -29,7 +29,7 @@ internal sealed class AddressValidationRequestMapper : IApiRequestMapper<MyAddre
 ```
 
 > [!NOTE]
-> Mark the request mapper `internal` unless you redistribute it as a library.
+> Mark the request mapper `internal`. This reduces the public API surface if you redistribute the integration as a library.
 
 ## Response Mapper
 
@@ -91,4 +91,4 @@ internal sealed class AddressValidationResponseMapper : IApiResponseMapper<ApiRe
 > ```
 
 > [!NOTE]
-> Mark the response mapper `internal` unless you redistribute it as a library.
+> Mark the response mapper `internal`. This reduces the public API surface if you redistribute the integration as a library.
