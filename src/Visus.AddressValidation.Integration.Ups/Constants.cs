@@ -3,22 +3,22 @@ namespace Visus.AddressValidation.Integration.Ups;
 using AddressValidation.Abstractions;
 
 /// <summary>
-///     Configuration Constants for UPS Service Integration
+///     Configuration constants for the UPS integration.
 /// </summary>
 public static class Constants
 {
     /// <summary>
-    ///     UPS API Development Endpoint
+    ///     The UPS API development endpoint.
     /// </summary>
     public static readonly Uri DevelopmentEndpointUri = new("https://wwwcie.ups.com");
 
     /// <summary>
-    ///     UPS API Production Endpoint
+    ///     The UPS API production endpoint.
     /// </summary>
     public static readonly Uri ProductionEndpointUri = new("https://onlinetools.ups.com");
 
     /// <summary>
-    ///     Countries that are supported by the UPS Address Validation API.
+    ///     The countries the UPS Address Validation API supports.
     /// </summary>
     public static readonly FrozenSet<CountryCode> SupportedCountries =
     [

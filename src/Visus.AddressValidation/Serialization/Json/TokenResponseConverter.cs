@@ -10,7 +10,7 @@ using Http;
 /// <remarks>
 ///     This converter handles both snake_case JSON property names (e.g. <c>access_token</c>) and
 ///     PascalCase property names (e.g. <c>AccessToken</c>). The <see cref="TokenResponse.ExpiresIn" />
-///     field is handled as either a JSON number or a string representation of an integer.
+///     field accepts either a JSON number or a numeric string.
 /// </remarks>
 public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
 {
@@ -160,7 +160,7 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
     }
 
     /// <summary>
-    ///     Parses the <c>expires_in</c> value from the current JSON token, supporting both
+    ///     Parses the <c>expires_in</c> value from the current JSON token. It accepts both
     ///     numeric and string representations.
     /// </summary>
     /// <param name="reader">The reader positioned at the value token to parse.</param>

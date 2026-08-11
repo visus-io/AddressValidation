@@ -14,8 +14,8 @@ using Validation;
 ///     The type of the validation request. Must derive from <see cref="AbstractAddressValidationRequest" />.
 /// </typeparam>
 /// <typeparam name="TApiResponse">
-///     The type of the raw response returned by the underlying service API. Mapped to an
-///     <see cref="IAddressValidationResponse" /> by an <see cref="IApiResponseMapper{TApiResponse}" />.
+///     The type of API response the provider returns. An <see cref="IApiResponseMapper{TApiResponse}" />
+///     maps it to an <see cref="IAddressValidationResponse" />.
 /// </typeparam>
 public abstract class AbstractAddressValidationService<TRequest, TApiResponse> : IAddressValidationService<TRequest>
     where TRequest : AbstractAddressValidationRequest
@@ -53,21 +53,21 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
     ///     Initializes a new instance of <see cref="AbstractAddressValidationService{TRequest, TApiResponse}" />.
     /// </summary>
     /// <param name="requestAdapter">
-    ///     An <see cref="IApiRequestAdapter{TRequest, TApiResponse}" /> used to forward
-    ///     <typeparamref name="TRequest" /> instances to the underlying API and return the raw
+    ///     An <see cref="IApiRequestAdapter{TRequest, TApiResponse}" /> that sends
+    ///     <typeparamref name="TRequest" /> instances to the provider and returns the
     ///     <typeparamref name="TApiResponse" />.
     /// </param>
     /// <param name="responseMapper">
-    ///     An <see cref="IApiResponseMapper{TApiResponse}" /> used to map <typeparamref name="TApiResponse" />
+    ///     An <see cref="IApiResponseMapper{TApiResponse}" /> that maps <typeparamref name="TApiResponse" />
     ///     instances to an <see cref="IAddressValidationResponse" />.
     /// </param>
     /// <param name="requestValidator">
-    ///     An <see cref="IValidator{T}" /> used to validate <typeparamref name="TRequest" /> instances
-    ///     before they are sent to the underlying API.
+    ///     An <see cref="IValidator{T}" /> that validates <typeparamref name="TRequest" /> instances
+    ///     before the service sends them to the provider.
     /// </param>
     /// <param name="responseValidator">
-    ///     An <see cref="IValidator{T}" /> used to validate <typeparamref name="TApiResponse" /> instances
-    ///     returned by the underlying API.
+    ///     An <see cref="IValidator{T}" /> that validates <typeparamref name="TApiResponse" /> instances
+    ///     the provider returns.
     /// </param>
     /// <exception cref="ArgumentNullException">
     ///     Thrown when <paramref name="requestAdapter" />, <paramref name="responseMapper" />,

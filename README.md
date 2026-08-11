@@ -14,7 +14,7 @@
 | `VisusIO.AddressValidation.Integration.PitneyBowes` | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation.Integration.PitneyBowes?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.PitneyBowes) | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation.Integration.PitneyBowes?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.PitneyBowes) |
 | `VisusIO.AddressValidation.Integration.Ups`         | [![NuGet Version](https://img.shields.io/nuget/v/VisusIO.AddressValidation.Integration.Ups?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.Ups)                 | [![NuGet Downloads](https://img.shields.io/nuget/dt/VisusIO.AddressValidation.Integration.Ups?style=flat-square&logo=nuget)](https://www.nuget.org/packages/VisusIO.AddressValidation.Integration.Ups)                 |
 
-AddressValidation is a .NET library that provides a unified, provider-agnostic API for validating physical mailing
+AddressValidation is a .NET library. It provides a unified, provider-agnostic API to validate physical mailing
 addresses.
 
 > [!NOTE]
@@ -45,8 +45,8 @@ dotnet add package VisusIO.AddressValidation.Integration.FedEx
 ### Registration
 
 All integrations require [
-`HybridCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.hybrid.hybridcache) for OAuth
-token caching. Register it alongside the integration at application startup:
+`HybridCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.hybrid.hybridcache) to cache
+access tokens. Register it alongside the integration at application startup:
 
 ```csharp
 builder.Services.AddHybridCache();
@@ -78,7 +78,7 @@ Configuration is read from `appsettings.json` under the `AddressValidationSettin
 | `ClientEnvironment` | No       | `PRODUCTION`, `DEVELOPMENT`, or `SANDBOX`. Defaults to `DEVELOPMENT` |
 
 > [!IMPORTANT]
-> `ClientId` and `ClientSecret` should be stored encrypted at rest.
+> Store `ClientId` and `ClientSecret` encrypted at rest.
 > See [Security](https://ave.projects.visus.io/docs/index.html#security) in the documentation for recommended
 > approaches.
 
@@ -141,12 +141,12 @@ public class ValidateController
 }
 ```
 
-The returned list is positionally aligned with `requests`. See the [documentation](https://ave.projects.visus.io/docs/index.html#batch-validation) for the full semantics.
+The returned list aligns positionally with `requests`. See the [documentation](https://ave.projects.visus.io/docs/index.html#batch-validation) for the full semantics.
 
 ### Instrumentation
 
-Every integration emits traces and metrics via `System.Diagnostics` (`ActivitySource` / `Meter`), which OpenTelemetry
-can collect directly. Both share the name in `AddressValidationTelemetry.SourceName`:
+Every integration emits traces and metrics via `System.Diagnostics` (`ActivitySource` / `Meter`). OpenTelemetry can
+collect this data directly. Both share the name in `AddressValidationTelemetry.SourceName`:
 
 ```csharp
 builder.Services.AddOpenTelemetry()

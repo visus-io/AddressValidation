@@ -39,10 +39,10 @@ public abstract class AbstractClientCredentialsAuthenticationClient : IAuthentic
     protected abstract Uri TokenUri { get; }
 
     /// <summary>
-    ///     Gets a value indicating whether <see cref="ClientId" /> and <see cref="ClientSecret" /> are sent as an
-    ///     <c>Authorization: Basic</c> header. When <see langword="false" />, they are sent as <c>client_id</c> and
-    ///     <c>client_secret</c> form fields in the request body instead. The default implementation returns
-    ///     <see langword="false" />.
+    ///     Gets a value indicating whether the client sends <see cref="ClientId" /> and <see cref="ClientSecret" />
+    ///     as an <c>Authorization: Basic</c> header. When <see langword="false" />, it sends them as
+    ///     <c>client_id</c> and <c>client_secret</c> form fields in the request body instead. The default
+    ///     implementation returns <see langword="false" />.
     /// </summary>
     protected virtual bool UseHttpBasicAuthentication => false;
 

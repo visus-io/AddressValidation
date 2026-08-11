@@ -2,8 +2,8 @@ namespace Visus.AddressValidation;
 
 /// <summary>
 ///     Marks a property as part of the custom response data for an address
-///     validation result, optionally overriding the name used when the property
-///     is serialized or mapped.
+///     validation result. An optional argument overrides the name used when
+///     the property is serialized or mapped.
 /// </summary>
 [ExcludeFromCodeCoverage]
 [AttributeUsage(AttributeTargets.Property)]
@@ -38,8 +38,7 @@ public sealed class CustomResponseDataPropertyAttribute : Attribute
 
     /// <summary>
     ///     Gets the explicit name to use for the property, or
-    ///     <see langword="null" /> if the property's declared name should be
-    ///     used.
+    ///     <see langword="null" /> to use the property's declared name.
     /// </summary>
     public string? Name { get; }
 }

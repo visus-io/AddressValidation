@@ -5,7 +5,7 @@ uid: custom-validation-client
 
 ## Validation Client
 
-The validation client is a [typed `HttpClient`](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests#how-to-use-typed-clients-with-ihttpclientfactory) whose sole responsibility is calling the provider's address validation endpoint and returning the raw response DTO.
+The validation client is a [typed `HttpClient`](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests#how-to-use-typed-clients-with-ihttpclientfactory). It calls the provider's address validation endpoint and returns the API response — nothing else.
 
 Below is an example of a validation client that sends a `POST` request to the provider API and deserializes the result:
 
@@ -75,10 +75,10 @@ internal sealed class MyAddressValidationClient
 > Unlike the [Authentication Client](xref:custom-authentication), the validation client does **not** implement an interface. It is referenced directly by its concrete type from the request adapter.
 
 > [!IMPORTANT]
-> The `Authorization` header must be redacted from HTTP logs. This is configured during [service registration](xref:custom-registering-services) via `RedactLoggedHeaders(["Authorization"])` on the `IHttpClientBuilder`; there is nothing to configure in the client itself. Without this configuration, bearer tokens will appear in structured logs.
+> Redact the `Authorization` header from HTTP logs. Configure this during [service registration](xref:custom-registering-services) via `RedactLoggedHeaders(["Authorization"])` on the `IHttpClientBuilder` — there is nothing to configure in the client itself. Without this configuration, bearer tokens appear in structured logs.
 
 > [!NOTE]
-> It is not necessary for the validation client to be `internal`, but it is **strongly** recommended if redistributing as a library.
+> Mark the validation client `internal`. This reduces the public API surface if you redistribute the integration as a library.
 
 ## Request Adapter
 
@@ -108,4 +108,4 @@ internal sealed class ApiRequestAdapter : IApiRequestAdapter<MyAddressValidation
 ```
 
 > [!NOTE]
-> It is not necessary for the request adapter to be `internal`, but it is **strongly** recommended if redistributing as a library.
+> Mark the request adapter `internal`. This reduces the public API surface if you redistribute the integration as a library.

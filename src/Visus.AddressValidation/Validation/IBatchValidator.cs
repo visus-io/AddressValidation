@@ -11,18 +11,17 @@ public interface IBatchValidator<in T>
     /// <summary>
     ///     Executes validation against the specified instance, producing one result per expected item.
     /// </summary>
-    /// <param name="instance">The instance which will be validated against.</param>
+    /// <param name="instance">The instance to validate.</param>
     /// <param name="requestIndexes">
-    ///     The original, caller-facing index of each request actually sent to the API, in the same order the
-    ///     requests were sent. Its count is the number of items expected in the result; implementations should use
-    ///     the values themselves (rather than the positional loop index) when a validation message needs to
-    ///     reference an item's position, since requests that failed local validation may have been filtered out
-    ///     before the API call.
+    ///     The original, caller-facing index of each request sent to the provider, in the order sent. Its count is
+    ///     the number of items expected in the result. Use these values, instead of the positional loop index,
+    ///     when a validation message must reference an item's original position. Local validation may filter out
+    ///     some requests before the batch call, so the loop index does not match the original position.
     /// </param>
-    /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
+    /// <param name="cancellationToken">A token that cancels the operation.</param>
     /// <returns>
     ///     A list of exactly <c>requestIndexes.Count</c> <see cref="IValidationResult" /> objects, positionally
-    ///     aligned with the items sent to the API.
+    ///     aligned with the items sent to the provider.
     /// </returns>
     ValueTask<IReadOnlyList<IValidationResult>> ExecuteAsync(T instance, IReadOnlyList<int> requestIndexes, CancellationToken cancellationToken = default);
 }

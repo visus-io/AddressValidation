@@ -5,7 +5,7 @@ uid: custom-registering-services
 
 ## Registering Services
 
-After implementing all components, wire them together in a static extension method on [`IServiceCollection`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection). This is the pattern used by all built-in integrations and is the single call a consumer makes at application startup.
+Implement all components. Then wire them together in a static extension method on [`IServiceCollection`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection). All built-in integrations use this pattern — it is the single call a consumer makes at application startup.
 
 ## Validation Service
 
@@ -29,7 +29,7 @@ internal sealed class AddressValidationService : AbstractAddressValidationServic
 > No additional logic belongs here. The base class manages the full validation pipeline: pre-validating the request, calling the API via the [request adapter](xref:custom-validation-client), validating the response, and mapping it to an [`IAddressValidationResponse`](xref:Visus.AddressValidation.Models.IAddressValidationResponse).
 
 > [!NOTE]
-> It is not necessary for the validation service to be `internal`, but it is **strongly** recommended if redistributing as a library.
+> Mark the validation service `internal`. This reduces the public API surface if you redistribute the integration as a library.
 
 ## Options
 
@@ -64,7 +64,7 @@ public sealed partial class MyServiceOptionsValidator : IValidateOptions<MyServi
 ```
 
 > [!NOTE]
-> The `[OptionsValidator]` attribute generates validation of all `[Required]` and other data-annotation attributes declared on the options class at compile time. No manual validation code is needed unless cross-property rules are required; the cross-property `SANDBOX`/`EndpointUriOverride` rule is already handled by [`AbstractServiceOptions`](xref:Visus.AddressValidation.Configuration.AbstractServiceOptions).
+> The `[OptionsValidator]` attribute generates validation for all `[Required]` and other data-annotation attributes on the options class, at compile time. You need no manual validation code unless you have rules across properties. [`AbstractServiceOptions`](xref:Visus.AddressValidation.Configuration.AbstractServiceOptions) already handles the rule linking `SANDBOX` and `EndpointUriOverride`.
 
 ## Batch Validation Service (Optional)
 
@@ -92,7 +92,7 @@ internal sealed class BatchAddressValidationService : AbstractBatchAddressValida
 > [!NOTE]
 > `requestValidator` is the same [`IValidator<TRequest>`](xref:custom-validators) used by the singular pipeline; there is no separate batch request validator. Each request is still validated individually before the batch call is made. See [Batch Validators](xref:custom-batch-validators) for the response side, and [Batch Mappers](xref:custom-batch-mappers) and [Batch Validation Client](xref:custom-batch-validation-client) for the remaining components.
 
-Implement the required components (batch request adapter, batch request mapper, batch response mapper, batch response validator) as described in [Batch Mappers](xref:custom-batch-mappers), [Batch Validation Client](xref:custom-batch-validation-client), and [Batch Validators](xref:custom-batch-validators), then register them alongside the singular pipeline's registrations inside the same extension method:
+Implement the required components — batch request adapter, batch request mapper, batch response mapper, batch response validator — as described in [Batch Mappers](xref:custom-batch-mappers), [Batch Validation Client](xref:custom-batch-validation-client), and [Batch Validators](xref:custom-batch-validators). Then register them alongside the singular pipeline's registrations, inside the same extension method:
 
 ```csharp
 services.TryAddScoped<IBatchApiResponseMapper<ApiResponse>, BatchAddressValidationResponseMapper>();
@@ -153,7 +153,7 @@ public static class ServiceCollectionExtensions
 ```
 
 > [!IMPORTANT]
-> Use `TryAddSingleton` and `TryAddScoped` rather than `AddSingleton` and `AddScoped`. This prevents double-registration if the extension method is called more than once and allows consumers to substitute their own implementations before calling it.
+> Use `TryAddSingleton` and `TryAddScoped` instead of `AddSingleton` and `AddScoped`. This prevents double registration when the extension method is called more than once. It also lets consumers substitute their own implementations before calling it.
 
 > [!NOTE]
 > The authentication service is registered as `Singleton` because it holds the [`HybridCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.hybrid.hybridcache)-backed access token and must share that state across the application lifetime. All other integration services are `Scoped`.
@@ -161,7 +161,7 @@ public static class ServiceCollectionExtensions
 [!INCLUDE [hybrid-cache-required](../../includes/hybrid-cache-required.md)]
 
 > [!NOTE]
-> `ValidateOnStart()` surfaces configuration errors (such as missing required properties or an invalid `SANDBOX`/`EndpointUriOverride` combination) immediately at application startup rather than on the first validation request.
+> `ValidateOnStart()` surfaces configuration errors (such as missing required properties or an invalid `SANDBOX`/`EndpointUriOverride` combination) immediately at application startup, instead of on the first validation request.
 
 > [!IMPORTANT]
 > The type argument to [`BearerTokenDelegatingHandler<TClient>`](xref:Visus.AddressValidation.Http.BearerTokenDelegatingHandler`1) must match the exact authentication client type registered via `AddHttpClient<TClient>()`. A mismatch results in a runtime failure when the DI container tries to resolve the handler.
@@ -219,4 +219,4 @@ public class BatchValidateController
 ```
 
 > [!NOTE]
-> The returned list is positionally aligned with `requests`, not a single response, so there is no single status code to branch on. See [`IBatchAddressValidationService<TRequest>`](xref:Visus.AddressValidation.Services.IBatchAddressValidationService`1) for the full null/`EmptyAddressValidationResponse` semantics per entry.
+> The returned list aligns positionally with `requests` — it is not a single response, so there is no single status code to branch on. See [`IBatchAddressValidationService<TRequest>`](xref:Visus.AddressValidation.Services.IBatchAddressValidationService`1) for the full null/`EmptyAddressValidationResponse` semantics per entry.

@@ -4,7 +4,7 @@ title: Introduction | Custom Integration
 
 ## Introduction
 
-Building a custom integration for **AddressValidation** means implementing a set of well-defined, single-responsibility contracts. The framework handles orchestration (the validation pipeline, HTTP resilience, and token caching), so you only need to supply provider-specific logic.
+To build a custom integration for **AddressValidation**, implement a set of well-defined, single-responsibility contracts. The framework handles orchestration — the validation pipeline, HTTP resilience, and access token caching — so you only supply provider-specific logic.
 
 ## Steps
 

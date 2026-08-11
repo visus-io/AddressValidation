@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using Abstractions;
 
 /// <summary>
-///     Abstract base class for provider-specific address validation service
-///     options, providing common environment, endpoint, and sandbox validation
-///     behavior.
+///     Abstract base class for one provider's address validation service
+///     options. It defines common environment, endpoint, and sandbox
+///     validation behavior.
 /// </summary>
 public abstract class AbstractServiceOptions : IValidatableObject
 {
@@ -17,9 +17,9 @@ public abstract class AbstractServiceOptions : IValidatableObject
     public abstract Uri EndpointUri { get; }
 
     /// <summary>
-    ///     Gets or sets the target client environment, which determines
-    ///     whether requests are sent to the provider's sandbox or production
-    ///     endpoint. Defaults to
+    ///     Gets or sets the target client environment. It determines whether
+    ///     requests go to the provider's sandbox or production endpoint.
+    ///     Defaults to
     ///     <see cref="Abstractions.ClientEnvironment.DEVELOPMENT" />.
     /// </summary>
     public ClientEnvironment ClientEnvironment { get; set; } = ClientEnvironment.DEVELOPMENT;
@@ -32,13 +32,13 @@ public abstract class AbstractServiceOptions : IValidatableObject
     ///     <para>
     ///         This property is <b>required</b> when
     ///         <see cref="ClientEnvironment" /> is
-    ///         <see cref="ClientEnvironment.SANDBOX" />; validation will fail
-    ///         if it is <see langword="null" /> in that case.
+    ///         <see cref="ClientEnvironment.SANDBOX" />. Validation fails if
+    ///         it is <see langword="null" /> in that case.
     ///     </para>
     ///     <para>
-    ///         For all other environments this property is optional and, when
-    ///         set, has no effect — the endpoint is always resolved from
-    ///         <see cref="ClientEnvironment" />.
+    ///         For all other environments, this property is optional. When
+    ///         set, it has no effect — <see cref="ClientEnvironment" />
+    ///         always determines the endpoint.
     ///     </para>
     /// </remarks>
     public Uri? EndpointUriOverride { get; set; }
@@ -50,16 +50,15 @@ public abstract class AbstractServiceOptions : IValidatableObject
     ///     The context in which validation is performed.
     /// </param>
     /// <returns>
-    ///     A collection of <see cref="ValidationResult" /> instances describing
-    ///     any validation failures, or an empty collection if the options are
-    ///     valid.
+    ///     A collection of <see cref="ValidationResult" /> instances that
+    ///     describe validation failures. The collection is empty when the
+    ///     options are valid.
     /// </returns>
     /// <remarks>
     ///     Validates that <see cref="EndpointUriOverride" /> is not
     ///     <see langword="null" /> when <see cref="ClientEnvironment" /> is
-    ///     <see cref="ClientEnvironment.SANDBOX" />, since the sandbox
-    ///     environment requires an explicit endpoint to target a local mock
-    ///     server.
+    ///     <see cref="ClientEnvironment.SANDBOX" />. The sandbox environment
+    ///     needs an explicit endpoint to target a local mock server.
     /// </remarks>
     public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

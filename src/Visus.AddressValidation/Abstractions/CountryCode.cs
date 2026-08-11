@@ -5,7 +5,7 @@ namespace Visus.AddressValidation.Abstractions;
 using System.ComponentModel;
 
 /// <summary>
-///     Enumeration of ISO-3166-1 Alpha 2 Country Codes
+///     Enumeration of ISO-3166-1 Alpha 2 Country Codes.
 /// </summary>
 [JsonConverter(typeof(JsonStringEnumConverter<CountryCode>))]
 public enum CountryCode

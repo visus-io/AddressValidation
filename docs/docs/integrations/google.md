@@ -10,10 +10,9 @@ AddressValidation offers a complete integration to the [Google Address Validatio
 
 ## Credentials
 
-Before utilizing the integration, the setup and configuration of a [service account](https://cloud.google.com/iam/docs/service-account-overview) is required. 
-It is assumed that an active project with the [Google Address Validation API](https://developers.google.com/maps/documentation/address-validation/overview) enabled and available.
+Set up a [service account](https://cloud.google.com/iam/docs/service-account-overview) before you use this integration. You need an active project with the [Google Address Validation API](https://developers.google.com/maps/documentation/address-validation/overview) enabled.
 
-To create the service account, you can refer to the following [article](https://cloud.google.com/iam/docs/service-accounts-create#iam-service-accounts-create-console), or if you have access to the [gcloud CLI](https://cloud.google.com/cli?hl=en) you can run the following:
+To create the service account, follow this [article](https://cloud.google.com/iam/docs/service-accounts-create#iam-service-accounts-create-console). If you have access to the [gcloud CLI](https://cloud.google.com/cli?hl=en), run the following commands instead:
 
 # [Shell](#tab/tab-ave-google-gcloud-shell)
 ```bash
@@ -29,7 +28,7 @@ gcloud iam service-accounts create $SA_NAME `
 ```
 ---
 
-After the service account has been created, it will need to be granted a [Domain-wide Delegation](https://support.google.com/a/answer/162106?hl=en#zippy=%2Cset-up-domain-wide-delegation-for-a-client) for the scope `https://www.googleapis.com/auth/cloud-platform`. You can execute the following command to get the `oauth2ClientId` value, otherwise you can retrieve it from the [service accounts dashboard](https://console.cloud.google.com/iam-admin/serviceaccounts) under the heading `OAuth 2 Client ID`:
+After you create the service account, grant it [Domain-wide Delegation](https://support.google.com/a/answer/162106?hl=en#zippy=%2Cset-up-domain-wide-delegation-for-a-client) for the scope `https://www.googleapis.com/auth/cloud-platform`. Run the following command to get the `oauth2ClientId` value. You can also find it on the [service accounts dashboard](https://console.cloud.google.com/iam-admin/serviceaccounts), under the heading `OAuth 2 Client ID`:
 
 # [Shell](#tab/tab-ave-google-gcloud-shell)
 ```bash
@@ -41,7 +40,7 @@ gcloud iam service-accounts describe $SA_NAME@$PROJECT_ID.iam.gserviceaccount.co
 ```
 ---
 
-Finally, create your [service account key](https://cloud.google.com/iam/docs/keys-create-delete#iam-service-account-keys-create-gcloud) and store it in a safe location as it will be needed later.
+Finally, create your [service account key](https://cloud.google.com/iam/docs/keys-create-delete#iam-service-account-keys-create-gcloud). Store it in a safe location — you need it later.
 
 # [Shell](#tab/tab-ave-google-gcloud-shell)
 ```bash
@@ -72,7 +71,7 @@ Install-Package VisusIO.AddressValidation.Integration.Google
 ```
 ---
 
-At application startup, you will need to register the integration with the [Microsoft DI](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) container:
+Register the integration with the [Microsoft DI](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) container at application startup:
 
 ```csharp
 builder.Services.AddGoogleAddressValidation();
@@ -107,14 +106,14 @@ Configuration is bound from the `AddressValidationSettings:Google` section. The 
 | `AuthenticationUriOverride` | SANDBOX only | Custom authentication URI; required when `ClientEnvironment` is `SANDBOX` |
 
 > [!IMPORTANT]
-> Formatting of the `PrivateKey` value **must** be preserved (newlines included).
+> Preserve the formatting of the `PrivateKey` value, including newlines.
 
 > [!IMPORTANT]
-> `PrivateKey` should be stored encrypted at rest. See the [Security](../index.md#security) for additional details.
+> Store `PrivateKey` encrypted at rest. See [Security](../index.md#security) for more details.
 
 ## Standard Example
 
-With the setup and configuration now complete, you can use the validator:
+After you complete setup and configuration, use the validator:
 
 ```csharp
 public class ValidateController
@@ -141,10 +140,10 @@ public class ValidateController
 ```
 
 > [!NOTE]
-> [`EnableUspsCass`](xref:Visus.AddressValidation.Integration.Google.Models.GoogleAddressValidationRequest#Visus_AddressValidation_Integration_Google_Models_GoogleAddressValidationRequest_EnableUspsCass) is a computed property and will only be `true` if the Country is `US`.
+> [`EnableUspsCass`](xref:Visus.AddressValidation.Integration.Google.Models.GoogleAddressValidationRequest#Visus_AddressValidation_Integration_Google_Models_GoogleAddressValidationRequest_EnableUspsCass) is a computed property. It is `true` only when Country is `US`.
 
 > [!TIP]
-> When re-validating an address, be sure to set the property [`PreviousResponseId`](xref:Visus.AddressValidation.Integration.Google.Models.GoogleAddressValidationRequest#Visus_AddressValidation_Integration_Google_Models_GoogleAddressValidationRequest_PreviousResponseId) value within [`GoogleAddressValidationRequest`](xref:Visus.AddressValidation.Integration.Google.Models.GoogleAddressValidationRequest). The value can be retrieved from the [`CustomResponseData`](xref:Visus.AddressValidation.Models.IAddressValidationResponse#Visus_AddressValidation_Models_IAddressValidationResponse_CustomResponseData) dictionary with the key `responseId`.
+> When you revalidate an address, set [`PreviousResponseId`](xref:Visus.AddressValidation.Integration.Google.Models.GoogleAddressValidationRequest#Visus_AddressValidation_Integration_Google_Models_GoogleAddressValidationRequest_PreviousResponseId) on [`GoogleAddressValidationRequest`](xref:Visus.AddressValidation.Integration.Google.Models.GoogleAddressValidationRequest). Get this value from the [`CustomResponseData`](xref:Visus.AddressValidation.Models.IAddressValidationResponse#Visus_AddressValidation_Models_IAddressValidationResponse_CustomResponseData) dictionary, under the key `responseId`.
 
 # [Request](#tab/tab-ave-google-json-request)
 ```JSON
@@ -212,10 +211,9 @@ public class ValidateController
 [!INCLUDE [is-residential-note](../includes/is-residential-note.md)]
 
 > [!NOTE]
-> The properties `googlePlaceId`, `latitude`, `longitude`, and `responseId` will always be present in `customResponseData`. If USPS&reg; CASS&trade; is supported for the destination (currently only the `US`), then those properties will be present within `customResponseData`.
+> The properties `googlePlaceId`, `latitude`, `longitude`, and `responseId` are always present in `customResponseData`. When USPS&reg; CASS&trade; is supported for the destination (currently only `US`), those properties are present in `customResponseData`.
 
 > [!NOTE]
-> The `Suggestions` collection will always be empty for responses returned as the [Google Address Validation API](https://developers.google.com/maps/documentation/address-validation/overview)
-> does not provide address suggestions.
+> The `Suggestions` collection is always empty. The [Google Address Validation API](https://developers.google.com/maps/documentation/address-validation/overview) does not provide address suggestions.
 
 [!INCLUDE [internal-validation-note](../includes/internal-validation-note.md)]

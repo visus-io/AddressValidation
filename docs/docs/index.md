@@ -3,7 +3,7 @@ title: Introduction
 ---
 # AddressValidation
 
-AddressValidation is a .NET library with the goal of providing a simple and streamlined process of validating physical addresses.
+AddressValidation is a .NET library. It validates physical addresses through a simple, streamlined process.
 
 > [!NOTE]
 > AddressValidation supports [trimming](https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/prepare-libraries-for-trimming) and [native AOT deployments](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/).
@@ -20,45 +20,44 @@ AddressValidation comes with several service integrations pre-built and ready to
 | [UPS&reg; Address Validation API](https://developer.ups.com/api/reference)                                    | [UPS](integrations/ups.md)                   | United States                                                                                 | **Complete** |
 | [USPS&reg; Address Validation API](https://developer.usps.com/api/93)                                        |                                              | United States                                                                                 | *Planned*    |
 
-If there is no integration for a service you wish to you use, you can either open a [feature request](https://github.com/visus-io/AddressValidation/issues/new?template=feature_request.yml) or you can read on how to develop a [custom integration](integrations/custom/introduction.md).
+If no integration exists for the service you want, open a [feature request](https://github.com/visus-io/AddressValidation/issues/new?template=feature_request.yml). You can also build a [custom integration](integrations/custom/introduction.md).
 
 ## Batch Validation
 
-[`IBatchAddressValidationService<TRequest>`](xref:Visus.AddressValidation.Services.IBatchAddressValidationService`1) is an opt-in interface for integrations whose provider API natively supports validating multiple addresses in a single call. Where available, it lets you submit a list of requests and get back a positionally-aligned list of responses instead of issuing one call per address.
+[`IBatchAddressValidationService<TRequest>`](xref:Visus.AddressValidation.Services.IBatchAddressValidationService`1) is an opt-in interface for integrations whose provider API natively supports validating multiple addresses in a single call. Where available, submit a list of requests and get back a positionally-aligned list of responses, instead of one call per address.
 
 [FedEx](integrations/fedex.md#batch-example) is currently the only integration that implements it. If you are building a [custom integration](integrations/custom/introduction.md) against a provider that supports multi-address requests, see the [Batch Validation](integrations/custom/registering-services.md#batch-validation-service-optional) section of the custom integration guide.
 
 ## Caching
 
-To provide maximum performance all integrations within AddressValidation require [`HybridCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.hybrid.hybridcache) to cache authentication tokens. Register it at application startup:
+All AddressValidation integrations require [`HybridCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.hybrid.hybridcache) to cache access tokens and maximize performance. Register it at application startup:
 
 ```csharp
 builder.Services.AddHybridCache();
 ```
 
-By default, `HybridCache` uses an in-process (L1) cache, which is sufficient for single-server deployments, local development, and testing environments. For multi-server deployments, also register an [`IDistributedCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.distributed.idistributedcache) provider to serve as the distributed (L2) cache layer. Refer to the [documentation](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/distributed) for available providers.
+By default, `HybridCache` uses an in-process (L1) cache. This cache is sufficient for single-server deployments, local development, and testing environments. For multi-server deployments, also register an [`IDistributedCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.distributed.idistributedcache) provider as the distributed (L2) cache layer. See the [documentation](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/distributed) for available providers.
 
 > [!NOTE]
 > Currently only [access tokens](https://oauth.net/2/access-tokens/) are cached. Caching of requests and responses is not natively supported for two reasons:
 > - **Privacy regulations:** address data constitutes personally identifiable information (PII) subject to [GDPR](https://gdpr-info.eu/) and [CCPA](https://oag.ca.gov/privacy/ccpa).
-> - **Provider Terms of Service:** Google, Pitney Bowes, and UPS all restrict caching of API responses. Google and Pitney Bowes both permit temporary caching for up to 30 days under specific conditions (user consent, secure storage, no cross-user reuse); UPS prohibits all uses of response data not explicitly permitted by their agreement.
+> - **Provider Terms of Service:** Google, Pitney Bowes, and UPS all restrict caching of API responses. Google and Pitney Bowes permit temporary caching for up to 30 days under specific conditions (user consent, secure storage, no cross-user reuse). UPS prohibits all use of response data not explicitly permitted by its agreement.
 
 ## Security
 
 > [!IMPORTANT]
-> AddressValidation **does not** (and will not) provide a facility for encrypting or decrypting sensitive information so please read this section carefully.
+> AddressValidation **does not** provide a way to encrypt or decrypt sensitive information. Read this section carefully.
 
-The pre-built integrations provided by AddressValidation all make use of an `IConfiguration` instance to read their respective configuration values.
-As a result, many of the configuration values will contain sensitive information such as client secrets and will need to be secured properly.
+The pre-built integrations use an `IConfiguration` instance to read their configuration values. Some of these values, such as client secrets, contain sensitive information. Secure this information properly.
 
-Fortunately, there are several options available to ensure that this information is stored securely:
+Several options can store this information securely:
 
 - [Azure AppConfig with Azure KeyVault](https://learn.microsoft.com/en-us/samples/azure/azure-sdk-for-net/app-secrets-configuration)
 - [Custom Configuration Provider with AWS Secrets Manager](https://aws.amazon.com/blogs/modernizing-with-aws/how-to-load-net-configuration-from-aws-secrets-manager/)
 - [Custom Configuration Provider with Google Secrets Manager](https://www.nuget.org/packages/Gcp.SecretManager.Provider)
 
-For any other implementation a [custom configuration provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/custom-configuration-provider) will be required.
+For other implementations, use a [custom configuration provider](https://learn.microsoft.com/en-us/dotnet/core/extensions/custom-configuration-provider).
 
 ## Instrumentation
 
-All integrations emit OpenTelemetry-compatible traces and metrics via `System.Diagnostics`, covering both address validation calls and OAuth token fetches/cache results. See [Instrumentation](instrumentation.md) for setup, the full list of activities and metrics, and export examples for popular observability backends.
+All integrations emit OpenTelemetry-compatible traces and metrics via `System.Diagnostics`. This covers address validation calls and access token fetches and cache results. See [Instrumentation](instrumentation.md) for setup steps and the full list of activities and metrics. It also includes export examples for popular observability backends.

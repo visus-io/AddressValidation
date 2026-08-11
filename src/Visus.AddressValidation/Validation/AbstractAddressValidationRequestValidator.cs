@@ -27,10 +27,10 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
     /// </summary>
     /// <param name="instance">The request instance to pre-validate.</param>
     /// <param name="results">The set of <see cref="ValidationState" /> objects for the current instance.</param>
-    /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
+    /// <param name="cancellationToken">A token that cancels the operation.</param>
     /// <returns>
-    ///     <see langword="true" /> when the country is present and supported; otherwise <see langword="false" />,
-    ///     and an error is added to <paramref name="results" />.
+    ///     <see langword="true" /> when the country is present and supported. Otherwise,
+    ///     <see langword="false" />, and this method adds an error to <paramref name="results" />.
     /// </returns>
     protected override ValueTask<bool> PreValidateAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
@@ -54,12 +54,12 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
     }
 
     /// <summary>
-    ///     Validates the address fields of <paramref name="instance" />, checking that address lines, city/town,
-    ///     state/province, and postal code are present and within the expected constraints for the given country.
+    ///     Validates the address fields of <paramref name="instance" />. It checks that address lines, city/town,
+    ///     state/province, and postal code are present and meet the constraints for the given country.
     /// </summary>
     /// <param name="instance">The request instance to validate.</param>
     /// <param name="results">The set of <see cref="ValidationState" /> objects for the current instance.</param>
-    /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
+    /// <param name="cancellationToken">A token that cancels the operation.</param>
     /// <returns>A task that represents the asynchronous validation operation.</returns>
     protected override ValueTask ValidateAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {

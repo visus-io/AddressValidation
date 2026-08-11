@@ -1,7 +1,7 @@
 namespace Visus.AddressValidation.Validation;
 
 /// <summary>
-///     Enumeration of validation severity levels
+///     Enumeration of validation severity levels.
 /// </summary>
 public enum ValidationSeverity
 {

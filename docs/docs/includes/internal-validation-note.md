@@ -1,5 +1,5 @@
 > [!NOTE]
 > AddressValidation runs an internal validation engine under the covers to
-> validate both the request and the response. You will find these results in the `Warnings` and `Errors` collections from the [`IAddressValidationResponse`](xref:Visus.AddressValidation.Models.IAddressValidationResponse) object.
+> validate both the request and the response. These results appear in the `Warnings` and `Errors` collections on the [`IAddressValidationResponse`](xref:Visus.AddressValidation.Models.IAddressValidationResponse) object.
 > 
-> Items within the `Suggestion` collection **are not** processed by the internal validator.
+> The internal validator **does not** process items in the `Suggestions` collection.

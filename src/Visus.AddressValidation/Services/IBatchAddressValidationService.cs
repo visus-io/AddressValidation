@@ -3,8 +3,8 @@ namespace Visus.AddressValidation.Services;
 using Models;
 
 /// <summary>
-///     Opt-in abstraction for an <see cref="IAddressValidationService{TRequest}" /> whose underlying provider API
-///     natively supports validating multiple addresses in a single call.
+///     Opt-in abstraction for an <see cref="IAddressValidationService{TRequest}" /> whose provider API natively
+///     supports batches of addresses in a single call.
 /// </summary>
 /// <typeparam name="TRequest">
 ///     The type of the validation request. Must derive from <see cref="AbstractAddressValidationRequest" />.
@@ -15,19 +15,19 @@ public interface IBatchAddressValidationService<in TRequest>
     /// <summary>
     ///     Validates the specified <paramref name="requests" /> asynchronously as a single batch call.
     /// </summary>
-    /// <param name="requests">The addresses to validate, in the order results should be returned in.</param>
-    /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
+    /// <param name="requests">The addresses to validate, listed in the order the response must preserve.</param>
+    /// <param name="cancellationToken">A token that cancels the operation.</param>
     /// <remarks>
-    ///     The returned list always has the same length and the same order as <paramref name="requests" />. An entry
-    ///     is an <see cref="EmptyAddressValidationResponse" /> when the corresponding request failed local
-    ///     validation, or when the provider could not resolve that specific address. An entry is
-    ///     <see langword="null" /> only when the entire underlying API call for the batch produced no response at
-    ///     all (mirroring the "no response" semantics of <see cref="IAddressValidationService{TRequest}.ValidateAsync" />);
-    ///     this can only ever apply to positions that held a locally-valid request.
+    ///     The returned list has the same length and order as <paramref name="requests" />. An entry is an
+    ///     <see cref="EmptyAddressValidationResponse" /> when the corresponding request fails local validation, or
+    ///     when the provider cannot resolve that address. An entry is <see langword="null" /> only when the batch
+    ///     API call produces no response at all. This matches the "no response" semantics of
+    ///     <see cref="IAddressValidationService{TRequest}.ValidateAsync" />. A <see langword="null" /> entry can
+    ///     only occur at a position that held a locally-valid request.
     /// </remarks>
     /// <returns>
-    ///     A task producing a list of <see cref="IAddressValidationResponse" /> (or <see langword="null" />),
-    ///     positionally aligned with <paramref name="requests" />.
+    ///     A task that returns a list of <see cref="IAddressValidationResponse" /> (or <see langword="null" />)
+    ///     items, positionally aligned with <paramref name="requests" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="requests" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentException">

@@ -1,11 +1,11 @@
 namespace Visus.AddressValidation.SourceGeneration;
 
 /// <summary>
-///     Holds metadata about a property discovered during source generation.
+///     Holds metadata about a property that the source generator discovers.
 /// </summary>
 /// <param name="ContainingType">Metadata about the type that declares this property.</param>
 /// <param name="Key">
-///     The key used to look up the property value, typically the value supplied via
+///     The key used to look up the property value. This is usually the value supplied via
 ///     <c>CustomResponseDataPropertyAttribute</c>.
 /// </param>
 /// <param name="Name">The name of the property as declared in source code.</param>
@@ -15,8 +15,8 @@ internal readonly record struct PropertyInfo(
     string Name)
 {
     /// <summary>
-    ///     Determines whether this instance is equal to another <see cref="PropertyInfo" />,
-    ///     using case-insensitive comparisons for all string fields.
+    ///     Determines whether this instance equals another <see cref="PropertyInfo" />. It compares all string
+    ///     fields case-insensitively.
     /// </summary>
     /// <param name="other">The other <see cref="PropertyInfo" /> to compare against.</param>
     /// <returns>

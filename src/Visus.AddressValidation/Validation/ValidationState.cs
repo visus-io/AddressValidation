@@ -3,7 +3,7 @@ namespace Visus.AddressValidation.Validation;
 using System.Globalization;
 
 /// <summary>
-///     Defines a validation state
+///     Defines a validation state.
 /// </summary>
 public readonly struct ValidationState : IEquatable<ValidationState>
 {
@@ -40,7 +40,7 @@ public readonly struct ValidationState : IEquatable<ValidationState>
     }
 
     /// <summary>
-    ///     Creates an error validation with a given message.
+    ///     Creates an error validation state with a given message.
     /// </summary>
     /// <param name="messageFormat">
     ///     A

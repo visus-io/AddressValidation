@@ -1,7 +1,7 @@
 namespace Visus.AddressValidation;
 
 /// <summary>
-///     The exception that is thrown when a class does not implement a required base class.
+///     Indicates that a class does not implement a required base class.
 /// </summary>
 public class InvalidImplementationException : Exception
 {

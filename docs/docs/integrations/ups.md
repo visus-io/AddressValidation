@@ -10,7 +10,7 @@ AddressValidation offers a complete integration to the [UPS&reg; Address Validat
 
 ## Credentials
 
-Before utilizing the integration, you will need a [developer account](https://developer.ups.com/) along with an active UPS account. After you have signed in to the account, [follow these instructions](https://developer.ups.com/get-started) to obtain your credentials.
+Get a [developer account](https://developer.ups.com/) and an active UPS account before you use this integration. After you sign in, [follow these instructions](https://developer.ups.com/get-started) to get your credentials.
 
 ## Installation
 
@@ -26,7 +26,7 @@ Install-Package VisusIO.AddressValidation.Integration.Ups
 ```
 ---
 
-At application startup, you will need to register the integration with the [Microsoft DI](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) container:
+Register the integration with the [Microsoft DI](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) container at application startup:
 
 ```csharp
 builder.Services.AddUpsAddressValidation();
@@ -60,7 +60,7 @@ Configuration is bound from the `AddressValidationSettings:Ups` section.
 | `EndpointUriOverride` | SANDBOX only | Custom endpoint URI; required when `ClientEnvironment` is `SANDBOX` |
 
 > [!IMPORTANT]
-> `ClientId` and `ClientSecret` should be stored encrypted at rest. See the [Security](../index.md#security) for additional details.
+> Store `ClientId` and `ClientSecret` encrypted at rest. See [Security](../index.md#security) for more details.
 
 ## Standard Example
 
@@ -132,7 +132,7 @@ public class ValidateController
 
 ## Suggestion Example
 
-In the event of an incomplete or ambiguous request, a potential match along with suggestions may be returned.
+For an incomplete or ambiguous request, the response may include a potential match with suggestions.
 
 > [!NOTE]
 > When `ClientEnvironment` is set to `DEVELOPMENT` only addresses in New York (`NY`) and California (`CA`) are supported.

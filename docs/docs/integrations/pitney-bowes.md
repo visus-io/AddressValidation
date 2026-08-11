@@ -10,13 +10,13 @@ AddressValidation offers a complete integration to the [Pitney Bowes Address Val
 
 ## Credentials
 
-Before utilizing the integration, you will need a [developer account](https://docs.shippingapi.pitneybowes.com/getting-started.html#sign-up-or-log-in) with Pitney Bowes. After you have signed in to the account, [follow these instructions](https://docs.shippingapi.pitneybowes.com/getting-started.html#get-your-api-key-and-secret) to obtain your API key and secret. 
+Get a [developer account](https://docs.shippingapi.pitneybowes.com/getting-started.html#sign-up-or-log-in) with Pitney Bowes before you use this integration. After you sign in, [follow these instructions](https://docs.shippingapi.pitneybowes.com/getting-started.html#get-your-api-key-and-secret) to get your API key and secret.
 
 > [!NOTE]
-> Production access is not granted by default. You will need [contact](https://docs.shippingapi.pitneybowes.com/getting-started.html#upgrade-to-production) Pitney Bowes to enable Production.
+> Production access is not granted by default. [Contact](https://docs.shippingapi.pitneybowes.com/getting-started.html#upgrade-to-production) Pitney Bowes to enable Production.
 
 > [!TIP]
-> Service providers should read up on [Merchant Accounts](https://docs.shippingapi.pitneybowes.com/merchant-accounts.html) should you wish to provide other services to clients. You may continue to use your own `Developer ID` for this integration as the Address Validation API does not require a `Shipper ID`.
+> If you provide other services to clients, read about [Merchant Accounts](https://docs.shippingapi.pitneybowes.com/merchant-accounts.html). You can still use your own `Developer ID` for this integration — the Address Validation API does not require a `Shipper ID`.
 
 ## Installation
 
@@ -32,7 +32,7 @@ Install-Package VisusIO.AddressValidation.Integration.PitneyBowes
 ```
 ---
 
-At application startup, you will need to register the integration with the [Microsoft DI](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) container:
+Register the integration with the [Microsoft DI](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) container at application startup:
 
 ```csharp
 builder.Services.AddPitneyBowesAddressValidation();
@@ -69,12 +69,11 @@ Configuration is bound from the `AddressValidationSettings:PitneyBowes` section.
 > `DeveloperId` is only used to construct the cache key for the authentication cache.
 
 > [!IMPORTANT]
-> `ApiKey` and `ApiSecret` should be stored encrypted at rest. See the [Security](../index.md#security) for additional details.
+> Store `ApiKey` and `ApiSecret` encrypted at rest. See [Security](../index.md#security) for more details.
 
 ## Standard Example
 
-The following example demonstrates a standard address validation request. 
-For situations where the validation has failed or the address being provided is incomplete, consider making an
+This example shows a standard address validation request. If validation fails, or the address is incomplete, make an
 [address suggestion request](#suggestion-example) instead.
 
 ```csharp
@@ -134,7 +133,7 @@ public class ValidateController
 
 ## Suggestion Example
 
-The following example demonstrates an address suggestion request. Scenarios in which such requests are made include:
+This example shows an address suggestion request. Make this request in these scenarios:
 
 - [Standard request](#standard-example) returned a validation failure in the [Errors](xref:Visus.AddressValidation.Models.IAddressValidationResponse#Visus_AddressValidation_Models_IAddressValidationResponse_Errors) collection.
 - Provided address is incomplete or ambiguous.

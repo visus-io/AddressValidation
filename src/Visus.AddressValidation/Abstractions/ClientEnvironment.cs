@@ -3,7 +3,7 @@ namespace Visus.AddressValidation.Abstractions;
 using System.ComponentModel;
 
 /// <summary>
-///     Enumeration of potential client environments
+///     Enumeration of potential client environments.
 /// </summary>
 [JsonConverter(typeof(JsonStringEnumConverter<ClientEnvironment>))]
 public enum ClientEnvironment

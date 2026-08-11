@@ -4,7 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 
 /// <summary>
-///     HTTP Basic Authentication Authorization Header
+///     Represents the Authorization header value for HTTP Basic authentication.
 /// </summary>
 /// <seealso cref="AuthenticationHeaderValue" />
 public sealed class BasicAuthenticationHeaderValue : AuthenticationHeaderValue

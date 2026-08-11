@@ -10,7 +10,7 @@ public abstract class AbstractAddressValidationRequest
     private CountryCode? _country;
 
     /// <summary>
-    ///     Gets the set of address lines for the address; comparisons are case-insensitive.
+    ///     Gets the set of address lines for the address. Comparisons are case-insensitive.
     /// </summary>
     public ISet<string> AddressLines { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -32,9 +32,10 @@ public abstract class AbstractAddressValidationRequest
     ///     Gets or sets the country code
     /// </summary>
     /// <remarks>
-    ///     Refer to <see cref="CountryCode" /> for accepted values. Setting the country to <see cref="CountryCode.GU" />,
-    ///     <see cref="CountryCode.PR" /> or <see cref="CountryCode.VI" /> will automatically change the country to
-    ///     <see cref="CountryCode.US" /> and set the appropriate <see cref="StateOrProvince" /> value.
+    ///     Refer to <see cref="CountryCode" /> for accepted values. If you set the country to
+    ///     <see cref="CountryCode.GU" />, <see cref="CountryCode.PR" />, or <see cref="CountryCode.VI" />, the
+    ///     country changes to <see cref="CountryCode.US" />. This also sets the appropriate
+    ///     <see cref="StateOrProvince" /> value.
     /// </remarks>
     public CountryCode? Country
     {
@@ -65,10 +66,10 @@ public abstract class AbstractAddressValidationRequest
     }
 
     /// <summary>
-    ///     Gets or sets the Zip (Postal) Code
+    ///     Gets or sets the postal code.
     /// </summary>
     /// <remarks>
-    ///     Value will be dropped for countries that have no concept of a postal code. Refer to the
+    ///     The setter clears this value for countries that have no concept of a postal code. Refer to the
     ///     <see cref="Constants.NoPostalCode" /> collection for details.
     /// </remarks>
     public string? PostalCode
@@ -89,10 +90,10 @@ public abstract class AbstractAddressValidationRequest
     }
 
     /// <summary>
-    ///     Gets or sets the State (Province)
+    ///     Gets or sets the state or province.
     /// </summary>
     /// <remarks>
-    ///     Value will be dropped for countries that are considered city-states. Refer to the
+    ///     The setter clears this value for countries considered city-states. Refer to the
     ///     <see cref="Constants.CityStates" /> collection for details.
     /// </remarks>
     public string? StateOrProvince

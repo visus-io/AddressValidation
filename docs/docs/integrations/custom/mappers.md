@@ -29,11 +29,11 @@ internal sealed class AddressValidationRequestMapper : IApiRequestMapper<MyAddre
 ```
 
 > [!NOTE]
-> It is not necessary for the request mapper to be `internal`, but it is **strongly** recommended if redistributing as a library.
+> Mark the request mapper `internal`. This reduces the public API surface if you redistribute the integration as a library.
 
 ## Response Mapper
 
-The response mapper converts the provider's raw [API response](xref:custom-models) into the unified [`IAddressValidationResponse`](xref:Visus.AddressValidation.Models.IAddressValidationResponse) returned to callers. Implement [`IApiResponseMapper<TApiResponse>`](xref:Visus.AddressValidation.Mappers.IApiResponseMapper`1) with a single `Map` method.
+The response mapper converts the provider's [API response](xref:custom-models) into the unified [`IAddressValidationResponse`](xref:Visus.AddressValidation.Models.IAddressValidationResponse) returned to callers. Implement [`IApiResponseMapper<TApiResponse>`](xref:Visus.AddressValidation.Mappers.IApiResponseMapper`1) with a single `Map` method.
 
 ```csharp
 [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
@@ -78,7 +78,7 @@ internal sealed class AddressValidationResponseMapper : IApiResponseMapper<ApiRe
 > ```
 
 > [!NOTE]
-> The concrete return type (`AddressValidationResponse` in the example above) should extend [`AbstractAddressValidationResponse<TResponse>`](xref:Visus.AddressValidation.Models.AbstractAddressValidationResponse`1) where `TResponse` is the provider DTO (`ApiResponse`). The base class automatically populates the `Errors` and `Warnings` collections from the `validationResult`.
+> Extend the concrete return type (`AddressValidationResponse` in the example above) from [`AbstractAddressValidationResponse<TResponse>`](xref:Visus.AddressValidation.Models.AbstractAddressValidationResponse`1), where `TResponse` is the provider DTO (`ApiResponse`). The base class populates the `Errors` and `Warnings` collections from `validationResult` automatically.
 >
 > ```csharp
 > internal sealed class AddressValidationResponse : AbstractAddressValidationResponse<ApiResponse>
@@ -91,4 +91,4 @@ internal sealed class AddressValidationResponseMapper : IApiResponseMapper<ApiRe
 > ```
 
 > [!NOTE]
-> It is not necessary for the response mapper to be `internal`, but it is **strongly** recommended if redistributing as a library.
+> Mark the response mapper `internal`. This reduces the public API surface if you redistribute the integration as a library.

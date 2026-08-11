@@ -10,7 +10,7 @@ using AddressValidation.Configuration;
 public sealed class FedExServiceOptions : AbstractServiceOptions
 {
     /// <summary>
-    ///     The configuration section path used to bind these options from
+    ///     The configuration section path that binds these options from
     ///     <c>appsettings.json</c> or other configuration sources.
     /// </summary>
     public const string SectionName = "AddressValidationSettings:FedEx";
@@ -51,10 +51,11 @@ public sealed class FedExServiceOptions : AbstractServiceOptions
     ///     used for address validation responses returned by the FedEx API.
     /// </summary>
     /// <remarks>
-    ///     When <see langword="null" /> (the default), the <c>x-locale</c>
-    ///     request header is omitted and FedEx will use its own default locale.
-    ///     Set to an IETF BCP 47 tag such as <c>en-US</c> or <c>fr-FR</c> to
-    ///     request responses in a specific language and region.
+    ///     When <see langword="null" /> (the default), the service omits the
+    ///     <c>x-locale</c> request header, and FedEx uses its own default
+    ///     locale. Set this to an IETF BCP 47 tag, such as <c>en-US</c> or
+    ///     <c>fr-FR</c>, to request responses in a specific language and
+    ///     region.
     /// </remarks>
     public string? Locale { get; set; }
 
@@ -65,9 +66,9 @@ public sealed class FedExServiceOptions : AbstractServiceOptions
     ///     The context in which validation is performed.
     /// </param>
     /// <returns>
-    ///     A collection of <see cref="ValidationResult" /> instances describing
-    ///     any validation failures, or an empty collection if the options are
-    ///     valid.
+    ///     A collection of <see cref="ValidationResult" /> instances that
+    ///     describe validation failures. The collection is empty when the
+    ///     options are valid.
     /// </returns>
     /// <remarks>
     ///     <para>

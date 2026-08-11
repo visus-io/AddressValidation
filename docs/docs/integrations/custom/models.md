@@ -15,7 +15,7 @@ public sealed class MyAddressValidationRequest : AbstractAddressValidationReques
 ```
 
 > [!NOTE]
-> If the provider does not require any additional fields beyond the standard address properties, the class body can be left empty. The subclass is still required so that the DI container can distinguish your integration's service from others.
+> If the provider needs no fields beyond the standard address properties, leave the class body empty. Still define the subclass — the DI container needs it to distinguish your integration's service from others.
 
 ## Provider API Contracts
 
@@ -83,11 +83,11 @@ The [Validation Client](xref:custom-validation-client) deserializes this type se
 > Only add `[JsonPropertyName]` when the provider's JSON field name differs from what the serializer produces for the C# property name. Most properties do not need it. For example, if a field is named `"DPV"` in JSON but the C# property is `DeliveryPointValidation`, the attribute is required; when names already match, omit it.
 
 > [!NOTE]
-> These types are the input and output for the JSON source-generated serializer contexts used by the [Validation Client](xref:custom-validation-client). Each DTO type used with `JsonContent.Create(...)` or `ReadFromJsonAsync(...)` must be listed in a `[JsonSerializable(...)]` attribute on the serializer context. This includes `ApiErrorResponse`, which is deserialized independently on non-2xx responses and must have its own entry alongside `ApiResponse`.
+> The [Validation Client](xref:custom-validation-client) uses a source-generated JSON serializer context. These types are its input and output. List each DTO type used with `JsonContent.Create(...)` or `ReadFromJsonAsync(...)` in a `[JsonSerializable(...)]` attribute on the serializer context. This includes `ApiErrorResponse`, which the client deserializes independently on non-2xx responses — give it its own entry alongside `ApiResponse`.
 
-## Surfacing Custom Response Data
+## Custom Response Data
 
-[`[CustomResponseDataProperty]`](xref:Visus.AddressValidation.CustomResponseDataPropertyAttribute) marks a response contract property for inclusion in [`IAddressValidationResponse.CustomResponseData`](xref:Visus.AddressValidation.Models.IAddressValidationResponse.CustomResponseData) (`IReadOnlyDictionary<string, object?>`). This lets consumers inspect provider-specific fields (residency classification, delivery point data, transaction identifiers, and so on) without casting to any provider-specific type.
+[`[CustomResponseDataProperty]`](xref:Visus.AddressValidation.CustomResponseDataPropertyAttribute) marks a property on the response contract. The marked property appears in [`IAddressValidationResponse.CustomResponseData`](xref:Visus.AddressValidation.Models.IAddressValidationResponse.CustomResponseData) (`IReadOnlyDictionary<string, object?>`). Consumers can inspect provider-specific fields — residency classification, delivery point data, transaction identifiers, and so on — without casting to a provider-specific type.
 
 The attribute has two forms:
 
