@@ -5,7 +5,7 @@ uid: custom-batch-validators
 
 ## Batch Validators
 
-Batch validation reuses the existing per-request [request validator](xref:custom-validators) unchanged; each request in the list is still validated individually before the batch call is made, and any request that fails is resolved to an [`EmptyAddressValidationResponse`](xref:Visus.AddressValidation.Models.EmptyAddressValidationResponse) without ever reaching the provider. Only the API response needs a dedicated batch validator, since it now describes many addresses instead of one.
+Batch validation reuses the existing per-request [request validator](xref:custom-validators) unchanged. Each request in the list is still validated individually before the batch call. Any request that fails validation resolves to an [`EmptyAddressValidationResponse`](xref:Visus.AddressValidation.Models.EmptyAddressValidationResponse), without ever reaching the provider. Only the API response needs a dedicated batch validator, since it now describes many addresses instead of one.
 
 Extend [`AbstractBatchValidator<T>`](xref:Visus.AddressValidation.Validation.AbstractBatchValidator`1). Unlike [`AbstractValidator<T>`](xref:Visus.AddressValidation.Validation.AbstractValidator`1), which produces a single shared `ISet<ValidationState>`, the batch validator produces one independent `ISet<ValidationState>` per item, indexed positionally.
 
@@ -62,9 +62,9 @@ internal sealed class BatchApiResponseValidator : AbstractBatchValidator<ApiResp
 > `PreValidateAsync` controls whether `ValidateAsync` runs, same as the non-batch [Response Validator](xref:custom-validators#response-validator). Use it for batch-wide conditions, such as a top-level error payload or a result count that does not match the number of items sent, and broadcast the resulting `ValidationState` to every item's result set with a small helper like `BroadcastToAll` above.
 
 > [!NOTE]
-> Batch-level information that cannot be attributed to one specific address, such as a response-wide warning alert, should also be broadcast to every item's result set in `ValidateAsync` rather than assigned arbitrarily to a single item.
+> For batch-level information that you cannot attribute to one specific address, such as a response-wide warning alert, broadcast it to every item's result set in `ValidateAsync`, instead of assigning it arbitrarily to a single item.
 
 > [!IMPORTANT]
-> `ExecuteAsync` must return exactly one [`IValidationResult`](xref:Visus.AddressValidation.Validation.IValidationResult) per item in `requestIndexes`. Extending `AbstractBatchValidator<T>` through `PreValidateAsync`/`ValidateAsync` as shown above guarantees this automatically. If a custom implementation violates the count contract, `ValidateManyAsync` throws `InvalidImplementationException` rather than silently misaligning results.
+> `ExecuteAsync` must return exactly one [`IValidationResult`](xref:Visus.AddressValidation.Validation.IValidationResult) per item in `requestIndexes`. Extending `AbstractBatchValidator<T>` through `PreValidateAsync`/`ValidateAsync` as shown above guarantees this automatically. If a custom implementation violates the count contract, `ValidateManyAsync` throws `InvalidImplementationException`, instead of silently misaligning results.
 
 [!INCLUDE [internal-validation-note](../../includes/internal-validation-note.md)]

@@ -18,8 +18,8 @@ using Validation;
 ///     The type of the validation request. Must derive from <see cref="AbstractAddressValidationRequest" />.
 /// </typeparam>
 /// <typeparam name="TApiResponse">
-///     The type of the raw response returned by the underlying service API. Mapped to
-///     <see cref="IAddressValidationResponse" /> instances by an <see cref="IBatchApiResponseMapper{TResponse}" />.
+///     The type of API response the provider returns. An <see cref="IBatchApiResponseMapper{TResponse}" />
+///     maps it to <see cref="IAddressValidationResponse" /> instances.
 /// </typeparam>
 public abstract class AbstractBatchAddressValidationService<TRequest, TApiResponse> : IBatchAddressValidationService<TRequest>
     where TRequest : AbstractAddressValidationRequest
@@ -65,21 +65,21 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
     ///     Initializes a new instance of <see cref="AbstractBatchAddressValidationService{TRequest, TApiResponse}" />.
     /// </summary>
     /// <param name="batchRequestAdapter">
-    ///     An <see cref="IBatchApiRequestAdapter{TRequest, TApiResponse}" /> used to forward a batch of
-    ///     <typeparamref name="TRequest" /> instances to the underlying API and return the raw
+    ///     An <see cref="IBatchApiRequestAdapter{TRequest, TApiResponse}" /> that sends a batch of
+    ///     <typeparamref name="TRequest" /> instances to the provider and returns the
     ///     <typeparamref name="TApiResponse" />.
     /// </param>
     /// <param name="batchResponseMapper">
-    ///     An <see cref="IBatchApiResponseMapper{TResponse}" /> used to map individual items within a
+    ///     An <see cref="IBatchApiResponseMapper{TResponse}" /> that maps individual items within a
     ///     <typeparamref name="TApiResponse" /> to an <see cref="IAddressValidationResponse" />.
     /// </param>
     /// <param name="requestValidator">
-    ///     An <see cref="IValidator{T}" /> used to validate each <typeparamref name="TRequest" /> instance before it
-    ///     is sent to the underlying API.
+    ///     An <see cref="IValidator{T}" /> that validates each <typeparamref name="TRequest" /> instance before the
+    ///     service sends it to the provider.
     /// </param>
     /// <param name="batchResponseValidator">
-    ///     An <see cref="IBatchValidator{T}" /> used to validate the <typeparamref name="TApiResponse" /> returned by
-    ///     the underlying API, producing one result per item sent.
+    ///     An <see cref="IBatchValidator{T}" /> that validates the <typeparamref name="TApiResponse" /> the provider
+    ///     returns. It produces one result per item sent.
     /// </param>
     /// <exception cref="ArgumentNullException">
     ///     Thrown when <paramref name="batchRequestAdapter" />, <paramref name="batchResponseMapper" />,

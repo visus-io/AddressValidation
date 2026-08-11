@@ -15,7 +15,7 @@ internal enum AddressType
     NORMAL,
 
     /// <summary>
-    ///     Address service was able to successfully match the address against reference data.
+    ///     Address service matched the address against reference data.
     /// </summary>
     STANDARDIZED,
 }

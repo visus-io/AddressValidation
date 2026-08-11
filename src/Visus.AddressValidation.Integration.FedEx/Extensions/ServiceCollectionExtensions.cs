@@ -19,7 +19,7 @@ using Services;
 using Validation;
 
 /// <summary>
-///     Extension methods for setting up FedEx Address Validation services in an <see cref="IServiceCollection" />.
+///     Extension methods that register FedEx address validation services with an <see cref="IServiceCollection" />.
 /// </summary>
 public static class ServiceCollectionExtensions
 {
@@ -28,10 +28,10 @@ public static class ServiceCollectionExtensions
     ///     <see cref="IServiceCollection" />.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
-    /// <returns>The same service collection so that multiple calls can be chained.</returns>
+    /// <returns>The same service collection, to support chained calls.</returns>
     /// <remarks>
-    ///     Options are loaded from the <c>AddressValidationSettings:FedEx</c> configuration section
-    ///     (see <see cref="FedExServiceOptions.SectionName" />) and validated at application startup.
+    ///     This method loads options from the <c>AddressValidationSettings:FedEx</c> configuration section (see
+    ///     <see cref="FedExServiceOptions.SectionName" />). It validates them at application startup.
     /// </remarks>
     public static IServiceCollection AddFedExAddressValidation(this IServiceCollection services)
     {

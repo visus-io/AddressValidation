@@ -20,12 +20,12 @@ internal enum ResolutionMethod
     GENERIC_VALIDATE,
 
     /// <summary>
-    ///     US Geo/Map Validated
+    ///     US address geocoded using NAVTEQ map data.
     /// </summary>
     NAVTEQ_GEO_VALIDATE,
 
     /// <summary>
-    ///     US Geo/Map Validated
+    ///     US address geocoded using TeleAtlas map data.
     /// </summary>
     TELEATLAS_GEO_VALIDATE,
 }

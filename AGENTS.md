@@ -62,6 +62,24 @@
 - Do not add new `.resx` entries without documenting the new string's placeholder semantics and do-not-translate list in the pull request description.
 - When adding, changing, or removing resource strings, only edit `Resources/Resources.resx` (the neutral-culture, source-of-truth file). Never edit the localized `Resources/Resources.<culture>.resx` files (e.g. `Resources.de-DE.resx`, `Resources.fr-FR.resx`) — those are owned by Crowdin, which opens its own signed PRs to sync translations after `Resources.resx` changes.
 
+## Documentation Style
+
+All documentation and XML doc comments **must** follow the ASD-STE100 (Simplified Technical
+English) standard. This applies to Markdown docs (`README.md`, `ARCHITECTURE.md`, `AGENTS.md`,
+`docs/docs/`) and to XML doc comments (`<summary>`, `<param>`, `<returns>`, `<exception>`, etc.)
+in C# source. Key rules:
+
+- Write short sentences. Target 20 words or fewer per sentence.
+- Write one instruction or one fact per sentence.
+- Use active voice. Use simple tenses: simple present, simple past, or imperative.
+- Address the reader directly with imperative mood for instructions (e.g. "Call
+  `ValidateAsync` first," not "The `ValidateAsync` method should be called first").
+- Avoid noun clusters (chains of 3+ nouns strung together). Avoid gerunds as nouns when a
+  verb form reads clearer.
+- Use each term consistently. Do not use a synonym for a term already used elsewhere in the
+  same document or comment.
+- Avoid vague qualifiers ("relatively", "fairly", "quite"). State the exact behavior or value.
+
 ## Documentation
 
 - Any change to core behavior — a public API added, changed, or removed; a supported provider, country, or feature added or removed; a validation rule or pipeline step added, changed, or removed; a configuration option added, changed, or removed — must be accompanied by a matching update to the docs under `docs/docs/` (and `README.md` where it summarizes the same information) in the same change. Treat missing doc updates as an incomplete change, not a follow-up.

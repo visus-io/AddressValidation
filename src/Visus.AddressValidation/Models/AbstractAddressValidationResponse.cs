@@ -12,7 +12,7 @@ public abstract class AbstractAddressValidationResponse : IAddressValidationResp
     ///     Initializes a new instance of <see cref="AbstractAddressValidationResponse" />.
     /// </summary>
     /// <param name="validationResult">
-    ///     The current validation state of the response, or <see langword="null" /> if no validation was performed.
+    ///     The current <see cref="IValidationResult" />, or <see langword="null" /> if no validation ran.
     /// </param>
     protected AbstractAddressValidationResponse(IValidationResult? validationResult = null)
     {
@@ -96,7 +96,7 @@ public abstract class AbstractAddressValidationResponse : IAddressValidationResp
 ///     Base class for implementing an <see cref="IAddressValidationResponse" /> backed by a specific API response type.
 /// </summary>
 /// <typeparam name="TResponse">
-///     The type of the underlying API response.
+///     The type of API response the provider returns.
 /// </typeparam>
 public abstract class AbstractAddressValidationResponse<TResponse>
     : AbstractAddressValidationResponse where TResponse : class
@@ -104,9 +104,9 @@ public abstract class AbstractAddressValidationResponse<TResponse>
     /// <summary>
     ///     Initializes a new instance of <see cref="AbstractAddressValidationResponse{TResponse}" />.
     /// </summary>
-    /// <param name="response">The underlying API response returned by the address validation service.</param>
+    /// <param name="response">The API response from the provider.</param>
     /// <param name="validationResult">
-    ///     The current validation state of the response, or <see langword="null" /> if no validation was performed.
+    ///     The current <see cref="IValidationResult" />, or <see langword="null" /> if no validation ran.
     /// </param>
     /// <exception cref="ArgumentNullException">
     ///     Thrown when <paramref name="response" /> is <see langword="null" />.

@@ -1,2 +1,2 @@
 > [!WARNING]
-> The `isResidential` value returned should be treated as a suggestion and not a guarantee.
+> Treat the returned `isResidential` value as a suggestion, not a guarantee.

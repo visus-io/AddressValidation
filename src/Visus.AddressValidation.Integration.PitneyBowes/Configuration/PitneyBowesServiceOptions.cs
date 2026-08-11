@@ -10,7 +10,7 @@ using AddressValidation.Configuration;
 public sealed class PitneyBowesServiceOptions : AbstractServiceOptions
 {
     /// <summary>
-    ///     The configuration section path used to bind these options from
+    ///     The configuration section path that binds these options from
     ///     <c>appsettings.json</c> or other configuration sources.
     /// </summary>
     public const string SectionName = "AddressValidationSettings:PitneyBowes";

@@ -4,7 +4,7 @@ title: Instrumentation
 
 # Instrumentation
 
-Every integration emits traces and metrics via [`System.Diagnostics`](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/distributed-tracing) (`ActivitySource` / `Meter`), which any OpenTelemetry-compatible collection pipeline can consume directly. Both the `ActivitySource` and the `Meter` share the name in [`AddressValidationTelemetry.SourceName`](xref:Visus.AddressValidation.Diagnostics.AddressValidationTelemetry) (`"Visus.AddressValidation"`).
+Every integration emits traces and metrics via [`System.Diagnostics`](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/distributed-tracing) (`ActivitySource` / `Meter`). Any OpenTelemetry-compatible pipeline can consume this data directly. The `ActivitySource` and the `Meter` share the name in [`AddressValidationTelemetry.SourceName`](xref:Visus.AddressValidation.Diagnostics.AddressValidationTelemetry) (`"Visus.AddressValidation"`).
 
 ## Setup
 
@@ -34,7 +34,7 @@ dotnet add package OpenTelemetry.Extensions.Hosting
 |---|---|---|---|
 | `address_validation.validate` | [`AbstractAddressValidationService<TRequest, TApiResponse>`](xref:Visus.AddressValidation.Services.AbstractAddressValidationService`2) | `address_validation.request_type`, `address_validation.country`, `address_validation.result` | Wraps a single `ValidateAsync` call, from request validation through response mapping. |
 | `address_validation.validate_many` | [`AbstractBatchAddressValidationService<TRequest, TApiResponse>`](xref:Visus.AddressValidation.Services.AbstractBatchAddressValidationService`2) | `address_validation.request_type`, `address_validation.batch_size`, `address_validation.country`, `address_validation.result` | Wraps a single `ValidateManyAsync` call, from per-item request validation through response mapping. `address_validation.country` is always the `batch` sentinel, since a batch may span multiple countries. |
-| `address_validation.token_fetch` | [`AbstractAuthenticationService<TClient>`](xref:Visus.AddressValidation.Services.AbstractAuthenticationService`1) | `address_validation.client_type`, `address_validation.result` | Wraps a single OAuth 2.0 token fetch on a cache miss. Not started on a cache hit. |
+| `address_validation.token_fetch` | [`AbstractAuthenticationService<TClient>`](xref:Visus.AddressValidation.Services.AbstractAuthenticationService`1) | `address_validation.client_type`, `address_validation.result` | Wraps a single access token fetch on a cache miss. Not started on a cache hit. |
 
 All activities are marked with `ActivityStatusCode.Error` and record the exception when the underlying operation throws.
 

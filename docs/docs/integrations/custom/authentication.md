@@ -5,10 +5,10 @@ uid: custom-authentication
 
 ## Authentication Client
 
-An authentication client is a [typed](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests#how-to-use-typed-clients-with-ihttpclientfactory) `HttpClient` whose sole responsibility is requesting an access token from the provider. The [Authentication Service](#authentication-service) handles caching and refresh. The client only needs to make the token request.
+An authentication client is a [typed](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests#how-to-use-typed-clients-with-ihttpclientfactory) `HttpClient`. It requests an access token from the provider — nothing else. The [Authentication Service](#authentication-service) handles caching and refresh.
 
 > [!NOTE]
-> There are general-purpose libraries for OAuth 2.0 such as [IdentityModel](https://github.com/IdentityModel/IdentityModel). To maintain maximum performance, avoid third-party dependencies, and support [trimming](https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/prepare-libraries-for-trimming) and [native AOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/), it is best to use native .NET components instead.
+> General-purpose OAuth 2.0 libraries exist, such as [IdentityModel](https://github.com/IdentityModel/IdentityModel). Use native .NET components instead. This maximizes performance, avoids third-party dependencies, and supports [trimming](https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/prepare-libraries-for-trimming) and [native AOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/).
 
 ### Using AbstractBasicAuthenticationClient
 
@@ -92,15 +92,15 @@ internal sealed class MyAuthenticationClient : IAuthenticationClient
 > The [`DefaultJsonSerializerContext`](xref:Visus.AddressValidation.Serialization.Json.DefaultJsonSerializerContext) instance passed to [`ReadFromJsonAsync(...)`](https://learn.microsoft.com/en-us/dotnet/api/system.net.http.json.httpcontentjsonextensions.readfromjsonasync) is a System.Text.Json [source generator](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation), required for correct behavior in trimmed and native AOT deployments.
 
 > [!NOTE]
-> It is not necessary for the authentication client to be `internal` but it is **strongly** recommended if redistributing as a library.
+> Mark the authentication client `internal` unless you redistribute it as a library.
 
 ## Authentication Service
 
-The authentication service wraps around the [authentication client](#authentication-client) and ensures the following:
+The authentication service wraps the [authentication client](#authentication-client) and does the following:
 
-- An authentication request is made to the underlying service for an [access token](https://oauth.net/2/access-tokens/).
-- The access token that is cached by [`HybridCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.hybrid.hybridcache) to avoid superfluous calls.
-  - If the cache hit misses due to expiration, an authentication request is made to retrieve a new token.
+- It requests an [access token](https://oauth.net/2/access-tokens/) from the underlying service.
+- It caches the access token with [`HybridCache`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.hybrid.hybridcache) to avoid unnecessary calls.
+  - If the cached token expires, it requests a new token.
 
 The example below assumes a `MyServiceOptions` class that extends [`AbstractServiceOptions`](xref:Visus.AddressValidation.Configuration.AbstractServiceOptions) and exposes the provider credentials:
 
@@ -149,13 +149,13 @@ internal sealed class MyAuthenticationService : AbstractAuthenticationService<My
 ```
 
 > [!IMPORTANT]
-> [`GenerateCacheKey()`](xref:Visus.AddressValidation.Services.AbstractAuthenticationService`1#Visus_AddressValidation_Services_AbstractAuthenticationService_1_GenerateCacheKey) **must** return a non-null, non-empty string. The key may only contain letters, digits, underscores, hyphens, and colons. If the required credentials are absent, throw an `InvalidOperationException` rather than returning an empty or invalid value. The base class will throw anyway if the key fails validation.
+> [`GenerateCacheKey()`](xref:Visus.AddressValidation.Services.AbstractAuthenticationService`1#Visus_AddressValidation_Services_AbstractAuthenticationService_1_GenerateCacheKey) **must** return a non-null, non-empty string. The key may only contain letters, digits, underscores, hyphens, and colons. If the required credentials are absent, throw an `InvalidOperationException` instead of returning an empty or invalid value. The base class also throws if the key fails validation.
 
 > [!IMPORTANT]
 > The service **must** inherit the [`AbstractAuthenticationService<TClient>`](xref:Visus.AddressValidation.Services.AbstractAuthenticationService`1) class.
 
 > [!NOTE]
-> [`BearerTokenDelegatingHandler<TClient>`](xref:Visus.AddressValidation.Http.BearerTokenDelegatingHandler`1) uses this service to automatically attach a [bearer token](https://oauth.net/2/bearer-tokens/) to the request. Refer to the <xref:custom-registering-services> page for details.
+> [`BearerTokenDelegatingHandler<TClient>`](xref:Visus.AddressValidation.Http.BearerTokenDelegatingHandler`1) uses this service to attach a [bearer token](https://oauth.net/2/bearer-tokens/) to the request automatically. See the <xref:custom-registering-services> page for details.
 
 > [!NOTE]
-> It is not necessary for the authentication service to be `internal` but it is **strongly** recommended if redistributing as a library.
+> Mark the authentication service `internal` unless you redistribute it as a library.

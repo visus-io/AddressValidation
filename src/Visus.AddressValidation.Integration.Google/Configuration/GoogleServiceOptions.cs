@@ -5,21 +5,20 @@ using AddressValidation.Abstractions;
 using AddressValidation.Configuration;
 
 /// <summary>
-///     Configuration options for the Google Address Validation API service
-///     account.
+///     Configuration options for the Google address validation service.
 /// </summary>
 public sealed class GoogleServiceOptions : AbstractServiceOptions
 {
     /// <summary>
-    ///     The configuration section path used to bind these options from
+    ///     The configuration section path that binds these options from
     ///     <c>appsettings.json</c> or other configuration sources.
     /// </summary>
     public const string SectionName = "AddressValidationSettings:Google";
 
     /// <summary>
-    ///     Initializes a new instance of <see cref="GoogleServiceOptions" />
-    ///     with <see cref="AbstractServiceOptions.ClientEnvironment" /> defaulting
-    ///     to <see cref="ClientEnvironment.PRODUCTION" />.
+    ///     Initializes a new instance of <see cref="GoogleServiceOptions" />.
+    ///     <see cref="AbstractServiceOptions.ClientEnvironment" /> defaults to
+    ///     <see cref="ClientEnvironment.PRODUCTION" />.
     /// </summary>
     public GoogleServiceOptions()
     {
@@ -55,13 +54,14 @@ public sealed class GoogleServiceOptions : AbstractServiceOptions
     ///     <para>
     ///         This property is <b>required</b> when
     ///         <see cref="AbstractServiceOptions.ClientEnvironment" /> is
-    ///         <see cref="ClientEnvironment.SANDBOX" />; validation will fail
-    ///         if it is <see langword="null" /> in that case.
+    ///         <see cref="ClientEnvironment.SANDBOX" />. Validation fails if
+    ///         it is <see langword="null" /> in that case.
     ///     </para>
     ///     <para>
-    ///         For all other environments this property is optional and, when
-    ///         set, has no effect — the authentication endpoint is always
-    ///         resolved from <see cref="AbstractServiceOptions.ClientEnvironment" />.
+    ///         For all other environments, this property is optional. When
+    ///         set, it has no effect —
+    ///         <see cref="AbstractServiceOptions.ClientEnvironment" /> always
+    ///         determines the authentication endpoint.
     ///     </para>
     /// </remarks>
     public Uri? AuthenticationUriOverride { get; set; }
@@ -94,13 +94,13 @@ public sealed class GoogleServiceOptions : AbstractServiceOptions
     ///     The context in which validation is performed.
     /// </param>
     /// <returns>
-    ///     A collection of <see cref="ValidationResult" /> instances describing
-    ///     any validation failures, or an empty collection if the options are
-    ///     valid.
+    ///     A collection of <see cref="ValidationResult" /> instances that
+    ///     describe validation failures. The collection is empty when the
+    ///     options are valid.
     /// </returns>
     /// <remarks>
-    ///     Inherits the sandbox endpoint override check from
-    ///     <see cref="AbstractServiceOptions.Validate" /> and additionally validates
+    ///     Inherits the sandbox endpoint check from
+    ///     <see cref="AbstractServiceOptions.Validate" />. It also validates
     ///     that <see cref="AuthenticationUriOverride" /> is not
     ///     <see langword="null" /> when
     ///     <see cref="AbstractServiceOptions.ClientEnvironment" /> is

@@ -3,22 +3,22 @@ namespace Visus.AddressValidation.Integration.PitneyBowes;
 using AddressValidation.Abstractions;
 
 /// <summary>
-///     Configuration Constants for Pitney Bowes Service Integration
+///     Configuration constants for the Pitney Bowes integration.
 /// </summary>
 public static class Constants
 {
     /// <summary>
-    ///     Pitney Bowes Development Endpoint
+    ///     The Pitney Bowes API development endpoint.
     /// </summary>
     public static readonly Uri DevelopmentEndpointUri = new("https://shipping-api-sandbox.pitneybowes.com/");
 
     /// <summary>
-    ///     Pitney Bowes Production Endpoint
+    ///     The Pitney Bowes API production endpoint.
     /// </summary>
     public static readonly Uri ProductionEndpointUri = new("https://shipping-api.pitneybowes.com/");
 
     /// <summary>
-    ///     Countries that are supported by the Pitney Bowes Address Validation API.
+    ///     The countries the Pitney Bowes Address Validation API supports.
     /// </summary>
     public static readonly FrozenSet<CountryCode> SupportedCountries =
     [

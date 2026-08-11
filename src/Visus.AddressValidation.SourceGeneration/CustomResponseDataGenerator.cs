@@ -7,16 +7,14 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 /// <summary>
-///     An incremental source generator that produces <c>GetCustomResponseData</c> method
-///     implementations for types whose properties are annotated with
-///     <c>CustomResponseDataPropertyAttribute</c>.
+///     An incremental source generator. It generates <c>GetCustomResponseData</c> methods for types whose
+///     properties carry <c>CustomResponseDataPropertyAttribute</c>.
 /// </summary>
 /// <remarks>
-///     For every type that contains at least one property marked with
-///     <c>CustomResponseDataPropertyAttribute</c>, the generator emits a partial class/record
-///     declaration that implements a method returning an
-///     <see cref="IReadOnlyDictionary{TKey,TValue}">IReadOnlyDictionary&lt;string, object?&gt;</see>
-///     mapping each property's key to its current value.
+///     This generator finds every type with at least one property marked <c>CustomResponseDataPropertyAttribute</c>.
+///     For each type, it emits a partial class or record declaration. That declaration implements a method that
+///     returns an <see cref="IReadOnlyDictionary{TKey,TValue}">IReadOnlyDictionary&lt;string, object?&gt;</see>.
+///     The dictionary maps each property's key to its current value.
 /// </remarks>
 [Generator]
 public sealed class CustomResponseDataGenerator : IIncrementalGenerator
@@ -29,7 +27,7 @@ public sealed class CustomResponseDataGenerator : IIncrementalGenerator
     ///     Registers the incremental generation pipeline.
     /// </summary>
     /// <param name="context">
-    ///     The <see cref="IncrementalGeneratorInitializationContext" /> used to register syntax
+    ///     The <see cref="IncrementalGeneratorInitializationContext" /> that registers syntax
     ///     providers and source outputs.
     /// </param>
     public void Initialize(IncrementalGeneratorInitializationContext context)

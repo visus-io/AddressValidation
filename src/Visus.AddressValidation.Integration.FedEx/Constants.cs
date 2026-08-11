@@ -3,27 +3,27 @@ namespace Visus.AddressValidation.Integration.FedEx;
 using AddressValidation.Abstractions;
 
 /// <summary>
-///     Configuration constants for FedEx Service Integration
+///     Configuration constants for the FedEx integration.
 /// </summary>
 public static class Constants
 {
     /// <summary>
-    ///     FedEx API Development Endpoint
+    ///     The FedEx API development endpoint.
     /// </summary>
     public static readonly Uri DevelopmentEndpointUri = new("https://apis-sandbox.fedex.com");
 
     /// <summary>
-    ///     The maximum number of addresses that can be validated in a single batch request.
+    ///     The maximum number of addresses allowed in a single batch request.
     /// </summary>
     public const int MaxBatchSize = 100;
 
     /// <summary>
-    ///     FedEx API Production Endpoint
+    ///     The FedEx API production endpoint.
     /// </summary>
     public static readonly Uri ProductionEndpointUri = new("https://apis.fedex.com");
 
     /// <summary>
-    ///     Countries that are supported by the FedEx Address Validation API.
+    ///     The countries the FedEx Address Validation API supports.
     /// </summary>
     public static readonly FrozenSet<CountryCode> SupportedCountries =
     [
@@ -75,7 +75,7 @@ public static class Constants
     ];
 
     /// <summary>
-    ///     IETF BCP 47 locale tags that are supported by the FedEx Address Validation API.
+    ///     The IETF BCP 47 locale tags the FedEx Address Validation API supports.
     /// </summary>
     public static readonly FrozenSet<string> SupportedLocales =
     [

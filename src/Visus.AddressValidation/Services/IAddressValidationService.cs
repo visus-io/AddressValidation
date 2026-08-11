@@ -6,7 +6,7 @@ using Models;
 ///     Abstraction for implementing an address validation service.
 /// </summary>
 /// <typeparam name="TRequest">
-///     The provider-specific request type; must derive from
+///     The provider-specific request type. It must derive from
 ///     <see cref="AbstractAddressValidationRequest" />.
 /// </typeparam>
 public interface IAddressValidationService<in TRequest>
@@ -15,12 +15,12 @@ public interface IAddressValidationService<in TRequest>
     /// <summary>
     ///     Validates the <paramref name="request" /> instance asynchronously.
     /// </summary>
-    /// <param name="request">Request to be validated represented as an instance of <typeparamref name="TRequest" />.</param>
-    /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
+    /// <param name="request">The <typeparamref name="TRequest" /> instance to validate.</param>
+    /// <param name="cancellationToken">A token that cancels the operation.</param>
     /// <remarks>
-    ///     The instance <see cref="IAddressValidationResponse" /> may be <see langword="null" /> if the request or validation
-    ///     failed.
+    ///     The returned <see cref="IAddressValidationResponse" /> may be <see langword="null" /> if the request or
+    ///     validation fails.
     /// </remarks>
-    /// <returns>Result of the validation as represented by an instance of <see cref="IAddressValidationResponse" />.</returns>
+    /// <returns>The validation result as an <see cref="IAddressValidationResponse" />.</returns>
     Task<IAddressValidationResponse?> ValidateAsync(TRequest request, CancellationToken cancellationToken = default);
 }

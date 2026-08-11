@@ -7,14 +7,13 @@ using Serialization.Json;
 /// </summary>
 /// <param name="AccessToken">The access token issued by the authorization server.</param>
 /// <param name="RefreshToken">
-///     The refresh token, which can be used to obtain new access tokens, or <see langword="null" /> if not issued.
+///     The refresh token, used to obtain new access tokens, or <see langword="null" /> if not issued.
 /// </param>
 /// <param name="IdentityToken">
 ///     The identity token containing claims about the authenticated user, or <see langword="null" /> if not issued.
 /// </param>
 /// <param name="IssuedTokenType">
-///     A URI that indicates the type of the issued security token, as defined by RFC 8693, or
-///     <see langword="null" /> if not present.
+///     A URI that identifies the token type per RFC 8693, or <see langword="null" /> if not present.
 /// </param>
 /// <param name="ExpiresIn">The lifetime in seconds of the access token.</param>
 /// <param name="Scope">

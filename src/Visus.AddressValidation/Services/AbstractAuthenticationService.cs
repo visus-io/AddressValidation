@@ -88,22 +88,23 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     /// <summary>
     ///     Retrieves an access token using token-based authentication.
     /// </summary>
-    /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
+    /// <param name="cancellationToken">A token that cancels the operation.</param>
     /// <returns>
-    ///     The current access token returned by the authentication service, or <see langword="null" /> if
-    ///     the authentication service did not return a valid token.
+    ///     The current access token, or <see langword="null" /> if the authentication service returns
+    ///     no valid token.
     /// </returns>
     /// <remarks>
     ///     <para>
-    ///         The access token is cached using <see cref="HybridCache" />. When no cached entry exists,
-    ///         a new token is fetched via <see cref="IAuthenticationClient.RequestClientCredentialsTokenAsync" />
-    ///         and stored in the cache with an expiration of <c>ExpiresIn - 60</c> seconds to provide a
-    ///         safety buffer before the token actually expires.
+    ///         This method caches the access token in <see cref="HybridCache" />. When no cached entry
+    ///         exists, it fetches a new token via
+    ///         <see cref="IAuthenticationClient.RequestClientCredentialsTokenAsync" />. It stores the
+    ///         token with an expiration of <c>ExpiresIn - 60</c> seconds, as a safety buffer before the
+    ///         token expires.
     ///     </para>
     ///     <para>
-    ///         Subsequent calls return the cached token until it expires, at which point a new token is
-    ///         fetched and cached. If the authentication service returns an invalid or empty token, the
-    ///         cache entry is removed and <see langword="null" /> is returned.
+    ///         Subsequent calls return the cached token until it expires. At that point, this method
+    ///         fetches and caches a new token. If the authentication service returns an invalid or
+    ///         empty token, this method removes the cache entry and returns <see langword="null" />.
     ///     </para>
     /// </remarks>
     public async Task<string?> GetAccessTokenAsync(CancellationToken cancellationToken = default)
@@ -157,14 +158,14 @@ public abstract class AbstractAuthenticationService<TClient> where TClient : IAu
     }
 
     /// <summary>
-    ///     Generates a unique cache key for caching retrieved access tokens.
+    ///     Generates a unique cache key to cache retrieved access tokens.
     /// </summary>
     /// <returns>
     ///     A non-null, non-empty string containing only A-Z, a-z, 0-9, underscores, hyphens, and colons.
     /// </returns>
     /// <exception cref="InvalidOperationException">
-    ///     Thrown when the required credentials needed to construct the key are absent or invalid,
-    ///     or when the returned key contains characters outside the allowed set.
+    ///     Thrown when the credentials needed to build the key are absent or invalid, or when the key
+    ///     contains disallowed characters.
     /// </exception>
     protected abstract string GenerateCacheKey();
 

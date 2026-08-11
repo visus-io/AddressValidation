@@ -18,7 +18,7 @@ public sealed class BearerTokenDelegatingHandler<TClient> : DelegatingHandler
     /// </summary>
     /// <param name="authenticationService">
     ///     An instance of <see cref="AbstractAuthenticationService{T}" /> that retrieves the
-    ///     access_token.
+    ///     access token.
     /// </param>
     /// <exception cref="ArgumentNullException">
     ///     Thrown when <paramref name="authenticationService" /> is <see langword="null" />.
@@ -29,7 +29,7 @@ public sealed class BearerTokenDelegatingHandler<TClient> : DelegatingHandler
     }
 
     /// <inheritdoc />
-    /// <exception cref="InvalidCredentialException">Provided credentials were rejected by the server.</exception>
+    /// <exception cref="InvalidCredentialException">The server rejected the provided credentials.</exception>
     protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);

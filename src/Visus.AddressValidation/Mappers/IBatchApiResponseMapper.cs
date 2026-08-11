@@ -7,7 +7,7 @@ using Validation;
 ///     Abstraction for mapping a single item within a batch API response to an <see cref="IAddressValidationResponse" />.
 /// </summary>
 /// <typeparam name="TResponse">
-///     The type of the underlying API response.
+///     The type of API response the provider returns.
 /// </typeparam>
 public interface IBatchApiResponseMapper<in TResponse>
     where TResponse : class
@@ -16,10 +16,10 @@ public interface IBatchApiResponseMapper<in TResponse>
     ///     Maps the item at <paramref name="index" /> within <paramref name="response" /> to an instance that
     ///     implements <see cref="IAddressValidationResponse" />.
     /// </summary>
-    /// <param name="response">The underlying batch API response returned by the address validation service.</param>
+    /// <param name="response">The batch API response from the provider.</param>
     /// <param name="index">The position, within the batch, of the item to map.</param>
     /// <param name="validationResult">
-    ///     Current validation state (if any) of the item represented as an instance of <see cref="IValidationResult" />.
+    ///     The current <see cref="IValidationResult" />, or <see langword="null" /> if none exists.
     /// </param>
     /// <returns>An instance that implements <see cref="IAddressValidationResponse" />.</returns>
     IAddressValidationResponse Map(TResponse response, int index, IValidationResult? validationResult = null);

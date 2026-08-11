@@ -5,7 +5,7 @@ uid: custom-validators
 
 ## Validators
 
-Two validators are required: one for the incoming [request](xref:custom-models) and one for the provider's [API response](xref:custom-models). Both run inside the validation pipeline managed by [`AbstractAddressValidationService<TRequest, TApiResponse>`](xref:Visus.AddressValidation.Services.AbstractAddressValidationService`2): the request validator runs before the API call, and the response validator runs after.
+Provide two validators: one for the incoming [request](xref:custom-models) and one for the provider's [API response](xref:custom-models). Both run inside the validation pipeline that [`AbstractAddressValidationService<TRequest, TApiResponse>`](xref:Visus.AddressValidation.Services.AbstractAddressValidationService`2) manages. The request validator runs before the API call. The response validator runs after.
 
 ## Request Validator
 
@@ -55,7 +55,7 @@ protected override async ValueTask<bool> PreValidateAsync(MyAddressValidationReq
 ```
 
 > [!IMPORTANT]
-> The request validator **must** derive from `AbstractAddressValidationRequestValidator<TRequest>`. Passing a plain [`AbstractValidator<TRequest>`](xref:Visus.AddressValidation.Validation.AbstractValidator`1) subclass that does not go through this hierarchy will throw [`InvalidImplementationException`](xref:Visus.AddressValidation.InvalidImplementationException) at construction time.
+> The request validator **must** derive from `AbstractAddressValidationRequestValidator<TRequest>`. A plain [`AbstractValidator<TRequest>`](xref:Visus.AddressValidation.Validation.AbstractValidator`1) subclass that skips this hierarchy throws [`InvalidImplementationException`](xref:Visus.AddressValidation.InvalidImplementationException) at construction time.
 
 ## Response Validator
 
@@ -90,9 +90,9 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 ```
 
 > [!NOTE]
-> `PreValidateAsync` controls whether `ValidateAsync` runs. Return `false` to short-circuit: errors already added to `results` will surface in `IAddressValidationResponse.Errors`, and `ValidateAsync` is not called. Return `true` to proceed to `ValidateAsync` for field-level checks on a structurally-valid response.
+> `PreValidateAsync` controls whether `ValidateAsync` runs. Return `false` to short-circuit: errors already added to `results` surface in `IAddressValidationResponse.Errors`, and `ValidateAsync` does not run. Return `true` to proceed to `ValidateAsync` for field-level checks on a structurally-valid response.
 
 > [!NOTE]
-> Override `ValidateAsync` for field-level validation that only applies once the response is structurally valid. Use [`ValidationState.CreateWarning`](xref:Visus.AddressValidation.Validation.ValidationState.CreateWarning*) for non-fatal conditions: warnings surface in `IAddressValidationResponse.Warnings` rather than `Errors`.
+> Override `ValidateAsync` for field-level validation that only applies once the response is structurally valid. Use [`ValidationState.CreateWarning`](xref:Visus.AddressValidation.Validation.ValidationState.CreateWarning*) for non-fatal conditions: warnings surface in `IAddressValidationResponse.Warnings`, instead of `Errors`.
 
 [!INCLUDE [internal-validation-note](../../includes/internal-validation-note.md)]

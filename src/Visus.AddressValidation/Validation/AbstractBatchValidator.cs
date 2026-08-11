@@ -18,8 +18,8 @@ public abstract class AbstractBatchValidator<T> : IBatchValidator<T>
     }
 
     /// <summary>
-    ///     Determines if validation should continue, providing a means to add shared (batch-wide) validation state
-    ///     that applies to every item prior to per-item validation.
+    ///     Determines if validation should continue. Override it to add shared, batch-wide validation state that
+    ///     applies to every item before per-item validation runs.
     /// </summary>
     /// <param name="instance">The instance to perform validation against.</param>
     /// <param name="requestIndexes">The original, caller-facing index of each request expected in the result.</param>
@@ -27,7 +27,7 @@ public abstract class AbstractBatchValidator<T> : IBatchValidator<T>
     ///     One <see cref="ISet{T}" /> of <see cref="ValidationState" /> objects per expected item, indexed
     ///     positionally.
     /// </param>
-    /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
+    /// <param name="cancellationToken">A token that cancels the operation.</param>
     /// <returns><see langword="true" /> to continue with per-item validation; otherwise, <see langword="false" />.</returns>
     protected virtual ValueTask<bool> PreValidateAsync(T instance, IReadOnlyList<int> requestIndexes, IReadOnlyList<ISet<ValidationState>> results, CancellationToken cancellationToken = default)
     {
@@ -35,7 +35,7 @@ public abstract class AbstractBatchValidator<T> : IBatchValidator<T>
     }
 
     /// <summary>
-    ///     Validates the specified instance, populating per-item validation state.
+    ///     Validates the specified instance. It populates per-item validation state.
     /// </summary>
     /// <param name="instance">The object to perform validation against.</param>
     /// <param name="requestIndexes">The original, caller-facing index of each request expected in the result.</param>
@@ -43,7 +43,7 @@ public abstract class AbstractBatchValidator<T> : IBatchValidator<T>
     ///     One <see cref="ISet{T}" /> of <see cref="ValidationState" /> objects per expected item, indexed
     ///     positionally.
     /// </param>
-    /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
+    /// <param name="cancellationToken">A token that cancels the operation.</param>
     /// <returns>A task that represents the asynchronous validation operation.</returns>
     protected virtual ValueTask ValidateAsync(T instance, IReadOnlyList<int> requestIndexes, IReadOnlyList<ISet<ValidationState>> results, CancellationToken cancellationToken = default)
     {

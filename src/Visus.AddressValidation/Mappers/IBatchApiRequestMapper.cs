@@ -19,7 +19,7 @@ public interface IBatchApiRequestMapper<in TRequest, out TApiRequest>
     /// <summary>
     ///     Maps the specified address validation requests to a single provider-specific API request object.
     /// </summary>
-    /// <param name="requests">The address validation requests to map, in the order results should be returned in.</param>
+    /// <param name="requests">The address validation requests to map, listed in the order the response must preserve.</param>
     /// <returns>
     ///     A provider-specific API request object populated from <paramref name="requests" />.
     /// </returns>

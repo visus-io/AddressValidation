@@ -8,9 +8,9 @@ public interface IAuthenticationClient
     /// <summary>
     ///     Sends a token request using the client_credentials grant type.
     /// </summary>
-    /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
+    /// <param name="cancellationToken">A token that cancels the operation.</param>
     /// <returns>
-    ///     An instance of <see cref="TokenResponse" /> containing the token or <see langword="null" />.
+    ///     An instance of <see cref="TokenResponse" /> that holds the token, or <see langword="null" />.
     /// </returns>
     Task<TokenResponse?> RequestClientCredentialsTokenAsync(CancellationToken cancellationToken = default);
 }

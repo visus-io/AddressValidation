@@ -15,12 +15,12 @@ public abstract class AbstractValidator<T> : IValidator<T>
     }
 
     /// <summary>
-    ///     Determines if validation should continue as well as providing a means to modify the instance and validation state
-    ///     prior to execution.
+    ///     Determines if validation should continue. Override it to modify the instance or validation state before
+    ///     execution.
     /// </summary>
     /// <param name="instance">The instance to perform validation against.</param>
     /// <param name="results">The set (collection) of <see cref="ValidationState" /> objects for the current instance.</param>
-    /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
+    /// <param name="cancellationToken">A token that cancels the operation.</param>
     /// <returns><see langword="true" /> to continue with validation; otherwise, <see langword="false" />.</returns>
     protected virtual ValueTask<bool> PreValidateAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
@@ -32,7 +32,7 @@ public abstract class AbstractValidator<T> : IValidator<T>
     /// </summary>
     /// <param name="instance">The object to perform validation against.</param>
     /// <param name="results">The set (collection) of <see cref="ValidationState" /> objects for the current instance.</param>
-    /// <param name="cancellationToken">A cancellation token that can be used to cancel the work.</param>
+    /// <param name="cancellationToken">A token that cancels the operation.</param>
     /// <returns>A task that represents the asynchronous validation operation.</returns>
     protected virtual ValueTask ValidateAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {

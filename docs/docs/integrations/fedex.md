@@ -8,7 +8,7 @@ AddressValidation offers a complete integration to the [FedEx&reg; Address Valid
 
 ## Credentials
 
-Before utilizing the integration, you will need a [developer account](https://developer.fedex.com/) with FedEx. After you have signed in to the account, [follow these instructions](https://developer.fedex.com/api/en-us/get-started.html) to obtain your credentials.
+Get a [developer account](https://developer.fedex.com/) with FedEx before you use this integration. After you sign in, [follow these instructions](https://developer.fedex.com/api/en-us/get-started.html) to get your credentials.
 
 ## Installation
 
@@ -24,7 +24,7 @@ Install-Package VisusIO.AddressValidation.Integration.FedEx
 ```
 ---
 
-At application startup, you will need to register the integration with the [Microsoft DI](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) container:
+Register the integration with the [Microsoft DI](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) container at application startup:
 
 ```csharp
 builder.Services.AddFedExAddressValidation();
@@ -59,7 +59,7 @@ Configuration is bound from the `AddressValidationSettings:FedEx` section.
 | `EndpointUriOverride` | SANDBOX only | Custom endpoint URI; required when `ClientEnvironment` is `SANDBOX` |
 
 > [!IMPORTANT]
-> `ClientId` and `ClientSecret` should be stored encrypted at rest. See the [Security](../index.md#security) for additional details.
+> Store `ClientId` and `ClientSecret` encrypted at rest. See [Security](../index.md#security) for more details.
 
 ## Standard Example
 
@@ -153,10 +153,10 @@ public class ValidateController
 ---
 
 > [!NOTE]
-> `transactionId` will always be present in `customResponseData`. When [`CustomerTransactionId`](xref:Visus.AddressValidation.Integration.FedEx.Models.FedExAddressValidationRequest#Visus_AddressValidation_Integration_FedEx_Models_FedExAddressValidationRequest_CustomerTransactionId) is set on the request, `customerTransactionId` will also be present with the same value echoed back by the FedEx API.
+> `transactionId` is always present in `customResponseData`. When you set [`CustomerTransactionId`](xref:Visus.AddressValidation.Integration.FedEx.Models.FedExAddressValidationRequest#Visus_AddressValidation_Integration_FedEx_Models_FedExAddressValidationRequest_CustomerTransactionId) on the request, `customerTransactionId` is also present, with the same value the FedEx API echoes back.
 
 > [!NOTE]
-> The `Suggestions` collection will always be empty as the [FedEx&reg; Address Validation API](https://developer.fedex.com/api/en-us/catalog/address-validation.html) does not provide address suggestions.
+> The `Suggestions` collection is always empty. The [FedEx&reg; Address Validation API](https://developer.fedex.com/api/en-us/catalog/address-validation.html) does not provide address suggestions.
 
 [!INCLUDE [is-residential-note](../includes/is-residential-note.md)]
 
@@ -187,7 +187,7 @@ public class ValidateController
 ```
 
 > [!NOTE]
-> `ValidateManyAsync` returns one entry per request, in the same order the requests were submitted. An entry is an [`EmptyAddressValidationResponse`](xref:Visus.AddressValidation.Models.EmptyAddressValidationResponse) when that request failed local validation or FedEx could not resolve it, and `null` only when the entire batch call produced no response. Since the result carries per-item outcomes rather than a single status, inspect each entry instead of relying on the HTTP status code.
+> `ValidateManyAsync` returns one entry per request, in the same order you submitted the requests. An entry is an [`EmptyAddressValidationResponse`](xref:Visus.AddressValidation.Models.EmptyAddressValidationResponse) when the request failed local validation, or when FedEx could not resolve it. An entry is `null` only when the entire batch call produced no response. Each result carries a per-item outcome, instead of one status for the whole call — inspect each entry instead of the HTTP status code.
 
 # [Request](#tab/tab-ave-fedex-batch-json-request)
 ```JSON
@@ -267,7 +267,7 @@ public class ValidateController
 > FedEx accepts only one transaction identifier per batch call, so [`CustomerTransactionId`](xref:Visus.AddressValidation.Integration.FedEx.Models.FedExAddressValidationRequest#Visus_AddressValidation_Integration_FedEx_Models_FedExAddressValidationRequest_CustomerTransactionId) set on any request other than the first in the batch is not transmitted.
 
 > [!NOTE]
-> FedEx's resolve endpoint does not echo `clientReferenceId` (or any other per-item identifier) back on a resolved address, so results are correlated to requests strictly by their position in the list, not by any field in the response. `clientReferenceId` is still transmitted to FedEx for their own tracking, but it has no effect on how this library associates a response with its request.
+> FedEx's resolve endpoint does not echo `clientReferenceId` (or any other per-item identifier) back on a resolved address. This library correlates results to requests strictly by list position, not by any field in the response. `clientReferenceId` is still sent to FedEx for its own tracking, but it has no effect on how this library matches a response to its request.
 
 [!INCLUDE [is-residential-note](../includes/is-residential-note.md)]
 

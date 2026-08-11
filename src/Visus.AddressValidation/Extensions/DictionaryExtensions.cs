@@ -10,7 +10,7 @@ public static class DictionaryExtensions
     /// <summary>
     ///     Merges the elements from <paramref name="dictionary" /> with the <paramref name="source" />.
     /// </summary>
-    /// <remarks>Elements with a key that already exists will not be merged.</remarks>
+    /// <remarks>If the key already exists in <paramref name="source" />, the merge skips that element.</remarks>
     /// <param name="source">The dictionary to merge with.</param>
     /// <param name="dictionary">The <see cref="IReadOnlyDictionary{TKey,TValue}" /> to merge from.</param>
     /// <typeparam name="TKey">The element type of the key.</typeparam>
@@ -34,7 +34,7 @@ public static class DictionaryExtensions
     /// <summary>
     ///     Merges the elements from <paramref name="dictionary" /> with the <paramref name="source" />.
     /// </summary>
-    /// <remarks>Elements with a key that already exists will not be merged.</remarks>
+    /// <remarks>If the key already exists in <paramref name="source" />, the merge skips that element.</remarks>
     /// <param name="source">The dictionary to merge to.</param>
     /// <param name="dictionary">The <see cref="IDictionary{TKey,TValue}" /> to merge from.</param>
     /// <typeparam name="TKey">The element type of the key.</typeparam>

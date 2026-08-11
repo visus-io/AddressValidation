@@ -15,7 +15,7 @@ internal enum AddressClassification
     BUSINESS,
 
     /// <summary>
-    ///     Contains Business &amp; Residential Units (Multi-Tenant Only)
+    ///     Contains Business and Residential Units (Multi-Tenant Only)
     /// </summary>
     MIXED,
 

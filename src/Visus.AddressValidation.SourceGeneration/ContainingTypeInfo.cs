@@ -4,7 +4,8 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 
 /// <summary>
-///     Holds metadata about a type that contains another type, used during source generation.
+///     Holds metadata about a type that contains another type. The source generator uses this metadata while
+///     generating code.
 /// </summary>
 /// <param name="Name">The simple (unqualified) name of the containing type.</param>
 /// <param name="FullName">The fully qualified name of the containing type.</param>
@@ -19,7 +20,7 @@ using Microsoft.CodeAnalysis;
 ///     <see langword="false" />.
 /// </param>
 /// <param name="ContainingTypes">
-///     The ordered list of types that further enclose this type, from outermost to innermost.
+///     The ordered list of additional types that enclose this type, from outermost to innermost.
 /// </param>
 internal sealed record ContainingTypeInfo(
     string Name,

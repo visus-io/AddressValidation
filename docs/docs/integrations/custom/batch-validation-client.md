@@ -31,7 +31,7 @@ internal sealed class BatchApiRequestAdapter : IBatchApiRequestAdapter<MyAddress
 ```
 
 > [!NOTE]
-> No new authentication or HTTP infrastructure is needed for batch support. The adapter reuses the same [validation client](xref:custom-validation-client) and, transitively, the same [`BearerTokenDelegatingHandler<TClient>`](xref:Visus.AddressValidation.Http.BearerTokenDelegatingHandler`1) and resilience pipeline configured for the singular pipeline. If the provider's batch endpoint is a different URL or accepts a different request shape than the single-address endpoint, add a second method to the existing validation client rather than creating a separate typed `HttpClient`.
+> Batch support needs no new authentication or HTTP infrastructure. The adapter reuses the same [validation client](xref:custom-validation-client) and, transitively, the same [`BearerTokenDelegatingHandler<TClient>`](xref:Visus.AddressValidation.Http.BearerTokenDelegatingHandler`1) and resilience pipeline configured for the singular pipeline. If the provider's batch endpoint uses a different URL or request shape than the single-address endpoint, add a second method to the existing validation client, instead of creating a separate typed `HttpClient`.
 
 ```csharp
 public Task<ApiResponse?> ValidateAddressesAsync(ApiRequest request, CancellationToken cancellationToken = default)
@@ -61,4 +61,4 @@ private async Task<ApiResponse?> ValidateAddressesInternalAsync(ApiRequest reque
 ```
 
 > [!NOTE]
-> It is not necessary for the batch request adapter to be `internal`, but it is **strongly** recommended if redistributing as a library.
+> Mark the batch request adapter `internal` unless you redistribute it as a library.
