@@ -46,7 +46,6 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
 
     private const string s_tokenTypePropertyName = "token_type";
 
-    /// <inheritdoc />
     /// <summary>
     ///     Reads and converts JSON into a <see cref="TokenResponse" /> object.
     /// </summary>
@@ -128,7 +127,6 @@ public sealed class TokenResponseConverter : JsonConverter<TokenResponse>
             errorDescription);
     }
 
-    /// <inheritdoc />
     /// <summary>
     ///     Writes a <see cref="TokenResponse" /> object as JSON.
     /// </summary>

@@ -10,13 +10,13 @@ An authentication client is a [typed](https://learn.microsoft.com/en-us/dotnet/a
 > [!NOTE]
 > General-purpose OAuth 2.0 libraries exist, such as [IdentityModel](https://github.com/IdentityModel/IdentityModel). Use native .NET components instead. This maximizes performance, avoids third-party dependencies, and supports [trimming](https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/prepare-libraries-for-trimming) and [native AOT](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/).
 
-### Using AbstractBasicAuthenticationClient
+### Using AbstractClientCredentialsAuthenticationClient
 
-For providers that use the [`client_credentials`](https://www.oauth.com/oauth2-servers/access-tokens/client-credentials/) grant with [HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Authentication#basic_authentication_scheme), extend [`AbstractBasicAuthenticationClient`](xref:Visus.AddressValidation.Http.Clients.AbstractBasicAuthenticationClient). The base class handles the token request, Basic Auth header, and JSON deserialization; you only implement three abstract properties:
+For providers that use the [`client_credentials`](https://www.oauth.com/oauth2-servers/access-tokens/client-credentials/) grant, extend [`AbstractClientCredentialsAuthenticationClient`](xref:Visus.AddressValidation.Http.Clients.AbstractClientCredentialsAuthenticationClient). The base class handles the token request and JSON deserialization; you implement three abstract properties:
 
 ```csharp
 [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
-internal sealed class MyAuthenticationClient : AbstractBasicAuthenticationClient
+internal sealed class MyAuthenticationClient : AbstractClientCredentialsAuthenticationClient
 {
     private readonly IOptions<MyServiceOptions> _options;
 
@@ -26,18 +26,24 @@ internal sealed class MyAuthenticationClient : AbstractBasicAuthenticationClient
         _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
-    protected override string Username => _options.Value.ClientId;
+    protected override string ClientId => _options.Value.ClientId;
 
-    protected override string Password => _options.Value.ClientSecret;
+    protected override string ClientSecret => _options.Value.ClientSecret;
 
     protected override Uri TokenUri => new(_options.Value.EndpointUri, "/oauth/token");
 }
 ```
 
-If the provider requires additional headers on the token request, override the virtual `AddAdditionalHeaders` method:
+By default, the base class sends `ClientId` and `ClientSecret` as `client_id` and `client_secret` form fields in the request body. If the provider instead requires [HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Authentication#basic_authentication_scheme), override the virtual `UseHttpBasicAuthentication` property:
 
 ```csharp
-protected override void AddAdditionalHeaders(HttpRequestMessage request)
+protected override bool UseHttpBasicAuthentication => true;
+```
+
+If the provider requires additional headers on the token request, override the virtual `ApplyAdditionalHeaders` method:
+
+```csharp
+protected override void ApplyAdditionalHeaders(HttpRequestMessage request)
 {
     request.Headers.Add("x-merchant-id", _options.Value.AccountNumber);
 }
@@ -45,7 +51,7 @@ protected override void AddAdditionalHeaders(HttpRequestMessage request)
 
 ### Custom flows
 
-For providers that use a non-standard grant type, bearer token in the request body, or another scheme that does not fit the Basic Auth pattern, implement [`IAuthenticationClient`](xref:Visus.AddressValidation.Http.Clients.IAuthenticationClient) directly:
+For providers that use a non-standard grant type, bearer token in the request body, or another scheme that does not fit the client-credentials pattern, implement [`IAuthenticationClient`](xref:Visus.AddressValidation.Http.Clients.IAuthenticationClient) directly:
 
 ```csharp
 [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]

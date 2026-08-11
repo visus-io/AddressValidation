@@ -81,7 +81,7 @@ Consumers depend only on this interface and `IAddressValidationResponse`; they n
 | Type | Role |
 |---|---|
 | `BearerTokenDelegatingHandler` | `DelegatingHandler` that injects `Authorization: Bearer <token>` into every outbound request to the provider API. Throws `InvalidCredentialException` if the token is absent. |
-| `AbstractBasicAuthenticationClient` | Abstract OAuth2 client that authenticates using HTTP Basic auth (used by UPS and Pitney Bowes). |
+| `AbstractClientCredentialsAuthenticationClient` | Abstract OAuth2 client that authenticates using the client-credentials grant. Sends credentials as body form fields by default, or as an HTTP Basic auth header when `UseHttpBasicAuthentication` is overridden (used by UPS and Pitney Bowes). |
 | `HttpClientBuilderExtensions` | Two resilience pipeline presets registered via `Microsoft.Extensions.Http.Resilience`. See [HTTP Resilience](#http-resilience). |
 
 ---
