@@ -23,24 +23,6 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
 {
     private const string s_activityName = "address_validation.validate";
 
-    private const string s_resultError = "error";
-
-    private const string s_resultInvalidRequest = "invalid_request";
-
-    private const string s_resultInvalidResponse = "invalid_response";
-
-    private const string s_resultNoResponse = "no_response";
-
-    private const string s_resultSuccess = "success";
-
-    private const string s_tagCountry = "address_validation.country";
-
-    private const string s_tagRequestType = "address_validation.request_type";
-
-    private const string s_tagResult = "address_validation.result";
-
-    private const string s_unknownCountry = "unknown";
-
     private readonly IApiRequestAdapter<TRequest, TApiResponse> _requestAdapter;
 
     private readonly IValidator<TRequest> _requestValidator;
@@ -110,37 +92,22 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
     {
         AddressValidationDiagnostics.ValidationDuration.Record(
             Stopwatch.GetElapsedTime(startTimestamp).TotalSeconds,
-            new KeyValuePair<string, object?>(s_tagRequestType, typeof(TRequest).Name),
-            new KeyValuePair<string, object?>(s_tagResult, result),
-            new KeyValuePair<string, object?>(s_tagCountry, country));
+            new KeyValuePair<string, object?>(AddressValidationServiceDiagnostics.s_tagRequestType, typeof(TRequest).Name),
+            new KeyValuePair<string, object?>(AddressValidationServiceDiagnostics.s_tagResult, result),
+            new KeyValuePair<string, object?>(AddressValidationServiceDiagnostics.s_tagCountry, country));
 
-        if ( response is null )
-        {
-            return;
-        }
-
-        AddressValidationDiagnostics.ResponseWarningCount.Record(
-            response.Warnings.Count,
-            new KeyValuePair<string, object?>(s_tagRequestType, typeof(TRequest).Name),
-            new KeyValuePair<string, object?>(s_tagResult, result),
-            new KeyValuePair<string, object?>(s_tagCountry, country));
-
-        AddressValidationDiagnostics.ResponseSuggestionCount.Record(
-            response.Suggestions.Count,
-            new KeyValuePair<string, object?>(s_tagRequestType, typeof(TRequest).Name),
-            new KeyValuePair<string, object?>(s_tagResult, result),
-            new KeyValuePair<string, object?>(s_tagCountry, country));
+        AddressValidationServiceDiagnostics.RecordResponseCounts(typeof(TRequest).Name, result, country, response);
     }
 
     private async Task<IAddressValidationResponse?> ValidateInternalAsync(TRequest request, CancellationToken cancellationToken)
     {
         using Activity? activity = AddressValidationDiagnostics.ActivitySource.StartActivity(s_activityName);
-        string country = request.Country?.ToString() ?? s_unknownCountry;
-        activity?.SetTag(s_tagRequestType, typeof(TRequest).Name);
-        activity?.SetTag(s_tagCountry, country);
+        string country = AddressValidationServiceDiagnostics.CountryTag(request);
+        activity?.SetTag(AddressValidationServiceDiagnostics.s_tagRequestType, typeof(TRequest).Name);
+        activity?.SetTag(AddressValidationServiceDiagnostics.s_tagCountry, country);
 
         long startTimestamp = Stopwatch.GetTimestamp();
-        string result = s_resultSuccess;
+        string result = AddressValidationServiceDiagnostics.s_resultSuccess;
         IAddressValidationResponse? response = null;
 
         try
@@ -148,7 +115,7 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
             IValidationResult requestValidationResult = await _requestValidator.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
             if ( requestValidationResult.HasErrors )
             {
-                result = s_resultInvalidRequest;
+                result = AddressValidationServiceDiagnostics.s_resultInvalidRequest;
                 response = new EmptyAddressValidationResponse(requestValidationResult);
                 return response;
             }
@@ -156,14 +123,14 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
             TApiResponse? apiResponse = await _requestAdapter.ExecuteAsync(request, cancellationToken).ConfigureAwait(false);
             if ( apiResponse is null )
             {
-                result = s_resultNoResponse;
+                result = AddressValidationServiceDiagnostics.s_resultNoResponse;
                 return null;
             }
 
             IValidationResult responseValidationResult = await _responseValidator.ExecuteAsync(apiResponse, cancellationToken).ConfigureAwait(false);
             if ( responseValidationResult.HasErrors )
             {
-                result = s_resultInvalidResponse;
+                result = AddressValidationServiceDiagnostics.s_resultInvalidResponse;
                 response = new EmptyAddressValidationResponse(responseValidationResult);
                 return response;
             }
@@ -173,14 +140,14 @@ public abstract class AbstractAddressValidationService<TRequest, TApiResponse> :
         }
         catch ( Exception ex )
         {
-            result = s_resultError;
+            result = AddressValidationServiceDiagnostics.s_resultError;
             activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
             activity?.AddException(ex);
             throw;
         }
         finally
         {
-            activity?.SetTag(s_tagResult, result);
+            activity?.SetTag(AddressValidationServiceDiagnostics.s_tagResult, result);
             RecordMetrics(startTimestamp, result, country, response);
         }
     }

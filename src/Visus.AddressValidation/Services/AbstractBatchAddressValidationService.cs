@@ -29,29 +29,11 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
 
     private static readonly CompositeFormat s_batchExceedsMaximumSizeFormat = CompositeFormat.Parse(Resources.Validation_Batch_ExceedsMaximumSize);
 
-    private const string s_resultError = "error";
-
-    private const string s_resultInvalidRequest = "invalid_request";
-
-    private const string s_resultInvalidResponse = "invalid_response";
-
-    private const string s_resultNoResponse = "no_response";
-
     private const string s_resultPartial = "partial";
-
-    private const string s_resultSuccess = "success";
 
     private const string s_sentinelBatchCountry = "batch";
 
     private const string s_tagBatchSize = "address_validation.batch_size";
-
-    private const string s_tagCountry = "address_validation.country";
-
-    private const string s_tagRequestType = "address_validation.request_type";
-
-    private const string s_tagResult = "address_validation.result";
-
-    private const string s_unknownCountry = "unknown";
 
     private readonly IBatchApiRequestAdapter<TRequest, TApiResponse> _batchRequestAdapter;
 
@@ -132,29 +114,9 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
         return ValidateManyInternalAsync(requests, cancellationToken);
     }
 
-    private static string CountryTag(TRequest request)
-    {
-        return request.Country?.ToString() ?? s_unknownCountry;
-    }
-
     private static void RecordItemMetrics(string result, string country, IAddressValidationResponse? response)
     {
-        if ( response is null )
-        {
-            return;
-        }
-
-        AddressValidationDiagnostics.ResponseWarningCount.Record(
-            response.Warnings.Count,
-            new KeyValuePair<string, object?>(s_tagRequestType, typeof(TRequest).Name),
-            new KeyValuePair<string, object?>(s_tagResult, result),
-            new KeyValuePair<string, object?>(s_tagCountry, country));
-
-        AddressValidationDiagnostics.ResponseSuggestionCount.Record(
-            response.Suggestions.Count,
-            new KeyValuePair<string, object?>(s_tagRequestType, typeof(TRequest).Name),
-            new KeyValuePair<string, object?>(s_tagResult, result),
-            new KeyValuePair<string, object?>(s_tagCountry, country));
+        AddressValidationServiceDiagnostics.RecordResponseCounts(typeof(TRequest).Name, result, country, response);
     }
 
     private async Task<bool> MapValidatedItemsAsync(TApiResponse apiResponse,
@@ -183,7 +145,10 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
 
             anyItemInvalid |= itemValidation.HasErrors;
             finalResults[validIndexes[j]] = itemResult;
-            RecordItemMetrics(itemValidation.HasErrors ? s_resultInvalidResponse : s_resultSuccess, CountryTag(validRequests[j]), itemResult);
+            RecordItemMetrics(
+                itemValidation.HasErrors ? AddressValidationServiceDiagnostics.s_resultInvalidResponse : AddressValidationServiceDiagnostics.s_resultSuccess,
+                AddressValidationServiceDiagnostics.CountryTag(validRequests[j]),
+                itemResult);
         }
 
         return anyItemInvalid;
@@ -202,7 +167,7 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
             if ( requestValidationResult.HasErrors )
             {
                 finalResults[i] = new EmptyAddressValidationResponse(requestValidationResult);
-                RecordItemMetrics(s_resultInvalidRequest, CountryTag(requests[i]), finalResults[i]);
+                RecordItemMetrics(AddressValidationServiceDiagnostics.s_resultInvalidRequest, AddressValidationServiceDiagnostics.CountryTag(requests[i]), finalResults[i]);
                 continue;
             }
 
@@ -221,12 +186,12 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
         }
 
         using Activity? activity = AddressValidationDiagnostics.ActivitySource.StartActivity(s_activityName);
-        activity?.SetTag(s_tagRequestType, typeof(TRequest).Name);
+        activity?.SetTag(AddressValidationServiceDiagnostics.s_tagRequestType, typeof(TRequest).Name);
         activity?.SetTag(s_tagBatchSize, requests.Count);
-        activity?.SetTag(s_tagCountry, s_sentinelBatchCountry);
+        activity?.SetTag(AddressValidationServiceDiagnostics.s_tagCountry, s_sentinelBatchCountry);
 
         long startTimestamp = Stopwatch.GetTimestamp();
-        string result = s_resultSuccess;
+        string result = AddressValidationServiceDiagnostics.s_resultSuccess;
         IAddressValidationResponse?[] finalResults = new IAddressValidationResponse?[requests.Count];
 
         try
@@ -236,14 +201,14 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
 
             if ( partition.ValidRequests.Count == 0 )
             {
-                result = s_resultInvalidRequest;
+                result = AddressValidationServiceDiagnostics.s_resultInvalidRequest;
                 return finalResults;
             }
 
             TApiResponse? apiResponse = await _batchRequestAdapter.ExecuteAsync(partition.ValidRequests, cancellationToken).ConfigureAwait(false);
             if ( apiResponse is null )
             {
-                result = anyLocallyInvalid ? s_resultPartial : s_resultNoResponse;
+                result = anyLocallyInvalid ? s_resultPartial : AddressValidationServiceDiagnostics.s_resultNoResponse;
                 foreach ( int index in partition.ValidIndexes )
                 {
                     finalResults[index] = null;
@@ -253,24 +218,24 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
             }
 
             bool anyItemInvalid = await MapValidatedItemsAsync(apiResponse, partition.ValidRequests, partition.ValidIndexes, finalResults, cancellationToken).ConfigureAwait(false);
-            result = anyLocallyInvalid || anyItemInvalid ? s_resultPartial : s_resultSuccess;
+            result = anyLocallyInvalid || anyItemInvalid ? s_resultPartial : AddressValidationServiceDiagnostics.s_resultSuccess;
             return finalResults;
         }
         catch ( Exception ex )
         {
-            result = s_resultError;
+            result = AddressValidationServiceDiagnostics.s_resultError;
             activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
             activity?.AddException(ex);
             throw;
         }
         finally
         {
-            activity?.SetTag(s_tagResult, result);
+            activity?.SetTag(AddressValidationServiceDiagnostics.s_tagResult, result);
             AddressValidationDiagnostics.ValidationDuration.Record(
                 Stopwatch.GetElapsedTime(startTimestamp).TotalSeconds,
-                new KeyValuePair<string, object?>(s_tagRequestType, typeof(TRequest).Name),
-                new KeyValuePair<string, object?>(s_tagResult, result),
-                new KeyValuePair<string, object?>(s_tagCountry, s_sentinelBatchCountry));
+                new KeyValuePair<string, object?>(AddressValidationServiceDiagnostics.s_tagRequestType, typeof(TRequest).Name),
+                new KeyValuePair<string, object?>(AddressValidationServiceDiagnostics.s_tagResult, result),
+                new KeyValuePair<string, object?>(AddressValidationServiceDiagnostics.s_tagCountry, s_sentinelBatchCountry));
         }
     }
 
