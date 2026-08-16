@@ -63,6 +63,14 @@ internal sealed class ApiMessageFormatterTests
     }
 
     [Test]
+    public void CreateWarning_NullCode_ReturnsBareMessage()
+    {
+        ValidationState state = ApiMessageFormatter.CreateWarning(null, "Heads up.");
+
+        state.Message.Should().Be("Heads up.");
+    }
+
+    [Test]
     public void CreateWarning_NullCodeAndMessage_Throws()
     {
         Action act = static () => ApiMessageFormatter.CreateWarning(null, null);
