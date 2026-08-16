@@ -19,9 +19,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
         {
             if ( !string.IsNullOrWhiteSpace(error.ErrorDescription) )
             {
-                results.Add(string.IsNullOrWhiteSpace(error.ErrorCode)
-                                ? ValidationState.CreateError(error.ErrorDescription)
-                                : ValidationState.CreateError($"{error.ErrorCode}: {error.ErrorDescription}"));
+                results.Add(ApiMessageFormatter.CreateError(error.ErrorCode, error.ErrorDescription));
             }
 
             if ( !string.IsNullOrWhiteSpace(error.AdditionalInfo) )

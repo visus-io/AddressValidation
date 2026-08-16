@@ -45,9 +45,12 @@ internal static class ResolvedAddressValidator
 
         foreach ( ApiResponse.CustomerMessage message in customerMessages )
         {
-            results.Add(string.IsNullOrWhiteSpace(message.Message)
-                            ? ValidationState.CreateWarning(message.Code)
-                            : ValidationState.CreateWarning($"{message.Code}: {message.Message}"));
+            if ( string.IsNullOrWhiteSpace(message.Code) && string.IsNullOrWhiteSpace(message.Message) )
+            {
+                continue;
+            }
+
+            results.Add(ApiMessageFormatter.CreateWarning(message.Code, message.Message));
         }
     }
 }

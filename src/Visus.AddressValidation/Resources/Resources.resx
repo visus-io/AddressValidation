@@ -54,4 +54,7 @@
     <data name="Validation_Batch_ExceedsMaximumSize" xml:space="preserve">
         <value>The batch contains {0} addresses, which exceeds the maximum of {1} supported by this provider.</value>
     </data>
+    <data name="Validation_ApiMessageFormatter_CodeOrMessageRequired" xml:space="preserve">
+        <value>Provide a code, a message, or both. Both values cannot be null, empty, or whitespace.</value>
+    </data>
 </root>

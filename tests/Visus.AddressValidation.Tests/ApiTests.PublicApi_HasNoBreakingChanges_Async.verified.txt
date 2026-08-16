@@ -813,6 +813,11 @@ namespace Visus.AddressValidation.Validation
         protected virtual System.Threading.Tasks.ValueTask<bool> PreValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
         protected virtual System.Threading.Tasks.ValueTask ValidateAsync(T instance, System.Collections.Generic.ISet<Visus.AddressValidation.Validation.ValidationState> results, System.Threading.CancellationToken cancellationToken = default) { }
     }
+    public static class ApiMessageFormatter
+    {
+        public static Visus.AddressValidation.Validation.ValidationState CreateError(string? code, string? message) { }
+        public static Visus.AddressValidation.Validation.ValidationState CreateWarning(string? code, string? message) { }
+    }
     public interface IBatchValidator<in T>
         where in T :  class
     {
