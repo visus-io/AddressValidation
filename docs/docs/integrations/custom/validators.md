@@ -88,6 +88,20 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 > [!NOTE]
 > [`ApiMessageFormatter`](xref:Visus.AddressValidation.Validation.ApiMessageFormatter) turns a provider's `(code, message)` pair into a `ValidationState`. Use `ApiMessageFormatter.CreateError` and `ApiMessageFormatter.CreateWarning` instead of hand-rolling the same code-or-message ternary in every provider. Both methods tolerate a `null`, empty, or whitespace `code` or `message`, and fall back to whichever value is present. They throw `ArgumentException` only when both are blank.
 
+> [!IMPORTANT]
+> The sample loop above calls `ApiMessageFormatter.CreateError` without a guard. This is safe only when the provider always sends a code, a message, or both on every error entry. Confirm that guarantee against your provider's API contract first. If an entry can arrive with neither field set, skip it before the call:
+> ```csharp
+> foreach ( ApiResponse.ErrorPayload error in instance.Errors )
+> {
+>     if ( string.IsNullOrWhiteSpace(error.Code) && string.IsNullOrWhiteSpace(error.Message) )
+>     {
+>         continue;
+>     }
+>
+>     results.Add(ApiMessageFormatter.CreateError(error.Code, error.Message));
+> }
+> ```
+
 > [!NOTE]
 > Override `ValidateAsync` for field-level validation that only applies once the response is structurally valid. Use [`ValidationState.CreateWarning`](xref:Visus.AddressValidation.Validation.ValidationState.CreateWarning*) for non-fatal conditions: warnings surface in `IAddressValidationResponse.Warnings`, instead of `Errors`.
 
