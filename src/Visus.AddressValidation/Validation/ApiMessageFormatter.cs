@@ -1,5 +1,7 @@
 namespace Visus.AddressValidation.Validation;
 
+using Resources;
+
 /// <summary>
 ///     Formats a provider-supplied code and message into a <see cref="ValidationState" />.
 /// </summary>
@@ -11,16 +13,19 @@ public static class ApiMessageFormatter
     /// <param name="code">The provider's error code. Can be <see langword="null" /> or empty when the provider omits one.</param>
     /// <param name="message">The provider's error message. Can be <see langword="null" /> or empty when the provider omits one.</param>
     /// <returns>A <see cref="ValidationState" /> instance.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="code" /> and <paramref name="message" /> are both <see langword="null" /> or empty.</exception>
     public static ValidationState CreateError(string? code, string? message)
     {
-        if ( string.IsNullOrWhiteSpace(code) )
+        if ( !string.IsNullOrWhiteSpace(code) )
         {
-            return ValidationState.CreateError(message ?? string.Empty);
+            return string.IsNullOrWhiteSpace(message)
+                       ? ValidationState.CreateError(code)
+                       : ValidationState.CreateError($"{code}: {message}");
         }
 
         return string.IsNullOrWhiteSpace(message)
-                    ? ValidationState.CreateError(code)
-                    : ValidationState.CreateError($"{code}: {message}");
+                   ? throw new ArgumentException(Resources.Validation_ApiMessageFormatter_CodeOrMessageRequired, nameof(message))
+                   : ValidationState.CreateError(message);
     }
 
     /// <summary>
@@ -29,15 +34,18 @@ public static class ApiMessageFormatter
     /// <param name="code">The provider's code. Can be <see langword="null" /> or empty when the provider omits one.</param>
     /// <param name="message">The provider's message. Can be <see langword="null" /> or empty when the provider omits one.</param>
     /// <returns>A <see cref="ValidationState" /> instance.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="code" /> and <paramref name="message" /> are both <see langword="null" /> or empty.</exception>
     public static ValidationState CreateWarning(string? code, string? message)
     {
-        if ( string.IsNullOrWhiteSpace(code) )
+        if ( !string.IsNullOrWhiteSpace(code) )
         {
-            return ValidationState.CreateWarning(message ?? string.Empty);
+            return string.IsNullOrWhiteSpace(message)
+                       ? ValidationState.CreateWarning(code)
+                       : ValidationState.CreateWarning($"{code}: {message}");
         }
 
         return string.IsNullOrWhiteSpace(message)
-                    ? ValidationState.CreateWarning(code)
-                    : ValidationState.CreateWarning($"{code}: {message}");
+                   ? throw new ArgumentException(Resources.Validation_ApiMessageFormatter_CodeOrMessageRequired, nameof(message))
+                   : ValidationState.CreateWarning(message);
     }
 }

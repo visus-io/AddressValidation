@@ -104,5 +104,11 @@ namespace Visus.AddressValidation.Resources {
                 return ResourceManager.GetString("Validation_Batch_ExceedsMaximumSize", resourceCulture);
             }
         }
+
+        public static string Validation_ApiMessageFormatter_CodeOrMessageRequired {
+            get {
+                return ResourceManager.GetString("Validation_ApiMessageFormatter_CodeOrMessageRequired", resourceCulture);
+            }
+        }
     }
 }
