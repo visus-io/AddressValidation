@@ -11,7 +11,7 @@ public static class ApiMessageFormatter
     ///     Creates an error state from a provider error code and message.
     /// </summary>
     /// <param name="code">
-    ///     The provider's error code. Can be <see langword="null" />, empty, or consist only of white space
+    ///     The provider's error code. Can be <see langword="null" />, empty, or consist only of whitespace
     ///     when the provider omits one.
     /// </param>
     /// <param name="message">
@@ -21,7 +21,7 @@ public static class ApiMessageFormatter
     /// <returns>A <see cref="ValidationState" /> instance.</returns>
     /// <exception cref="ArgumentException">
     ///     Thrown when <paramref name="code" /> and <paramref name="message" /> are both
-    ///     <see langword="null" />, empty, or white space.
+    ///     <see langword="null" />, empty, or whitespace.
     /// </exception>
     public static ValidationState CreateError(string? code, string? message)
     {
@@ -43,17 +43,17 @@ public static class ApiMessageFormatter
     ///     Creates a warning state from a provider code and message.
     /// </summary>
     /// <param name="code">
-    ///     The provider's code. Can be <see langword="null" />, empty, or consist only of white space when the
+    ///     The provider's code. Can be <see langword="null" />, empty, or consist only of whitespace when the
     ///     provider omits one.
     /// </param>
     /// <param name="message">
-    ///     The provider's message. Can be <see langword="null" />, empty, or consist only of white space
+    ///     The provider's message. Can be <see langword="null" />, empty, or consist only of whitespace
     ///     when the provider omits one.
     /// </param>
     /// <returns>A <see cref="ValidationState" /> instance.</returns>
     /// <exception cref="ArgumentException">
     ///     Thrown when <paramref name="code" /> and <paramref name="message" /> are both
-    ///     <see langword="null" />, empty, or white space.
+    ///     <see langword="null" />, empty, or whitespace.
     /// </exception>
     public static ValidationState CreateWarning(string? code, string? message)
     {
