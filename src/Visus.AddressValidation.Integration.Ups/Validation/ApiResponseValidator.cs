@@ -20,9 +20,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
                 continue;
             }
 
-            results.Add(string.IsNullOrWhiteSpace(error.Code)
-                            ? ValidationState.CreateError(error.Message)
-                            : ValidationState.CreateError($"{error.Code}: {error.Message}"));
+            results.Add(ApiMessageFormatter.CreateError(error.Code, error.Message));
         }
 
         return ValueTask.FromResult(false);

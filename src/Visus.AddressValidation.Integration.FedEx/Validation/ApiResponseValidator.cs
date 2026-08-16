@@ -17,9 +17,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 
         foreach ( ApiErrorResponse.Error error in instance.ErrorResponse.Errors )
         {
-            results.Add(string.IsNullOrWhiteSpace(error.Message)
-                            ? ValidationState.CreateError(error.Code)
-                            : ValidationState.CreateError($"{error.Code}: {error.Message}"));
+            results.Add(ApiMessageFormatter.CreateError(error.Code, error.Message));
         }
 
         return ValueTask.FromResult(false);
@@ -39,9 +37,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
             switch ( alert.AlertType )
             {
                 case AlertType.WARNING:
-                    results.Add(string.IsNullOrWhiteSpace(alert.Message)
-                                    ? ValidationState.CreateWarning(alert.Code)
-                                    : ValidationState.CreateWarning($"{alert.Code}: {alert.Message}"));
+                    results.Add(ApiMessageFormatter.CreateWarning(alert.Code, alert.Message));
                     break;
                 case AlertType.NOTE:
                 default:

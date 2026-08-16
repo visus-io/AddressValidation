@@ -49,9 +49,7 @@ internal sealed class BatchApiResponseValidator : AbstractBatchValidator<ApiResp
                 continue;
             }
 
-            ValidationState state = string.IsNullOrWhiteSpace(alert.Message)
-                                        ? ValidationState.CreateWarning(alert.Code)
-                                        : ValidationState.CreateWarning($"{alert.Code}: {alert.Message}");
+            ValidationState state = ApiMessageFormatter.CreateWarning(alert.Code, alert.Message);
 
             BroadcastToAll(state, results);
         }
@@ -63,9 +61,7 @@ internal sealed class BatchApiResponseValidator : AbstractBatchValidator<ApiResp
     {
         foreach ( ApiErrorResponse.Error error in errorResponse.Errors )
         {
-            ValidationState state = string.IsNullOrWhiteSpace(error.Message)
-                                        ? ValidationState.CreateError(error.Code)
-                                        : ValidationState.CreateError($"{error.Code}: {error.Message}");
+            ValidationState state = ApiMessageFormatter.CreateError(error.Code, error.Message);
 
             BroadcastToAll(state, results);
         }

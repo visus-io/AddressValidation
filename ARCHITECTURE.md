@@ -76,6 +76,8 @@ Consumers depend only on this interface and `IAddressValidationResponse`; they n
 
 `AbstractBatchValidator<T>` is the batch counterpart, used to validate a batch API response. Unlike `AbstractValidator<T>`, which produces a single shared `ISet<ValidationState>`, it produces one independent `ISet<ValidationState>` per item sent, indexed positionally: `PreValidateAsync` and `ValidateAsync` both receive `IReadOnlyList<int> requestIndexes` (the original, caller-facing index of each request that was actually sent) alongside `IReadOnlyList<ISet<ValidationState>> results` (positionally aligned with the sent batch, not with `requestIndexes`). Batch-wide conditions (a top-level error payload, a result count that doesn't match the number of items sent) are handled in `PreValidateAsync` and broadcast to every item's result set; per-item conditions are handled in `ValidateAsync`.
 
+`ApiMessageFormatter` is a shared helper that turns a provider's error or alert `(code, message)` pair into a `ValidationState`. Every provider API returns errors and alerts in this same shape, so each response validator calls `ApiMessageFormatter.CreateError(code, message)` or `CreateWarning(code, message)` instead of re-implementing the same formatting logic. The helper falls back to the code alone when the message is empty, and to the message alone when the code is empty, since different providers omit one or the other field.
+
 ### HTTP Infrastructure
 
 | Type | Role |
