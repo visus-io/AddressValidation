@@ -15,8 +15,8 @@ public static class ApiMessageFormatter
     ///     when the provider omits one.
     /// </param>
     /// <param name="message">
-    ///     The provider's error message. Can be <see langword="null" />, empty, or consist only of white
-    ///     space when the provider omits one.
+    ///     The provider's error message. Can be <see langword="null" />, empty, or consist only of whitespace when the
+    ///     provider omits one.
     /// </param>
     /// <returns>A <see cref="ValidationState" /> instance.</returns>
     /// <exception cref="ArgumentException">

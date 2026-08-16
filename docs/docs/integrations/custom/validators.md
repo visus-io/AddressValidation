@@ -74,14 +74,7 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 
         foreach ( ApiResponse.ErrorPayload error in instance.Errors )
         {
-            if ( string.IsNullOrWhiteSpace(error.Message) )
-            {
-                continue;
-            }
-
-            results.Add(string.IsNullOrWhiteSpace(error.Code)
-                            ? ValidationState.CreateError(error.Message)
-                            : ValidationState.CreateError($"{error.Code}: {error.Message}"));
+            results.Add(ApiMessageFormatter.CreateError(error.Code, error.Message));
         }
 
         return ValueTask.FromResult(false);
@@ -91,6 +84,9 @@ internal sealed class ApiResponseValidator : AbstractValidator<ApiResponse>
 
 > [!NOTE]
 > `PreValidateAsync` controls whether `ValidateAsync` runs. Return `false` to short-circuit: errors already added to `results` surface in `IAddressValidationResponse.Errors`, and `ValidateAsync` does not run. Return `true` to proceed to `ValidateAsync` for field-level checks on a structurally-valid response.
+
+> [!NOTE]
+> [`ApiMessageFormatter`](xref:Visus.AddressValidation.Validation.ApiMessageFormatter) turns a provider's `(code, message)` pair into a `ValidationState`. Use `ApiMessageFormatter.CreateError` and `ApiMessageFormatter.CreateWarning` instead of hand-rolling the same code-or-message ternary in every provider. Both methods tolerate a `null`, empty, or whitespace `code` or `message`, and fall back to whichever value is present. They throw `ArgumentException` only when both are blank.
 
 > [!NOTE]
 > Override `ValidateAsync` for field-level validation that only applies once the response is structurally valid. Use [`ValidationState.CreateWarning`](xref:Visus.AddressValidation.Validation.ValidationState.CreateWarning*) for non-fatal conditions: warnings surface in `IAddressValidationResponse.Warnings`, instead of `Errors`.
