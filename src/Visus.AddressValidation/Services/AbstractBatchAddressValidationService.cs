@@ -3,6 +3,7 @@ namespace Visus.AddressValidation.Services;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
+using Abstractions;
 using Adapters;
 using Diagnostics;
 using Mappers;
@@ -114,6 +115,21 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
         return ValidateManyInternalAsync(requests, cancellationToken);
     }
 
+    private static string ComputeBatchCountryTag(IReadOnlyList<TRequest> requests)
+    {
+        CountryCode? firstCountry = requests[0].Country;
+
+        for ( int i = 1; i < requests.Count; i++ )
+        {
+            if ( requests[i].Country != firstCountry )
+            {
+                return s_sentinelBatchCountry;
+            }
+        }
+
+        return AddressValidationServiceDiagnostics.CountryTag(requests[0]);
+    }
+
     private static void RecordItemMetrics(string result, string country, IAddressValidationResponse? response)
     {
         AddressValidationServiceDiagnostics.RecordResponseCounts(typeof(TRequest).Name, result, country, response);
@@ -185,9 +201,10 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
         }
 
         using Activity? activity = AddressValidationDiagnostics.ActivitySource.StartActivity(s_activityName);
+        string countryTag = ComputeBatchCountryTag(requests);
         activity?.SetTag(AddressValidationServiceDiagnostics.s_tagRequestType, typeof(TRequest).Name);
         activity?.SetTag(s_tagBatchSize, requests.Count);
-        activity?.SetTag(AddressValidationServiceDiagnostics.s_tagCountry, s_sentinelBatchCountry);
+        activity?.SetTag(AddressValidationServiceDiagnostics.s_tagCountry, countryTag);
 
         long startTimestamp = Stopwatch.GetTimestamp();
         string result = AddressValidationServiceDiagnostics.s_resultSuccess;
@@ -230,7 +247,7 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
                 Stopwatch.GetElapsedTime(startTimestamp).TotalSeconds,
                 new KeyValuePair<string, object?>(AddressValidationServiceDiagnostics.s_tagRequestType, typeof(TRequest).Name),
                 new KeyValuePair<string, object?>(AddressValidationServiceDiagnostics.s_tagResult, result),
-                new KeyValuePair<string, object?>(AddressValidationServiceDiagnostics.s_tagCountry, s_sentinelBatchCountry));
+                new KeyValuePair<string, object?>(AddressValidationServiceDiagnostics.s_tagCountry, countryTag));
         }
     }
 
