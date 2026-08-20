@@ -3,6 +3,7 @@ namespace Visus.AddressValidation.Services;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
+using Abstractions;
 using Adapters;
 using Diagnostics;
 using Mappers;
@@ -116,17 +117,17 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
 
     private static string ComputeBatchCountryTag(IReadOnlyList<TRequest> requests)
     {
-        string firstCountry = AddressValidationServiceDiagnostics.CountryTag(requests[0]);
+        CountryCode? firstCountry = requests[0].Country;
 
         for ( int i = 1; i < requests.Count; i++ )
         {
-            if ( !string.Equals(AddressValidationServiceDiagnostics.CountryTag(requests[i]), firstCountry, StringComparison.Ordinal) )
+            if ( requests[i].Country != firstCountry )
             {
                 return s_sentinelBatchCountry;
             }
         }
 
-        return firstCountry;
+        return AddressValidationServiceDiagnostics.CountryTag(requests[0]);
     }
 
     private static void RecordItemMetrics(string result, string country, IAddressValidationResponse? response)
