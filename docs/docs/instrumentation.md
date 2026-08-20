@@ -59,7 +59,7 @@ All activities are marked with `ActivityStatusCode.Error` and record the excepti
 | `address_validation.request_type` | The `TRequest` type name (e.g., `FedExAddressValidationRequest`) |
 | `address_validation.batch_size` | The number of requests passed to `ValidateManyAsync` |
 | `address_validation.client_type` | The `TClient` type name of the provider's authentication client |
-| `address_validation.country` | The [`CountryCode`](xref:Visus.AddressValidation.Abstractions.CountryCode) of the request, or `unknown` when absent. For the overall `validate_many` activity and its duration metric, this is the shared country when every item in the batch has the same country, or `batch` when the batch spans multiple countries |
+| `address_validation.country` | The [`CountryCode`](xref:Visus.AddressValidation.Abstractions.CountryCode) of the request, or `unknown` when absent. For the overall `validate_many` activity and its duration metric, this tag is the shared country when every item in the batch has the same country. Otherwise, this tag is `batch`. |
 
 ## Exporting to a Backend
 
