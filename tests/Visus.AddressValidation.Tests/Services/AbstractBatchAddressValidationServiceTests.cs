@@ -105,6 +105,50 @@ internal sealed class AbstractBatchAddressValidationServiceTests : IDisposable
 
     [Test]
     [NotInParallel]
+    public async Task ValidateManyAsync_WhenAllRequestsShareSameCountry_RecordsThatCountryTag(CancellationToken cancellationToken)
+    {
+        List<TestAddressValidationRequest> requests = [ValidRequest(), ValidRequest(),];
+        TestApiResponse apiResponse = new();
+        StubAdapter(requests, apiResponse);
+        StubResponseValidator(false, false);
+        StubResponseMapper(apiResponse);
+
+        await _sut.ValidateManyAsync(requests, cancellationToken).ConfigureAwait(false);
+
+        Activity activity = _capture.Activities.Should().ContainSingle(a => string.Equals(a.OperationName, "address_validation.validate_many", StringComparison.Ordinal)).Subject;
+        activity.GetTagItem("address_validation.country").Should().Be(nameof(CountryCode.US));
+
+        DiagnosticsCapture.Measurement measurement = _capture.Measurements
+                                                             .Should()
+                                                             .ContainSingle(m => string.Equals(m.InstrumentName, "visus.address_validation.validate.duration", StringComparison.Ordinal))
+                                                             .Subject;
+        measurement.Tags.Should().Contain(new KeyValuePair<string, object?>("address_validation.country", nameof(CountryCode.US)));
+    }
+
+    [Test]
+    [NotInParallel]
+    public async Task ValidateManyAsync_WhenRequestsSpanDifferentCountries_RecordsBatchSentinelTag(CancellationToken cancellationToken)
+    {
+        List<TestAddressValidationRequest> requests = [ValidRequest(), ValidRequest(CountryCode.CA),];
+        TestApiResponse apiResponse = new();
+        StubAdapter(requests, apiResponse);
+        StubResponseValidator(false, false);
+        StubResponseMapper(apiResponse);
+
+        await _sut.ValidateManyAsync(requests, cancellationToken).ConfigureAwait(false);
+
+        Activity activity = _capture.Activities.Should().ContainSingle(a => string.Equals(a.OperationName, "address_validation.validate_many", StringComparison.Ordinal)).Subject;
+        activity.GetTagItem("address_validation.country").Should().Be("batch");
+
+        DiagnosticsCapture.Measurement measurement = _capture.Measurements
+                                                             .Should()
+                                                             .ContainSingle(m => string.Equals(m.InstrumentName, "visus.address_validation.validate.duration", StringComparison.Ordinal))
+                                                             .Subject;
+        measurement.Tags.Should().Contain(new KeyValuePair<string, object?>("address_validation.country", "batch"));
+    }
+
+    [Test]
+    [NotInParallel]
     public async Task ValidateManyAsync_RecordsOnePerItemWarningAndSuggestionCountMeasurement(CancellationToken cancellationToken)
     {
         List<TestAddressValidationRequest> requests = [ValidRequest(), ValidRequest(),];
@@ -313,11 +357,11 @@ internal sealed class AbstractBatchAddressValidationServiceTests : IDisposable
         return result;
     }
 
-    private static TestAddressValidationRequest ValidRequest()
+    private static TestAddressValidationRequest ValidRequest(CountryCode country = CountryCode.US)
     {
         TestAddressValidationRequest request = new()
         {
-            Country = CountryCode.US,
+            Country = country,
             CityOrTown = "Springfield",
             StateOrProvince = "IL",
             PostalCode = "62701",
