@@ -18,9 +18,13 @@ public interface IBatchApiResponseMapper<in TResponse>
     /// <remarks>
     ///     Call this once per batch, not once per item. <paramref name="response" /> is the same instance for
     ///     every item in the batch, so any response-level data it exposes is invariant across the whole call.
+    ///     The batch service does not call this method when every item in the batch has validation errors.
     /// </remarks>
     /// <param name="response">The batch API response from the provider.</param>
-    /// <returns>The response-level custom data to merge into every mapped item.</returns>
+    /// <returns>
+    ///     The response-level custom data to merge into every mapped item. Return an empty dictionary when
+    ///     <paramref name="response" /> exposes no shared data. Never return <see langword="null" />.
+    /// </returns>
     IReadOnlyDictionary<string, object?> GetSharedCustomResponseData(TResponse response);
 
     /// <summary>
