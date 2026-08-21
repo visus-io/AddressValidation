@@ -19,6 +19,6 @@ internal sealed class AddressValidationResponseMapper : IApiResponseMapper<ApiRe
 
         ApiResponse.ResolvedAddress primary = response.Result.ResolvedAddresses[0];
 
-        return ResolvedAddressResponseMapper.Map(response, primary, validationResult);
+        return ResolvedAddressResponseMapper.Map(response, primary, response.GetCustomResponseData(), validationResult);
     }
 }

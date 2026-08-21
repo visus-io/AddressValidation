@@ -85,6 +85,9 @@ internal sealed class BatchAddressValidationServiceTests : IAsyncDisposable
             results.Should().HaveCount(3);
             results[0]!.CityOrTown.Should().Be("IRVING");
             results[2]!.CityOrTown.Should().Be("NEW YORK");
+
+            results[0]!.CustomResponseData.Should().ContainKey("customerTransactionId").WhoseValue.Should().Be("APIF_SV_ADVC_TxIDcustomer_test");
+            results[2]!.CustomResponseData.Should().ContainKey("customerTransactionId").WhoseValue.Should().Be("APIF_SV_ADVC_TxIDcustomer_test");
         }
     }
 

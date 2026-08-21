@@ -10,7 +10,7 @@ using Models;
 
 internal static class ResolvedAddressResponseMapper
 {
-    internal static IAddressValidationResponse Map(ApiResponse response, ApiResponse.ResolvedAddress address, IValidationResult? validationResult)
+    internal static IAddressValidationResponse Map(ApiResponse response, ApiResponse.ResolvedAddress address, IReadOnlyDictionary<string, object?> sharedCustomResponseData, IValidationResult? validationResult)
     {
         return new AddressValidationResponse(response, validationResult)
         {
@@ -21,16 +21,16 @@ internal static class ResolvedAddressResponseMapper
             PostalCode = address.PostalCode,
             StateOrProvince = address.StateOrProvince,
             IsResidential = address.Classification == AddressClassification.RESIDENTIAL,
-            CustomResponseData = BuildCustomResponseData(response, address),
+            CustomResponseData = BuildCustomResponseData(sharedCustomResponseData, address),
         };
     }
 
     private static ReadOnlyDictionary<string, object?> BuildCustomResponseData(
-        ApiResponse response, ApiResponse.ResolvedAddress address)
+        IReadOnlyDictionary<string, object?> sharedCustomResponseData, ApiResponse.ResolvedAddress address)
     {
         Dictionary<string, object?> data = new(StringComparer.OrdinalIgnoreCase);
 
-        data.Merge(response.GetCustomResponseData());
+        data.Merge(sharedCustomResponseData);
         data.Merge(address.GetCustomResponseData());
         data.Merge(address.Attributes.GetCustomResponseData());
 

@@ -8,9 +8,17 @@ using Contracts;
 [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
 internal sealed class BatchAddressValidationResponseMapper : IBatchApiResponseMapper<ApiResponse>
 {
-    public IAddressValidationResponse Map(ApiResponse response, int index, IValidationResult? validationResult = null)
+    public IReadOnlyDictionary<string, object?> GetSharedCustomResponseData(ApiResponse response)
     {
         ArgumentNullException.ThrowIfNull(response);
+
+        return response.GetCustomResponseData();
+    }
+
+    public IAddressValidationResponse Map(ApiResponse response, int index, IReadOnlyDictionary<string, object?> sharedCustomResponseData, IValidationResult? validationResult = null)
+    {
+        ArgumentNullException.ThrowIfNull(response);
+        ArgumentNullException.ThrowIfNull(sharedCustomResponseData);
         ArgumentOutOfRangeException.ThrowIfNegative(index);
 
         if ( response.Result is null || index >= response.Result.ResolvedAddresses.Length )
@@ -18,6 +26,6 @@ internal sealed class BatchAddressValidationResponseMapper : IBatchApiResponseMa
             return new EmptyAddressValidationResponse(validationResult);
         }
 
-        return ResolvedAddressResponseMapper.Map(response, response.Result.ResolvedAddresses[index], validationResult);
+        return ResolvedAddressResponseMapper.Map(response, response.Result.ResolvedAddresses[index], sharedCustomResponseData, validationResult);
     }
 }

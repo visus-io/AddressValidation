@@ -570,8 +570,6 @@ namespace Visus.AddressValidation.Extensions
 {
     public static class DictionaryExtensions
     {
-        public static void Merge<TKey, TValue>(this System.Collections.Generic.IDictionary<TKey, TValue> source, System.Collections.Generic.IDictionary<TKey, TValue> dictionary)
-            where TKey :  notnull { }
         public static void Merge<TKey, TValue>(this System.Collections.Generic.IDictionary<TKey, TValue> source, System.Collections.Generic.IReadOnlyDictionary<TKey, TValue> dictionary)
             where TKey :  notnull { }
     }
@@ -646,7 +644,8 @@ namespace Visus.AddressValidation.Mappers
     public interface IBatchApiResponseMapper<in TResponse>
         where in TResponse :  class
     {
-        Visus.AddressValidation.Models.IAddressValidationResponse Map(TResponse response, int index, Visus.AddressValidation.Validation.IValidationResult? validationResult = null);
+        System.Collections.Generic.IReadOnlyDictionary<string, object?> GetSharedCustomResponseData(TResponse response);
+        Visus.AddressValidation.Models.IAddressValidationResponse Map(TResponse response, int index, System.Collections.Generic.IReadOnlyDictionary<string, object?> sharedCustomResponseData, Visus.AddressValidation.Validation.IValidationResult? validationResult = null);
     }
 }
 namespace Visus.AddressValidation.Models

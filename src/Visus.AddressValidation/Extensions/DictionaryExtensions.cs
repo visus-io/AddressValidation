@@ -21,37 +21,12 @@ public static class DictionaryExtensions
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(dictionary);
 
-        IEnumerable<KeyValuePair<TKey, TValue>> items = from kvp in dictionary
-                                                        where !source.ContainsKey(kvp.Key)
-                                                        select kvp;
-
-        foreach ( KeyValuePair<TKey, TValue> kvp in items )
+        foreach ( KeyValuePair<TKey, TValue> kvp in dictionary )
         {
-            source.Add(kvp.Key, kvp.Value);
-        }
-    }
-
-    /// <summary>
-    ///     Merges the elements from <paramref name="dictionary" /> with the <paramref name="source" />.
-    /// </summary>
-    /// <remarks>If the key already exists in <paramref name="source" />, the merge skips that element.</remarks>
-    /// <param name="source">The dictionary to merge to.</param>
-    /// <param name="dictionary">The <see cref="IDictionary{TKey,TValue}" /> to merge from.</param>
-    /// <typeparam name="TKey">The element type of the key.</typeparam>
-    /// <typeparam name="TValue">The element type of the value.</typeparam>
-    public static void Merge<TKey, TValue>(this IDictionary<TKey, TValue> source, IDictionary<TKey, TValue> dictionary)
-        where TKey : notnull
-    {
-        ArgumentNullException.ThrowIfNull(source);
-        ArgumentNullException.ThrowIfNull(dictionary);
-
-        IEnumerable<KeyValuePair<TKey, TValue>> items = from kvp in dictionary
-                                                        where !source.ContainsKey(kvp.Key)
-                                                        select kvp;
-
-        foreach ( KeyValuePair<TKey, TValue> kvp in items )
-        {
-            source.Add(kvp.Key, kvp.Value);
+            if ( !source.ContainsKey(kvp.Key) )
+            {
+                source.Add(kvp.Key, kvp.Value);
+            }
         }
     }
 }

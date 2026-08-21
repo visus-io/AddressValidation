@@ -135,12 +135,27 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
         AddressValidationServiceDiagnostics.RecordResponseCounts(typeof(TRequest).Name, result, country, response);
     }
 
+    private static (TRequest[] Requests, int[] Indexes) SplitValidPartition(IReadOnlyList<PartitionedRequest> validPartition)
+    {
+        TRequest[] requests = new TRequest[validPartition.Count];
+        int[] indexes = new int[validPartition.Count];
+
+        for ( int i = 0; i < validPartition.Count; i++ )
+        {
+            PartitionedRequest partitioned = validPartition[i];
+            requests[i] = partitioned.Request;
+            indexes[i] = partitioned.OriginalIndex;
+        }
+
+        return ( requests, indexes );
+    }
+
     private async Task<bool> MapValidatedItemsAsync(TApiResponse apiResponse,
                                                     IReadOnlyList<PartitionedRequest> validPartition,
+                                                    IReadOnlyList<int> validIndexes,
                                                     IAddressValidationResponse?[] finalResults,
                                                     CancellationToken cancellationToken)
     {
-        IReadOnlyList<int> validIndexes = [.. validPartition.Select(static p => p.OriginalIndex),];
         IReadOnlyList<IValidationResult> perItemValidation =
             await _batchResponseValidator.ExecuteAsync(apiResponse, validIndexes, cancellationToken).ConfigureAwait(false);
 
@@ -151,14 +166,25 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
                 $"{nameof(IValidationResult)} per sent request ({validPartition.Count}), but returned {perItemValidation.Count}.");
         }
 
+        IReadOnlyDictionary<string, object?>? sharedCustomResponseData = null;
+
         bool anyItemInvalid = false;
         for ( int j = 0; j < validPartition.Count; j++ )
         {
             PartitionedRequest partitioned = validPartition[j];
             IValidationResult itemValidation = perItemValidation[j];
-            IAddressValidationResponse itemResult = itemValidation.HasErrors
-                                                        ? new EmptyAddressValidationResponse(itemValidation)
-                                                        : _batchResponseMapper.Map(apiResponse, j, itemValidation);
+            IAddressValidationResponse itemResult;
+            if ( itemValidation.HasErrors )
+            {
+                itemResult = new EmptyAddressValidationResponse(itemValidation);
+            }
+            else
+            {
+                sharedCustomResponseData ??= _batchResponseMapper.GetSharedCustomResponseData(apiResponse) ??
+                                              throw new InvalidImplementationException(
+                                                  $"{nameof(IBatchApiResponseMapper<>)}.{nameof(IBatchApiResponseMapper<>.GetSharedCustomResponseData)} must not return null.");
+                itemResult = _batchResponseMapper.Map(apiResponse, j, sharedCustomResponseData, itemValidation);
+            }
 
             anyItemInvalid |= itemValidation.HasErrors;
             finalResults[partitioned.OriginalIndex] = itemResult;
@@ -175,7 +201,7 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
                                                                                  IAddressValidationResponse?[] finalResults,
                                                                                  CancellationToken cancellationToken)
     {
-        List<PartitionedRequest> validPartition = [];
+        List<PartitionedRequest> validPartition = new(requests.Count);
 
         for ( int i = 0; i < requests.Count; i++ )
         {
@@ -221,7 +247,7 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
                 return finalResults;
             }
 
-            IReadOnlyList<TRequest> validRequests = [.. validPartition.Select(static p => p.Request),];
+            ( TRequest[] validRequests, int[] validIndexes ) = SplitValidPartition(validPartition);
             TApiResponse? apiResponse = await _batchRequestAdapter.ExecuteAsync(validRequests, cancellationToken).ConfigureAwait(false);
             if ( apiResponse is null )
             {
@@ -229,7 +255,7 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
                 return finalResults;
             }
 
-            bool anyItemInvalid = await MapValidatedItemsAsync(apiResponse, validPartition, finalResults, cancellationToken).ConfigureAwait(false);
+            bool anyItemInvalid = await MapValidatedItemsAsync(apiResponse, validPartition, validIndexes, finalResults, cancellationToken).ConfigureAwait(false);
             result = anyLocallyInvalid || anyItemInvalid ? s_resultPartial : AddressValidationServiceDiagnostics.s_resultSuccess;
             return finalResults;
         }
