@@ -179,6 +179,20 @@ internal sealed class AbstractBatchAddressValidationServiceTests : IDisposable
     }
 
     [Test]
+    [NotInParallel]
+    public async Task ValidateManyAsync_WhenAllResponseItemsHaveErrors_NeverComputesSharedCustomResponseData(CancellationToken cancellationToken)
+    {
+        List<TestAddressValidationRequest> requests = [ValidRequest(), ValidRequest(),];
+        TestApiResponse apiResponse = new();
+        StubAdapter(requests, apiResponse);
+        StubResponseValidator(true, true);
+
+        await _sut.ValidateManyAsync(requests, cancellationToken).ConfigureAwait(false);
+
+        _responseMapper.DidNotReceive().GetSharedCustomResponseData(Arg.Any<TestApiResponse>());
+    }
+
+    [Test]
     public async Task ValidateManyAsync_WhenAdapterReturnsNull_ReturnsNullForEveryValidSlot(CancellationToken cancellationToken)
     {
         List<TestAddressValidationRequest> requests = [ValidRequest(), ValidRequest(),];
@@ -259,6 +273,20 @@ internal sealed class AbstractBatchAddressValidationServiceTests : IDisposable
                        .Returns(Task.FromResult<TestApiResponse?>(apiResponse));
 
         Func<Task> act = () => sut.ValidateManyAsync(requests, cancellationToken);
+
+        await act.Should().ThrowExactlyAsync<InvalidImplementationException>().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task ValidateManyAsync_WhenSharedCustomResponseDataIsNull_ThrowsInvalidImplementationException(CancellationToken cancellationToken)
+    {
+        List<TestAddressValidationRequest> requests = [ValidRequest(), ValidRequest(),];
+        TestApiResponse apiResponse = new();
+        StubAdapter(requests, apiResponse);
+        StubResponseValidator(false, false);
+        _responseMapper.GetSharedCustomResponseData(apiResponse).Returns(default(IReadOnlyDictionary<string, object?>)!);
+
+        Func<Task> act = () => _sut.ValidateManyAsync(requests, cancellationToken);
 
         await act.Should().ThrowExactlyAsync<InvalidImplementationException>().ConfigureAwait(false);
     }

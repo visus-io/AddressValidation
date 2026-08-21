@@ -166,16 +166,25 @@ public abstract class AbstractBatchAddressValidationService<TRequest, TApiRespon
                 $"{nameof(IValidationResult)} per sent request ({validPartition.Count}), but returned {perItemValidation.Count}.");
         }
 
-        IReadOnlyDictionary<string, object?> sharedCustomResponseData = _batchResponseMapper.GetSharedCustomResponseData(apiResponse);
+        IReadOnlyDictionary<string, object?>? sharedCustomResponseData = null;
 
         bool anyItemInvalid = false;
         for ( int j = 0; j < validPartition.Count; j++ )
         {
             PartitionedRequest partitioned = validPartition[j];
             IValidationResult itemValidation = perItemValidation[j];
-            IAddressValidationResponse itemResult = itemValidation.HasErrors
-                                                        ? new EmptyAddressValidationResponse(itemValidation)
-                                                        : _batchResponseMapper.Map(apiResponse, j, sharedCustomResponseData, itemValidation);
+            IAddressValidationResponse itemResult;
+            if ( itemValidation.HasErrors )
+            {
+                itemResult = new EmptyAddressValidationResponse(itemValidation);
+            }
+            else
+            {
+                sharedCustomResponseData ??= _batchResponseMapper.GetSharedCustomResponseData(apiResponse) ??
+                                              throw new InvalidImplementationException(
+                                                  $"{nameof(IBatchApiResponseMapper<>)}.{nameof(IBatchApiResponseMapper<>.GetSharedCustomResponseData)} must not return null.");
+                itemResult = _batchResponseMapper.Map(apiResponse, j, sharedCustomResponseData, itemValidation);
+            }
 
             anyItemInvalid |= itemValidation.HasErrors;
             finalResults[partitioned.OriginalIndex] = itemResult;
