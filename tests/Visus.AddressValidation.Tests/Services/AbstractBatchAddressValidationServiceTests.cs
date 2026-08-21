@@ -164,6 +164,21 @@ internal sealed class AbstractBatchAddressValidationServiceTests : IDisposable
     }
 
     [Test]
+    [NotInParallel]
+    public async Task ValidateManyAsync_WhenMultipleItemsAreValid_ComputesSharedCustomResponseDataOnce(CancellationToken cancellationToken)
+    {
+        List<TestAddressValidationRequest> requests = [ValidRequest(), ValidRequest(), ValidRequest(),];
+        TestApiResponse apiResponse = new();
+        StubAdapter(requests, apiResponse);
+        StubResponseValidator(false, false);
+        StubResponseMapper(apiResponse);
+
+        await _sut.ValidateManyAsync(requests, cancellationToken).ConfigureAwait(false);
+
+        _responseMapper.Received(1).GetSharedCustomResponseData(apiResponse);
+    }
+
+    [Test]
     public async Task ValidateManyAsync_WhenAdapterReturnsNull_ReturnsNullForEveryValidSlot(CancellationToken cancellationToken)
     {
         List<TestAddressValidationRequest> requests = [ValidRequest(), ValidRequest(),];
@@ -378,7 +393,8 @@ internal sealed class AbstractBatchAddressValidationServiceTests : IDisposable
 
     private void StubResponseMapper(TestApiResponse apiResponse)
     {
-        _responseMapper.Map(apiResponse, Arg.Any<int>(), Arg.Any<IValidationResult>()).Returns(_ => StubMappedResponse());
+        _responseMapper.GetSharedCustomResponseData(apiResponse).Returns(new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase));
+        _responseMapper.Map(apiResponse, Arg.Any<int>(), Arg.Any<IReadOnlyDictionary<string, object?>>(), Arg.Any<IValidationResult>()).Returns(_ => StubMappedResponse());
     }
 
     private void StubResponseValidator(bool firstHasErrors, bool remainingHaveErrors)

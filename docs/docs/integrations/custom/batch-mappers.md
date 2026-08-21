@@ -40,15 +40,23 @@ internal sealed class BatchAddressValidationRequestMapper : IBatchApiRequestMapp
 
 ## Batch Response Mapper
 
-The batch response mapper converts one item out of the provider's batch response into a unified [`IAddressValidationResponse`](xref:Visus.AddressValidation.Models.IAddressValidationResponse), selected by position. Implement [`IBatchApiResponseMapper<TApiResponse>`](xref:Visus.AddressValidation.Mappers.IBatchApiResponseMapper`1) with a single `Map` method.
+The batch response mapper converts one item out of the provider's batch response into a unified [`IAddressValidationResponse`](xref:Visus.AddressValidation.Models.IAddressValidationResponse), selected by position. Implement [`IBatchApiResponseMapper<TApiResponse>`](xref:Visus.AddressValidation.Mappers.IBatchApiResponseMapper`1) with two methods: `GetSharedCustomResponseData` and `Map`.
 
 ```csharp
 [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
 internal sealed class BatchAddressValidationResponseMapper : IBatchApiResponseMapper<ApiResponse>
 {
-    public IAddressValidationResponse Map(ApiResponse response, int index, IValidationResult? validationResult = null)
+    public IReadOnlyDictionary<string, object?> GetSharedCustomResponseData(ApiResponse response)
     {
         ArgumentNullException.ThrowIfNull(response);
+
+        return response.GetCustomResponseData();
+    }
+
+    public IAddressValidationResponse Map(ApiResponse response, int index, IReadOnlyDictionary<string, object?> sharedCustomResponseData, IValidationResult? validationResult = null)
+    {
+        ArgumentNullException.ThrowIfNull(response);
+        ArgumentNullException.ThrowIfNull(sharedCustomResponseData);
         ArgumentOutOfRangeException.ThrowIfNegative(index);
 
         if ( response.Results is null || index >= response.Results.Length )
@@ -57,6 +65,8 @@ internal sealed class BatchAddressValidationResponseMapper : IBatchApiResponseMa
         }
 
         ApiResponse.ResultPayload result = response.Results[index];
+        Dictionary<string, object?> customResponseData = new(sharedCustomResponseData, StringComparer.OrdinalIgnoreCase);
+        customResponseData.Merge(result.GetCustomResponseData());
 
         return new AddressValidationResponse(response, validationResult)
         {
@@ -66,6 +76,7 @@ internal sealed class BatchAddressValidationResponseMapper : IBatchApiResponseMa
             CityOrTown = result.City,
             StateOrProvince = result.State,
             PostalCode = result.PostalCode,
+            CustomResponseData = customResponseData.AsReadOnly(),
         };
     }
 }
@@ -73,6 +84,9 @@ internal sealed class BatchAddressValidationResponseMapper : IBatchApiResponseMa
 
 > [!NOTE]
 > `index` is the position of the item within the provider's response, not the original caller-facing index of the request. The [batch validation service](xref:Visus.AddressValidation.Services.AbstractBatchAddressValidationService`2) only calls `Map` for items that were actually sent to the provider (locally-invalid requests are already resolved to an `EmptyAddressValidationResponse` before the API call), so `index` always lines up with the provider response array.
+
+> [!NOTE]
+> `response` is the same instance for every item in a batch call, so any response-level data it exposes is invariant across the whole batch. The [batch validation service](xref:Visus.AddressValidation.Services.AbstractBatchAddressValidationService`2) calls `GetSharedCustomResponseData` exactly once per batch — not once per item — and passes the result into every `Map` call as `sharedCustomResponseData`. If the response type has no response-level custom data (see [Data Models](xref:custom-models)), return an empty dictionary.
 
 > [!NOTE]
 > When response fields are shared between the singular and batch response DTOs, factor the per-item mapping logic (including `GetCustomResponseData()` handling, see [Data Models](xref:custom-models)) into an internal static helper and call it from both the singular and batch response mappers.
