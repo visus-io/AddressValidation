@@ -9,7 +9,7 @@ Provide two validators: one for the incoming [request](xref:custom-models) and o
 
 ## Request Validator
 
-Extend [`AbstractAddressValidationRequestValidator<TRequest>`](xref:Visus.AddressValidation.Validation.AbstractAddressValidationRequestValidator`1) and implement the two required abstract members. Override `PreValidateAsync` for provider-specific checks, but always call `base.PreValidateAsync` first and return `false` if it does.
+Extend [`AbstractAddressValidationRequestValidator<TRequest>`](xref:Visus.AddressValidation.Validation.AbstractAddressValidationRequestValidator`1) and implement the two required abstract members. The base class runs its shared country check first, before your `PreValidateAsync` override runs. If your `PreValidateAsync` override returns `true`, the base class then runs its shared address-field checks, before your `ValidateAsync` override runs. Override `PreValidateAsync` to add provider-specific checks. You do not need to call `base.PreValidateAsync` — the shared country check always runs at its fixed point in the pipeline, regardless of what your override does.
 
 ```csharp
 [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
@@ -25,7 +25,7 @@ internal sealed class AddressValidationRequestValidator : AbstractAddressValidat
 > `ProviderName` is the human-readable name of the provider. It appears in validation error messages when the request's `Country` is absent or not in `SupportedCountries`, for example *"Country 'XX' is not supported by My Provider"*.
 
 > [!NOTE]
-> `SupportedCountries` is the [`FrozenSet<CountryCode>`](xref:Visus.AddressValidation.Abstractions.CountryCode) checked by the base `PreValidateAsync`. If `Country` is `null` or not in this set, an error is added to `results` and the pipeline short-circuits before `ValidateAsync` runs. By convention, define it in a static `Constants` class within the integration:
+> `SupportedCountries` is the [`FrozenSet<CountryCode>`](xref:Visus.AddressValidation.Abstractions.CountryCode) checked by the base class's shared country validation. This check runs automatically, before your `PreValidateAsync` override. If `Country` is `null` or not in this set, an error is added to `results` and the pipeline short-circuits before `ValidateAsync` runs. By convention, define it in a static `Constants` class within the integration:
 > ```csharp
 > public static class Constants
 > {
@@ -37,20 +37,15 @@ internal sealed class AddressValidationRequestValidator : AbstractAddressValidat
 > }
 > ```
 
-The inherited `ValidateAsync` validates the remaining address fields after the country check passes: `AddressLines` must be non-empty and contain at most 3 lines; `CityOrTown`, `StateOrProvince`, and `PostalCode` must be present (with country-specific exceptions for city-states and countries without postal codes).
+The base class checks the remaining address fields after the country check passes and after your `PreValidateAsync` override (if any) returns `true`: `AddressLines` must be non-empty and contain at most 3 lines; `CityOrTown`, `StateOrProvince`, and `PostalCode` must be present (with country-specific exceptions for city-states and countries without postal codes). This check runs independently of whether you override `ValidateAsync` — but if your `PreValidateAsync` returns `false`, this check is skipped, same as any other pre-validation failure.
 
-To add provider-specific pre-validation (such as enforcing field ranges or environment-specific restrictions), override `PreValidateAsync` and always call `base.PreValidateAsync` first:
+To add provider-specific pre-validation (such as enforcing field ranges or environment-specific restrictions), override `PreValidateAsync`. The base class's shared country check already ran before your override runs, so add only your own checks:
 
 ```csharp
-protected override async ValueTask<bool> PreValidateAsync(MyAddressValidationRequest instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
+protected override ValueTask<bool> PreValidateAsync(MyAddressValidationRequest instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
 {
-    if (!await base.PreValidateAsync(instance, results, cancellationToken).ConfigureAwait(false))
-    {
-        return false;
-    }
-
     // Provider-specific checks here.
-    return true;
+    return ValueTask.FromResult(true);
 }
 ```
 

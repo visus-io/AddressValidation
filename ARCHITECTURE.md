@@ -67,12 +67,30 @@ Consumers depend only on this interface and `IAddressValidationResponse`; they n
 
 ### Validation Infrastructure
 
-`AbstractValidator<T>` defines a two-phase template:
+`AbstractValidator<T>` defines a two-phase template, and each phase has two layers:
 
 1. **`PreValidateAsync`** — fast early-abort check (e.g., null country, unsupported country).
 2. **`ValidateAsync`** — full rule evaluation (address lines, city, state/province, postal code).
 
-`AbstractAddressValidationRequestValidator<T>` extends this with the shared rules that apply to all providers. Provider-specific validators extend it further to add their own rules and supply their `SupportedCountries` frozen set and `ProviderName`.
+Each phase pairs an internal hook with a protected hook:
+
+- Pre-validation phase: `internal virtual PreValidateInternalAsync`, then `protected virtual PreValidateAsync`.
+- Validation phase: `internal virtual ValidateInternalAsync`, then `protected virtual ValidateAsync`.
+
+Within each phase, `ExecuteInternalAsync` calls the internal hook first, then the protected hook. The full call order across both phases is:
+
+`PreValidateInternalAsync` → `PreValidateAsync` → `ValidateInternalAsync` → `ValidateAsync`
+
+Only `PreValidateInternalAsync` runs before every provider override. `ValidateInternalAsync` runs after a provider's `PreValidateAsync` override, not before it. The internal hooks are not part of the public API surface. They let a base class in this hierarchy enforce validation that a subclass cannot skip or reorder.
+
+`AbstractAddressValidationRequestValidator<T>` implements two hooks as `internal sealed override`:
+
+- `PreValidateInternalAsync` runs the shared country check. It runs before any provider-specific `PreValidateAsync` override.
+- `ValidateInternalAsync` runs the shared address-field rules (lines, city, state/province, postal code). It runs after `PreValidateAsync`, but before any provider-specific `ValidateAsync` override.
+
+A provider validator never needs to call `base.PreValidateAsync` or `base.ValidateAsync` to opt into the shared rules. Those inherited protected members reach only `AbstractValidator<T>`'s no-op defaults. Provider-specific validators add their own rules instead: they override the protected `PreValidateAsync`/`ValidateAsync` hooks, and supply their `SupportedCountries` frozen set and `ProviderName`.
+
+Sealing `PreValidateInternalAsync` is deliberate. Before this refactor, a provider's `PreValidateAsync` override could normalize `Country` — for example, default a missing value — then call `base.PreValidateAsync` to run the shared check against the normalized value. That path no longer exists. The shared country check always runs first, against the request exactly as the caller supplied it. Any country normalization a provider needs must happen before the request reaches the validator, not inside `PreValidateAsync`.
 
 `AbstractBatchValidator<T>` is the batch counterpart, used to validate a batch API response. Unlike `AbstractValidator<T>`, which produces a single shared `ISet<ValidationState>`, it produces one independent `ISet<ValidationState>` per item sent, indexed positionally: `PreValidateAsync` and `ValidateAsync` both receive `IReadOnlyList<int> requestIndexes` (the original, caller-facing index of each request that was actually sent) alongside `IReadOnlyList<ISet<ValidationState>> results` (positionally aligned with the sent batch, not with `requestIndexes`). Batch-wide conditions (a top-level error payload, a result count that doesn't match the number of items sent) are handled in `PreValidateAsync` and broadcast to every item's result set; per-item conditions are handled in `ValidateAsync`.
 

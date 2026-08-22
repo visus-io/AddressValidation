@@ -29,13 +29,8 @@ internal sealed class AddressValidationRequestValidator : AbstractAddressValidat
     /// <inheritdoc />
     protected override FrozenSet<CountryCode> SupportedCountries => Constants.SupportedCountries;
 
-    protected override async ValueTask<bool> PreValidateAsync(UpsAddressValidationRequest instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
+    protected override ValueTask<bool> PreValidateAsync(UpsAddressValidationRequest instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
     {
-        if ( !await base.PreValidateAsync(instance, results, cancellationToken).ConfigureAwait(false) )
-        {
-            return false;
-        }
-
         if ( instance.MaximumCandidateListSize is < 0 or > 50 )
         {
             results.Add(ValidationState.CreateError(Resources.Validation_Field_MustBeBetween,
@@ -43,12 +38,12 @@ internal sealed class AddressValidationRequestValidator : AbstractAddressValidat
                 0,
                 50));
 
-            return false;
+            return ValueTask.FromResult(false);
         }
 
         if ( _options.Value.ClientEnvironment != ClientEnvironment.DEVELOPMENT )
         {
-            return true;
+            return ValueTask.FromResult(true);
         }
 
         if ( instance.Country.HasValue && instance.Country.Value != CountryCode.US )
@@ -59,22 +54,22 @@ internal sealed class AddressValidationRequestValidator : AbstractAddressValidat
                 "UPS",
                 ClientEnvironment.DEVELOPMENT));
 
-            return false;
+            return ValueTask.FromResult(false);
         }
 
         if ( instance.Country is not CountryCode.US
           || string.IsNullOrWhiteSpace(instance.StateOrProvince)
           || _supportedDevelopmentRegions.Contains(instance.StateOrProvince) )
         {
-            return true;
+            return ValueTask.FromResult(true);
         }
 
         results.Add(ValidationState.CreateError(Resources.Validation_Provider_OnlyValuesSupportedInMode,
             nameof(instance.StateOrProvince),
-            string.Join(", ", _supportedDevelopmentRegions),
+            string.Join(", ", _supportedDevelopmentRegions.Order(StringComparer.OrdinalIgnoreCase)),
             "UPS",
             ClientEnvironment.DEVELOPMENT));
 
-        return false;
+        return ValueTask.FromResult(false);
     }
 }
