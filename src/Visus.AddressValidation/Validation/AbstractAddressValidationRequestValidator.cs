@@ -1,6 +1,5 @@
 namespace Visus.AddressValidation.Validation;
 
-using System.Diagnostics;
 using Abstractions;
 using Models;
 using Resources;
@@ -21,22 +20,8 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
     /// </summary>
     protected abstract FrozenSet<CountryCode> SupportedCountries { get; }
 
-    /// <summary>
-    ///     Checks that <paramref name="instance" /> specifies a non-null country code supported by
-    ///     <see cref="ProviderName" />. Validation is skipped if the country is missing or unsupported.
-    /// </summary>
-    /// <param name="instance">The request instance to pre-validate.</param>
-    /// <param name="results">The set of <see cref="ValidationState" /> objects for the current instance.</param>
-    /// <param name="cancellationToken">A token that cancels the operation.</param>
-    /// <returns>
-    ///     <see langword="true" /> when the country is present and supported. Otherwise,
-    ///     <see langword="false" />, and this method adds an error to <paramref name="results" />.
-    /// </returns>
-    protected override ValueTask<bool> PreValidateAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
+    internal sealed override ValueTask<bool> PreValidateInternalAsync(T instance, ISet<ValidationState> results)
     {
-        Debug.Assert(instance != null);
-        Debug.Assert(results != null);
-
         if ( instance.Country is not null )
         {
             if ( SupportedCountries.Contains(instance.Country.Value) )
@@ -53,19 +38,8 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
         return ValueTask.FromResult(false);
     }
 
-    /// <summary>
-    ///     Validates the address fields of <paramref name="instance" />. It checks that address lines, city/town,
-    ///     state/province, and postal code are present and meet the constraints for the given country.
-    /// </summary>
-    /// <param name="instance">The request instance to validate.</param>
-    /// <param name="results">The set of <see cref="ValidationState" /> objects for the current instance.</param>
-    /// <param name="cancellationToken">A token that cancels the operation.</param>
-    /// <returns>A task that represents the asynchronous validation operation.</returns>
-    protected override ValueTask ValidateAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken = default)
+    internal sealed override ValueTask ValidateInternalAsync(T instance, ISet<ValidationState> results)
     {
-        Debug.Assert(instance != null);
-        Debug.Assert(results != null);
-
         switch ( instance.AddressLines.Count )
         {
             case 0:
@@ -100,6 +74,6 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
             results.Add(ValidationState.CreateError(Resources.Validation_Address_CountryNotSupported, nameof(instance.Country), instance.Country));
         }
 
-        return base.ValidateAsync(instance, results, cancellationToken);
+        return ValueTask.CompletedTask;
     }
 }

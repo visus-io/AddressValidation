@@ -67,12 +67,14 @@ Consumers depend only on this interface and `IAddressValidationResponse`; they n
 
 ### Validation Infrastructure
 
-`AbstractValidator<T>` defines a two-phase template:
+`AbstractValidator<T>` defines a two-phase template, and each phase has two layers:
 
 1. **`PreValidateAsync`** — fast early-abort check (e.g., null country, unsupported country).
 2. **`ValidateAsync`** — full rule evaluation (address lines, city, state/province, postal code).
 
-`AbstractAddressValidationRequestValidator<T>` extends this with the shared rules that apply to all providers. Provider-specific validators extend it further to add their own rules and supply their `SupportedCountries` frozen set and `ProviderName`.
+Each phase pairs an `internal virtual PreValidateInternalAsync`/`ValidateInternalAsync` hook with the existing `protected virtual PreValidateAsync`/`ValidateAsync` hook. `ExecuteInternalAsync` calls the internal hook first, then the protected hook, for each phase. The internal hooks are not part of the public API surface. They let a base class in this hierarchy enforce validation that a subclass cannot skip or reorder.
+
+`AbstractAddressValidationRequestValidator<T>` implements `PreValidateInternalAsync` (the shared country check) and `ValidateInternalAsync` (the shared address-field rules: lines, city, state/province, postal code) as `internal sealed override`. Both run before any provider-specific `PreValidateAsync`/`ValidateAsync` override. A provider validator never needs to call `base.PreValidateAsync`/`base.ValidateAsync` to opt into the shared rules — those inherited protected members reach only `AbstractValidator<T>`'s no-op defaults. Provider-specific validators add their own rules by overriding the protected `PreValidateAsync`/`ValidateAsync` hooks, and supply their `SupportedCountries` frozen set and `ProviderName`.
 
 `AbstractBatchValidator<T>` is the batch counterpart, used to validate a batch API response. Unlike `AbstractValidator<T>`, which produces a single shared `ISet<ValidationState>`, it produces one independent `ISet<ValidationState>` per item sent, indexed positionally: `PreValidateAsync` and `ValidateAsync` both receive `IReadOnlyList<int> requestIndexes` (the original, caller-facing index of each request that was actually sent) alongside `IReadOnlyList<ISet<ValidationState>> results` (positionally aligned with the sent batch, not with `requestIndexes`). Batch-wide conditions (a top-level error payload, a result count that doesn't match the number of items sent) are handled in `PreValidateAsync` and broadcast to every item's result set; per-item conditions are handled in `ValidateAsync`.
 
