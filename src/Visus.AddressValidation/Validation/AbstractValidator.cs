@@ -40,26 +40,26 @@ public abstract class AbstractValidator<T> : IValidator<T>
     }
 
     // ReSharper disable once MemberCanBeProtected.Global
-    internal virtual ValueTask<bool> PreValidateInternalAsync(T instance, ISet<ValidationState> results)
+    internal virtual ValueTask<bool> PreValidateInternalAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken)
     {
         return ValueTask.FromResult(true);
     }
 
     // ReSharper disable once MemberCanBeProtected.Global
-    internal virtual ValueTask ValidateInternalAsync(T instance, ISet<ValidationState> results)
+    internal virtual ValueTask ValidateInternalAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken)
     {
         return ValueTask.CompletedTask;
     }
 
     private async ValueTask<IValidationResult> ExecuteInternalAsync(ValidationContext<T> context, CancellationToken cancellationToken)
     {
-        if ( !await PreValidateInternalAsync(context.Instance, context.ValidationResults).ConfigureAwait(false) ||
+        if ( !await PreValidateInternalAsync(context.Instance, context.ValidationResults, cancellationToken).ConfigureAwait(false) ||
              !await PreValidateAsync(context.Instance, context.ValidationResults, cancellationToken).ConfigureAwait(false) )
         {
             return new ValidationResult(context.ValidationResults);
         }
 
-        await ValidateInternalAsync(context.Instance, context.ValidationResults).ConfigureAwait(false);
+        await ValidateInternalAsync(context.Instance, context.ValidationResults, cancellationToken).ConfigureAwait(false);
         await ValidateAsync(context.Instance, context.ValidationResults, cancellationToken).ConfigureAwait(false);
 
         return new ValidationResult(context.ValidationResults);

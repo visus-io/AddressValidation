@@ -20,7 +20,7 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
     /// </summary>
     protected abstract FrozenSet<CountryCode> SupportedCountries { get; }
 
-    internal sealed override ValueTask<bool> PreValidateInternalAsync(T instance, ISet<ValidationState> results)
+    internal sealed override ValueTask<bool> PreValidateInternalAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken)
     {
         if ( instance.Country is not null )
         {
@@ -38,7 +38,7 @@ public abstract class AbstractAddressValidationRequestValidator<T> : AbstractVal
         return ValueTask.FromResult(false);
     }
 
-    internal sealed override ValueTask ValidateInternalAsync(T instance, ISet<ValidationState> results)
+    internal sealed override ValueTask ValidateInternalAsync(T instance, ISet<ValidationState> results, CancellationToken cancellationToken)
     {
         switch ( instance.AddressLines.Count )
         {
