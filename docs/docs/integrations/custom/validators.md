@@ -37,7 +37,7 @@ internal sealed class AddressValidationRequestValidator : AbstractAddressValidat
 > }
 > ```
 
-The base class checks the remaining address fields after the country check passes: `AddressLines` must be non-empty and contain at most 3 lines; `CityOrTown`, `StateOrProvince`, and `PostalCode` must be present (with country-specific exceptions for city-states and countries without postal codes). This check always runs, whether or not you override `ValidateAsync`.
+The base class checks the remaining address fields after the country check passes and after your `PreValidateAsync` override (if any) returns `true`: `AddressLines` must be non-empty and contain at most 3 lines; `CityOrTown`, `StateOrProvince`, and `PostalCode` must be present (with country-specific exceptions for city-states and countries without postal codes). This check runs independently of whether you override `ValidateAsync` — but if your `PreValidateAsync` returns `false`, this check is skipped, same as any other pre-validation failure.
 
 To add provider-specific pre-validation (such as enforcing field ranges or environment-specific restrictions), override `PreValidateAsync`. The base class's shared country check already ran before your override runs, so add only your own checks:
 
