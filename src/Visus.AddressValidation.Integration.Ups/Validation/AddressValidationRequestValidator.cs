@@ -66,7 +66,7 @@ internal sealed class AddressValidationRequestValidator : AbstractAddressValidat
 
         results.Add(ValidationState.CreateError(Resources.Validation_Provider_OnlyValuesSupportedInMode,
             nameof(instance.StateOrProvince),
-            string.Join(", ", _supportedDevelopmentRegions),
+            string.Join(", ", _supportedDevelopmentRegions.Order(StringComparer.OrdinalIgnoreCase)),
             "UPS",
             ClientEnvironment.DEVELOPMENT));
 

@@ -9,7 +9,7 @@ Provide two validators: one for the incoming [request](xref:custom-models) and o
 
 ## Request Validator
 
-Extend [`AbstractAddressValidationRequestValidator<TRequest>`](xref:Visus.AddressValidation.Validation.AbstractAddressValidationRequestValidator`1) and implement the two required abstract members. The base class runs its shared country check before your `PreValidateAsync` override. It runs its shared address-field checks after your `PreValidateAsync` override returns `true`. Override `PreValidateAsync` to add provider-specific checks. You do not need to call `base.PreValidateAsync` — the base class's checks always run at their fixed point in the pipeline, regardless of what your override does.
+Extend [`AbstractAddressValidationRequestValidator<TRequest>`](xref:Visus.AddressValidation.Validation.AbstractAddressValidationRequestValidator`1) and implement the two required abstract members. The base class runs its shared country check first, before your `PreValidateAsync` override runs. If your `PreValidateAsync` override returns `true`, the base class then runs its shared address-field checks, before your `ValidateAsync` override runs. Override `PreValidateAsync` to add provider-specific checks. You do not need to call `base.PreValidateAsync` — the shared country check always runs at its fixed point in the pipeline, regardless of what your override does.
 
 ```csharp
 [SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by DI container")]
